@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateStandardsTable extends Migration
+class CreateUnitsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,13 @@ class CreateStandardsTable extends Migration
      */
     public function up()
     {
-        Schema::create('standards', function (Blueprint $table) {
+        Schema::create('units', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('board_id');
-            $table->string('standard',255)->nullable();
-            $table->string('section',255)->nullable();
-            $table->string('semester',500)->nullable();
+            $table->unsignedBigInteger('standard_id');
+            $table->unsignedBigInteger('semester_id');
+            $table->unsignedBigInteger('subject_id');
+            $table->string('title',255)->nullable();
+            $table->string('url',500)->nullable();
             $table->string('thumbnail',500)->nullable();
             $table->enum('status',["Active","Inactive","Deleted"])->default('Active')->nullable();
             $table->timestamps();
@@ -32,6 +33,6 @@ class CreateStandardsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('standards');
+        Schema::dropIfExists('units');
     }
 }

@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title','Edit Standard')
+@section('title','Add Semester')
 @section('css')
 @endsection
 
@@ -11,9 +11,9 @@
             <div class="card h-100">
                 <div class="card-inner">
                     <div class="card-head">
-                        <h5 class="card-title">Edit Standard</h5>
+                        <h5 class="card-title">Add Semester</h5>
                     </div>
-                    <form action="{{ route('standard.update',$standarddata->id) }}" method="POST" enctype='multipart/form-data'>
+                    <form action="{{ route('semester.store') }}" method="POST" enctype='multipart/form-data'>
                     @csrf
                         <div class="form-group">
                             <label class="form-label">Board</label>
@@ -21,7 +21,7 @@
                                 <select name="board_id" class="form-control" id="board_id">
                                     <option>--Select Board--</option>
                                     @foreach($boards as $boards_data)
-                                    <option value="{{ $boards_data->id }}" @if($standarddata->board_id == $boards_data->id) selected="" @endif>{{ $boards_data->name }}</option>
+                                    <option value="{{ $boards_data->id }}" @if(old('board_id') == $boards_data->id) selected="" @endif>{{ $boards_data->name }}</option>
                                     @endforeach
                                 </select>
                                 @error('board_id')
@@ -34,19 +34,13 @@
                         <div class="form-group">
                             <label class="form-label">Standard</label>
                             <div class="form-control-wrap">
-                                <input type="text" class="form-control" id="standard" name="standard" value="{{ $standarddata->standard }}">
-                                @error('standard')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Section</label>
-                            <div class="form-control-wrap">
-                                <input type="text" class="form-control" id="section" name="section" value="{{ $standarddata->section }}">
-                                @error('section')
+                                <select name="standard_id" class="form-control" id="standard_id">
+                                    <option>--Select Standard--</option>
+                                    @foreach($standards as $standards_data)
+                                    <option value="{{ $standards_data->id }}" @if(old('standard_id') == $standards_data->id) selected="" @endif>{{ $standards_data->standard }}</option>
+                                    @endforeach
+                                </select>
+                                @error('standard_id')
                                     <span class="text-danger" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -56,7 +50,7 @@
                         <div class="form-group">
                             <label class="form-label">Semester</label>
                             <div class="form-control-wrap">
-                                <input type="text" class="form-control" id="semester" name="semester" value="{{ $standarddata->semester }}">
+                                <input type="text" class="form-control" id="semester" name="semester" value="{{ old('semester') }}">
                                 @error('semester')
                                     <span class="text-danger" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -64,26 +58,11 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="form-label">Thumbnail</label>
-                            <div class="form-control-wrap">
-                                <input type="file" class="form-control" id="thumbnail" name="thumbnail" value="">
-                                <input type="hidden" name="hidden_thumbnail" value="{{ $standarddata->thumbnail }}">
-                                <br/>
-                                @if($standarddata->thumbnail)
-                                <img src="{{ asset('upload/standard/'.$standarddata->thumbnail) }}" class="thumbnail" height="100" width="100">
-                                @endif
-                                @error('thumbnail')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
+                        
                         
                         <div class="form-group">
                             <button type="submit" class="btn btn-lg btn-primary">Submit</button>
-                            <a type="button" href="{{ route('board.index') }}" class="btn btn-lg btn-danger text-light">Cancel</a>
+                            <a type="button" href="{{ route('subject.index') }}" class="btn btn-lg btn-danger text-light">Cancel</a>
                         </div>
                     </form>
                 </div>

@@ -16,15 +16,15 @@
                     <form action="{{ route('book.update',$bookdata->id) }}" method="POST" enctype='multipart/form-data'>
                     @csrf
                         <div class="form-group">
-                            <label class="form-label">Subject</label>
+                            <label class="form-label">Units</label>
                             <div class="form-control-wrap">
-                                <select name="subject_id" class="form-control" id="subject_id">
-                                    <option>--Select Subject--</option>
-                                    @foreach($subjects as $subjects_data)
-                                    <option value="{{ $subjects_data->id }}" @if($bookdata->subject_id == $subjects_data->id) selected="" @endif>{{ $subjects_data->subject_name }}</option>
+                                <select name="unit_id" class="form-control" id="unit_id">
+                                    <option>--Select Unit--</option>
+                                    @foreach($units as $units_data)
+                                    <option value="{{ $units_data->id }}" @if($bookdata->unit_id == $units_data->id) selected="" @endif>{{ $units_data->title }}</option>
                                     @endforeach
                                 </select>
-                                @error('board_id')
+                                @error('unit_id')
                                     <span class="text-danger" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>

@@ -38,6 +38,13 @@
                         </a>
                     </li><!-- .nk-menu-item -->
 
+                    <li class="nk-menu-item @if(\Request::route()->getName() == 'semester.index' || \Request::route()->getName() == 'semester.create' || \Request::route()->getName() == 'semester.edit') active @endif">
+                        <a href="{{ route('semester.index') }}" class="nk-menu-link">
+                            <span class="nk-menu-icon"><em class="icon ni ni-cart-fill"></em></span>
+                            <span class="nk-menu-text">Semester</span>
+                        </a>
+                    </li><!-- .nk-menu-item -->
+
                     <li class="nk-menu-item @if(\Request::route()->getName() == 'subject.index' || \Request::route()->getName() == 'subject.create' || \Request::route()->getName() == 'subject.edit') active @endif">
                         <a href="{{ route('subject.index') }}" class="nk-menu-link">
                             <span class="nk-menu-icon"><em class="icon ni ni-cart-fill"></em></span>
@@ -45,6 +52,12 @@
                         </a>
                     </li><!-- .nk-menu-item -->
 
+                    <li class="nk-menu-item @if(\Request::route()->getName() == 'unit.index' || \Request::route()->getName() == 'unit.create' || \Request::route()->getName() == 'unit.edit') active @endif">
+                        <a href="{{ route('unit.index') }}" class="nk-menu-link">
+                            <span class="nk-menu-icon"><em class="icon ni ni-cart-fill"></em></span>
+                            <span class="nk-menu-text">Unit</span>
+                        </a>
+                    </li><!-- .nk-menu-item -->
 
                     <li class="nk-menu-item @if(\Request::route()->getName() == 'book.index' || \Request::route()->getName() == 'book.create' || \Request::route()->getName() == 'book.edit') active @endif">
                         <a href="{{ route('book.index') }}" class="nk-menu-link">
@@ -52,6 +65,7 @@
                             <span class="nk-menu-text">Book</span>
                         </a>
                     </li><!-- .nk-menu-item -->
+                    
 
                     
                     

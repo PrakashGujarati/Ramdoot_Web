@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Book;
 use Illuminate\Http\Request;
 use App\Models\Subject;
+use App\Models\unit;
 
 class BookController extends Controller
 {
@@ -26,8 +27,8 @@ class BookController extends Controller
      */
     public function create()
     {
-        $subjects = Subject::where('status','Active')->get();
-        return view('book.add',compact('subjects'));
+        $units = unit::where('status','Active')->get();
+        return view('book.add',compact('units'));
     }
 
     /**
@@ -39,7 +40,7 @@ class BookController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'subject_id'     => 'required',
+            'unit_id'     => 'required',
             'title' => 'required',
             'url' => 'required',
             'thumbnail'  => 'required',
@@ -67,7 +68,7 @@ class BookController extends Controller
         }
 
         $add = new Book;
-        $add->subject_id = $request->subject_id;
+        $add->unit_id = $request->unit_id;
         $add->title = $request->title;
         $add->url = $request->url;
         $add->thumbnail = $new_name;
@@ -96,9 +97,9 @@ class BookController extends Controller
      */
     public function edit(Book $book,$id)
     {
-        $subjects = Subject::where('status','Active')->get();
+        $units = unit::where('status','Active')->get();
         $bookdata = Book::where('id',$id)->first();
-        return view('book.edit',compact('bookdata','subjects'));
+        return view('book.edit',compact('bookdata','units'));
     }
 
     /**
@@ -111,7 +112,7 @@ class BookController extends Controller
     public function update(Request $request, Book $book,$id)
     {
         $this->validate($request, [
-            'subject_id'     => 'required',
+            'unit_id' => 'required',
             'title' => 'required',
             'url' => 'required',
         ]);
@@ -141,7 +142,7 @@ class BookController extends Controller
         }
 
         $update = Book::find($id);
-        $update->subject_id = $request->subject_id;
+        $update->unit_id = $request->unit_id;
         $update->title = $request->title;
         $update->url = $request->url;
         $update->thumbnail = $new_name;

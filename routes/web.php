@@ -6,7 +6,9 @@ use App\Http\Controllers\BoardController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\StandardController;
 use App\Http\Controllers\SubjectController;
-
+use App\Http\Controllers\SemesterController;
+use App\Http\Controllers\UnitController;
+use App\Http\Controllers\SliderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,6 +60,25 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('book/{id}/edit', [BookController::class, 'edit'])->name('book.edit');
 	Route::post('book/{id}/update', [BookController::class, 'update'])->name('book.update');
 	Route::get('book/{id}/delete', [BookController::class, 'distroy'])->name('book.distroy');
+
+	/*Semester*/
+	Route::get('semester', [SemesterController::class, 'index'])->name('semester.index');
+	Route::get('semester/create', [SemesterController::class, 'create'])->name('semester.create');
+	Route::post('semester/store', [SemesterController::class, 'store'])->name('semester.store');
+	Route::get('semester/{id}/edit', [SemesterController::class, 'edit'])->name('semester.edit');
+	Route::post('semester/{id}/update', [SemesterController::class, 'update'])->name('semester.update');
+	Route::get('semester/{id}/delete', [SemesterController::class, 'distroy'])->name('semester.distroy');
+
+	/*unit*/
+	Route::get('unit', [UnitController::class, 'index'])->name('unit.index');
+	Route::get('unit/create', [UnitController::class, 'create'])->name('unit.create');
+	Route::post('unit/store', [UnitController::class, 'store'])->name('unit.store');
+	Route::get('unit/{id}/edit', [UnitController::class, 'edit'])->name('unit.edit');
+	Route::post('unit/{id}/update', [UnitController::class, 'update'])->name('unit.update');
+	Route::get('unit/{id}/delete', [UnitController::class, 'distroy'])->name('unit.distroy');
+
+
+	
 
 });
 

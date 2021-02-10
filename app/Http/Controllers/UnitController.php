@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Standard;
+use App\Models\unit;
 use Illuminate\Http\Request;
 use App\Models\Board;
+use App\Models\Standard;
+use App\Models\semester;
+use App\Models\Subject;
 
-class StandardController extends Controller
+class UnitController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +18,8 @@ class StandardController extends Controller
      */
     public function index()
     {
-        $standard_details = Standard::where('status','Active')->get();
-        return view('standard.index',compact('standard_details'));
+        $unit_details = unit::where('status','Active')->get();
+        return view('unit.index',compact('unit_details'));
     }
 
     /**
@@ -26,8 +29,10 @@ class StandardController extends Controller
      */
     public function create()
     {
-        $boards = Board::where('status','Active')->get();
-        return view('standard.add',compact('boards'));
+        $semesters = semester::where('status','Active')->get();
+        $standards = Standard::where('status','Active')->get();
+        $subjects = Subject::where('status','Active')->get();
+        return view('unit.add',compact('subjects','standards','semesters'));
     }
 
     /**
@@ -39,11 +44,12 @@ class StandardController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'board_id'     => 'required',
-            'standard'  => 'required',
-            'semester' => 'required',
-            'section' => 'required',
-            'thumbnail'  => 'required',
+            'standard_id'  => 'required',
+            'semester_id' => 'required',
+            'subject_id' => 'required',
+            'title' => 'required',
+            'url' => 'required',
+            'thumbnail' => 'required',
         ]);
 
         $new_name='';
@@ -57,7 +63,7 @@ class StandardController extends Controller
             $valid_ext = array('png','jpeg','jpg');
 
             // Location
-            $location = public_path('upload/standard/').$new_name;
+            $location = public_path('upload/unit/').$new_name;
 
             $file_extension = pathinfo($location, PATHINFO_EXTENSION);
             $file_extension = strtolower($file_extension);
@@ -67,24 +73,25 @@ class StandardController extends Controller
             }
         }
 
-        $add = new Standard;
-        $add->board_id = $request->board_id;
-        $add->standard = $request->standard;
-        $add->semester = $request->semester;
-        $add->section = $request->section;
+        $add = new unit;
+        $add->standard_id = $request->standard_id;
+        $add->semester_id = $request->semester_id;
+        $add->subject_id = $request->subject_id;
+        $add->title = $request->title;
+        $add->url = $request->url;
         $add->thumbnail = $new_name;
         $add->save();
 
-        return redirect()->route('standard.index')->with('success', 'Standard Added Successfully.');
+        return redirect()->route('unit.index')->with('success', 'Unit Added Successfully.');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Standard  $standard
+     * @param  \App\Models\unit  $unit
      * @return \Illuminate\Http\Response
      */
-    public function show(Standard $standard)
+    public function show(unit $unit)
     {
         //
     }
@@ -92,30 +99,33 @@ class StandardController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Standard  $standard
+     * @param  \App\Models\unit  $unit
      * @return \Illuminate\Http\Response
      */
-    public function edit(Standard $standard,$id)
+    public function edit(unit $unit,$id)
     {
-        $standarddata = Standard::where('id',$id)->first();
-        $boards = Board::where('status','Active')->get();
-        return view('standard.edit',compact('standarddata','boards'));
+        $unitdata = unit::where('id',$id)->first();
+        $subjects = Subject::where('status','Active')->get();
+        $semesters = semester::where('status','Active')->get();
+        $standards = Standard::where('status','Active')->get();
+        return view('unit.edit',compact('unitdata','subjects','semesters','standards'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Standard  $standard
+     * @param  \App\Models\unit  $unit
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Standard $standard,$id)
+    public function update(Request $request, unit $unit,$id)
     {
         $this->validate($request, [
-            'board_id'     => 'required',
-            'standard'  => 'required',
-            'semester' => 'required',
-            'section' => 'required',
+            'standard_id'  => 'required',
+            'semester_id' => 'required',
+            'subject_id' => 'required',
+            'title' => 'required',
+            'url' => 'required',
         ]);
 
         $new_name='';
@@ -129,7 +139,7 @@ class StandardController extends Controller
             $valid_ext = array('png','jpeg','jpg');
 
             // Location
-            $location = public_path('upload/standard/').$new_name;
+            $location = public_path('upload/unit/').$new_name;
 
             $file_extension = pathinfo($location, PATHINFO_EXTENSION);
             $file_extension = strtolower($file_extension);
@@ -142,30 +152,31 @@ class StandardController extends Controller
             $new_name = $request->hidden_thumbnail;
         }
 
-        $update = Standard::find($id);
-        $update->board_id = $request->board_id;
-        $update->standard = $request->standard;
-        $update->semester = $request->semester;
-        $update->section = $request->section;
+        $update = unit::find($id);
+        $update->standard_id = $request->standard_id;
+        $update->semester_id = $request->semester_id;
+        $update->subject_id = $request->subject_id;
+        $update->title = $request->title;
+        $update->url = $request->url;
         $update->thumbnail = $new_name;
         $update->save();
 
-        return redirect()->route('standard.index')->with('success', 'Standard Updated Successfully.');
+        return redirect()->route('unit.index')->with('success', 'Unit Updated Successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Standard  $standard
+     * @param  \App\Models\unit  $unit
      * @return \Illuminate\Http\Response
      */
-    public function distroy(Standard $standard,$id)
+    public function distroy(unit $unit,$id)
     {
-        $delete = Standard::find($id);
+        $delete = unit::find($id);
         $delete->status = "Deleted";
         $delete->save();
 
-        return redirect()->route('standard.index')->with('success', 'Standard Deleted Successfully.');
+        return redirect()->route('unit.index')->with('success', 'Unit Deleted Successfully.');
     }
 
     function compressImage($source, $destination, $quality) {
@@ -184,4 +195,3 @@ class StandardController extends Controller
 
     }
 }
-
