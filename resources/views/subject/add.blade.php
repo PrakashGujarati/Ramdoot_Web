@@ -47,6 +47,24 @@
                                 @enderror
                             </div>
                         </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Semester</label>
+                            <div class="form-control-wrap">
+                                <select name="semester_id" class="form-control" id="semester_id">
+                                    <option>--Select Semester--</option>
+                                    @foreach($semesters as $semesters_data)
+                                    <option value="{{ $semesters_data->id }}" @if(old('semester_id') == $semesters_data->id) selected="" @endif>{{ $semesters_data->semester }}</option>
+                                    @endforeach
+                                </select>
+                                @error('semester_id')
+                                    <span class="text-danger" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
                         <div class="form-group">
                             <label class="form-label">Subject Name</label>
                             <div class="form-control-wrap">

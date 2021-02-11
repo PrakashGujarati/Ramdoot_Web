@@ -8,4 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 class Subject extends Model
 {
     use HasFactory;
+
+    public function board()
+    {
+    	return $this->belongsTo(Board::class,'board_id');
+    }
+
+    public function standard()
+    {
+    	return $this->belongsTo(Standard::class,'board_id');
+    }
+
+    public function semester()
+    {
+    	return $this->belongsTo(semester::class,'semester_id');
+    }
 }

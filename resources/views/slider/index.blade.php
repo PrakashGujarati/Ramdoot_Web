@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title','Subjects')
+@section('title','Sliders')
 @section('css')
 @endsection
 
@@ -18,10 +18,10 @@
 			@endif
         	<div class="row">
         		<div class="col-lg-10">
-            		<h4 class="nk-block-title">Subject List</h4>
+            		<h4 class="nk-block-title">Slider List</h4>
             	</div>
             	<div class="col-lg-2 text-right">
-            		<a href="{{ route('subject.create') }}" class="btn btn-primary text-light">Add Subject</a>
+            		<a href="{{ route('slider.create') }}" class="btn btn-primary text-light">Add Slider</a>
             	</div>
             </div>
         </div>
@@ -31,24 +31,20 @@
             <table class="datatable-init table">
                 <thead>
                     <tr>
-                        <th>Board</th>
-                        <th>Standard</th>
-                        <th>Semester</th>
-                        <th>Subject</th>
+                        <th>Area</th>
+                        <th>Text</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                	@if(count($subject_details) > 0)
-                	@foreach($subject_details as $data)
+                	@if(count($slider_details) > 0)
+                	@foreach($slider_details as $data)
                     <tr>
-                        <td>{{ isset($data->board->name) ? $data->board->name:'' }}</td>
-                        <td>{{ isset($data->standard->standard) ? $data->standard->standard:'' }}</td>
-                        <td>{{ isset($data->semester->semester) ? $data->semester->semester:'' }}</td>
-                        <td>{{ $data->subject_name }}</td>
+                        <td>{{ $data->area }}</td>
+                        <td>{{ $data->text }}</td>
                         <td>
-                        	<a href="{{ route('subject.edit',$data->id) }}"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
-                        	<a href="javascript:;" data-url="{{ route('subject.distroy',$data->id) }}" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a>
+                        	<a href="{{ route('slider.edit',$data->id) }}"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
+                        	<a href="javascript:;" data-url="{{ route('slider.distroy',$data->id) }}" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a>
                         </td>
                     </tr>
                     @endforeach
@@ -71,7 +67,7 @@
 	$('.distroy').on('click', function() {
 	    let del_url = $(this).attr('data-url');
 	    bootbox.confirm({
-	        message: "Are you sure to delete this subject ?",
+	        message: "Are you sure to delete this slider ?",
 	        buttons: {
 	            confirm: {
 	                label: 'Yes',

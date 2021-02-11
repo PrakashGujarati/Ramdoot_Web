@@ -31,6 +31,7 @@
             <table class="datatable-init table">
                 <thead>
                     <tr>
+                        <th>Unit</th>
                         <th>Title</th>
                         <th>Action</th>
                     </tr>
@@ -39,6 +40,7 @@
                 	@if(count($book_details) > 0)
                 	@foreach($book_details as $data)
                     <tr>
+                        <td>{{ isset($data->unit->title) ? $data->unit->title:'' }}</td>
                         <td>{{ $data->title }}</td>
                         <td>
                         	<a href="{{ route('book.edit',$data->id) }}"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>

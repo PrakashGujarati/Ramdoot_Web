@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Standard extends Model
 {
     use HasFactory;
+
+    public function board()
+    {
+    	return $this->belongsTo(Board::class,'board_id');
+    }
+
 }

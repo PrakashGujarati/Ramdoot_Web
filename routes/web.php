@@ -77,7 +77,13 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::post('unit/{id}/update', [UnitController::class, 'update'])->name('unit.update');
 	Route::get('unit/{id}/delete', [UnitController::class, 'distroy'])->name('unit.distroy');
 
-
+	/*slider*/
+	Route::get('slider', [SliderController::class, 'index'])->name('slider.index');
+	Route::get('slider/create', [SliderController::class, 'create'])->name('slider.create');
+	Route::post('slider/store', [SliderController::class, 'store'])->name('slider.store');
+	Route::get('slider/{id}/edit', [SliderController::class, 'edit'])->name('slider.edit');
+	Route::post('slider/{id}/update', [SliderController::class, 'update'])->name('slider.update');
+	Route::get('slider/{id}/delete', [SliderController::class, 'distroy'])->name('slider.distroy');
 	
 
 });

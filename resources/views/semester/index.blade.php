@@ -31,6 +31,8 @@
             <table class="datatable-init table">
                 <thead>
                     <tr>
+                        <th>Board</th>
+                        <th>Standard</th>
                         <th>Semester</th>
                         <th>Action</th>
                     </tr>
@@ -39,6 +41,8 @@
                 	@if(count($semester_details) > 0)
                 	@foreach($semester_details as $data)
                     <tr>
+                        <td>{{ isset($data->board->name) ? $data->board->name:'' }}</td>
+                        <td>{{ isset($data->standard->standard) ? $data->standard->standard:'' }}</td>
                         <td>{{ $data->semester }}</td>
                         <td>
                         	<a href="{{ route('semester.edit',$data->id) }}"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>

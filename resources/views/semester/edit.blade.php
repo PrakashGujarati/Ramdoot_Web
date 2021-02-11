@@ -61,7 +61,7 @@
                         
                         <div class="form-group">
                             <button type="submit" class="btn btn-lg btn-primary">Submit</button>
-                            <a type="button" href="{{ route('subject.index') }}" class="btn btn-lg btn-danger text-light">Cancel</a>
+                            <a type="button" href="{{ route('semester.index') }}" class="btn btn-lg btn-danger text-light">Cancel</a>
                         </div>
                     </form>
                 </div>

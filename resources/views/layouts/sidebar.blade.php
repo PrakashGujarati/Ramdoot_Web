@@ -66,6 +66,12 @@
                         </a>
                     </li><!-- .nk-menu-item -->
                     
+                    <li class="nk-menu-item @if(\Request::route()->getName() == 'slider.index' || \Request::route()->getName() == 'slider.create' || \Request::route()->getName() == 'slider.edit') active @endif">
+                        <a href="{{ route('slider.index') }}" class="nk-menu-link">
+                            <span class="nk-menu-icon"><em class="icon ni ni-cart-fill"></em></span>
+                            <span class="nk-menu-text">Slider</span>
+                        </a>
+                    </li><!-- .nk-menu-item -->
 
                     
                     

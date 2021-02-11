@@ -6,6 +6,7 @@ use App\Models\Subject;
 use Illuminate\Http\Request;
 use App\Models\Board;
 use App\Models\Standard;
+use App\Models\semester;
 
 class SubjectController extends Controller
 {
@@ -29,7 +30,8 @@ class SubjectController extends Controller
     {
         $boards = Board::where('status','Active')->get();
         $standards = Standard::where('status','Active')->get();
-        return view('subject.add',compact('boards','standards'));
+        $semesters = semester::where('status','Active')->get();
+        return view('subject.add',compact('boards','standards','semesters'));
     }
 
     /**
@@ -42,6 +44,7 @@ class SubjectController extends Controller
     {
         $this->validate($request, [
             'board_id'     => 'required',
+            'semester_id' => 'required',
             'standard_id'  => 'required',
             'subject_name' => 'required',
             'url' => 'required',
@@ -72,6 +75,7 @@ class SubjectController extends Controller
         $add = new Subject;
         $add->board_id = $request->board_id;
         $add->standard_id = $request->standard_id;
+        $add->semester_id = $request->semester_id;
         $add->subject_name = $request->subject_name;
         $add->url = $request->url;
         $add->thumbnail = $new_name;
@@ -103,7 +107,8 @@ class SubjectController extends Controller
         $subjectdata = Subject::where('id',$id)->first();
         $boards = Board::where('status','Active')->get();
         $standards = Standard::where('status','Active')->get();
-        return view('subject.edit',compact('subjectdata','boards','standards'));
+        $semesters = semester::where('status','Active')->get();
+        return view('subject.edit',compact('subjectdata','boards','standards','semesters'));
 
     }
 
@@ -118,6 +123,7 @@ class SubjectController extends Controller
     {
         $this->validate($request, [
             'board_id'     => 'required',
+            'semester_id' => 'required',
             'standard_id'  => 'required',
             'subject_name' => 'required',
             'url' => 'required',
@@ -150,6 +156,7 @@ class SubjectController extends Controller
         $update = Subject::find($id);
         $update->board_id = $request->board_id;
         $update->standard_id = $request->standard_id;
+        $update->semester_id = $request->semester_id;
         $update->subject_name = $request->subject_name;
         $update->url = $request->url;
         $update->thumbnail = $new_name;

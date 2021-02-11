@@ -31,6 +31,7 @@
             <table class="datatable-init table">
                 <thead>
                     <tr>
+                        <th>Board</th>
                         <th>Standard</th>
                         <th>Semester</th>
                         <th>Action</th>
@@ -40,6 +41,7 @@
                 	@if(count($standard_details) > 0)
                 	@foreach($standard_details as $data)
                     <tr>
+                        <td>{{ isset($data->board->name) ? $data->board->name:'' }}</td>
                         <td>{{ $data->standard }}</td>
                         <td>{{ $data->semester }}</td>
                         <td>

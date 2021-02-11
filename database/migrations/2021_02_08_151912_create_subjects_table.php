@@ -17,6 +17,7 @@ class CreateSubjectsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('board_id');
             $table->unsignedBigInteger('standard_id');
+            $table->unsignedBigInteger('semester_id');
             $table->string('subject_name',255)->nullable();
             $table->string('url',500)->nullable();
             $table->string('thumbnail',500)->nullable();

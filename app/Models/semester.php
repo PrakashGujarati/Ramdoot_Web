@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class semester extends Model
 {
     use HasFactory;
+
+    public function board()
+    {
+    	return $this->belongsTo(Board::class,'board_id');
+    }
+
+    public function standard()
+    {
+    	return $this->belongsTo(Standard::class,'board_id');
+    }
 }

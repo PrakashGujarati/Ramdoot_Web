@@ -8,4 +8,22 @@ use Illuminate\Database\Eloquent\Model;
 class unit extends Model
 {
     use HasFactory;
+
+    public function standard()
+    {
+    	return $this->belongsTo(Standard::class,'standard_id');
+    }
+
+    public function semester()
+    {
+    	return $this->belongsTo(semester::class,'semester_id');
+    }
+
+    public function subject()
+    {
+    	return $this->belongsTo(Subject::class,'subject_id');
+    }
+
+
+
 }

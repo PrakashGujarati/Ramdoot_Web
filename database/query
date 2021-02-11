@@ -1,0 +1,8 @@
+
+
+
+
+----------------------- 11-02-2021 -------------------
+
+
+ALTER TABLE `subjects` ADD `semester_id` INT(11) NOT NULL DEFAULT '0' AFTER `standard_id`;
