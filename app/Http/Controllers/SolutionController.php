@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Book;
+use App\Models\solution;
 use Illuminate\Http\Request;
-use App\Models\Subject;
 use App\Models\unit;
 use Auth;
 
-class BookController extends Controller
+class SolutionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,8 +16,8 @@ class BookController extends Controller
      */
     public function index()
     {
-        $book_details = Book::where('status','Active')->get();
-        return view('book.index',compact('book_details'));
+        $solution_details = solution::where('status','Active')->get();
+        return view('solution.index',compact('solution_details'));
     }
 
     /**
@@ -29,7 +28,7 @@ class BookController extends Controller
     public function create()
     {
         $units = unit::where('status','Active')->get();
-        return view('book.add',compact('units'));
+        return view('solution.add',compact('units'));
     }
 
     /**
@@ -42,26 +41,25 @@ class BookController extends Controller
     {
         $this->validate($request, [
             'unit_id'     => 'required',
-            'title' => 'required',
-            'url' => 'required',
-            'thumbnail'  => 'required',
-            'pages' => 'required',
-            'label' => 'required',
-            'release_date' => 'required',    
+            'question' => 'required',
+            'answer' => 'required',
+            'marks' => 'required',
+            'image'  => 'required',
+            'label' => 'required',    
         ]);
 
         $new_name='';
-        if($request->has('thumbnail'))
+        if($request->has('image'))
         {
         
-            $image = $request->file('thumbnail');
+            $image = $request->file('image');
 
             $new_name = rand() . '.' . $image->getClientOriginalExtension();
 
             $valid_ext = array('png','jpeg','jpg');
 
             // Location
-            $location = public_path('upload/book/').$new_name;
+            $location = public_path('upload/solution/').$new_name;
 
             $file_extension = pathinfo($location, PATHINFO_EXTENSION);
             $file_extension = strtolower($file_extension);
@@ -71,76 +69,72 @@ class BookController extends Controller
             }
         }
 
-        $add = new Book;
+        $add = new solution;
         $add->user_id  = Auth::user()->id;
         $add->unit_id = $request->unit_id;
-        $add->title = $request->title;
-        $add->url = $request->url;
-        $add->thumbnail = $new_name;
-        $add->pages = isset($request->pages) ? $request->pages:'';
-        $add->description = isset($request->description) ? $request->description:'';
+        $add->question = $request->question;
+        $add->answer = $request->answer;
+        $add->image = $new_name;
+        $add->marks = $request->marks;
         $add->label = $request->label;
-        $add->release_date = $request->release_date;
         $add->save();
 
-        return redirect()->route('book.index')->with('success', 'Book Added Successfully.');
-
+        return redirect()->route('solution.index')->with('success', 'Solution Added Successfully.');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Book  $book
+     * @param  \App\Models\solution  $solution
      * @return \Illuminate\Http\Response
      */
-    public function show(Book $book)
+    public function show(solution $solution)
     {
-        //
+        
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Book  $book
+     * @param  \App\Models\solution  $solution
      * @return \Illuminate\Http\Response
      */
-    public function edit(Book $book,$id)
+    public function edit(solution $solution,$id)
     {
         $units = unit::where('status','Active')->get();
-        $bookdata = Book::where('id',$id)->first();
-        return view('book.edit',compact('bookdata','units'));
+        $solutiondata = solution::where('id',$id)->first();
+        return view('solution.edit',compact('solutiondata','units'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Book  $book
+     * @param  \App\Models\solution  $solution
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Book $book,$id)
+    public function update(Request $request, solution $solution,$id)
     {
         $this->validate($request, [
-            'unit_id' => 'required',
-            'title' => 'required',
-            'url' => 'required',
-            'pages' => 'required',
+            'unit_id'     => 'required',
+            'question' => 'required',
+            'answer' => 'required',
+            'marks' => 'required',
             'label' => 'required',
-            'release_date' => 'required',
         ]);
 
         $new_name='';
-        if($request->has('thumbnail'))
+        if($request->has('image'))
         {
         
-            $image = $request->file('thumbnail');
+            $image = $request->file('image');
 
             $new_name = rand() . '.' . $image->getClientOriginalExtension();
 
             $valid_ext = array('png','jpeg','jpg');
 
             // Location
-            $location = public_path('upload/book/').$new_name;
+            $location = public_path('upload/solution/').$new_name;
 
             $file_extension = pathinfo($location, PATHINFO_EXTENSION);
             $file_extension = strtolower($file_extension);
@@ -150,36 +144,35 @@ class BookController extends Controller
             }
         }
         else{
-            $new_name = $request->hidden_thumbnail;
+            $new_name = $request->hidden_image;
         }
 
-        $update = Book::find($id);
+        $update = solution::find($id);
+        $update->user_id  = Auth::user()->id;
         $update->unit_id = $request->unit_id;
-        $update->title = $request->title;
-        $update->url = $request->url;
-        $update->thumbnail = $new_name;
-        $update->pages = isset($request->pages) ? $request->pages:'';
-        $update->description = isset($request->description) ? $request->description:'';
+        $update->question = $request->question;
+        $update->answer = $request->answer;
+        $update->image = $new_name;
+        $update->marks = $request->marks;
         $update->label = $request->label;
-        $update->release_date = $request->release_date;
         $update->save();
 
-        return redirect()->route('book.index')->with('success', 'Book Updated Successfully.');
+        return redirect()->route('solution.index')->with('success', 'Solution Updated Successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Book  $book
+     * @param  \App\Models\solution  $solution
      * @return \Illuminate\Http\Response
      */
-    public function distroy(Book $book,$id)
+    public function distroy(solution $solution,$id)
     {
-        $delete = Book::find($id);
+        $delete = solution::find($id);
         $delete->status = "Deleted";
         $delete->save();
 
-        return redirect()->route('book.index')->with('success', 'Book Deleted Successfully.');
+        return redirect()->route('solution.index')->with('success', 'Solution Deleted Successfully.');
     }
 
     function compressImage($source, $destination, $quality) {
@@ -195,6 +188,5 @@ class BookController extends Controller
         $image = imagecreatefrompng($source);
 
       imagejpeg($image, $destination, $quality);
-
     }
 }

@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title','Standards')
+@section('title','Solutions')
 @section('css')
 @endsection
 
@@ -18,10 +18,10 @@
 			@endif
         	<div class="row">
         		<div class="col-lg-10">
-            		<h4 class="nk-block-title">Standard List</h4>
+            		<h4 class="nk-block-title">Solution List</h4>
             	</div>
             	<div class="col-lg-2 text-right">
-            		<a href="{{ route('standard.create') }}" class="btn btn-primary text-light">Add Standard</a>
+            		<a href="{{ route('solution.create') }}" class="btn btn-primary text-light">Add Solution</a>
             	</div>
             </div>
         </div>
@@ -31,20 +31,22 @@
             <table class="datatable-init table">
                 <thead>
                     <tr>
-                        <th>Board</th>
-                        <th>Standard</th>
+                        <th>Unit</th>
+                        <th>Question</th>
+                        <th>Answer</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                	@if(count($standard_details) > 0)
-                	@foreach($standard_details as $data)
+                	@if(count($solution_details) > 0)
+                	@foreach($solution_details as $data)
                     <tr>
-                        <td>{{ isset($data->board->name) ? $data->board->name:'' }}</td>
-                        <td>{{ $data->standard }}</td>
+                        <td>{{ isset($data->unit->title) ? $data->unit->title:'' }}</td>
+                        <td>{{ $data->question }}</td>
+                        <td>{{ $data->answer }}</td>
                         <td>
-                        	<a href="{{ route('standard.edit',$data->id) }}"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
-                        	<a href="javascript:;" data-url="{{ route('standard.distroy',$data->id) }}" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a>
+                        	<a href="{{ route('solution.edit',$data->id) }}"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
+                        	<a href="javascript:;" data-url="{{ route('solution.distroy',$data->id) }}" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a>
                         </td>
                     </tr>
                     @endforeach
@@ -67,7 +69,7 @@
 	$('.distroy').on('click', function() {
 	    let del_url = $(this).attr('data-url');
 	    bootbox.confirm({
-	        message: "Are you sure to delete this standard ?",
+	        message: "Are you sure to delete this solution ?",
 	        buttons: {
 	            confirm: {
 	                label: 'Yes',

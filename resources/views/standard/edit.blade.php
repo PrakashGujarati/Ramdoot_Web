@@ -53,7 +53,7 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label class="form-label">Semester</label>
                             <div class="form-control-wrap">
                                 <input type="text" class="form-control" id="semester" name="semester" value="{{ $standarddata->semester }}">
@@ -63,7 +63,7 @@
                                     </span>
                                 @enderror
                             </div>
-                        </div>
+                        </div> -->
                         <div class="form-group">
                             <label class="form-label">Thumbnail</label>
                             <div class="form-control-wrap">

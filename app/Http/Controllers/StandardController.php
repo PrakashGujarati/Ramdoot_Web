@@ -41,7 +41,7 @@ class StandardController extends Controller
         $this->validate($request, [
             'board_id'     => 'required',
             'standard'  => 'required',
-            'semester' => 'required',
+            //'semester' => 'required',
             'section' => 'required',
             'thumbnail'  => 'required',
         ]);
@@ -70,7 +70,6 @@ class StandardController extends Controller
         $add = new Standard;
         $add->board_id = $request->board_id;
         $add->standard = $request->standard;
-        $add->semester = $request->semester;
         $add->section = $request->section;
         $add->thumbnail = $new_name;
         $add->save();
@@ -114,7 +113,7 @@ class StandardController extends Controller
         $this->validate($request, [
             'board_id'     => 'required',
             'standard'  => 'required',
-            'semester' => 'required',
+           // 'semester' => 'required',
             'section' => 'required',
         ]);
 
@@ -145,7 +144,6 @@ class StandardController extends Controller
         $update = Standard::find($id);
         $update->board_id = $request->board_id;
         $update->standard = $request->standard;
-        $update->semester = $request->semester;
         $update->section = $request->section;
         $update->thumbnail = $new_name;
         $update->save();

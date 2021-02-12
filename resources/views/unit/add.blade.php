@@ -100,7 +100,31 @@
                                 @enderror
                             </div>
                         </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Pages</label>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control" id="pages" name="pages" value="{{ old('pages') }}">
+                                @error('pages')
+                                    <span class="text-danger" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
                         
+                        <div class="form-group">
+                            <label class="form-label">Description</label>
+                            <div class="form-control-wrap">
+                                <textarea class="form-control" id="description" name="description" value="{{ old('description') }}"></textarea>
+                                @error('description')
+                                    <span class="text-danger" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
                         <div class="form-group">
                             <button type="submit" class="btn btn-lg btn-primary">Submit</button>
                             <a type="button" href="{{ route('unit.index') }}" class="btn btn-lg btn-danger text-light">Cancel</a>

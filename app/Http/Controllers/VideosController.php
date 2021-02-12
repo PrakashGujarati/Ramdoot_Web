@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\unit;
+use App\Models\videos;
 use Illuminate\Http\Request;
-use App\Models\Board;
-use App\Models\Standard;
-use App\Models\semester;
-use App\Models\Subject;
+use App\Models\unit;
+use Auth;
 
-class UnitController extends Controller
+class VideosController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,8 +16,8 @@ class UnitController extends Controller
      */
     public function index()
     {
-        $unit_details = unit::where('status','Active')->get();
-        return view('unit.index',compact('unit_details'));
+        $videos_details = videos::where('status','Active')->get();
+        return view('videos.index',compact('videos_details'));
     }
 
     /**
@@ -29,10 +27,8 @@ class UnitController extends Controller
      */
     public function create()
     {
-        $semesters = semester::where('status','Active')->get();
-        $standards = Standard::where('status','Active')->get();
-        $subjects = Subject::where('status','Active')->get();
-        return view('unit.add',compact('subjects','standards','semesters'));
+        $units = unit::where('status','Active')->get();
+        return view('videos.add',compact('units'));
     }
 
     /**
@@ -44,13 +40,13 @@ class UnitController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'standard_id'  => 'required',
-            'semester_id' => 'required',
-            'subject_id' => 'required',
+            'unit_id'     => 'required',
             'title' => 'required',
             'url' => 'required',
-            'thumbnail' => 'required',
-            'pages' => 'required',
+            'thumbnail'  => 'required',
+            'duration' => 'required',
+            'label' => 'required',
+            'release_date' => 'required',    
         ]);
 
         $new_name='';
@@ -64,7 +60,7 @@ class UnitController extends Controller
             $valid_ext = array('png','jpeg','jpg');
 
             // Location
-            $location = public_path('upload/unit/').$new_name;
+            $location = public_path('upload/videos/').$new_name;
 
             $file_extension = pathinfo($location, PATHINFO_EXTENSION);
             $file_extension = strtolower($file_extension);
@@ -74,27 +70,28 @@ class UnitController extends Controller
             }
         }
 
-        $add = new unit;
-        $add->standard_id = $request->standard_id;
-        $add->semester_id = $request->semester_id;
-        $add->subject_id = $request->subject_id;
+        $add = new videos;
+        $add->user_id  = Auth::user()->id;
+        $add->unit_id = $request->unit_id;
         $add->title = $request->title;
         $add->url = $request->url;
         $add->thumbnail = $new_name;
-        $add->pages = isset($request->pages) ? $request->pages:'';
+        $add->duration = $request->duration;
         $add->description = isset($request->description) ? $request->description:'';
+        $add->label = $request->label;
+        $add->release_date = $request->release_date;
         $add->save();
 
-        return redirect()->route('unit.index')->with('success', 'Unit Added Successfully.');
+        return redirect()->route('videos.index')->with('success', 'Videos Added Successfully.');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\unit  $unit
+     * @param  \App\Models\videos  $videos
      * @return \Illuminate\Http\Response
      */
-    public function show(unit $unit)
+    public function show(videos $videos)
     {
         //
     }
@@ -102,34 +99,32 @@ class UnitController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\unit  $unit
+     * @param  \App\Models\videos  $videos
      * @return \Illuminate\Http\Response
      */
-    public function edit(unit $unit,$id)
+    public function edit(videos $videos,$id)
     {
-        $unitdata = unit::where('id',$id)->first();
-        $subjects = Subject::where('status','Active')->get();
-        $semesters = semester::where('status','Active')->get();
-        $standards = Standard::where('status','Active')->get();
-        return view('unit.edit',compact('unitdata','subjects','semesters','standards'));
+        $units = unit::where('status','Active')->get();
+        $videodata = videos::where('id',$id)->first();
+        return view('videos.edit',compact('videodata','units'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\unit  $unit
+     * @param  \App\Models\videos  $videos
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, unit $unit,$id)
+    public function update(Request $request, videos $videos,$id)
     {
         $this->validate($request, [
-            'standard_id'  => 'required',
-            'semester_id' => 'required',
-            'subject_id' => 'required',
+            'unit_id' => 'required',
             'title' => 'required',
             'url' => 'required',
-            'pages' => 'required',
+            'duration' => 'required',
+            'label' => 'required',
+            'release_date' => 'required',
         ]);
 
         $new_name='';
@@ -143,7 +138,7 @@ class UnitController extends Controller
             $valid_ext = array('png','jpeg','jpg');
 
             // Location
-            $location = public_path('upload/unit/').$new_name;
+            $location = public_path('upload/videos/').$new_name;
 
             $file_extension = pathinfo($location, PATHINFO_EXTENSION);
             $file_extension = strtolower($file_extension);
@@ -156,33 +151,33 @@ class UnitController extends Controller
             $new_name = $request->hidden_thumbnail;
         }
 
-        $update = unit::find($id);
-        $update->standard_id = $request->standard_id;
-        $update->semester_id = $request->semester_id;
-        $update->subject_id = $request->subject_id;
+        $update = videos::find($id);
+        $update->unit_id = $request->unit_id;
         $update->title = $request->title;
         $update->url = $request->url;
         $update->thumbnail = $new_name;
-        $update->pages = isset($request->pages) ? $request->pages:'';
+        $update->duration = $request->duration;
         $update->description = isset($request->description) ? $request->description:'';
+        $update->label = $request->label;
+        $update->release_date = $request->release_date;
         $update->save();
 
-        return redirect()->route('unit.index')->with('success', 'Unit Updated Successfully.');
+        return redirect()->route('videos.index')->with('success', 'Videos Updated Successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\unit  $unit
+     * @param  \App\Models\videos  $videos
      * @return \Illuminate\Http\Response
      */
-    public function distroy(unit $unit,$id)
+    public function distroy(videos $videos,$id)
     {
-        $delete = unit::find($id);
+        $delete = videos::find($id);
         $delete->status = "Deleted";
         $delete->save();
 
-        return redirect()->route('unit.index')->with('success', 'Unit Deleted Successfully.');
+        return redirect()->route('videos.index')->with('success', 'Videos Deleted Successfully.');
     }
 
     function compressImage($source, $destination, $quality) {
@@ -198,6 +193,6 @@ class UnitController extends Controller
         $image = imagecreatefrompng($source);
 
       imagejpeg($image, $destination, $quality);
-
     }
+
 }

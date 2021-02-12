@@ -19,59 +19,129 @@
                 <ul class="nk-menu">
                     <li class="nk-menu-item @if(\Request::route()->getName() == 'dashboard') active @endif">
                         <a href="{{ route('dashboard') }}" class="nk-menu-link">    
-                            <span class="nk-menu-icon"><em class="icon ni ni-cart-fill"></em></span>
+                            <span class="nk-menu-icon"><em class="icon ni ni-masonry-fill"></em></span>
                             <span class="nk-menu-text">Dashboard</span>
                         </a>
                     </li><!-- .nk-menu-item -->
 
-                    <li class="nk-menu-item @if(\Request::route()->getName() == 'board.index' || \Request::route()->getName() == 'board.create' || \Request::route()->getName() == 'board.edit') active @endif">
-                        <a href="{{ route('board.index') }}" class="nk-menu-link">
-                            <span class="nk-menu-icon"><em class="icon ni ni-cart-fill"></em></span>
-                            <span class="nk-menu-text">Board</span>
-                        </a>
-                    </li><!-- .nk-menu-item -->
 
-                    <li class="nk-menu-item @if(\Request::route()->getName() == 'standard.index' || \Request::route()->getName() == 'standard.create' || \Request::route()->getName() == 'standard.edit') active @endif">
-                        <a href="{{ route('standard.index') }}" class="nk-menu-link">
-                            <span class="nk-menu-icon"><em class="icon ni ni-cart-fill"></em></span>
-                            <span class="nk-menu-text">Standard</span>
+                    <li class="nk-menu-item has-sub">
+                        <a href="#" class="nk-menu-link nk-menu-toggle">
+                            <span class="nk-menu-icon"><em class="icon ni ni-layers-fill"></em></span>
+                            <span class="nk-menu-text">Resources</span>
                         </a>
-                    </li><!-- .nk-menu-item -->
+                        <ul class="nk-menu-sub">
+                            <li class="nk-menu-item @if(\Request::route()->getName() == 'board.index' || \Request::route()->getName() == 'board.create' || \Request::route()->getName() == 'board.edit') active @endif">
+                                <a href="{{ route('board.index') }}" class="nk-menu-link">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
+                                    <span class="nk-menu-text">Board</span>
+                                </a>
+                            </li><!-- .nk-menu-item -->
 
-                    <li class="nk-menu-item @if(\Request::route()->getName() == 'semester.index' || \Request::route()->getName() == 'semester.create' || \Request::route()->getName() == 'semester.edit') active @endif">
-                        <a href="{{ route('semester.index') }}" class="nk-menu-link">
-                            <span class="nk-menu-icon"><em class="icon ni ni-cart-fill"></em></span>
-                            <span class="nk-menu-text">Semester</span>
+                            <li class="nk-menu-item @if(\Request::route()->getName() == 'standard.index' || \Request::route()->getName() == 'standard.create' || \Request::route()->getName() == 'standard.edit') active @endif">
+                                <a href="{{ route('standard.index') }}" class="nk-menu-link">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
+                                    <span class="nk-menu-text">Standard</span>
+                                </a>
+                            </li><!-- .nk-menu-item -->
+
+                            <li class="nk-menu-item @if(\Request::route()->getName() == 'semester.index' || \Request::route()->getName() == 'semester.create' || \Request::route()->getName() == 'semester.edit') active @endif">
+                                <a href="{{ route('semester.index') }}" class="nk-menu-link">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
+                                    <span class="nk-menu-text">Semester</span>
+                                </a>
+                            </li><!-- .nk-menu-item -->
+
+                        </ul><!-- .nk-menu-sub -->
+                    </li>
+
+
+                    <li class="nk-menu-item has-sub">
+                        <a href="#" class="nk-menu-link nk-menu-toggle">
+                            <span class="nk-menu-icon"><em class="icon ni ni-view-group-fill"></em></span>
+                            <span class="nk-menu-text">Modules</span>
                         </a>
-                    </li><!-- .nk-menu-item -->
+                        <ul class="nk-menu-sub">
+                            <li class="nk-menu-item @if(\Request::route()->getName() == 'subject.index' || \Request::route()->getName() == 'subject.create' || \Request::route()->getName() == 'subject.edit') active @endif">
+                            <a href="{{ route('subject.index') }}" class="nk-menu-link">
+                                <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
+                                <span class="nk-menu-text">Subject</span>
+                            </a>
+                        </li><!-- .nk-menu-item -->
 
-                    <li class="nk-menu-item @if(\Request::route()->getName() == 'subject.index' || \Request::route()->getName() == 'subject.create' || \Request::route()->getName() == 'subject.edit') active @endif">
-                        <a href="{{ route('subject.index') }}" class="nk-menu-link">
-                            <span class="nk-menu-icon"><em class="icon ni ni-cart-fill"></em></span>
-                            <span class="nk-menu-text">Subject</span>
-                        </a>
-                    </li><!-- .nk-menu-item -->
+                        <li class="nk-menu-item @if(\Request::route()->getName() == 'unit.index' || \Request::route()->getName() == 'unit.create' || \Request::route()->getName() == 'unit.edit') active @endif">
+                            <a href="{{ route('unit.index') }}" class="nk-menu-link">
+                                <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
+                                <span class="nk-menu-text">Unit</span>
+                            </a>
+                        </li><!-- .nk-menu-item -->
 
-                    <li class="nk-menu-item @if(\Request::route()->getName() == 'unit.index' || \Request::route()->getName() == 'unit.create' || \Request::route()->getName() == 'unit.edit') active @endif">
-                        <a href="{{ route('unit.index') }}" class="nk-menu-link">
-                            <span class="nk-menu-icon"><em class="icon ni ni-cart-fill"></em></span>
-                            <span class="nk-menu-text">Unit</span>
-                        </a>
-                    </li><!-- .nk-menu-item -->
-
+                        </ul><!-- .nk-menu-sub -->
+                    </li>
+                    
                     <li class="nk-menu-item @if(\Request::route()->getName() == 'book.index' || \Request::route()->getName() == 'book.create' || \Request::route()->getName() == 'book.edit') active @endif">
                         <a href="{{ route('book.index') }}" class="nk-menu-link">
-                            <span class="nk-menu-icon"><em class="icon ni ni-cart-fill"></em></span>
+                            <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
                             <span class="nk-menu-text">Book</span>
                         </a>
-                    </li><!-- .nk-menu-item -->
-                    
-                    <li class="nk-menu-item @if(\Request::route()->getName() == 'slider.index' || \Request::route()->getName() == 'slider.create' || \Request::route()->getName() == 'slider.edit') active @endif">
-                        <a href="{{ route('slider.index') }}" class="nk-menu-link">
-                            <span class="nk-menu-icon"><em class="icon ni ni-cart-fill"></em></span>
-                            <span class="nk-menu-text">Slider</span>
+                    </li><!-- .nk-menu-item -->                    
+
+                    <li class="nk-menu-item @if(\Request::route()->getName() == 'videos.index' || \Request::route()->getName() == 'videos.create' || \Request::route()->getName() == 'videos.edit') active @endif">
+                        <a href="{{ route('videos.index') }}" class="nk-menu-link">
+                            <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
+                            <span class="nk-menu-text">Videos</span>
                         </a>
                     </li><!-- .nk-menu-item -->
+
+                    <li class="nk-menu-item @if(\Request::route()->getName() == 'solution.index' || \Request::route()->getName() == 'solution.create' || \Request::route()->getName() == 'solution.edit') active @endif">
+                        <a href="{{ route('solution.index') }}" class="nk-menu-link">
+                            <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
+                            <span class="nk-menu-text">Solution</span>
+                        </a>
+                    </li><!-- .nk-menu-item -->
+
+
+                    <li class="nk-menu-item @if(\Request::route()->getName() == 'material.index' || \Request::route()->getName() == 'material.create' || \Request::route()->getName() == 'material.edit') active @endif">
+                        <a href="#" class="nk-menu-link">
+                            <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
+                            <span class="nk-menu-text">Material</span>
+                        </a>
+                    </li><!-- .nk-menu-item -->
+
+                    <li class="nk-menu-item @if(\Request::route()->getName() == 'paper.index' || \Request::route()->getName() == 'paper.create' || \Request::route()->getName() == 'paper.edit') active @endif">
+                        <a href="#" class="nk-menu-link">
+                            <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
+                            <span class="nk-menu-text">Paper</span>
+                        </a>
+                    </li><!-- .nk-menu-item -->
+
+                    <li class="nk-menu-item @if(\Request::route()->getName() == 'worksheet.index' || \Request::route()->getName() == 'worksheet.create' || \Request::route()->getName() == 'worksheet.edit') active @endif">
+                        <a href="#" class="nk-menu-link">
+                            <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
+                            <span class="nk-menu-text">Worksheet</span>
+                        </a>
+                    </li><!-- .nk-menu-item -->
+
+
+                    <li class="nk-menu-item has-sub">
+                        <a href="#" class="nk-menu-link nk-menu-toggle">
+                            <span class="nk-menu-icon"><em class="icon ni ni-align-right"></em></span>
+                            <span class="nk-menu-text">Others</span>
+                        </a>
+                        <ul class="nk-menu-sub">
+                            <li class="nk-menu-item @if(\Request::route()->getName() == 'slider.index' || \Request::route()->getName() == 'slider.create' || \Request::route()->getName() == 'slider.edit') active @endif">
+                                <a href="{{ route('slider.index') }}" class="nk-menu-link">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
+                                    <span class="nk-menu-text">Slider</span>
+                                </a>
+                            </li><!-- .nk-menu-item -->
+                        </ul><!-- .nk-menu-sub -->
+                    </li>
+
+                    
+
+
+
 
                     
                     
