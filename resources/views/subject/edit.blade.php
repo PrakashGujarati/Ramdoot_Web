@@ -21,7 +21,7 @@
                                 <select name="board_id" class="form-control" id="board_id">
                                     <option>--Select Board--</option>
                                     @foreach($boards as $boards_data)
-                                    <option value="{{ $boards_data->id }}" @if($subjectdata->board_id == $boards_data->id) selected="" @endif>{{ $boards_data->name }}</option>
+                                    <option value="{{ $boards_data->id }}" @if($subjectdata->board_id == $boards_data->id) selected="" @endif>{{ $boards_data->name." - ".$boards_data->medium }}</option>
                                     @endforeach
                                 </select>
                                 @error('name')

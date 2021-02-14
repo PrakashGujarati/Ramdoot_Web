@@ -18,13 +18,13 @@ class RegisterController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|min:4',
-            'email' => 'required|email',
+            'mobile' => 'required|numeric|min:10',
             'password' => 'required|min:8',
         ]);
  
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
+            'name' => $request->name,            
+            'mobile' => $request->mobile,
             'password' => bcrypt($request->password)
         ]);
        
@@ -39,7 +39,7 @@ class RegisterController extends Controller
     public function login(Request $request)
     {
         $data = [
-            'email' => $request->email,
+            'mobile' => $request->mobile,
             'password' => $request->password
         ];
  
