@@ -2,6 +2,20 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\api\UserController;
+use App\Http\Controllers\api\BoardController;
+use App\Http\Controllers\api\SliderController;
+use App\Http\Controllers\api\StandardController;
+use App\Http\Controllers\api\SemesterController;
+use App\Http\Controllers\api\SubjectController;
+use App\Http\Controllers\api\VideosController;
+use App\Http\Controllers\api\SolutionController;
+use App\Http\Controllers\api\MaterialController;
+use App\Http\Controllers\api\PaperController;
+use App\Http\Controllers\api\WorksheetController;
+
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +28,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::post('login', [UserController::class, 'login']);
+Route::post('register', [UserController::class, 'register']);
+
+
+Route::post('board_medium', [BoardController::class, 'boardMedium']);
+Route::post('slider', [SliderController::class, 'slider']);
+Route::post('standard_list', [StandardController::class, 'standardList']);
+Route::post('semester_list', [SemesterController::class, 'semesterList']);
+Route::post('subject_list', [SubjectController::class, 'subjectList']);
+Route::post('video_list', [VideosController::class, 'videoList']);
+Route::post('solution_list', [SolutionController::class, 'solutionList']);
+Route::post('material_list', [MaterialController::class, 'materialList']);
+Route::post('paper_list', [PaperController::class, 'paperList']);
+Route::post('worksheet_list', [WorksheetController::class, 'worksheetList']);
+
+
+

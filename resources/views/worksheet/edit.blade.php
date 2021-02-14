@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title','Add Material')
+@section('title','Edit Worksheet')
 @section('css')
 @endsection
 
@@ -11,11 +11,13 @@
             <div class="card h-100">
                 <div class="card-inner">
                     <div class="card-head">
-                        <h5 class="card-title">Add Material</h5>
+                        <h5 class="card-title">Edit Worksheet</h5>
                     </div>
-                    <form action="{{ route('material.store') }}" method="POST" enctype='multipart/form-data'>
+                    <form action="{{ route('worksheet.update',$worksheetdata->id) }}" method="POST" enctype='multipart/form-data'>
                     @csrf
-                        
+                    
+                            
+
                         <div class="row">
 
                             <div class="form-group col-lg-6">
@@ -24,7 +26,7 @@
                                     <select name="unit_id" class="form-control" id="unit_id">
                                         <option>--Select Unit--</option>
                                         @foreach($units as $units_data)
-                                        <option value="{{ $units_data->id }}" @if(old('unit_id') == $units_data->id) selected="" @endif>{{ $units_data->title }}</option>
+                                        <option value="{{ $units_data->id }}" @if($worksheetdata->unit_id == $units_data->id) selected="" @endif>{{ $units_data->title }}</option>
                                         @endforeach
                                     </select>
                                     @error('unit_id')
@@ -38,7 +40,7 @@
                             <div class="form-group col-lg-6">
                                 <label class="form-label">Title</label>
                                 <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="title" name="title" value="{{ old('title') }}">
+                                    <input type="text" class="form-control" id="title" name="title" value="{{ $worksheetdata->title }}">
                                     @error('title')
                                         <span class="text-danger" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -52,7 +54,7 @@
                         <div class="form-group">
                             <label class="form-label">Url</label>
                             <div class="form-control-wrap">
-                                <input type="text" class="form-control" id="url" name="url" value="{{ old('url') }}">
+                                <input type="text" class="form-control" id="url" name="url" value="{{ $worksheetdata->url }}">
                                 @error('url')
                                     <span class="text-danger" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -66,10 +68,10 @@
 
                         <div class="row">
                             <div class="form-group col-lg-6">
-                                <label class="form-label">Size</label>
+                                <label class="form-label">Type</label>
                                 <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="size" name="size" value="{{ old('size') }}">
-                                    @error('size')
+                                    <input type="text" class="form-control" id="type" name="type" value="{{ $worksheetdata->type }}">
+                                    @error('type')
                                         <span class="text-danger" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
@@ -81,7 +83,7 @@
                             <div class="form-group col-lg-6">
                                 <label class="form-label">Label</label>
                                 <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="label" name="label" value="{{ old('label') }}">
+                                    <input type="text" class="form-control" id="label" name="label" value="{{ $worksheetdata->label }}">
                                     @error('label')
                                         <span class="text-danger" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -95,18 +97,20 @@
                         <div class="form-group">
                             <label class="form-label">Description</label>
                             <div class="form-control-wrap">
-                                <textarea class="form-control" id="description" name="description" value="{{ old('description') }}"></textarea>
+                                <textarea class="form-control" id="description" name="description" value="{{ $worksheetdata->description }}">{{ $worksheetdata->description }}</textarea>
                                 @error('description')
                                     <span class="text-danger" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
                             </div>
-                        </div>
+                        </div>               
 
+                        
+                        
                         <div class="form-group">
                             <button type="submit" class="btn btn-lg btn-primary">Submit</button>
-                            <a type="button" href="{{ route('solution.index') }}" class="btn btn-lg btn-danger text-light">Cancel</a>
+                            <a type="button" href="{{ route('worksheet.index') }}" class="btn btn-lg btn-danger text-light">Cancel</a>
                         </div>
                     </form>
                 </div>

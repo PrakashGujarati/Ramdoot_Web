@@ -28,17 +28,14 @@ use App\Http\Controllers\WorksheetController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+Route::get('/', function () {
+    return redirect('/login');
+});
 
 Route::group(['middleware' => 'auth'], function(){
-	Route::get('/', [HomeController::class, 'index'])->name('dashboard');
-
-
+	Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 	/*board*/
-	Route::get('board', [BoardController::class, 'index'])->name('board.index');
+	Route::get('/board', [BoardController::class, 'index'])->name('board.index');
 	Route::get('board/create', [BoardController::class, 'create'])->name('board.create');
 	Route::post('board/store', [BoardController::class, 'store'])->name('board.store');
 	Route::get('board/{id}/edit', [BoardController::class, 'edit'])->name('board.edit');
@@ -134,14 +131,5 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::post('worksheet/{id}/update', [WorksheetController::class, 'update'])->name('worksheet.update');
 	Route::get('worksheet/{id}/delete', [WorksheetController::class, 'distroy'])->name('worksheet.distroy');
 
-	
-	
-	
-	
-	
 
 });
-
-// Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-//     return view('dashboard');
-// })->name('dashboard');

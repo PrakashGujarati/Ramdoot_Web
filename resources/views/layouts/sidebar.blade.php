@@ -102,21 +102,21 @@
 
 
                     <li class="nk-menu-item @if(\Request::route()->getName() == 'material.index' || \Request::route()->getName() == 'material.create' || \Request::route()->getName() == 'material.edit') active @endif">
-                        <a href="#" class="nk-menu-link">
+                        <a href="{{ route('material.index') }}" class="nk-menu-link">
                             <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
                             <span class="nk-menu-text">Material</span>
                         </a>
                     </li><!-- .nk-menu-item -->
 
                     <li class="nk-menu-item @if(\Request::route()->getName() == 'paper.index' || \Request::route()->getName() == 'paper.create' || \Request::route()->getName() == 'paper.edit') active @endif">
-                        <a href="#" class="nk-menu-link">
+                        <a href="{{ route('paper.index') }}" class="nk-menu-link">
                             <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
                             <span class="nk-menu-text">Paper</span>
                         </a>
                     </li><!-- .nk-menu-item -->
 
                     <li class="nk-menu-item @if(\Request::route()->getName() == 'worksheet.index' || \Request::route()->getName() == 'worksheet.create' || \Request::route()->getName() == 'worksheet.edit') active @endif">
-                        <a href="#" class="nk-menu-link">
+                        <a href="{{ route('worksheet.index') }}" class="nk-menu-link">
                             <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
                             <span class="nk-menu-text">Worksheet</span>
                         </a>
