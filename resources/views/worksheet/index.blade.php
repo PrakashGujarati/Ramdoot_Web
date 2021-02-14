@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title','Materials')
+@section('title','Worksheets')
 @section('css')
 @endsection
 
@@ -18,10 +18,10 @@
 			@endif
         	<div class="row">
         		<div class="col-lg-10">
-            		<h4 class="nk-block-title">Material List</h4>
+            		<h4 class="nk-block-title">Worksheet List</h4>
             	</div>
             	<div class="col-lg-2 text-right">
-            		<a href="{{ route('material.create') }}" class="btn btn-primary text-light">Add Material</a>
+            		<a href="{{ route('worksheet.create') }}" class="btn btn-primary text-light">Add Worksheet</a>
             	</div>
             </div>
         </div>
@@ -37,14 +37,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                	@if(count($material_details) > 0)
-                	@foreach($material_details as $data)
+                	@if(count($worksheet_details) > 0)
+                	@foreach($worksheet_details as $data)
                     <tr>
                         <td>{{ isset($data->unit->title) ? $data->unit->title:'' }}</td>
                         <td>{{ $data->title }}</td>
                         <td>
-                        	<a href="{{ route('material.edit',$data->id) }}"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
-                        	<a href="javascript:;" data-url="{{ route('material.distroy',$data->id) }}" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a>
+                        	<a href="{{ route('worksheet.edit',$data->id) }}"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
+                        	<a href="javascript:;" data-url="{{ route('worksheet.distroy',$data->id) }}" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a>
                         </td>
                     </tr>
                     @endforeach
@@ -67,7 +67,7 @@
 	$('.distroy').on('click', function() {
 	    let del_url = $(this).attr('data-url');
 	    bootbox.confirm({
-	        message: "Are you sure to delete this material ?",
+	        message: "Are you sure to delete this worksheet ?",
 	        buttons: {
 	            confirm: {
 	                label: 'Yes',

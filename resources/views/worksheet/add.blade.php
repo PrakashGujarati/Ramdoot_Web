@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title','Add Material')
+@section('title','Add Worksheet')
 @section('css')
 @endsection
 
@@ -11,9 +11,9 @@
             <div class="card h-100">
                 <div class="card-inner">
                     <div class="card-head">
-                        <h5 class="card-title">Add Material</h5>
+                        <h5 class="card-title">Add Worksheet</h5>
                     </div>
-                    <form action="{{ route('material.store') }}" method="POST" enctype='multipart/form-data'>
+                    <form action="{{ route('worksheet.store') }}" method="POST" enctype='multipart/form-data'>
                     @csrf
                         
                         <div class="row">
@@ -66,10 +66,10 @@
 
                         <div class="row">
                             <div class="form-group col-lg-6">
-                                <label class="form-label">Size</label>
+                                <label class="form-label">Type</label>
                                 <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="size" name="size" value="{{ old('size') }}">
-                                    @error('size')
+                                    <input type="text" class="form-control" id="type" name="type" value="{{ old('type') }}">
+                                    @error('type')
                                         <span class="text-danger" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
@@ -106,7 +106,7 @@
 
                         <div class="form-group">
                             <button type="submit" class="btn btn-lg btn-primary">Submit</button>
-                            <a type="button" href="{{ route('solution.index') }}" class="btn btn-lg btn-danger text-light">Cancel</a>
+                            <a type="button" href="{{ route('worksheet.index') }}" class="btn btn-lg btn-danger text-light">Cancel</a>
                         </div>
                     </form>
                 </div>
