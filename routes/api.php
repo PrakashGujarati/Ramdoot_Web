@@ -2,18 +2,18 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\API\RegisterController;
-use App\Http\Controllers\API\UserController;
-use App\Http\Controllers\API\BoardController;
-use App\Http\Controllers\API\SliderController;
-use App\Http\Controllers\API\StandardController;
-use App\Http\Controllers\API\SemesterController;
-use App\Http\Controllers\API\SubjectController;
-use App\Http\Controllers\API\VideosController;
-use App\Http\Controllers\API\SolutionController;
-use App\Http\Controllers\API\MaterialController;
-use App\Http\Controllers\API\PaperController;
-use App\Http\Controllers\API\WorksheetController;
+use App\Http\Controllers\api\RegisterController;
+use App\Http\Controllers\api\UserController;
+use App\Http\Controllers\api\BoardController;
+use App\Http\Controllers\api\SliderController;
+use App\Http\Controllers\api\StandardController;
+use App\Http\Controllers\api\SemesterController;
+use App\Http\Controllers\api\SubjectController;
+use App\Http\Controllers\api\VideosController;
+use App\Http\Controllers\api\SolutionController;
+use App\Http\Controllers\api\MaterialController;
+use App\Http\Controllers\api\PaperController;
+use App\Http\Controllers\api\WorksheetController;
 
 
 
