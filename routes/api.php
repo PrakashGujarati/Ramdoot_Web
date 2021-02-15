@@ -29,7 +29,7 @@ use App\Http\Controllers\Api\WorksheetController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::group(['middleware'=>'api'], function()
+Route::group(['middleware'=>'auth:api'], function()
 {
 	Route::get('logout',[RegisterController::class, 'logout']); 
     Route::post('board_medium', [BoardController::class, 'boardMedium']);
