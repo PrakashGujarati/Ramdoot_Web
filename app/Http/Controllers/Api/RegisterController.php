@@ -16,21 +16,30 @@ class RegisterController extends Controller
      */
     public function register(Request $request)
     {
-        $this->validate($request, [
-            'name' => 'required|min:4',
-            'mobile' => 'required|numeric|min:10',
-            'password' => 'required|min:8',
+        $this->validate($request, [            
+            'mobile' => 'required|numeric|min:10',            
         ]);
  
-        $user = User::create([
-            'name' => $request->name,            
-            'mobile' => $request->mobile,
-            'password' => bcrypt($request->password)
-        ]);
-       
-        $token = $user->createToken('Ramdoot')->accessToken;
- 
-        return response()->json(['token' => $token], 200);
+        if(User::where('mobile',$request->mobile)->exists())
+        {
+            $data = [
+                'mobile' => $request->mobile              
+            ];
+
+            $user = User::where('mobile',$request->mobile)->first();
+            $token = $user->createToken('Ramdoot')->accessToken;
+           return response()->json(['token' => $token], 200);
+           
+        }else{        
+            $user = User::create([            
+                'mobile' => $request->mobile,            
+            ]);
+           
+            $token = $user->createToken('Ramdoot')->accessToken;
+            return response()->json(['token' => $token], 200);
+        }
+
+        
     }
  
     /**
@@ -38,17 +47,7 @@ class RegisterController extends Controller
      */
     public function login(Request $request)
     {
-        $data = [
-            'mobile' => $request->mobile,
-            'password' => $request->password
-        ];
- 
-        if (auth()->attempt($data)) {
-            $token = auth()->user()->createToken('Ramdoot')->accessToken;
-            return response()->json(['token' => $token], 200);
-        } else {
-            return response()->json(['error' => 'Unauthorised'], 401);
-        }
+        
     }   
 
     public function logout(Request $request)
