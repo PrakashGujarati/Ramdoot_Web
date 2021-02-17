@@ -14,6 +14,8 @@ use App\Http\Controllers\api\SolutionController;
 use App\Http\Controllers\api\MaterialController;
 use App\Http\Controllers\api\PaperController;
 use App\Http\Controllers\api\WorksheetController;
+use App\Http\Controllers\api\UnitController;
+use App\Http\Controllers\api\FeatureController;
 
 
 
@@ -37,11 +39,13 @@ Route::group(['middleware'=>'api'], function()
     Route::post('standard_list', [StandardController::class, 'standardList']);
     Route::post('semester_list', [SemesterController::class, 'semesterList']);
     Route::post('subject_list', [SubjectController::class, 'subjectList']);
+    Route::post('unit_list', [UnitController::class, 'unitList']);
     Route::post('video_list', [VideosController::class, 'videoList']);
     Route::post('solution_list', [SolutionController::class, 'solutionList']);
     Route::post('material_list', [MaterialController::class, 'materialList']);
     Route::post('paper_list', [PaperController::class, 'paperList']);
     Route::post('worksheet_list', [WorksheetController::class, 'worksheetList']);
+    Route::post('features_list', [FeatureController::class, 'features_list']);
 });
 
 Route::post('register', [RegisterController::class, 'register']);

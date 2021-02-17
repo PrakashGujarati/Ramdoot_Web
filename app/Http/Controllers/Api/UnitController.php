@@ -14,15 +14,13 @@ use Validator;
 
 class UnitController extends Controller
 {
-    public function subjectList(Request $request){
+    public function unitList(Request $request){
         $rules = array(
-            'board_id' => 'required',
             'standard_id' => 'required',
             'semester_id' => 'required',
             'subject_id' => 'required',
         );
         $messages = array(
-            'board_id.required' => 'Please enter board id.',
             'standard_id.required' => 'Please enter standard id.',
             'semester_id.required' => 'Please enter semester id.',
             'subject_id.required' => 'Please enter subject id.'
@@ -35,19 +33,11 @@ class UnitController extends Controller
                 return ['status' => "false",'msg' => $msg];
             }
 
-            $chkbaord = Board::where(['id' => $request->board_id,'status' => 'Active'])->first();
             $chkstandard = Standard::where(['id' => $request->standard_id,'status' => 'Active'])->first();
             $chksemester = semester::where(['id' => $request->semester_id,'status' => 'Active'])->first();
             $chksubject = subject::where(['id' => $request->subject_id,'status' => 'Active'])->first();
 
-            if(empty($chkbaord)){
-                return response()->json([
-                    "code" => 400,
-                    "message" => "Board not found.",
-                    "data" => [],
-                ]);
-            }
-            elseif (empty($chkstandard)) {
+            if (empty($chkstandard)) {
                 return response()->json([
                     "code" => 400,
                     "message" => "Standard not found.",
@@ -69,14 +59,13 @@ class UnitController extends Controller
                 ]);
             }
             else{
-                $getdata = Subject::where(['board_id' => $request->board_id,'standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'status' => 'Active'])->get();
-                $subjectids = Subject::where(['board_id' => $request->board_id,'standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'status' => 'Active'])->pluck('id');
-                $unitcount = Unit::whereIn('subject_id',$subjectids)->count();
+                $getdata = unit::where(['subject_id' => $request->subject_id,'standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'status' => 'Active'])->get();
+                
                 if(count($getdata) > 0){
                     $data=[];
                     foreach ($getdata as $value) {
                         $thumbnail = env('APP_URL')."/upload/subject/".$value->thumbnail;
-                        $data[] = ['id' => $value->id,'name' => $value->subject_name,'url' => $value->url,'thumbnail' => $thumbnail,"units"=>$unitcount];
+                        $data[] = ['id' => $value->id,'title' => $value->title,'url' => $value->url,'thumbnail' => $thumbnail,'description' => $value->description,"pages"=> $value->pages];
                     }
 
                     return response()->json([
