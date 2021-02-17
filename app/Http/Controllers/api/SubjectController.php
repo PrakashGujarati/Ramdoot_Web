@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\semester;
 use App\Models\Board;
+use App\Models\unit;
 use App\Models\Standard;
 use App\Models\Subject;
 use DB;
@@ -60,13 +61,14 @@ class SubjectController extends Controller
 	        ]);
         }
         else{
-        	$getdata = Subject::where(['board_id' => $request->board_id,'standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'status' => 'Active'])->get();
-
+			$getdata = Subject::where(['board_id' => $request->board_id,'standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'status' => 'Active'])->get();
+			$subjectids = Subject::where(['board_id' => $request->board_id,'standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'status' => 'Active'])->pluck('id');
+			$unitcount = unit::whereIn('subject_id',$subjectids)->count();
 	    	if(count($getdata) > 0){
 	    		$data=[];
 	    		foreach ($getdata as $value) {
 	    			$thumbnail = env('APP_URL')."/upload/subject/".$value->thumbnail;
-	    			$data[] = ['id' => $value->id,'name' => $value->subject_name,'url' => $value->url,'thumbnail' => $thumbnail];
+	    			$data[] = ['id' => $value->id,'name' => $value->subject_name,'url' => $value->url,'thumbnail' => $thumbnail,"units"=>$unitcount];
 	    		}
 
 	    		return response()->json([

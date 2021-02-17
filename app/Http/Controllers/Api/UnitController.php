@@ -1,0 +1,98 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\semester;
+use App\Models\Board;
+use App\Models\unit;
+use App\Models\Standard;
+use App\Models\Subject;
+use DB;
+use Validator;
+
+class UnitController extends Controller
+{
+    public function subjectList(Request $request){
+        $rules = array(
+            'board_id' => 'required',
+            'standard_id' => 'required',
+            'semester_id' => 'required',
+            'subject_id' => 'required',
+        );
+        $messages = array(
+            'board_id.required' => 'Please enter board id.',
+            'standard_id.required' => 'Please enter standard id.',
+            'semester_id.required' => 'Please enter semester id.',
+            'subject_id.required' => 'Please enter subject id.'
+        );
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+            if ($validator->fails()) {
+                $msg = $validator->messages();
+                return ['status' => "false",'msg' => $msg];
+            }
+
+            $chkbaord = Board::where(['id' => $request->board_id,'status' => 'Active'])->first();
+            $chkstandard = Standard::where(['id' => $request->standard_id,'status' => 'Active'])->first();
+            $chksemester = semester::where(['id' => $request->semester_id,'status' => 'Active'])->first();
+            $chksubject = subject::where(['id' => $request->subject_id,'status' => 'Active'])->first();
+
+            if(empty($chkbaord)){
+                return response()->json([
+                    "code" => 400,
+                    "message" => "Board not found.",
+                    "data" => [],
+                ]);
+            }
+            elseif (empty($chkstandard)) {
+                return response()->json([
+                    "code" => 400,
+                    "message" => "Standard not found.",
+                    "data" => [],
+                ]);
+            }
+            elseif (empty($chksemester)) {
+                return response()->json([
+                    "code" => 400,
+                    "message" => "Semester not found.",
+                    "data" => [],
+                ]);
+            }
+            elseif (empty($chksubject)) {
+                return response()->json([
+                    "code" => 400,
+                    "message" => "subject not found.",
+                    "data" => [],
+                ]);
+            }
+            else{
+                $getdata = Subject::where(['board_id' => $request->board_id,'standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'status' => 'Active'])->get();
+                $subjectids = Subject::where(['board_id' => $request->board_id,'standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'status' => 'Active'])->pluck('id');
+                $unitcount = Unit::whereIn('subject_id',$subjectids)->count();
+                if(count($getdata) > 0){
+                    $data=[];
+                    foreach ($getdata as $value) {
+                        $thumbnail = env('APP_URL')."/upload/subject/".$value->thumbnail;
+                        $data[] = ['id' => $value->id,'name' => $value->subject_name,'url' => $value->url,'thumbnail' => $thumbnail,"units"=>$unitcount];
+                    }
+
+                    return response()->json([
+                        "code" => 200,
+                        "message" => "success",
+                        "data" => $data,
+                    ]);
+                }
+                else{
+                    return response()->json([
+                        "code" => 400,
+                        "message" => "Subject details not found.",
+                        "data" => [],
+                    ]);
+                }	
+            }
+    }
+}
+
