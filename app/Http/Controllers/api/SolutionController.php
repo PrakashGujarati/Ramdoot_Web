@@ -41,7 +41,7 @@ class SolutionController extends Controller
         }
         else{
 
-        	$getdata = unit::where(['unit_id' => $request->unit_id,'status' => 'Active'])->get();
+        	$getdata = unit::where(['id' => $request->unit_id,'status' => 'Active'])->get();
         	
 	    	if(count($getdata) > 0){
 	    		$data=[];$getdata=[];
