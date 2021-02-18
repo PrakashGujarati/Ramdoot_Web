@@ -16,6 +16,7 @@ use App\Http\Controllers\api\PaperController;
 use App\Http\Controllers\api\WorksheetController;
 use App\Http\Controllers\api\UnitController;
 use App\Http\Controllers\api\FeatureController;
+use App\Http\Controllers\api\TextbookController;
 
 
 
@@ -41,6 +42,7 @@ Route::group(['middleware'=>'api'], function()
     Route::post('subject_list', [SubjectController::class, 'subjectList']);
     Route::post('unit_list', [UnitController::class, 'unitList']);
     Route::post('video_list', [VideosController::class, 'videoList']);
+    Route::post('book_list', [TextbookController::class, 'textbookList']);
     Route::post('solution_list', [SolutionController::class, 'solutionList']);
     Route::post('material_list', [MaterialController::class, 'materialList']);
     Route::post('paper_list', [PaperController::class, 'paperList']);

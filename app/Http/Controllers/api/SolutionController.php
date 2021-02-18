@@ -41,13 +41,13 @@ class SolutionController extends Controller
         }
         else{
 
-        	$getdata = unit::where(['id' => $request->unit_id,'status' => 'Active'])->get();
+        	$getdata = unit::where(['id' => $request->unit_id,'status' => 'Active']);
         	
-	    	if(count($getdata) > 0){
+	    	if($getdata->count() > 0){
 	    		$data=[];$getdata=[];
 				$title="";
 
-	    		$getdata = solution::where(['unit_id' => $getdata->id,'status' => 'Active'])->get();
+	    		$getdata = solution::where(['unit_id' => $request->unit_id,'status' => 'Active'])->get();
 	    			$solutiondata=[];
 	    			foreach ($getdata as $value1) {
 	    				$image = env('APP_URL')."/upload/solution/".$value1->image;
@@ -55,7 +55,7 @@ class SolutionController extends Controller
 	    				$solutiondata[] = ['id' => $value1->id,'question' => $value1->question,'answer' => $value1->answer,'marks' => $value1->marks,'image' => $image,'label' => $value1->label];
 	    			}
 
-	    			$data[] = ['id' => $value->id,'unit_title' =>$title,'solution' => $solutiondata];
+	    			$data[] = ['id' => $request->unit_id,'unit_title' =>$title,'solution' => $solutiondata];
 	    		
 	    		return response()->json([
 	    			"code" => 200,
