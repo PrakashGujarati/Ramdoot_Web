@@ -64,7 +64,28 @@ class UnitController extends Controller
             $valid_ext = array('png','jpeg','jpg');
 
             // Location
-            $location = public_path('upload/unit/').$new_name;
+            $location = public_path('upload/unit/thumbnail/').$new_name;
+
+            $file_extension = pathinfo($location, PATHINFO_EXTENSION);
+            $file_extension = strtolower($file_extension);
+
+            if(in_array($file_extension,$valid_ext)){
+                $this->compressImage($image->getPathName(),$location,60);
+            }
+        }
+
+        $url_file='';
+        if($request->has('url'))
+        {
+
+            $image = $request->file('url');
+
+            $url_file = rand() . '.' . $image->getClientOriginalExtension();
+
+            $valid_ext = array('png','jpeg','jpg');
+
+            // Location
+            $location = public_path('upload/unit/url/').$url_file;
 
             $file_extension = pathinfo($location, PATHINFO_EXTENSION);
             $file_extension = strtolower($file_extension);
@@ -79,7 +100,7 @@ class UnitController extends Controller
         $add->semester_id = $request->semester_id;
         $add->subject_id = $request->subject_id;
         $add->title = $request->title;
-        $add->url = $request->url;
+        $add->url = $url_file;
         $add->thumbnail = $new_name;
         $add->pages = isset($request->pages) ? $request->pages:'';
         $add->description = isset($request->description) ? $request->description:'';
@@ -128,7 +149,6 @@ class UnitController extends Controller
             'semester_id' => 'required',
             'subject_id' => 'required',
             'title' => 'required',
-            'url' => 'required',
             'pages' => 'required',
         ]);
 
@@ -143,7 +163,7 @@ class UnitController extends Controller
             $valid_ext = array('png','jpeg','jpg');
 
             // Location
-            $location = public_path('upload/unit/').$new_name;
+            $location = public_path('upload/unit/thumbnail/').$new_name;
 
             $file_extension = pathinfo($location, PATHINFO_EXTENSION);
             $file_extension = strtolower($file_extension);
@@ -156,12 +176,36 @@ class UnitController extends Controller
             $new_name = $request->hidden_thumbnail;
         }
 
+        $url_file='';
+        if($request->has('url'))
+        {
+
+            $image = $request->file('url');
+
+            $url_file = rand() . '.' . $image->getClientOriginalExtension();
+
+            $valid_ext = array('png','jpeg','jpg');
+
+            // Location
+            $location = public_path('upload/unit/url/').$url_file;
+
+            $file_extension = pathinfo($location, PATHINFO_EXTENSION);
+            $file_extension = strtolower($file_extension);
+
+            if(in_array($file_extension,$valid_ext)){
+                $this->compressImage($image->getPathName(),$location,60);
+            }
+        }
+        else{
+            $url_file = $request->hidden_url;
+        }
+
         $update = unit::find($id);
         $update->standard_id = $request->standard_id;
         $update->semester_id = $request->semester_id;
         $update->subject_id = $request->subject_id;
         $update->title = $request->title;
-        $update->url = $request->url;
+        $update->url = $url_file;
         $update->thumbnail = $new_name;
         $update->pages = isset($request->pages) ? $request->pages:'';
         $update->description = isset($request->description) ? $request->description:'';

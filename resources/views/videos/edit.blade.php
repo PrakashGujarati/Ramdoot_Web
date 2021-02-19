@@ -48,9 +48,29 @@
 
                         <div class="row">
                             <div class="form-group col-lg-6">
+                                <label class="form-label">Type</label>
+                                <div class="form-control-wrap">
+                                    <select class="form-control" id="type" name="type">
+                                        <option  value="URL" @if($videodata->type == "URL") selected="" @endif>URL</option>
+                                        <option value="File" @if($videodata->type == "File") selected="" @endif>File</option>
+                                    </select>
+                                    @error('type')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-6">
                                 <label class="form-label">Url</label>
                                 <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="url" name="url" value="{{ $videodata->url }}">
+                                    <input type="text" class="form-control url" id="url" name="url" value="{{ $videodata->url }}">
+                                    <input type="file" class="form-control url_file" id="url_file" name="url_file" value="">
+                                    <input type="hidden" name="hidden_url" value="{{ $videodata->url }}">
+                                    <br/>
+                                    @if($videodata->url)
+                                        <img src="{{ asset('upload/videos/url/'.$videodata->url) }}" class="thumbnail url_file_image" height="100" width="100">
+                                    @endif
                                     @error('url')
                                         <span class="text-danger" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -59,6 +79,10 @@
                                 </div>
                             </div>
 
+                            
+                        </div>
+
+                        <div class="row">
                             <div class="form-group col-lg-6">
                                 <label class="form-label">Duration</label>
                                 <div class="form-control-wrap">
@@ -71,9 +95,7 @@
                                 </div>
                             </div>
 
-                        </div>
 
-                        <div class="row">
                             <div class="form-group col-lg-6">
                                 <label class="form-label">Label</label>
                                 <div class="form-control-wrap">
@@ -106,7 +128,7 @@
                                 <input type="hidden" name="hidden_thumbnail" value="{{ $videodata->thumbnail }}">
                                 <br/>
                                 @if($videodata->thumbnail)
-                                <img src="{{ asset('upload/videos/'.$videodata->thumbnail) }}" class="thumbnail" height="100" width="100">
+                                <img src="{{ asset('upload/videos/thumbnail/'.$videodata->thumbnail) }}" class="thumbnail" height="100" width="100">
                                 @endif
                                 @error('thumbnail')
                                     <span class="text-danger" role="alert">
@@ -144,4 +166,46 @@
 @endsection
 
 @section('scripts')
+
+<script type="text/javascript">
+
+    $( document ).ready(function() {
+        var type = $('#type').val();
+        getType(type);
+    });
+
+    $(document).on('change','#type',function(){
+        var type = $('#type').val();
+        if(type == "File"){
+            $('.url_file').css('display','block');
+            $('.url_file_image').css('display','none');  
+            var blank="";
+            $('.url').val(blank);
+            $('.url').css('display','none');
+        }else{
+            $('.url_file').css('display','none');
+            $('.url_file_image').css('display','none');
+            var blank="";
+            $('.url').val(blank);
+            $('.url').css('display','block');
+        }
+    });
+
+    function getType(type){
+        if(type == "File"){
+            $('.url_file').css('display','block'); 
+            var blank="";
+            $('.url').val(blank);
+            $('.url').css('display','none');
+        }else{
+            $('.url_file').css('display','none');
+            $('.url_file_image').css('display','none');
+            var geturl="{{ $videodata->url }}";
+            $('.url').val(geturl);
+            $('.url').css('display','block');
+        }
+    }
+
+</script>
+
 @endsection

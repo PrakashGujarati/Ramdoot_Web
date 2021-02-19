@@ -59,7 +59,7 @@ class SolutionController extends Controller
             $valid_ext = array('png','jpeg','jpg');
 
             // Location
-            $location = public_path('upload/solution/').$new_name;
+            $location = public_path('upload/solution/thumbnail/').$new_name;
 
             $file_extension = pathinfo($location, PATHINFO_EXTENSION);
             $file_extension = strtolower($file_extension);
@@ -134,7 +134,7 @@ class SolutionController extends Controller
             $valid_ext = array('png','jpeg','jpg');
 
             // Location
-            $location = public_path('upload/solution/').$new_name;
+            $location = public_path('upload/solution/thumbnail/').$new_name;
 
             $file_extension = pathinfo($location, PATHINFO_EXTENSION);
             $file_extension = strtolower($file_extension);

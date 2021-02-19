@@ -54,7 +54,12 @@
                         <div class="form-group">
                             <label class="form-label">Url</label>
                             <div class="form-control-wrap">
-                                <input type="text" class="form-control" id="url" name="url" value="{{ $worksheetdata->url }}">
+                                <input type="file" class="form-control" id="url" name="url" value="">
+                                <input type="hidden" name="hidden_url" value="{{ $worksheetdata->url }}">
+                                <br/>
+                                @if($worksheetdata->url)
+                                    <img src="{{ asset('upload/worksheet/url/'.$worksheetdata->url) }}" class="thumbnail" height="100" width="100">
+                                @endif
                                 @error('url')
                                     <span class="text-danger" role="alert">
                                         <strong>{{ $message }}</strong>

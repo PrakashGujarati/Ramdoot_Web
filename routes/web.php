@@ -50,6 +50,8 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::post('standard/{id}/update', [StandardController::class, 'update'])->name('standard.update');
 	Route::get('standard/{id}/delete', [StandardController::class, 'distroy'])->name('standard.distroy');
 
+	Route::get('get_standard', [StandardController::class, 'getStandard'])->name('get.standard');
+
 	/*Subjects*/
 	Route::get('subject', [SubjectController::class, 'index'])->name('subject.index');
 	Route::get('subject/create', [SubjectController::class, 'create'])->name('subject.create');
@@ -57,6 +59,8 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('subject/{id}/edit', [SubjectController::class, 'edit'])->name('subject.edit');
 	Route::post('subject/{id}/update', [SubjectController::class, 'update'])->name('subject.update');
 	Route::get('subject/{id}/delete', [SubjectController::class, 'distroy'])->name('subject.distroy');
+
+	Route::get('get_subject', [SubjectController::class, 'getSubject'])->name('get.subject');
 
 	/*Book*/
 	Route::get('book', [BookController::class, 'index'])->name('book.index');
@@ -73,6 +77,9 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('semester/{id}/edit', [SemesterController::class, 'edit'])->name('semester.edit');
 	Route::post('semester/{id}/update', [SemesterController::class, 'update'])->name('semester.update');
 	Route::get('semester/{id}/delete', [SemesterController::class, 'distroy'])->name('semester.distroy');
+
+	Route::get('get_semester', [SemesterController::class, 'getSemester'])->name('get.semester');
+	Route::get('get_semester_unit', [SemesterController::class, 'getSemesterUnit'])->name('get.semester.unit');
 
 	/*unit*/
 	Route::get('unit', [UnitController::class, 'index'])->name('unit.index');

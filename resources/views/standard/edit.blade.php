@@ -71,7 +71,7 @@
                                 <input type="hidden" name="hidden_thumbnail" value="{{ $standarddata->thumbnail }}">
                                 <br/>
                                 @if($standarddata->thumbnail)
-                                <img src="{{ asset('upload/standard/'.$standarddata->thumbnail) }}" class="thumbnail" height="100" width="100">
+                                <img src="{{ asset('upload/standard/thumbnail/'.$standarddata->thumbnail) }}" class="thumbnail" height="100" width="100">
                                 @endif
                                 @error('thumbnail')
                                     <span class="text-danger" role="alert">

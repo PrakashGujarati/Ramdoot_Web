@@ -62,7 +62,28 @@ class SubjectController extends Controller
             $valid_ext = array('png','jpeg','jpg');
 
             // Location
-            $location = public_path('upload/subject/').$new_name;
+            $location = public_path('upload/subject/thumbnail/').$new_name;
+
+            $file_extension = pathinfo($location, PATHINFO_EXTENSION);
+            $file_extension = strtolower($file_extension);
+
+            if(in_array($file_extension,$valid_ext)){
+                $this->compressImage($image->getPathName(),$location,60);
+            }
+        }
+
+        $url_file='';
+        if($request->has('url'))
+        {
+
+            $image = $request->file('url');
+
+            $url_file = rand() . '.' . $image->getClientOriginalExtension();
+
+            $valid_ext = array('png','jpeg','jpg');
+
+            // Location
+            $location = public_path('upload/subject/url/').$url_file;
 
             $file_extension = pathinfo($location, PATHINFO_EXTENSION);
             $file_extension = strtolower($file_extension);
@@ -77,7 +98,7 @@ class SubjectController extends Controller
         $add->standard_id = $request->standard_id;
         $add->semester_id = $request->semester_id;
         $add->subject_name = $request->subject_name;
-        $add->url = $request->url;
+        $add->url = $url_file;
         $add->thumbnail = $new_name;
         $add->save();
 
@@ -125,8 +146,7 @@ class SubjectController extends Controller
             'board_id'     => 'required',
             'semester_id' => 'required',
             'standard_id'  => 'required',
-            'subject_name' => 'required',
-            'url' => 'required',
+            'subject_name' => 'required'
         ]);
 
         $new_name='';
@@ -140,7 +160,7 @@ class SubjectController extends Controller
             $valid_ext = array('png','jpeg','jpg');
 
             // Location
-            $location = public_path('upload/subject/').$new_name;
+            $location = public_path('upload/subject/thumbnail/').$new_name;
 
             $file_extension = pathinfo($location, PATHINFO_EXTENSION);
             $file_extension = strtolower($file_extension);
@@ -153,12 +173,36 @@ class SubjectController extends Controller
             $new_name = $request->hidden_thumbnail;
         }
 
+        $url_file='';
+        if($request->has('url'))
+        {
+
+            $image = $request->file('url');
+
+            $url_file = rand() . '.' . $image->getClientOriginalExtension();
+
+            $valid_ext = array('png','jpeg','jpg');
+
+            // Location
+            $location = public_path('upload/subject/url/').$url_file;
+
+            $file_extension = pathinfo($location, PATHINFO_EXTENSION);
+            $file_extension = strtolower($file_extension);
+
+            if(in_array($file_extension,$valid_ext)){
+                $this->compressImage($image->getPathName(),$location,60);
+            }
+        }
+        else{
+            $url_file = $request->hidden_url;
+        }
+
         $update = Subject::find($id);
         $update->board_id = $request->board_id;
         $update->standard_id = $request->standard_id;
         $update->semester_id = $request->semester_id;
         $update->subject_name = $request->subject_name;
-        $update->url = $request->url;
+        $update->url = $url_file;
         $update->thumbnail = $new_name;
         $update->save();
 
@@ -195,4 +239,29 @@ class SubjectController extends Controller
       imagejpeg($image, $destination, $quality);
 
     }
+
+    public function getSubject(Request $request){
+
+        $getsubject = Subject::where(['standard_id' => $request->standard_id,'semester_id' => $request->semester_id])->get();
+
+        $result="<option value=''>--Select Subject--</option>";
+        if(count($getsubject) > 0)
+        {
+            foreach ($getsubject as $subject) {
+
+                if($request->has('subject_id')){
+                    if($request->subject_id == $subject->id){
+                        $result.="<option value='".$subject->id."' selected>".$subject->subject_name."</option>";
+                    }
+                    else{
+                        $result.="<option value='".$subject->id."'>".$subject->subject_name."</option>";    
+                    }
+                }else{
+                    $result.="<option value='".$subject->id."'>".$subject->subject_name."</option>";
+                }
+            }
+        }
+        return response()->json(['html'=>$result]);   
+    }
+    
 }

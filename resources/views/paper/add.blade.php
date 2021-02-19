@@ -54,7 +54,7 @@
                             <div class="form-group col-lg-6">
                                 <label class="form-label">Url</label>
                                 <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="url" name="url" value="{{ old('url') }}">
+                                    <input type="file" class="form-control" id="url" name="url" value="">
                                     @error('url')
                                         <span class="text-danger" role="alert">
                                             <strong>{{ $message }}</strong>

@@ -57,7 +57,7 @@ class StandardController extends Controller
             $valid_ext = array('png','jpeg','jpg');
 
             // Location
-            $location = public_path('upload/standard/').$new_name;
+            $location = public_path('upload/standard/thumbnail/').$new_name;
 
             $file_extension = pathinfo($location, PATHINFO_EXTENSION);
             $file_extension = strtolower($file_extension);
@@ -128,7 +128,7 @@ class StandardController extends Controller
             $valid_ext = array('png','jpeg','jpg');
 
             // Location
-            $location = public_path('upload/standard/').$new_name;
+            $location = public_path('upload/standard/thumbnail/').$new_name;
 
             $file_extension = pathinfo($location, PATHINFO_EXTENSION);
             $file_extension = strtolower($file_extension);
@@ -180,6 +180,30 @@ class StandardController extends Controller
 
       imagejpeg($image, $destination, $quality);
 
+    }
+
+    public function getStandard(Request $request){
+
+        $getstandard = Standard::where(['board_id' => $request->board_id])->get();
+
+        $result="<option value=''>--Select Standard--</option>";
+        if(count($getstandard) > 0)
+        {
+            foreach ($getstandard as $standard) {
+
+                if($request->has('standard_id')){
+                    if($request->standard_id == $standard->id){
+                        $result.="<option value='".$standard->id."' selected>".$standard->standard."</option>";
+                    }
+                    else{
+                        $result.="<option value='".$standard->id."'>".$standard->standard."</option>";    
+                    }
+                }else{
+                    $result.="<option value='".$standard->id."'>".$standard->standard."</option>";
+                }
+            }
+        }
+        return response()->json(['html'=>$result]);   
     }
 }
 

@@ -45,12 +45,12 @@
                         <div class="form-group">
                             <label class="form-label">Url</label>
                             <div class="form-control-wrap">
-                                <input type="text" class="form-control" id="url" name="url" value="{{ $bookdata->url }}">
-                                @error('url')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                                <input type="file" class="form-control" id="url" name="url" value="">
+                                <input type="hidden" name="hidden_url" value="{{ $bookdata->url }}">
+                                <br/>
+                                @if($bookdata->url)
+                                    <img src="{{ asset('upload/book/url/'.$bookdata->url) }}" class="thumbnail" height="100" width="100">
+                                @endif
                             </div>
                         </div>
                         <div class="form-group">
@@ -60,7 +60,7 @@
                                 <input type="hidden" name="hidden_thumbnail" value="{{ $bookdata->thumbnail }}">
                                 <br/>
                                 @if($bookdata->thumbnail)
-                                <img src="{{ asset('upload/book/'.$bookdata->thumbnail) }}" class="thumbnail" height="100" width="100">
+                                <img src="{{ asset('upload/book/thumbnail/'.$bookdata->thumbnail) }}" class="thumbnail" height="100" width="100">
                                 @endif
                                 @error('thumbnail')
                                     <span class="text-danger" role="alert">

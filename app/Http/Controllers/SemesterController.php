@@ -134,4 +134,53 @@ class SemesterController extends Controller
       imagejpeg($image, $destination, $quality);
 
     }
+
+    public function getSemester(Request $request){
+
+        $getsemester = semester::where(['board_id' => $request->board_id,'standard_id' => $request->standard_id])->get();
+
+        $result="<option value=''>--Select Semester--</option>";
+        if(count($getsemester) > 0)
+        {
+            foreach ($getsemester as $semester) {
+
+                if($request->has('semester_id')){
+                    if($request->semester_id == $semester->id){
+                        $result.="<option value='".$semester->id."' selected>".$semester->semester."</option>";
+                    }
+                    else{
+                        $result.="<option value='".$semester->id."'>".$semester->semester."</option>";    
+                    }
+                }else{
+                    $result.="<option value='".$semester->id."'>".$semester->semester."</option>";
+                }
+            }
+        }
+        return response()->json(['html'=>$result]);   
+    }
+
+    public function getSemesterUnit(Request $request){
+
+        $getsemester = semester::where(['standard_id' => $request->standard_id])->get();
+
+        $result="<option value=''>--Select Semester--</option>";
+        if(count($getsemester) > 0)
+        {
+            foreach ($getsemester as $semester) {
+
+                if($request->has('semester_id')){
+                    if($request->semester_id == $semester->id){
+                        $result.="<option value='".$semester->id."' selected>".$semester->semester."</option>";
+                    }
+                    else{
+                        $result.="<option value='".$semester->id."'>".$semester->semester."</option>";    
+                    }
+                }else{
+                    $result.="<option value='".$semester->id."'>".$semester->semester."</option>";
+                }
+            }
+        }
+        return response()->json(['html'=>$result]);   
+    }
+
 }

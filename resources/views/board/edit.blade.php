@@ -51,7 +51,12 @@
                         <div class="form-group">
                             <label class="form-label">Url</label>
                             <div class="form-control-wrap">
-                                <input type="text" class="form-control" id="url" name="url" value="{{ $boarddata->url }}">
+                                <input type="file" class="form-control" id="url" name="url" value="">
+                                <input type="hidden" name="hidden_url" value="{{ $boarddata->url }}">
+                                <br/>
+                                @if($boarddata->url)
+                                <img src="{{ asset('upload/board/url/'.$boarddata->url) }}" class="thumbnail" height="100" width="100">
+                                @endif
                                 @error('url')
                                     <span class="text-danger" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -66,7 +71,7 @@
                                 <input type="hidden" name="hidden_thumbnail" value="{{ $boarddata->thumbnail }}">
                                 <br/>
                                 @if($boarddata->thumbnail)
-                                <img src="{{ asset('upload/board/'.$boarddata->thumbnail) }}" class="thumbnail" height="100" width="100">
+                                <img src="{{ asset('upload/board/thumbnail/'.$boarddata->thumbnail) }}" class="thumbnail" height="100" width="100">
                                 @endif
                                 @error('thumbnail')
                                     <span class="text-danger" role="alert">

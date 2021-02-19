@@ -42,7 +42,6 @@ class VideosController extends Controller
         $this->validate($request, [
             'unit_id'     => 'required',
             'title' => 'required',
-            'url' => 'required',
             'thumbnail'  => 'required',
             'duration' => 'required',
             'label' => 'required',
@@ -60,7 +59,7 @@ class VideosController extends Controller
             $valid_ext = array('png','jpeg','jpg');
 
             // Location
-            $location = public_path('upload/videos/').$new_name;
+            $location = public_path('upload/videos/thumbnail/').$new_name;
 
             $file_extension = pathinfo($location, PATHINFO_EXTENSION);
             $file_extension = strtolower($file_extension);
@@ -70,11 +69,41 @@ class VideosController extends Controller
             }
         }
 
+
+        if($request->type == "File"){
+            $url_file='';
+            if($request->has('url_file'))
+            {
+
+                $image = $request->file('url_file');
+
+                $url_file = rand() . '.' . $image->getClientOriginalExtension();
+
+                $valid_ext = array('png','jpeg','jpg');
+
+                // Location
+                $location = public_path('upload/videos/url/').$url_file;
+
+                $file_extension = pathinfo($location, PATHINFO_EXTENSION);
+                $file_extension = strtolower($file_extension);
+
+                if(in_array($file_extension,$valid_ext)){
+                    $this->compressImage($image->getPathName(),$location,60);
+                }
+            }    
+        }
+        else{
+            $url_file = $request->url;
+        }
+
+        
+
         $add = new videos;
         $add->user_id  = Auth::user()->id;
         $add->unit_id = $request->unit_id;
         $add->title = $request->title;
-        $add->url = $request->url;
+        $add->type = $request->type;
+        $add->url = $url_file;
         $add->thumbnail = $new_name;
         $add->duration = $request->duration;
         $add->description = isset($request->description) ? $request->description:'';
@@ -121,7 +150,6 @@ class VideosController extends Controller
         $this->validate($request, [
             'unit_id' => 'required',
             'title' => 'required',
-            'url' => 'required',
             'duration' => 'required',
             'label' => 'required',
             'release_date' => 'required',
@@ -138,7 +166,7 @@ class VideosController extends Controller
             $valid_ext = array('png','jpeg','jpg');
 
             // Location
-            $location = public_path('upload/videos/').$new_name;
+            $location = public_path('upload/videos/thumbnail/').$new_name;
 
             $file_extension = pathinfo($location, PATHINFO_EXTENSION);
             $file_extension = strtolower($file_extension);
@@ -151,10 +179,42 @@ class VideosController extends Controller
             $new_name = $request->hidden_thumbnail;
         }
 
+
+        if($request->type == "File"){
+            $url_file='';
+            if($request->has('url_file'))
+            {
+
+                $image = $request->file('url_file');
+
+                $url_file = rand() . '.' . $image->getClientOriginalExtension();
+
+                $valid_ext = array('png','jpeg','jpg');
+
+                // Location
+                $location = public_path('upload/videos/url/').$url_file;
+
+                $file_extension = pathinfo($location, PATHINFO_EXTENSION);
+                $file_extension = strtolower($file_extension);
+
+                if(in_array($file_extension,$valid_ext)){
+                    $this->compressImage($image->getPathName(),$location,60);
+                }
+            }
+            else{
+                $url_file = $request->hidden_url;
+            }    
+        }
+        else{
+            $url_file = $request->url;
+        }
+
+
         $update = videos::find($id);
         $update->unit_id = $request->unit_id;
         $update->title = $request->title;
-        $update->url = $request->url;
+        $update->type = $request->type;
+        $update->url = $url_file;
         $update->thumbnail = $new_name;
         $update->duration = $request->duration;
         $update->description = isset($request->description) ? $request->description:'';

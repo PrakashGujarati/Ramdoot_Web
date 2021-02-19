@@ -96,7 +96,7 @@
                                 <input type="hidden" name="hidden_image" value="{{ $solutiondata->image }}">
                                 <br/>
                                 @if($solutiondata->image)
-                                <img src="{{ asset('upload/solution/'.$solutiondata->image) }}" class="thumbnail" height="100" width="100">
+                                <img src="{{ asset('upload/solution/thumbnail/'.$solutiondata->image) }}" class="thumbnail" height="100" width="100">
                                 @endif
                                 @error('image')
                                     <span class="text-danger" role="alert">

@@ -55,7 +55,28 @@ class BoardController extends Controller
             $valid_ext = array('png','jpeg','jpg');
 
             // Location
-            $location = public_path('upload/board/').$new_name;
+            $location = public_path('upload/board/thumbnail/').$new_name;
+
+            $file_extension = pathinfo($location, PATHINFO_EXTENSION);
+            $file_extension = strtolower($file_extension);
+
+            if(in_array($file_extension,$valid_ext)){
+                $this->compressImage($image->getPathName(),$location,60);
+            }
+        }
+
+        $url_file='';
+        if($request->has('url'))
+        {
+        
+            $image = $request->file('url');
+
+            $url_file = rand() . '.' . $image->getClientOriginalExtension();
+
+            $valid_ext = array('png','jpeg','jpg');
+
+            // Location
+            $location = public_path('upload/board/url/').$url_file;
 
             $file_extension = pathinfo($location, PATHINFO_EXTENSION);
             $file_extension = strtolower($file_extension);
@@ -69,7 +90,7 @@ class BoardController extends Controller
         $add->name = $request->name;
         $add->medium = $request->medium;
         $add->abbreviation = $request->abbreviation;
-        $add->url = $request->url;
+        $add->url = $url_file;
         $add->thumbnail = $new_name;
         $add->save();
 
@@ -111,8 +132,7 @@ class BoardController extends Controller
         $this->validate($request, [
             'name'     => 'required',
             'medium'  => 'required',
-            'abbreviation' => 'required',
-            'url'  => 'required',
+            'abbreviation' => 'required'
         ]);
 
         $new_name='';
@@ -126,7 +146,7 @@ class BoardController extends Controller
             $valid_ext = array('png','jpeg','jpg');
 
             // Location
-            $location = public_path('upload/board/').$new_name;
+            $location = public_path('upload/board/thumbnail/').$new_name;
 
             $file_extension = pathinfo($location, PATHINFO_EXTENSION);
             $file_extension = strtolower($file_extension);
@@ -139,11 +159,39 @@ class BoardController extends Controller
             $new_name = $request->hidden_thumbnail;
         }
 
+
+        $url_file='';
+    
+        if($request->has('url'))
+        {
+
+            $image = $request->file('url');
+
+            $url_file = rand() . '.' . $image->getClientOriginalExtension();
+
+            $valid_ext = array('png','jpeg','jpg');
+
+            // Location
+            $location = public_path('upload/board/url/').$url_file;
+
+            $file_extension = pathinfo($location, PATHINFO_EXTENSION);
+            $file_extension = strtolower($file_extension);
+
+            if(in_array($file_extension,$valid_ext)){
+                $this->compressImage($image->getPathName(),$location,60);
+            }
+        }
+        else{
+            $url_file = $request->hidden_url;
+        }
+
+        
+
         $update = Board::find($id);
         $update->name = $request->name;
         $update->medium = $request->medium;
         $update->abbreviation = $request->abbreviation;
-        $update->url = $request->url;
+        $update->url = $url_file;
         $update->thumbnail = $new_name;
         $update->save();
 

@@ -46,12 +46,32 @@ class PaperController extends Controller
             'label' => 'required', 
         ]);
 
+        $url_file='';
+        if($request->has('url'))
+        {
+            $image = $request->file('url');
+
+            $url_file = rand() . '.' . $image->getClientOriginalExtension();
+
+            $valid_ext = array('png','jpeg','jpg');
+
+            // Location
+            $location = public_path('upload/paper/url/').$url_file;
+
+            $file_extension = pathinfo($location, PATHINFO_EXTENSION);
+            $file_extension = strtolower($file_extension);
+
+            if(in_array($file_extension,$valid_ext)){
+                $this->compressImage($image->getPathName(),$location,60);
+            }
+        }
+
 
         $add = new paper;
         $add->user_id  = Auth::user()->id;
         $add->unit_id = $request->unit_id;
         $add->title = $request->title;
-        $add->url = $request->url;
+        $add->url = $url_file;
         $add->label = $request->label;
         $add->description = isset($request->description) ? $request->description:'';
         $add->save();
@@ -95,15 +115,38 @@ class PaperController extends Controller
         $this->validate($request, [
             'unit_id'     => 'required',
             'title' => 'required',
-            'url' => 'required',
             'label' => 'required',
         ]);
+
+        $url_file='';
+        if($request->has('url'))
+        {
+
+            $image = $request->file('url');
+
+            $url_file = rand() . '.' . $image->getClientOriginalExtension();
+
+            $valid_ext = array('png','jpeg','jpg');
+
+            // Location
+            $location = public_path('upload/paper/url/').$url_file;
+
+            $file_extension = pathinfo($location, PATHINFO_EXTENSION);
+            $file_extension = strtolower($file_extension);
+
+            if(in_array($file_extension,$valid_ext)){
+                $this->compressImage($image->getPathName(),$location,60);
+            }
+        }
+        else{
+            $url_file = $request->hidden_url;
+        }
 
         $update = paper::find($id);
         $update->user_id  = Auth::user()->id;
         $update->unit_id = $request->unit_id;
         $update->title = $request->title;
-        $update->url = $request->url;
+        $update->url = $url_file;
         $update->label = $request->label;
         $update->description = isset($request->description) ? $request->description:'';
         $update->save();
