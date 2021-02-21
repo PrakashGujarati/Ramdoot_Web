@@ -15,6 +15,7 @@ class RegisterController extends Controller
      */
     public function register(Request $request)
     {
+
         $this->validate($request, [            
             'mobile' => 'required|numeric|min:10',            
         ]);
@@ -46,8 +47,93 @@ class RegisterController extends Controller
      */
     public function login(Request $request)
     {
-        
+        $rules = array(
+            'mobile' => 'required'
+        );
+        $messages = array(
+            'mobile.required' => 'Please enter mobile number.'
+        );
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            $msg = $validator->messages();
+            return ['status' => "false",'msg' => $msg];
+        }
+
+        $checkuser = User::where('mobile',$request->mobile)->first();
+        if($checkuser){
+            return response()->json([
+                "code" => 200,
+                "message" => "success",
+                "data" => $checkuser,
+            ]);
+        }
+        else{
+            return response()->json([
+                "code" => 400,
+                "message" => "User not found.",
+                "data" => [],
+            ]);
+        }
+
     }   
+
+    public function profile_update(Request $request)
+    {
+        
+        $rules = array(
+            'user_id' => 'required'
+        );
+        $messages = array(
+            'user_id.required' => 'Please enter user id.'
+        );
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            $msg = $validator->messages();
+            return ['status' => "false",'msg' => $msg];
+        }
+
+        $checkuser = User::where('id',$request->user_id)->first();
+        if($checkuser){
+
+            $rules = array(
+                'mobile' => 'required|unique:users,mobile,'.$request->user_id,
+            );
+            $messages = array(      
+                'mobile.required' => 'Please enter mobile number.'
+            );
+
+            $validator = Validator::make($request->all(), $rules, $messages);
+
+            if ($validator->fails()) {
+                $msg = $validator->messages();
+                return ['status' => "false",'msg' => $msg];
+            }
+
+            $update = User::find($checkuser->id);
+            $update->name = $request->name;
+            $update->mobile = $request->mobile;
+            $update->email = $request->email;
+            $update->save();
+
+            return response()->json([
+                "code" => 200,
+                "message" => "success",
+                "data" => $update,
+            ]);
+
+        }else{
+            return response()->json([
+                "code" => 400,
+                "message" => "User not found.",
+                "data" => [],
+            ]);
+        }
+
+    }
 
     public function logout(Request $request)
     {      
