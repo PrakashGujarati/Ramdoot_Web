@@ -48,6 +48,8 @@ Route::group(['middleware'=>'api'], function()
     Route::post('paper_list', [PaperController::class, 'paperList']);
     Route::post('worksheet_list', [WorksheetController::class, 'worksheetList']);
     Route::post('features_list', [FeatureController::class, 'features_list']);
+    Route::post('profile_update', [RegisterController::class, 'profile_update']);
+
 });
 
 Route::post('register', [RegisterController::class, 'register']);

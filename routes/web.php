@@ -14,6 +14,12 @@ use App\Http\Controllers\SolutionController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\PaperController;
 use App\Http\Controllers\WorksheetController;
+use App\Http\Controllers\McqController;
+use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\ExamController;
+use App\Http\Controllers\ExamQuestionController;
+use App\Http\Controllers\ExamStudentController;
+use App\Http\Controllers\StudentQuestionAnswerController;
 
 
 
@@ -138,5 +144,53 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::post('worksheet/{id}/update', [WorksheetController::class, 'update'])->name('worksheet.update');
 	Route::get('worksheet/{id}/delete', [WorksheetController::class, 'distroy'])->name('worksheet.distroy');
 
+	/*mcqs*/
+	Route::get('mcq', [McqController::class, 'index'])->name('mcq.index');
+	Route::get('mcq/create', [McqController::class, 'create'])->name('mcq.create');
+	Route::post('mcq/store', [McqController::class, 'store'])->name('mcq.store');
+	Route::get('mcq/{id}/edit', [McqController::class, 'edit'])->name('mcq.edit');
+	Route::post('mcq/{id}/update', [McqController::class, 'update'])->name('mcq.update');
+	Route::get('mcq/{id}/delete', [McqController::class, 'distroy'])->name('mcq.distroy');
+
+	/*question*/
+	Route::get('question', [QuestionController::class, 'index'])->name('question.index');
+	Route::get('question/create', [QuestionController::class, 'create'])->name('question.create');
+	Route::post('question/store', [QuestionController::class, 'store'])->name('question.store');
+	Route::get('question/{id}/edit', [QuestionController::class, 'edit'])->name('question.edit');
+	Route::post('question/{id}/update', [QuestionController::class, 'update'])->name('question.update');
+	Route::get('question/{id}/delete', [QuestionController::class, 'distroy'])->name('question.distroy');
+
+	/*exam*/
+	Route::get('exam', [ExamController::class, 'index'])->name('exam.index');
+	Route::get('exam/create', [ExamController::class, 'create'])->name('exam.create');
+	Route::post('exam/store', [ExamController::class, 'store'])->name('exam.store');
+	Route::get('exam/{id}/edit', [ExamController::class, 'edit'])->name('exam.edit');
+	Route::post('exam/{id}/update', [ExamController::class, 'update'])->name('exam.update');
+	Route::get('exam/{id}/delete', [ExamController::class, 'distroy'])->name('exam.distroy');
+
+
+	/*exam_question*/
+	Route::get('exam_question', [ExamQuestionController::class, 'index'])->name('exam_question.index');
+	Route::get('exam_question/create', [ExamQuestionController::class, 'create'])->name('exam_question.create');
+	Route::post('exam_question/store', [ExamQuestionController::class, 'store'])->name('exam_question.store');
+	Route::get('exam_question/{id}/edit', [ExamQuestionController::class, 'edit'])->name('exam_question.edit');
+	Route::post('exam_question/{id}/update', [ExamQuestionController::class, 'update'])->name('exam_question.update');
+	Route::get('exam_question/{id}/delete', [ExamQuestionController::class, 'distroy'])->name('exam_question.distroy');
+
+	/*exam_student*/
+	Route::get('exam_student', [ExamStudentController::class, 'index'])->name('exam_student.index');
+	Route::get('exam_student/create', [ExamStudentController::class, 'create'])->name('exam_student.create');
+	Route::post('exam_student/store', [ExamStudentController::class, 'store'])->name('exam_student.store');
+	Route::get('exam_student/{id}/edit', [ExamStudentController::class, 'edit'])->name('exam_student.edit');
+	Route::post('exam_student/{id}/update', [ExamStudentController::class, 'update'])->name('exam_student.update');
+	Route::get('exam_student/{id}/delete', [ExamStudentController::class, 'distroy'])->name('exam_student.distroy');
+	
+	/*exam_student_question_answer*/
+	Route::get('exam_student_question_answer', [StudentQuestionAnswerController::class, 'index'])->name('exam_student_question_answer.index');
+	Route::get('exam_student_question_answer/create', [StudentQuestionAnswerController::class, 'create'])->name('exam_student_question_answer.create');
+	Route::post('exam_student_question_answer/store', [StudentQuestionAnswerController::class, 'store'])->name('exam_student_question_answer.store');
+	Route::get('exam_student_question_answer/{id}/edit', [StudentQuestionAnswerController::class, 'edit'])->name('exam_student_question_answer.edit');
+	Route::post('exam_student_question_answer/{id}/update', [StudentQuestionAnswerController::class, 'update'])->name('exam_student_question_answer.update');
+	Route::get('exam_student_question_answer/{id}/delete', [StudentQuestionAnswerController::class, 'distroy'])->name('exam_student_question_answer.distroy');
 
 });

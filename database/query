@@ -1,5 +1,14 @@
 
 
+----------------------- 21-02-2021 -------------------
+
+
+ALTER TABLE `questions` ADD `unit_id` INT(11) NOT NULL DEFAULT '0' AFTER `id`;
+
+ALTER TABLE `questions` CHANGE `group_id` `group_id` INT(11) NOT NULL DEFAULT '0', CHANGE `section_id` `section_id` INT(11) NOT NULL DEFAULT '0';
+
+ALTER TABLE `exam_questions` ADD `status` ENUM('Active','Inactive','Deleted') NULL DEFAULT 'Active' AFTER `question_id`;
+
 ----------------------- 19-02-2021 -------------------
 
 
