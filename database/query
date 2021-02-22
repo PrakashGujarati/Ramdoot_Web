@@ -1,4 +1,9 @@
 
+----------------------- 22-02-2021 -------------------
+
+
+ALTER TABLE `books` ADD `board_id` INT(11) NOT NULL DEFAULT '0' AFTER `id`, ADD `standard_id` INT(11) NOT NULL DEFAULT '0' AFTER `board_id`, ADD `semester_id` INT(11) NOT NULL DEFAULT '0' AFTER `standard_id`, ADD `subject_id` INT(11) NOT NULL DEFAULT '0' AFTER `semester_id`;
+
 
 ----------------------- 21-02-2021 -------------------
 

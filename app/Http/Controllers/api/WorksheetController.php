@@ -70,7 +70,8 @@ class WorksheetController extends Controller
 	    			$getdata = worksheet::where(['unit_id' => $value->id,'status' => 'Active'])->get();
 	    			$worksheetdata = [];
 	    			foreach ($getdata as $value1) {
-	    				$worksheetdata[] = ['id' => $value1->id,'title' => $value1->title,'url' => $value1->url,'type' => $value1->type,'description' => $value1->description,'label' => $value1->label];
+                        $url = env('APP_URL')."/upload/worksheet/url/".$value1->url;
+	    				$worksheetdata[] = ['id' => $value1->id,'title' => $value1->title,'url' => $url,'type' => $value1->type,'description' => $value1->description,'label' => $value1->label];
 	    			}
 
 	    			$data[] = ['id' => $value->id,'unit_title' =>$value->title,'worksheet' => $worksheetdata];

@@ -69,7 +69,8 @@ class PaperController extends Controller
 	    			$getdata = paper::where(['unit_id' => $value->id,'status' => 'Active'])->get();
 	    			$paperdata=[];
 	    			foreach ($getdata as $value1) {
-	    				$paperdata[] = ['id' => $value1->id,'title' => $value1->title,'url' => $value1->url,'description' => $value1->description,'label' => $value1->label];
+                        $url = env('APP_URL')."/upload/paper/url/".$value1->url;
+	    				$paperdata[] = ['id' => $value1->id,'title' => $value1->title,'url' => $url,'description' => $value1->description,'label' => $value1->label];
 	    			}
 
 	    			$data[] = ['id' => $value->id,'unit_title' =>$value->title,'paper' => $paperdata];

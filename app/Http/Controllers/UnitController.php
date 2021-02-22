@@ -244,4 +244,29 @@ class UnitController extends Controller
       imagejpeg($image, $destination, $quality);
 
     }
+
+    public function getUnit(Request $request){
+
+       //$getunit = unit::where(['unit_id' => $request->board_id])->get();
+       $getunit = unit::where(['standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'subject_id' => $request->subject_id])->get();
+
+        $result="<option value=''>--Select Unit--</option>";
+        if(count($getunit) > 0)
+        {
+            foreach ($getunit as $unit) {
+
+                if($request->has('unit_id')){
+                    if($request->unit_id == $unit->id){
+                        $result.="<option value='".$unit->id."' selected>".$unit->title."</option>";
+                    }
+                    else{
+                        $result.="<option value='".$unit->id."'>".$unit->title."</option>";    
+                    }
+                }else{
+                    $result.="<option value='".$unit->id."'>".$unit->title."</option>";
+                }
+            }
+        }
+        return response()->json(['html'=>$result]); 
+    }
 }

@@ -20,7 +20,7 @@ use App\Http\Controllers\ExamController;
 use App\Http\Controllers\ExamQuestionController;
 use App\Http\Controllers\ExamStudentController;
 use App\Http\Controllers\StudentQuestionAnswerController;
-
+use App\Http\Controllers\FeatureController;
 
 
 
@@ -94,6 +94,8 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('unit/{id}/edit', [UnitController::class, 'edit'])->name('unit.edit');
 	Route::post('unit/{id}/update', [UnitController::class, 'update'])->name('unit.update');
 	Route::get('unit/{id}/delete', [UnitController::class, 'distroy'])->name('unit.distroy');
+
+	Route::get('get_unit', [UnitController::class, 'getUnit'])->name('get.unit');
 
 	/*slider*/
 	Route::get('slider', [SliderController::class, 'index'])->name('slider.index');
@@ -192,5 +194,13 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('exam_student_question_answer/{id}/edit', [StudentQuestionAnswerController::class, 'edit'])->name('exam_student_question_answer.edit');
 	Route::post('exam_student_question_answer/{id}/update', [StudentQuestionAnswerController::class, 'update'])->name('exam_student_question_answer.update');
 	Route::get('exam_student_question_answer/{id}/delete', [StudentQuestionAnswerController::class, 'distroy'])->name('exam_student_question_answer.distroy');
+
+	/*feature*/
+	Route::get('feature', [FeatureController::class, 'index'])->name('feature.index');
+	Route::get('feature/create', [FeatureController::class, 'create'])->name('feature.create');
+	Route::post('feature/store', [FeatureController::class, 'store'])->name('feature.store');
+	Route::get('feature/{id}/edit', [FeatureController::class, 'edit'])->name('feature.edit');
+	Route::post('feature/{id}/update', [FeatureController::class, 'update'])->name('feature.update');
+	Route::get('feature/{id}/delete', [FeatureController::class, 'distroy'])->name('feature.distroy');
 
 });

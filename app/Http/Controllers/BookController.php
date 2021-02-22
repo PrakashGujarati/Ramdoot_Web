@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Subject;
 use App\Models\unit;
 use Auth;
+use App\Models\Board;
 
 class BookController extends Controller
 {
@@ -29,7 +30,8 @@ class BookController extends Controller
     public function create()
     {
         $units = unit::where('status','Active')->get();
-        return view('book.add',compact('units'));
+        $boards = Board::where('status','Active')->get();
+        return view('book.add',compact('units','boards'));
     }
 
     /**
@@ -40,8 +42,13 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
+
         $this->validate($request, [
-            'unit_id'     => 'required',
+            'board_id' => 'required',
+            'standard_id' => 'required',
+            'semester_id'  => 'required',
+            'subject_id' => 'required',
+            'unit_id' => 'required',
             'title' => 'required',
             'url' => 'required',
             'thumbnail'  => 'required',
@@ -93,6 +100,10 @@ class BookController extends Controller
 
         $add = new Book;
         $add->user_id  = Auth::user()->id;
+        $add->board_id = $request->board_id;
+        $add->standard_id = $request->standard_id;
+        $add->semester_id = $request->semester_id;
+        $add->subject_id = $request->subject_id;
         $add->unit_id = $request->unit_id;
         $add->title = $request->title;
         $add->url = $url_file;
@@ -199,6 +210,10 @@ class BookController extends Controller
 
         $update = Book::find($id);
         $update->unit_id = $request->unit_id;
+        $update->board_id = $request->board_id;
+        $update->standard_id = $request->standard_id;
+        $update->semester_id = $request->semester_id;
+        $update->subject_id = $request->subject_id;
         $update->title = $request->title;
         $update->url = $url_file;
         $update->thumbnail = $new_name;

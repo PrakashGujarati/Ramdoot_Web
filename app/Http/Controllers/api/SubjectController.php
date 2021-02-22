@@ -67,8 +67,9 @@ class SubjectController extends Controller
 	    	if(count($getdata) > 0){
 	    		$data=[];
 	    		foreach ($getdata as $value) {
-	    			$thumbnail = env('APP_URL')."/upload/subject/".$value->thumbnail;
-	    			$data[] = ['id' => $value->id,'name' => $value->subject_name,'url' => $value->url,'thumbnail' => $thumbnail,"units"=>$unitcount];
+                    $url = env('APP_URL')."/upload/subject/url/".$value->url;
+	    			$thumbnail = env('APP_URL')."/upload/subject/thumbnail/".$value->thumbnail;
+	    			$data[] = ['id' => $value->id,'name' => $value->subject_name,'url' => $url,'thumbnail' => $thumbnail,"units"=>$unitcount];
 	    		}
 
 	    		return response()->json([
