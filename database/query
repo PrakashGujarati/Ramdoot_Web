@@ -1,4 +1,24 @@
 
+
+
+----------------------- 23-02-2021 -------------------
+
+
+ALTER TABLE `worksheets` ADD `board_id` INT(11) NOT NULL DEFAULT '0' AFTER `id`, ADD `standard_id` INT(11) NOT NULL DEFAULT '0' AFTER `board_id`, ADD `semester_id` INT(11) NOT NULL DEFAULT '0' AFTER `standard_id`, ADD `subject_id` INT(11) NOT NULL DEFAULT '0' AFTER `semester_id`;
+
+
+ALTER TABLE `papers` ADD `board_id` INT(11) NOT NULL DEFAULT '0' AFTER `id`, ADD `standard_id` INT(11) NOT NULL DEFAULT '0' AFTER `board_id`, ADD `semester_id` INT(11) NOT NULL DEFAULT '0' AFTER `standard_id`, ADD `subject_id` INT(11) NOT NULL DEFAULT '0' AFTER `semester_id`;
+
+
+ALTER TABLE `materials` ADD `board_id` INT(11) NOT NULL DEFAULT '0' AFTER `id`, ADD `standard_id` INT(11) NOT NULL DEFAULT '0' AFTER `board_id`, ADD `semester_id` INT(11) NOT NULL DEFAULT '0' AFTER `standard_id`, ADD `subject_id` INT(11) NOT NULL DEFAULT '0' AFTER `semester_id`;
+
+
+ALTER TABLE `solutions` ADD `board_id` INT(11) NOT NULL DEFAULT '0' AFTER `id`, ADD `standard_id` INT(11) NOT NULL DEFAULT '0' AFTER `board_id`, ADD `semester_id` INT(11) NOT NULL DEFAULT '0' AFTER `standard_id`, ADD `subject_id` INT(11) NOT NULL DEFAULT '0' AFTER `semester_id`;
+
+
+ALTER TABLE `videos` ADD `board_id` INT(11) NOT NULL DEFAULT '0' AFTER `id`, ADD `standard_id` INT(11) NOT NULL DEFAULT '0' AFTER `board_id`, ADD `semester_id` INT(11) NOT NULL DEFAULT '0' AFTER `standard_id`, ADD `subject_id` INT(11) NOT NULL DEFAULT '0' AFTER `semester_id`;
+
+
 ----------------------- 22-02-2021 -------------------
 
 

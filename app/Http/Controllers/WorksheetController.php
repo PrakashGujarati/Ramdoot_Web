@@ -6,6 +6,7 @@ use App\Models\worksheet;
 use Illuminate\Http\Request;
 use App\Models\unit;
 use Auth;
+use App\Models\Board;
 
 class WorksheetController extends Controller
 {
@@ -28,7 +29,8 @@ class WorksheetController extends Controller
     public function create()
     {
         $units = unit::where('status','Active')->get();
-        return view('worksheet.add',compact('units'));
+        $boards = Board::where('status','Active')->get();
+        return view('worksheet.add',compact('units','boards'));
     }
 
     /**
@@ -41,6 +43,10 @@ class WorksheetController extends Controller
     {
         $this->validate($request, [
             'unit_id'     => 'required',
+            'board_id' => 'required',
+            'standard_id' => 'required',
+            'semester_id'  => 'required',
+            'subject_id' => 'required',
             'title' => 'required',
             'url' => 'required',
             'type' => 'required',
@@ -71,6 +77,10 @@ class WorksheetController extends Controller
         $add = new worksheet;
         $add->user_id  = Auth::user()->id;
         $add->unit_id = $request->unit_id;
+        $add->board_id = $request->board_id;
+        $add->standard_id = $request->standard_id;
+        $add->semester_id = $request->semester_id;
+        $add->subject_id = $request->subject_id;
         $add->title = $request->title;
         $add->url = $url_file;
         $add->type = $request->type;
@@ -102,7 +112,8 @@ class WorksheetController extends Controller
     {
         $units = unit::where('status','Active')->get();
         $worksheetdata = worksheet::where('id',$id)->first();
-        return view('worksheet.edit',compact('worksheetdata','units'));
+        $boards = Board::where('status','Active')->get();
+        return view('worksheet.edit',compact('worksheetdata','units','boards'));
     }
 
     /**
@@ -116,6 +127,10 @@ class WorksheetController extends Controller
     {
         $this->validate($request, [
             'unit_id'     => 'required',
+            'board_id' => 'required',
+            'standard_id' => 'required',
+            'semester_id'  => 'required',
+            'subject_id' => 'required',
             'title' => 'required',
             'type' => 'required',
             'label' => 'required',
@@ -148,6 +163,10 @@ class WorksheetController extends Controller
         $update = worksheet::find($id);
         $update->user_id  = Auth::user()->id;
         $update->unit_id = $request->unit_id;
+        $update->board_id = $request->board_id;
+        $update->standard_id = $request->standard_id;
+        $update->semester_id = $request->semester_id;
+        $update->subject_id = $request->subject_id;
         $update->title = $request->title;
         $update->url = $url_file;
         $update->type = $request->type;

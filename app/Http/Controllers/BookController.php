@@ -138,8 +138,9 @@ class BookController extends Controller
     public function edit(Book $book,$id)
     {
         $units = unit::where('status','Active')->get();
+        $boards = Board::where('status','Active')->get();
         $bookdata = Book::where('id',$id)->first();
-        return view('book.edit',compact('bookdata','units'));
+        return view('book.edit',compact('bookdata','units','boards'));
     }
 
     /**
@@ -152,6 +153,10 @@ class BookController extends Controller
     public function update(Request $request, Book $book,$id)
     {
         $this->validate($request, [
+            'board_id' => 'required',
+            'standard_id' => 'required',
+            'semester_id'  => 'required',
+            'subject_id' => 'required',
             'unit_id' => 'required',
             'title' => 'required',
             'pages' => 'required',

@@ -6,6 +6,7 @@ use App\Models\videos;
 use Illuminate\Http\Request;
 use App\Models\unit;
 use Auth;
+use App\Models\Board;
 
 class VideosController extends Controller
 {
@@ -28,7 +29,8 @@ class VideosController extends Controller
     public function create()
     {
         $units = unit::where('status','Active')->get();
-        return view('videos.add',compact('units'));
+        $boards = Board::where('status','Active')->get();
+        return view('videos.add',compact('units','boards'));
     }
 
     /**
@@ -41,6 +43,10 @@ class VideosController extends Controller
     {
         $this->validate($request, [
             'unit_id'     => 'required',
+            'board_id' => 'required',
+            'standard_id' => 'required',
+            'semester_id'  => 'required',
+            'subject_id' => 'required',
             'title' => 'required',
             'thumbnail'  => 'required',
             'duration' => 'required',
@@ -101,6 +107,10 @@ class VideosController extends Controller
         $add = new videos;
         $add->user_id  = Auth::user()->id;
         $add->unit_id = $request->unit_id;
+        $add->board_id = $request->board_id;
+        $add->standard_id = $request->standard_id;
+        $add->semester_id = $request->semester_id;
+        $add->subject_id = $request->subject_id;
         $add->title = $request->title;
         $add->type = $request->type;
         $add->url = $url_file;
@@ -135,7 +145,8 @@ class VideosController extends Controller
     {
         $units = unit::where('status','Active')->get();
         $videodata = videos::where('id',$id)->first();
-        return view('videos.edit',compact('videodata','units'));
+        $boards = Board::where('status','Active')->get();
+        return view('videos.edit',compact('videodata','units','boards'));
     }
 
     /**
@@ -149,6 +160,10 @@ class VideosController extends Controller
     {
         $this->validate($request, [
             'unit_id' => 'required',
+            'board_id' => 'required',
+            'standard_id' => 'required',
+            'semester_id'  => 'required',
+            'subject_id' => 'required',
             'title' => 'required',
             'duration' => 'required',
             'label' => 'required',
@@ -212,6 +227,10 @@ class VideosController extends Controller
 
         $update = videos::find($id);
         $update->unit_id = $request->unit_id;
+        $update->board_id = $request->board_id;
+        $update->standard_id = $request->standard_id;
+        $update->semester_id = $request->semester_id;
+        $update->subject_id = $request->subject_id;
         $update->title = $request->title;
         $update->type = $request->type;
         $update->url = $url_file;

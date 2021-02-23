@@ -6,6 +6,7 @@ use App\Models\solution;
 use Illuminate\Http\Request;
 use App\Models\unit;
 use Auth;
+use App\Models\Board;
 
 class SolutionController extends Controller
 {
@@ -28,7 +29,8 @@ class SolutionController extends Controller
     public function create()
     {
         $units = unit::where('status','Active')->get();
-        return view('solution.add',compact('units'));
+        $boards = Board::where('status','Active')->get();
+        return view('solution.add',compact('units','boards'));
     }
 
     /**
@@ -41,6 +43,10 @@ class SolutionController extends Controller
     {
         $this->validate($request, [
             'unit_id'     => 'required',
+            'board_id' => 'required',
+            'standard_id' => 'required',
+            'semester_id'  => 'required',
+            'subject_id' => 'required',
             'question' => 'required',
             'answer' => 'required',
             'marks' => 'required',
@@ -72,6 +78,10 @@ class SolutionController extends Controller
         $add = new solution;
         $add->user_id  = Auth::user()->id;
         $add->unit_id = $request->unit_id;
+        $add->board_id = $request->board_id;
+        $add->standard_id = $request->standard_id;
+        $add->semester_id = $request->semester_id;
+        $add->subject_id = $request->subject_id;
         $add->question = $request->question;
         $add->answer = $request->answer;
         $add->image = $new_name;
@@ -103,7 +113,8 @@ class SolutionController extends Controller
     {
         $units = unit::where('status','Active')->get();
         $solutiondata = solution::where('id',$id)->first();
-        return view('solution.edit',compact('solutiondata','units'));
+        $boards = Board::where('status','Active')->get();
+        return view('solution.edit',compact('solutiondata','units','boards'));
     }
 
     /**
@@ -117,6 +128,10 @@ class SolutionController extends Controller
     {
         $this->validate($request, [
             'unit_id'     => 'required',
+            'board_id' => 'required',
+            'standard_id' => 'required',
+            'semester_id'  => 'required',
+            'subject_id' => 'required',
             'question' => 'required',
             'answer' => 'required',
             'marks' => 'required',
@@ -150,6 +165,10 @@ class SolutionController extends Controller
         $update = solution::find($id);
         $update->user_id  = Auth::user()->id;
         $update->unit_id = $request->unit_id;
+        $update->board_id = $request->board_id;
+        $update->standard_id = $request->standard_id;
+        $update->semester_id = $request->semester_id;
+        $update->subject_id = $request->subject_id;
         $update->question = $request->question;
         $update->answer = $request->answer;
         $update->image = $new_name;

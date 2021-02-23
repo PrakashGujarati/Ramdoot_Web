@@ -6,6 +6,7 @@ use App\Models\material;
 use Illuminate\Http\Request;
 use App\Models\unit;
 use Auth;
+use App\Models\Board;
 
 class MaterialController extends Controller
 {
@@ -28,7 +29,8 @@ class MaterialController extends Controller
     public function create()
     {
         $units = unit::where('status','Active')->get();
-        return view('material.add',compact('units'));
+        $boards = Board::where('status','Active')->get();
+        return view('material.add',compact('units','boards'));
     }
 
     /**
@@ -41,6 +43,10 @@ class MaterialController extends Controller
     {
         $this->validate($request, [
             'unit_id'     => 'required',
+            'board_id' => 'required',
+            'standard_id' => 'required',
+            'semester_id'  => 'required',
+            'subject_id' => 'required',
             'title' => 'required',
             'url' => 'required',
             'size' => 'required',
@@ -71,6 +77,10 @@ class MaterialController extends Controller
         $add = new material;
         $add->user_id  = Auth::user()->id;
         $add->unit_id = $request->unit_id;
+        $add->board_id = $request->board_id;
+        $add->standard_id = $request->standard_id;
+        $add->semester_id = $request->semester_id;
+        $add->subject_id = $request->subject_id;
         $add->title = $request->title;
         $add->url = $url_file;
         $add->size = $request->size;
@@ -102,7 +112,8 @@ class MaterialController extends Controller
     {
         $units = unit::where('status','Active')->get();
         $materialdata = material::where('id',$id)->first();
-        return view('material.edit',compact('materialdata','units'));
+        $boards = Board::where('status','Active')->get();
+        return view('material.edit',compact('materialdata','units','boards'));
     }
 
     /**
@@ -116,6 +127,10 @@ class MaterialController extends Controller
     {
         $this->validate($request, [
             'unit_id'     => 'required',
+            'board_id' => 'required',
+            'standard_id' => 'required',
+            'semester_id'  => 'required',
+            'subject_id' => 'required',
             'title' => 'required',
             'size' => 'required',
             'label' => 'required',
@@ -148,6 +163,10 @@ class MaterialController extends Controller
         $update = material::find($id);
         $update->user_id  = Auth::user()->id;
         $update->unit_id = $request->unit_id;
+        $update->board_id = $request->board_id;
+        $update->standard_id = $request->standard_id;
+        $update->semester_id = $request->semester_id;
+        $update->subject_id = $request->subject_id;
         $update->title = $request->title;
         $update->url = $url_file;
         $update->size = $request->size;

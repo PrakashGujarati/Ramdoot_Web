@@ -6,6 +6,7 @@ use App\Models\paper;
 use Illuminate\Http\Request;
 use App\Models\unit;
 use Auth;
+use App\Models\Board;
 
 class PaperController extends Controller
 {
@@ -28,7 +29,8 @@ class PaperController extends Controller
     public function create()
     {
         $units = unit::where('status','Active')->get();
-        return view('paper.add',compact('units'));
+        $boards = Board::where('status','Active')->get();
+        return view('paper.add',compact('units','boards'));
     }
 
     /**
@@ -41,6 +43,10 @@ class PaperController extends Controller
     {
         $this->validate($request, [
             'unit_id'     => 'required',
+            'board_id' => 'required',
+            'standard_id' => 'required',
+            'semester_id'  => 'required',
+            'subject_id' => 'required',
             'title' => 'required',
             'url' => 'required',
             'label' => 'required', 
@@ -70,6 +76,10 @@ class PaperController extends Controller
         $add = new paper;
         $add->user_id  = Auth::user()->id;
         $add->unit_id = $request->unit_id;
+        $add->board_id = $request->board_id;
+        $add->standard_id = $request->standard_id;
+        $add->semester_id = $request->semester_id;
+        $add->subject_id = $request->subject_id;
         $add->title = $request->title;
         $add->url = $url_file;
         $add->label = $request->label;
@@ -100,7 +110,8 @@ class PaperController extends Controller
     {
         $units = unit::where('status','Active')->get();
         $paperdata = paper::where('id',$id)->first();
-        return view('paper.edit',compact('paperdata','units'));
+        $boards = Board::where('status','Active')->get();
+        return view('paper.edit',compact('paperdata','units','boards'));
     }
 
     /**
@@ -114,6 +125,10 @@ class PaperController extends Controller
     {
         $this->validate($request, [
             'unit_id'     => 'required',
+            'board_id' => 'required',
+            'standard_id' => 'required',
+            'semester_id'  => 'required',
+            'subject_id' => 'required',
             'title' => 'required',
             'label' => 'required',
         ]);
@@ -145,6 +160,10 @@ class PaperController extends Controller
         $update = paper::find($id);
         $update->user_id  = Auth::user()->id;
         $update->unit_id = $request->unit_id;
+        $update->board_id = $request->board_id;
+        $update->standard_id = $request->standard_id;
+        $update->semester_id = $request->semester_id;
+        $update->subject_id = $request->subject_id;
         $update->title = $request->title;
         $update->url = $url_file;
         $update->label = $request->label;
