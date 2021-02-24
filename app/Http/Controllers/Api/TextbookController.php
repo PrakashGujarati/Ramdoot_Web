@@ -62,7 +62,7 @@ class TextbookController extends Controller
         }
         else{
 
-        	$getunit = Book::where(['standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'subject_id' => $request->subject_id,'status' => 'Active'])->get();
+        	$getunit = unit::where(['standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'subject_id' => $request->subject_id,'status' => 'Active'])->get();
         	//$getdata = Books::where(['unit_id' => $request->unit_id,'status' => 'Active'])->get();
 	    	if(count($getunit) > 0){
 	    		$data=[];$getdata=[];
