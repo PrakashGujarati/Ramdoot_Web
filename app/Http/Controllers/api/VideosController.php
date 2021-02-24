@@ -71,7 +71,13 @@ class VideosController extends Controller
 	    			$getdata = videos::where(['unit_id' => $value->id,'status' => 'Active'])->get();
 	    			$videodata=[];
 	    			foreach ($getdata as $value1) {
-                        $url = env('APP_URL')."/upload/videos/url/".$value1->url;
+                        $url='';
+                        if($value1->type == "File"){
+                            $url = env('APP_URL')."/upload/videos/url/".$value1->url;
+                        }
+                        elseif ($value1->type == "URL") {
+                            $url = $value1->url;
+                        }
 	    				$thumbnail = env('APP_URL')."/upload/videos/thumbnail/".$value1->thumbnail;
 	    				$videodata[] = ['id' => $value1->id,'title' => $value1->title,'url' => $url,'thumbnail' => $thumbnail,'duration' => $value1->duration,'description' => $value1->description,'label' => $value1->label,'release_date' => $value1->release_date];
 	    			}

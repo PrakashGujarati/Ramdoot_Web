@@ -28,7 +28,7 @@ class FeatureController extends Controller
 
         }else{
             return response()->json([
-                "code" => 200,
+                "code" => 400,
                 "message" => "Features Details Not Found.",
                 "data" => [],
             ]);

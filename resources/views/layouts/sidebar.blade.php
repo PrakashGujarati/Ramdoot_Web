@@ -146,14 +146,15 @@
                         </a>
                     </li><!-- .nk-menu-item -->
 
-                  {{--  <li class="nk-menu-item @if(\Request::route()->getName() == 'exam_student.index' || \Request::route()->getName() == 'exam_student.create' || \Request::route()->getName() == 'exam_student.edit') active @endif">
+                    <li class="nk-menu-item @if(\Request::route()->getName() == 'exam_student.index' || 
+                    	\Request::route()->getName() == 'exam_student.create' || \Request::route()->getName() == 'exam_student.edit') active @endif">
                         <a href="{{ route('exam_student.index') }}" class="nk-menu-link">
                             <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
                             <span class="nk-menu-text">Exam Student</span>
                         </a>
                     </li><!-- .nk-menu-item -->
 
-                    <li class="nk-menu-item @if(\Request::route()->getName() == 'exam_student_question_answer.index' || \Request::route()->getName() == 'exam_student_question_answer.create' || \Request::route()->getName() == 'exam_student_question_answer.edit') active @endif">
+                   {{-- <li class="nk-menu-item @if(\Request::route()->getName() == 'exam_student_question_answer.index' || \Request::route()->getName() == 'exam_student_question_answer.create' || \Request::route()->getName() == 'exam_student_question_answer.edit') active @endif">
                         <a href="{{ route('exam_student_question_answer.index') }}" class="nk-menu-link">
                             <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
                             <span class="nk-menu-text">Student Question/Answer</span>

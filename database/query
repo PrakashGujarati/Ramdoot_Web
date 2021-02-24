@@ -1,5 +1,12 @@
 
 
+----------------------- 24-02-2021 -------------------
+
+
+ALTER TABLE `exam_students` CHANGE `node_number` `node_number` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL;
+
+ALTER TABLE `users` ADD `address` TEXT NULL AFTER `password`, ADD `pin_code` VARCHAR(255) NULL AFTER `address`, ADD `city` VARCHAR(255) NULL AFTER `pin_code`, ADD `birth_date` VARCHAR(255) NULL AFTER `city`;
+
 
 ----------------------- 23-02-2021 -------------------
 

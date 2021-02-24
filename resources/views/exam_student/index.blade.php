@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title','Exams')
+@section('title','Students')
 @section('css')
 @endsection
 
@@ -17,11 +17,11 @@
 				</div>
 			@endif
         	<div class="row">
-        		<div class="col-lg-10">
-            		<h4 class="nk-block-title">Exam List</h4>
+        		<div class="col-lg-9">
+            		<h4 class="nk-block-title">Exam Student List</h4>
             	</div>
-            	<div class="col-lg-2 text-right">
-            		<a href="{{ route('exam.create') }}" class="btn btn-primary text-light">Add Exam</a>
+            	<div class="col-lg-3 text-right">
+            		<a href="{{ route('exam_student.create') }}" class="btn btn-primary text-light">Add Student</a>
             	</div>
             </div>
         </div>
@@ -31,20 +31,20 @@
             <table class="datatable-init table">
                 <thead>
                     <tr>
-                        <th>Unit</th>
-                        <th>Name</th>
+                        <th>Exam</th>
+                        <th>Student</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                	@if(count($exam_details) > 0)
-                	@foreach($exam_details as $data)
+                	@if(count($examstudent_details) > 0)
+                	@foreach($examstudent_details as $data)
                     <tr>
-                        <td>{{ isset($data->unit->title) ? $data->unit->title:'' }}</td>
-                        <td>{{ $data->name }}</td>
+                        <td>{{ isset($data->exam->name) ? $data->exam->name:'' }}</td>
+                        <td>{{ isset($data->user->name) ? $data->user->name:'' }}</td>
                         <td>
-                        	<a href="{{ route('exam.edit',$data->id) }}"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
-                        	<a href="javascript:;" data-url="{{ route('exam.distroy',$data->id) }}" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a>
+                        	<a href="{{ route('exam_student.edit',$data->id) }}"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
+                        	<a href="javascript:;" data-url="{{ route('exam_student.distroy',$data->id) }}" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a>
                         </td>
                     </tr>
                     @endforeach
@@ -67,7 +67,7 @@
 	$('.distroy').on('click', function() {
 	    let del_url = $(this).attr('data-url');
 	    bootbox.confirm({
-	        message: "Are you sure to delete this exam ?",
+	        message: "Are you sure to delete this exam student ?",
 	        buttons: {
 	            confirm: {
 	                label: 'Yes',

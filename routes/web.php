@@ -163,12 +163,12 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('question/{id}/delete', [QuestionController::class, 'distroy'])->name('question.distroy');
 
 	/*exam*/
-	Route::get('exam', [ExamController::class, 'index'])->name('exam.index');
-	Route::get('exam/create', [ExamController::class, 'create'])->name('exam.create');
-	Route::post('exam/store', [ExamController::class, 'store'])->name('exam.store');
-	Route::get('exam/{id}/edit', [ExamController::class, 'edit'])->name('exam.edit');
-	Route::post('exam/{id}/update', [ExamController::class, 'update'])->name('exam.update');
-	Route::get('exam/{id}/delete', [ExamController::class, 'distroy'])->name('exam.distroy');
+	Route::get('exams', [ExamController::class, 'index'])->name('exam.index');
+	Route::get('exams/create', [ExamController::class, 'create'])->name('exam.create');
+	Route::post('exams/store', [ExamController::class, 'store'])->name('exam.store');
+	Route::get('exams/{id}/edit', [ExamController::class, 'edit'])->name('exam.edit');
+	Route::post('exams/{id}/update', [ExamController::class, 'update'])->name('exam.update');
+	Route::get('exams/{id}/delete', [ExamController::class, 'distroy'])->name('exam.distroy');
 
 
 	/*exam_question*/

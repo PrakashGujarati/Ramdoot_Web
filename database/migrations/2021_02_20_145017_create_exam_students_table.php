@@ -21,7 +21,7 @@ class CreateExamStudentsTable extends Migration
             $table->time('end_time')->nullable();
             $table->tinyInteger('is_attend')->default(0);
             $table->time('remaining_time')->nullable();
-            $table->string('node_number');
+            $table->string('node_number')->nullable();
             $table->string('result')->nullable();
             $table->string('ip_address')->nullable();
             $table->tinyInteger('student_status')->default(0);

@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\exam_student;
 use Illuminate\Http\Request;
+use App\Models\exam;
+use App\Models\User;
+use Auth;
 
 class ExamStudentController extends Controller
 {
@@ -14,8 +17,8 @@ class ExamStudentController extends Controller
      */
     public function index()
     {
-        $examquestion_details = exam_student::where('status','Active')->get();
-        return view('exam_question.index',compact('examquestion_details'));
+        $examstudent_details = exam_student::where('status','Active')->get();
+        return view('exam_student.index',compact('examstudent_details'));
     }
 
     /**
@@ -26,7 +29,8 @@ class ExamStudentController extends Controller
     public function create()
     {
         $exams = exam::where('status','Active')->get();
-        return view('exam_question.add',compact('exams'));
+        $users = User::where('id','!=',Auth::user()->id)->where('name','!=','')->get();
+        return view('exam_student.add',compact('exams','users'));
     }
 
     /**
@@ -39,25 +43,25 @@ class ExamStudentController extends Controller
     {
         $this->validate($request, [
             'exam_id' => 'required',
+            'student_id' => 'required',
             'start_time' => 'required',
             'end_time' => 'required',
             
         ]);
 
         
-        $add = new question;
-        $add->unit_id = $request->unit_id;
-        $add->note = $request->note;
-        $add->question = $request->question;
-        $add->option_a = $request->option_a;
-        $add->option_b = $request->option_b;
-        $add->option_c = $request->option_c;
-        $add->option_d = $request->option_d;
-        $add->answer = $request->answer;
-        $add->per_question_marks = $request->per_question_marks;
+        $add = new exam_student;
+        $add->exam_id = $request->exam_id;
+        $add->user_id = $request->student_id;
+        $add->start_time = $request->start_time;
+        $add->end_time = $request->end_time;
+        $add->remaining_time = isset($request->remaining_time) ? $request->remaining_time:null;
+        $add->result = isset($request->result) ? $request->result:null;
+        $add->node_number = isset($request->node_number) ? $request->node_number:null;
+        $add->is_attend = isset($request->is_attend) ? $request->is_attend:0;
         $add->save();
 
-        return redirect()->route('question.index')->with('success', 'Question Added Successfully.');
+        return redirect()->route('exam_student.index')->with('success', 'Student Added Successfully.');
     }
 
     /**
@@ -77,11 +81,12 @@ class ExamStudentController extends Controller
      * @param  \App\Models\exam_student  $exam_student
      * @return \Illuminate\Http\Response
      */
-    public function edit(exam_student $exam_student)
+    public function edit(exam_student $exam_student,$id)
     {
-        $units = unit::where('status','Active')->get();
-        $questiondata = question::where('id',$id)->first();
-        return view('question.edit',compact('questiondata','units'));
+        $exams = exam::where('status','Active')->get();
+        $users = User::where('id','!=',Auth::user()->id)->where('name','!=','')->get();
+        $examstudentdata = exam_student::where('id',$id)->first();
+        return view('exam_student.edit',compact('examstudentdata','users','exams'));
     }
 
     /**
@@ -91,34 +96,29 @@ class ExamStudentController extends Controller
      * @param  \App\Models\exam_student  $exam_student
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, exam_student $exam_student)
+    public function update(Request $request, exam_student $exam_student,$id)
     {
         $this->validate($request, [
-            'unit_id'     => 'required',
-            'question' => 'required',
-            'note' => 'required',
-            'option_a' => 'required',
-            'option_b' => 'required',
-            'option_c' => 'required',
-            'option_d' => 'required',
-            'answer' => 'required',
-            'per_question_marks' => 'required', 
+            'exam_id' => 'required',
+            'student_id' => 'required',
+            'start_time' => 'required',
+            'end_time' => 'required',
+            
         ]);
 
         
-        $update = question::find($id);
-        $update->unit_id = $request->unit_id;
-        $update->note = $request->note;
-        $update->question = $request->question;
-        $update->option_a = $request->option_a;
-        $update->option_b = $request->option_b;
-        $update->option_c = $request->option_c;
-        $update->option_d = $request->option_d;
-        $update->answer = $request->answer;
-        $update->per_question_marks = $request->per_question_marks;
+        $update = exam_student::find($id);
+        $update->exam_id = $request->exam_id;
+        $update->user_id = $request->student_id;
+        $update->start_time = $request->start_time;
+        $update->end_time = $request->end_time;
+        $update->remaining_time = isset($request->remaining_time) ? $request->remaining_time:null;
+        $update->result = isset($request->result) ? $request->result:null;
+        $update->node_number = isset($request->node_number) ? $request->node_number:null;
+        $update->is_attend = isset($request->is_attend) ? $request->is_attend:0;
         $update->save();
 
-        return redirect()->route('question.index')->with('success', 'Question Updated Successfully.');
+        return redirect()->route('exam_student.index')->with('success', 'Student Updated Successfully.');
     }
 
     /**
@@ -127,12 +127,12 @@ class ExamStudentController extends Controller
      * @param  \App\Models\exam_student  $exam_student
      * @return \Illuminate\Http\Response
      */
-    public function destroy(exam_student $exam_student)
+    public function distroy(exam_student $exam_student,$id)
     {
-        $delete = question::find($id);
+        $delete = exam_student::find($id);
         $delete->status = "Deleted";
         $delete->save();
 
-        return redirect()->route('question.index')->with('success', 'Question Deleted Successfully.');
+        return redirect()->route('exam_student.index')->with('success', 'Student Deleted Successfully.');
     }
 }

@@ -77,12 +77,26 @@ class RegisterController extends Controller
     public function profile_update(Request $request)
     {
         
+        // $rules = array(
+        //     'user_id' => 'required'
+        // );
+        // $messages = array(
+        //     'user_id.required' => 'Please enter user id.'
+        // );
+
+        // $rules = array(
+        //     'mobile' => 'required|unique:users,mobile,'.$request->user_id,
+        // );
+        // $messages = array(      
+        //     'mobile.required' => 'Please enter mobile number.'
+        // );
+
         $rules = array(
-            'user_id' => 'required'
-        );
-        $messages = array(
-            'user_id.required' => 'Please enter user id.'
-        );
+             'mobile' => 'required',
+         );
+         $messages = array(      
+             'mobile.required' => 'Please enter mobile number.'
+         );
 
         $validator = Validator::make($request->all(), $rules, $messages);
 
@@ -91,27 +105,18 @@ class RegisterController extends Controller
             return ['status' => "false",'msg' => $msg];
         }
 
-        $checkuser = User::where('id',$request->user_id)->first();
+        $checkuser = User::where('mobile',$request->mobile)->first();
+
         if($checkuser){
-
-            $rules = array(
-                'mobile' => 'required|unique:users,mobile,'.$request->user_id,
-            );
-            $messages = array(      
-                'mobile.required' => 'Please enter mobile number.'
-            );
-
-            $validator = Validator::make($request->all(), $rules, $messages);
-
-            if ($validator->fails()) {
-                $msg = $validator->messages();
-                return ['status' => "false",'msg' => $msg];
-            }
 
             $update = User::find($checkuser->id);
             $update->name = $request->name;
             $update->mobile = $request->mobile;
             $update->email = $request->email;
+            $update->address = $request->address;
+            $update->pin_code = $request->pin_code;
+            $update->city = $request->city;
+            $update->birth_date = $request->birth_date;
             $update->save();
 
             return response()->json([
@@ -119,14 +124,16 @@ class RegisterController extends Controller
                 "message" => "success",
                 "data" => $update,
             ]);
-
-        }else{
+        }
+        else{
             return response()->json([
                 "code" => 400,
                 "message" => "User not found.",
                 "data" => [],
-            ]);
+            ]); 
         }
+
+        
 
     }   
 
