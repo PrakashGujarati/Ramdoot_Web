@@ -188,12 +188,8 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('exam_student/{id}/delete', [ExamStudentController::class, 'distroy'])->name('exam_student.distroy');
 	
 	/*exam_student_question_answer*/
-	Route::get('exam_student_question_answer', [StudentQuestionAnswerController::class, 'index'])->name('exam_student_question_answer.index');
-	Route::get('exam_student_question_answer/create', [StudentQuestionAnswerController::class, 'create'])->name('exam_student_question_answer.create');
-	Route::post('exam_student_question_answer/store', [StudentQuestionAnswerController::class, 'store'])->name('exam_student_question_answer.store');
-	Route::get('exam_student_question_answer/{id}/edit', [StudentQuestionAnswerController::class, 'edit'])->name('exam_student_question_answer.edit');
-	Route::post('exam_student_question_answer/{id}/update', [StudentQuestionAnswerController::class, 'update'])->name('exam_student_question_answer.update');
-	Route::get('exam_student_question_answer/{id}/delete', [StudentQuestionAnswerController::class, 'distroy'])->name('exam_student_question_answer.distroy');
+	Route::get('student_question_answer', [StudentQuestionAnswerController::class, 'index'])->name('exam_student_question_answer.index');
+	//Route::get('exam_student_question_answer/{id}/delete', [StudentQuestionAnswerController::class, 'distroy'])->name('exam_student_question_answer.distroy');
 
 	/*feature*/
 	Route::get('feature', [FeatureController::class, 'index'])->name('feature.index');

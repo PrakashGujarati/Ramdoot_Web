@@ -32,7 +32,8 @@
                 <thead>
                     <tr>
                         <th>Unit</th>
-                        <th>Title</th>
+                        <th>Question</th>
+                        <th>Answer</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -41,7 +42,8 @@
                 	@foreach($material_details as $data)
                     <tr>
                         <td>{{ isset($data->unit->title) ? $data->unit->title:'' }}</td>
-                        <td>{{ $data->title }}</td>
+                        <td>{{ $data->question }}</td>
+                        <td>{{ $data->answer }}</td>
                         <td>
                         	<a href="{{ route('material.edit',$data->id) }}"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
                         	<a href="javascript:;" data-url="{{ route('material.distroy',$data->id) }}" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a>

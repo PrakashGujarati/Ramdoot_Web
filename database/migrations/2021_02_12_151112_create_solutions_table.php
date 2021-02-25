@@ -15,8 +15,12 @@ class CreateSolutionsTable extends Migration
     {
         Schema::create('solutions', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('unit_id');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('board_id')->default(0);
+            $table->unsignedBigInteger('standard_id')->default(0);
+            $table->unsignedBigInteger('semester_id')->default(0);
+            $table->unsignedBigInteger('subject_id')->default(0);
+            $table->unsignedBigInteger('unit_id')->default(0);
+            $table->unsignedBigInteger('user_id')->default(0);
             $table->string('question',255)->nullable();
             $table->string('answer',255)->nullable();
             $table->string('marks',500)->nullable();

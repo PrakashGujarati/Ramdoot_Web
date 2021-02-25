@@ -47,23 +47,25 @@ class MaterialController extends Controller
             'standard_id' => 'required',
             'semester_id'  => 'required',
             'subject_id' => 'required',
-            'title' => 'required',
-            'url' => 'required',
-            'size' => 'required',
+            'question' => 'required',
+            'answer' => 'required',
+            'marks' => 'required',
+            'image'  => 'required',
             'label' => 'required', 
         ]);
 
-        $url_file='';
-        if($request->has('url'))
+        $new_name='';
+        if($request->has('image'))
         {
-            $image = $request->file('url');
+        
+            $image = $request->file('image');
 
-            $url_file = rand() . '.' . $image->getClientOriginalExtension();
+            $new_name = rand() . '.' . $image->getClientOriginalExtension();
 
             $valid_ext = array('png','jpeg','jpg');
 
             // Location
-            $location = public_path('upload/material/url/').$url_file;
+            $location = public_path('upload/material/thumbnail/').$new_name;
 
             $file_extension = pathinfo($location, PATHINFO_EXTENSION);
             $file_extension = strtolower($file_extension);
@@ -81,11 +83,11 @@ class MaterialController extends Controller
         $add->standard_id = $request->standard_id;
         $add->semester_id = $request->semester_id;
         $add->subject_id = $request->subject_id;
-        $add->title = $request->title;
-        $add->url = $url_file;
-        $add->size = $request->size;
+        $add->question = $request->question;
+        $add->answer = $request->answer;
+        $add->image = $new_name;
+        $add->marks = $request->marks;
         $add->label = $request->label;
-        $add->description = isset($request->description) ? $request->description:'';
         $add->save();
 
         return redirect()->route('material.index')->with('success', 'Material Added Successfully.');
@@ -131,23 +133,24 @@ class MaterialController extends Controller
             'standard_id' => 'required',
             'semester_id'  => 'required',
             'subject_id' => 'required',
-            'title' => 'required',
-            'size' => 'required',
+            'question' => 'required',
+            'answer' => 'required',
+            'marks' => 'required',
             'label' => 'required',
         ]);
 
-        $url_file='';
-        if($request->has('url'))
+        $new_name='';
+        if($request->has('image'))
         {
+        
+            $image = $request->file('image');
 
-            $image = $request->file('url');
-
-            $url_file = rand() . '.' . $image->getClientOriginalExtension();
+            $new_name = rand() . '.' . $image->getClientOriginalExtension();
 
             $valid_ext = array('png','jpeg','jpg');
 
             // Location
-            $location = public_path('upload/material/url/').$url_file;
+            $location = public_path('upload/material/thumbnail/').$new_name;
 
             $file_extension = pathinfo($location, PATHINFO_EXTENSION);
             $file_extension = strtolower($file_extension);
@@ -157,7 +160,7 @@ class MaterialController extends Controller
             }
         }
         else{
-            $url_file = $request->hidden_url;
+            $new_name = $request->hidden_image;
         }
 
         $update = material::find($id);
@@ -167,11 +170,11 @@ class MaterialController extends Controller
         $update->standard_id = $request->standard_id;
         $update->semester_id = $request->semester_id;
         $update->subject_id = $request->subject_id;
-        $update->title = $request->title;
-        $update->url = $url_file;
-        $update->size = $request->size;
+        $update->question = $request->question;
+        $update->answer = $request->answer;
+        $update->image = $new_name;
+        $update->marks = $request->marks;
         $update->label = $request->label;
-        $update->description = isset($request->description) ? $request->description:'';
         $update->save();
 
         return redirect()->route('material.index')->with('success', 'Material Updated Successfully.');

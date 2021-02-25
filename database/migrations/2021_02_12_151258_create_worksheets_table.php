@@ -15,8 +15,12 @@ class CreateWorksheetsTable extends Migration
     {
         Schema::create('worksheets', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('unit_id');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('board_id')->default(0);
+            $table->unsignedBigInteger('standard_id')->default(0);
+            $table->unsignedBigInteger('semester_id')->default(0);
+            $table->unsignedBigInteger('subject_id')->default(0);
+            $table->unsignedBigInteger('unit_id')->default(0);
+            $table->unsignedBigInteger('user_id')->default(0);
             $table->string('title',255)->nullable();
             $table->text('description')->nullable();
             $table->string('type',255)->nullable();

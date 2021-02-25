@@ -14,7 +14,8 @@ class StudentQuestionAnswerController extends Controller
      */
     public function index()
     {
-        //
+        $student_question_answer_details = student_question_answer::all();
+        return view('exam_student_question_answer.index',compact('student_question_answer_details'));
     }
 
     /**

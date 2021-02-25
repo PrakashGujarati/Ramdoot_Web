@@ -82,69 +82,61 @@
 
                             
 
-                        <div class="row">
-
-                            <div class="form-group col-lg-6">
-                                <label class="form-label">Units</label>
-                                <div class="form-control-wrap">
-                                    <select name="unit_id" class="form-control unit_id" id="unit_id">
-                                        <option>--Select Unit--</option>
-                                    </select>
-                                    @error('unit_id')
-                                        <span class="text-danger" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-                            
-                            <div class="form-group col-lg-6">
-                                <label class="form-label">Title</label>
-                                <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="title" name="title" value="{{ $materialdata->title }}">
-                                    @error('title')
-                                        <span class="text-danger" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                        </div>
+                        
 
                         <div class="form-group">
-                            <label class="form-label">Url</label>
+                            <label class="form-label">Units</label>
                             <div class="form-control-wrap">
-                                <input type="file" class="form-control" id="url" name="url" value="">
-                                <input type="hidden" name="hidden_url" value="{{ $materialdata->url }}">
-                                <br/>
-                                @if($materialdata->url)
-                                    <img src="{{ asset('upload/material/url/'.$materialdata->url) }}" class="thumbnail" height="100" width="100">
-                                @endif
-                                @error('url')
+                                <select name="unit_id" class="form-control unit_id" id="unit_id">
+                                    <option>--Select Unit--</option>
+                                </select>
+                                @error('unit_id')
                                     <span class="text-danger" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
                             </div>
                         </div>
-                    
+
+                        
+                        <div class="form-group">
+                            <label class="form-label">Question</label>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control" id="question" name="question" value="{{ $materialdata->question }}">
+                                @error('question')
+                                    <span class="text-danger" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Answer</label>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control" id="answer" name="answer" value="{{ $materialdata->answer }}">
+                                @error('answer')
+                                    <span class="text-danger" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
                         
 
 
                         <div class="row">
                             <div class="form-group col-lg-6">
-                                <label class="form-label">Size</label>
+                                <label class="form-label">Marks</label>
                                 <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="size" name="size" value="{{ $materialdata->size }}">
-                                    @error('size')
+                                    <input type="text" class="form-control" id="marks" name="marks" value="{{ $materialdata->marks }}">
+                                    @error('marks')
                                         <span class="text-danger" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
                                 </div>
                             </div>
-
 
                             <div class="form-group col-lg-6">
                                 <label class="form-label">Label</label>
@@ -161,19 +153,22 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label">Description</label>
+                            <label class="form-label">Image</label>
                             <div class="form-control-wrap">
-                                <textarea class="form-control" id="description" name="description" value="{{ $materialdata->description }}">{{ $materialdata->description }}</textarea>
-                                @error('description')
+                                <input type="file" class="form-control" id="image" name="image" value="">
+                                <input type="hidden" name="hidden_image" value="{{ $materialdata->image }}">
+                                <br/>
+                                @if($materialdata->image)
+                                <img src="{{ asset('upload/material/thumbnail/'.$materialdata->image) }}" class="thumbnail" height="100" width="100">
+                                @endif
+                                @error('image')
                                     <span class="text-danger" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
                             </div>
-                        </div>               
+                        </div>
 
-                        
-                        
                         <div class="form-group">
                             <button type="submit" class="btn btn-lg btn-primary">Submit</button>
                             <a type="button" href="{{ route('solution.index') }}" class="btn btn-lg btn-danger text-light">Cancel</a>

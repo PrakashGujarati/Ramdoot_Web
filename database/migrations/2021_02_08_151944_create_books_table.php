@@ -15,8 +15,12 @@ class CreateBooksTable extends Migration
     {
         Schema::create('books', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('unit_id');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('board_id')->default(0);
+            $table->unsignedBigInteger('standard_id')->default(0);
+            $table->unsignedBigInteger('semester_id')->default(0);
+            $table->unsignedBigInteger('subject_id')->default(0);
+            $table->unsignedBigInteger('unit_id')->default(0);
+            $table->unsignedBigInteger('user_id')->default(0);
             $table->string('title',255)->nullable();
             $table->string('url',500)->nullable();
             $table->string('thumbnail',500)->nullable();

@@ -1,4 +1,4 @@
-main header @s -->
+<!--main header @s -->
 <div class="nk-header nk-header-fixed is-light">
     <div class="container-fluid">
         <div class="nk-header-wrap">

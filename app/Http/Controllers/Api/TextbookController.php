@@ -70,8 +70,10 @@ class TextbookController extends Controller
 	    			$getdata = Book::where(['unit_id' => $value->id,'status' => 'Active'])->get();
 	    			$bookdata=[];
 	    			foreach ($getdata as $value1) {
-	    				$thumbnail = env('APP_URL')."/upload/book/".$value1->thumbnail;
-	    				$bookdata[] = ['id' => $value1->id,'title' => $value1->title,'url' => $value1->url,'thumbnail' => $thumbnail,'pages' => $value1->pages,'description' => $value1->description,'label' => $value1->label,'release_date' => $value1->release_date];
+                        $url = env('APP_URL')."/upload/book/url/".$value1->url;
+	    				$thumbnail = env('APP_URL')."/upload/book/thumbnail/".$value1->thumbnail;
+	    				$bookdata[] = ['id' => $value1->id,'title' => $value1->title,'url' => $url,'thumbnail' => $thumbnail,
+                        'pages' => $value1->pages,'description' => $value1->description,'label' => $value1->label,'release_date' => $value1->release_date];
 	    			}
 
 	    			$data[] = ['id' => $value->id,'unit_title' =>$value->title,'book' => $bookdata];

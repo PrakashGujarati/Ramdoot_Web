@@ -50,7 +50,7 @@ class SolutionController extends Controller
 	    		$getdata = solution::where(['unit_id' => $request->unit_id,'status' => 'Active'])->get();
 	    			$solutiondata=[];
 	    			foreach ($getdata as $value1) {
-	    				$image = env('APP_URL')."/upload/solution/".$value1->image;
+	    				$image = env('APP_URL')."/upload/solution/thumbnail/".$value1->image;
 						$title = $value1->label;
 	    				$solutiondata[] = ['id' => $value1->id,'question' => $value1->question,'answer' => $value1->answer,'marks' => $value1->marks,'image' => $image,'label' => $value1->label];
 	    			}

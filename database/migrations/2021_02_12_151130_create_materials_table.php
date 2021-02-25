@@ -15,12 +15,16 @@ class CreateMaterialsTable extends Migration
     {
         Schema::create('materials', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('unit_id');
-            $table->unsignedBigInteger('user_id');
-            $table->string('title',255)->nullable();
-            $table->text('description')->nullable();
-            $table->string('url',255)->nullable();
-            $table->string('size',255)->nullable();
+            $table->unsignedBigInteger('board_id')->default(0);
+            $table->unsignedBigInteger('standard_id')->default(0);
+            $table->unsignedBigInteger('semester_id')->default(0);
+            $table->unsignedBigInteger('subject_id')->default(0);
+            $table->unsignedBigInteger('unit_id')->default(0);
+            $table->unsignedBigInteger('user_id')->default(0);
+            $table->text('question',255)->nullable();
+            $table->text('answer',255)->nullable();
+            $table->string('marks',255)->nullable();
+            $table->text('image',500)->nullable();
             $table->string('label',255)->nullable();
             $table->enum('status',["Active","Inactive","Deleted"])->default('Active')->nullable();
             $table->timestamps();

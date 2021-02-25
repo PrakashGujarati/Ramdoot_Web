@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title','MCQs')
+@section('title','Student Question/Answer')
 @section('css')
 @endsection
 
@@ -18,10 +18,10 @@
 			@endif
         	<div class="row">
         		<div class="col-lg-10">
-            		<h4 class="nk-block-title">MCQ List</h4>
+            		<h4 class="nk-block-title">Student Question/Answer List</h4>
             	</div>
             	<div class="col-lg-2 text-right">
-            		<a href="{{ route('mcq.create') }}" class="btn btn-primary text-light">Add MCQ</a>
+            		<!-- <a href="{{ route('mcq.create') }}" class="btn btn-primary text-light">Add MCQ</a> -->
             	</div>
             </div>
         </div>
@@ -31,23 +31,23 @@
             <table class="datatable-init table">
                 <thead>
                     <tr>
-                        <th>Unit</th>
+                        <th>Student</th>
                         <th>Question</th>
                         <th>Answer</th>
-                        <th>Action</th>
+                        <!-- <th>Action</th> -->
                     </tr>
                 </thead>
                 <tbody>
-                	@if(count($mcq_details) > 0)
-                	@foreach($mcq_details as $data)
+                	@if(count($student_question_answer_details) > 0)
+                	@foreach($student_question_answer_details as $data)
                     <tr>
                         <td>{{ isset($data->unit->title) ? $data->unit->title:'' }}</td>
                         <td>{{ $data->question }}</td>
                         <td>{{ $data->answer }}</td>
-                        <td>
-                        	<a href="{{ route('mcq.edit',$data->id) }}"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
-                        	<a href="javascript:;" data-url="{{ route('mcq.distroy',$data->id) }}" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a>
-                        </td>
+                        {{--<td>
+                        	<a href=""><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
+                        	<a href="javascript:;" data-url="" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a>
+                        </td>--}}
                     </tr>
                     @endforeach
                     @else

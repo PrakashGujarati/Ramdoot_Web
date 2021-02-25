@@ -1,5 +1,13 @@
 
 
+----------------------- 25-02-2021 -------------------
+
+ALTER TABLE `materials` DROP `title`, DROP `description`, DROP `url`, DROP `size`;
+
+ALTER TABLE `materials` ADD `question` TEXT NULL AFTER `user_id`, ADD `answer` TEXT NULL AFTER `question`, ADD `marks` VARCHAR(255) NULL AFTER `answer`, ADD `image` TEXT NULL AFTER `marks`;
+
+ALTER TABLE `solutions` CHANGE `question` `question` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL, CHANGE `answer` `answer` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL, CHANGE `marks` `marks` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL, CHANGE `image` `image` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;
+
 ----------------------- 24-02-2021 -------------------
 
 
