@@ -6,6 +6,7 @@ use App\Models\exam_question;
 use Illuminate\Http\Request;
 use App\Models\exam;
 use App\Models\question;
+use App\Models\Board;
 
 class ExamQuestionController extends Controller
 {
@@ -29,7 +30,8 @@ class ExamQuestionController extends Controller
     {
         $exams = exam::where('status','Active')->get();
         $questions = question::where('status','Active')->get();
-        return view('exam_question.add',compact('exams','questions'));
+        $boards = Board::where('status','Active')->get();
+        return view('exam_question.add',compact('exams','questions','boards'));
     }
 
     /**
@@ -42,12 +44,22 @@ class ExamQuestionController extends Controller
     {
         
         $this->validate($request, [
+            'board_id' => 'required',
+            'standard_id' => 'required',
+            'semester_id'  => 'required',
+            'subject_id' => 'required',
+            'unit_id' => 'required',
             'exam_id'     => 'required',
             'question_id' => 'required',
         ]);
 
         
         $add = new exam_question;
+        $add->board_id = $request->board_id;
+        $add->standard_id = $request->standard_id;
+        $add->semester_id = $request->semester_id;
+        $add->subject_id = $request->subject_id;
+        $add->unit_id = $request->unit_id;
         $add->exam_id = $request->exam_id;
         $add->question_id = $request->question_id;
         $add->save();
@@ -76,8 +88,9 @@ class ExamQuestionController extends Controller
     {
         $exams = exam::where('status','Active')->get();
         $questions = question::where('status','Active')->get();
+        $boards = Board::where('status','Active')->get();
         $exam_questiondata = exam_question::where('id',$id)->first();
-        return view('exam_question.edit',compact('exam_questiondata','exams','questions'));
+        return view('exam_question.edit',compact('exam_questiondata','exams','questions','boards'));
     }
 
     /**
@@ -90,11 +103,21 @@ class ExamQuestionController extends Controller
     public function update(Request $request, exam_question $exam_question,$id)
     {
         $this->validate($request, [
+            'board_id' => 'required',
+            'standard_id' => 'required',
+            'semester_id'  => 'required',
+            'subject_id' => 'required',
+            'unit_id' => 'required',
             'exam_id'     => 'required',
             'question_id' => 'required',
         ]);
 
         $update = exam_question::find($id);
+        $update->board_id = $request->board_id;
+        $update->standard_id = $request->standard_id;
+        $update->semester_id = $request->semester_id;
+        $update->subject_id = $request->subject_id;
+        $update->unit_id = $request->unit_id;
         $update->exam_id = $request->exam_id;
         $update->question_id = $request->question_id;
         $update->save();

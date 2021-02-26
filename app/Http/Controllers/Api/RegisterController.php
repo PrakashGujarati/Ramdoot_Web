@@ -109,6 +109,28 @@ class RegisterController extends Controller
 
         if($checkuser){
 
+            if($request->has('profile_image'))
+            {
+                $image = $request->file('profile_image');
+
+                $profile = rand() . '.' . $image->getClientOriginalExtension();
+
+                $valid_ext = array('png','jpeg','jpg');
+
+                // Location
+                $location = public_path('upload/profile/').$profile;
+
+                $file_extension = pathinfo($location, PATHINFO_EXTENSION);
+                $file_extension = strtolower($file_extension);
+
+                if(in_array($file_extension,$valid_ext)){
+                    $this->compressImage($image->getPathName(),$location,60);
+                }
+            }else{
+                $profile = $checkuser->profile_photo_path;
+            }
+
+
             $update = User::find($checkuser->id);
             $update->name = $request->name;
             $update->mobile = $request->mobile;
@@ -117,12 +139,20 @@ class RegisterController extends Controller
             $update->pin_code = $request->pin_code;
             $update->city = $request->city;
             $update->birth_date = $request->birth_date;
+            $update->profile_photo_path = $profile;
             $update->save();
+
+            $image="";
+            if($update->profile_photo_path){
+                $image = env('APP_URL')."/upload/profile/".$update->profile_photo_path;    
+            }
+
+            $data = ['name' => $update->name,'mobile' => $update->mobile,'email' => $update->email,'address' => $update->address,'pin_code' => $update->pin_code,'city' => $update->city,'birth_date' => $update->birth_date,'profile_photo' => $image];
 
             return response()->json([
                 "code" => 200,
                 "message" => "success",
-                "data" => $update,
+                "data" => $data,
             ]);
         }
         else{
@@ -144,4 +174,19 @@ class RegisterController extends Controller
             'message' => 'Successfully logged out'
         ]);
 	}
+
+    function compressImage($source, $destination, $quality) {
+      $info = getimagesize($source);
+
+      if ($info['mime'] == 'image/jpeg') 
+        $image = imagecreatefromjpeg($source);
+
+      elseif ($info['mime'] == 'image/gif') 
+        $image = imagecreatefromgif($source);
+
+      elseif ($info['mime'] == 'image/png') 
+        $image = imagecreatefrompng($source);
+
+      imagejpeg($image, $destination, $quality);
+    }
 }

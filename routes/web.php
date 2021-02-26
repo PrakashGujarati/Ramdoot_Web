@@ -170,6 +170,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::post('exams/{id}/update', [ExamController::class, 'update'])->name('exam.update');
 	Route::get('exams/{id}/delete', [ExamController::class, 'distroy'])->name('exam.distroy');
 
+	Route::get('get_exam', [ExamController::class, 'getExam'])->name('get.exam');
 
 	/*exam_question*/
 	Route::get('exam_question', [ExamQuestionController::class, 'index'])->name('exam_question.index');

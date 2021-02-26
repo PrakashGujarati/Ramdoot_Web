@@ -21,7 +21,7 @@
             		<h4 class="nk-block-title">Exam Student List</h4>
             	</div>
             	<div class="col-lg-3 text-right">
-            		<a href="{{ route('exam_student.create') }}" class="btn btn-primary text-light">Add Student</a>
+            		{{--<a href="#" class="btn btn-primary text-light">Add Student</a>--}}
             	</div>
             </div>
         </div>
@@ -33,7 +33,7 @@
                     <tr>
                         <th>Exam</th>
                         <th>Student</th>
-                        <th>Action</th>
+                        <!-- <th>Action</th> -->
                     </tr>
                 </thead>
                 <tbody>
@@ -42,10 +42,10 @@
                     <tr>
                         <td>{{ isset($data->exam->name) ? $data->exam->name:'' }}</td>
                         <td>{{ isset($data->user->name) ? $data->user->name:'' }}</td>
-                        <td>
-                        	<a href="{{ route('exam_student.edit',$data->id) }}"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
-                        	<a href="javascript:;" data-url="{{ route('exam_student.distroy',$data->id) }}" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a>
-                        </td>
+                        {{--<td>
+                        	<a href="#"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
+                        	<a href="javascript:;" data-url="#" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a>
+                        </td>--}}
                     </tr>
                     @endforeach
                     @else

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\exam;
 use Illuminate\Http\Request;
 use App\Models\unit;
+use App\Models\Board;
 
 class ExamController extends Controller
 {
@@ -26,8 +27,10 @@ class ExamController extends Controller
      */
     public function create()
     {
+
+        $boards = Board::where('status','Active')->get();
         $units = unit::where('status','Active')->get();
-        return view('exam.add',compact('units'));
+        return view('exam.add',compact('units','boards'));
     }
 
     /**
@@ -40,6 +43,10 @@ class ExamController extends Controller
     {
 
         $this->validate($request, [
+            'board_id' => 'required',
+            'standard_id' => 'required',
+            'semester_id'  => 'required',
+            'subject_id' => 'required',
             'unit_id'     => 'required',
             'name' => 'required',
             'time_duration' => 'required',
@@ -52,6 +59,10 @@ class ExamController extends Controller
 
         
         $add = new exam;
+        $add->board_id = $request->board_id;
+        $add->standard_id = $request->standard_id;
+        $add->semester_id = $request->semester_id;
+        $add->subject_id = $request->subject_id;
         $add->unit_id = $request->unit_id;
         $add->name = $request->name;
         $add->note = isset($request->note) ? $request->note:'';
@@ -90,8 +101,9 @@ class ExamController extends Controller
     public function edit(exam $exam,$id)
     {
         $units = unit::where('status','Active')->get();
+        $boards = Board::where('status','Active')->get();
         $examdata = exam::where('id',$id)->first();
-        return view('exam.edit',compact('examdata','units'));
+        return view('exam.edit',compact('examdata','units','boards'));
     }
 
     /**
@@ -104,6 +116,10 @@ class ExamController extends Controller
     public function update(Request $request, exam $exam,$id)
     {
         $this->validate($request, [
+            'board_id' => 'required',
+            'standard_id' => 'required',
+            'semester_id'  => 'required',
+            'subject_id' => 'required',
             'unit_id'     => 'required',
             'name' => 'required',
             'time_duration' => 'required',
@@ -116,6 +132,10 @@ class ExamController extends Controller
 
         
         $update = exam::find($id);
+        $update->board_id = $request->board_id;
+        $update->standard_id = $request->standard_id;
+        $update->semester_id = $request->semester_id;
+        $update->subject_id = $request->subject_id;
         $update->unit_id = $request->unit_id;
         $update->name = $request->name;
         $update->note = isset($request->note) ? $request->note:'';
@@ -147,5 +167,32 @@ class ExamController extends Controller
         $delete->save();
 
         return redirect()->route('exam.index')->with('success', 'Exam Deleted Successfully.');
+    }
+
+    
+
+    public function getExam(Request $request){
+
+       //$getunit = unit::where(['unit_id' => $request->board_id])->get();
+       $getexam = exam::where(['standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'subject_id' => $request->subject_id,'unit_id' => $request->unit_id])->get();
+
+        $result="<option value=''>--Select Exam--</option>";
+        if(count($getexam) > 0)
+        {
+            foreach ($getexam as $exam) {
+
+                if($request->has('exam_id')){
+                    if($request->exam_id == $exam->id){
+                        $result.="<option value='".$exam->id."' selected>".$exam->name."</option>";
+                    }
+                    else{
+                        $result.="<option value='".$exam->id."'>".$exam->name."</option>";    
+                    }
+                }else{
+                    $result.="<option value='".$exam->id."'>".$exam->name."</option>";
+                }
+            }
+        }
+        return response()->json(['html'=>$result]); 
     }
 }

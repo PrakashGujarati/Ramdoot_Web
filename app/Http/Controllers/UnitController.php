@@ -267,6 +267,7 @@ class UnitController extends Controller
                 }
             }
         }
+        
         return response()->json(['html'=>$result]); 
     }
 }

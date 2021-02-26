@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\question;
 use Illuminate\Http\Request;
 use App\Models\unit;
+use App\Models\Board;
 
 
 class QuestionController extends Controller
@@ -28,7 +29,8 @@ class QuestionController extends Controller
     public function create()
     {
         $units = unit::where('status','Active')->get();
-        return view('question.add',compact('units'));
+        $boards = Board::where('status','Active')->get();
+        return view('question.add',compact('units','boards'));
     }
 
     /**
@@ -40,6 +42,10 @@ class QuestionController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
+            'board_id' => 'required',
+            'standard_id' => 'required',
+            'semester_id'  => 'required',
+            'subject_id' => 'required',
             'unit_id'     => 'required',
             'question' => 'required',
             'note' => 'required',
@@ -53,6 +59,10 @@ class QuestionController extends Controller
 
         
         $add = new question;
+        $add->board_id = $request->board_id;
+        $add->standard_id = $request->standard_id;
+        $add->semester_id = $request->semester_id;
+        $add->subject_id = $request->subject_id;
         $add->unit_id = $request->unit_id;
         $add->note = $request->note;
         $add->question = $request->question;
@@ -87,8 +97,9 @@ class QuestionController extends Controller
     public function edit(question $question,$id)
     {
         $units = unit::where('status','Active')->get();
+        $boards = Board::where('status','Active')->get();
         $questiondata = question::where('id',$id)->first();
-        return view('question.edit',compact('questiondata','units'));
+        return view('question.edit',compact('questiondata','units','boards'));
     }
 
     /**
@@ -101,6 +112,10 @@ class QuestionController extends Controller
     public function update(Request $request, question $question,$id)
     {
         $this->validate($request, [
+            'board_id' => 'required',
+            'standard_id' => 'required',
+            'semester_id'  => 'required',
+            'subject_id' => 'required',
             'unit_id'     => 'required',
             'question' => 'required',
             'note' => 'required',
@@ -114,6 +129,10 @@ class QuestionController extends Controller
 
         
         $update = question::find($id);
+        $update->board_id = $request->board_id;
+        $update->standard_id = $request->standard_id;
+        $update->semester_id = $request->semester_id;
+        $update->subject_id = $request->subject_id;
         $update->unit_id = $request->unit_id;
         $update->note = $request->note;
         $update->question = $request->question;
