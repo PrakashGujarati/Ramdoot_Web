@@ -6,6 +6,10 @@ use App\Models\question;
 use Illuminate\Http\Request;
 use App\Models\unit;
 use App\Models\Board;
+use Excel;
+use App\Imports\QuestionImport;
+use App\Exports\QuestionExport;
+use Session;
 
 
 class QuestionController extends Controller
@@ -161,4 +165,37 @@ class QuestionController extends Controller
 
         return redirect()->route('question.index')->with('success', 'Question Deleted Successfully.');
     }
+
+    public function importQuestionView(){
+
+        $boards = Board::where('status','Active')->get();
+        $html=view('question.dynamic_import_model',compact('boards'))->render();
+        return response()->json(['success'=>true,'html'=>$html]);
+    }
+
+    public function questionExport()
+    {
+        $data=[];
+         return Excel::download(new QuestionExport($data), 'Questions.xlsx');        
+    }
+
+    public function questionImport(Request $request){
+
+        $allowed = array('csv', 'xls', 'xlsx');
+        $filename = $_FILES['file']['name'];
+        $ext = pathinfo($filename, PATHINFO_EXTENSION);
+        if (!in_array($ext, $allowed)) {
+            Session::flash('error','Please select valid file.');
+            return redirect()->route('question.index');
+        }
+        else{
+            Excel::import(new QuestionImport($request), request()->file('file')); 
+            return redirect()->route('question.index');    
+        }
+
+        
+    }
+
 }
+
+

@@ -122,6 +122,13 @@
                         </a>
                     </li><!-- .nk-menu-item -->
 
+                    <li class="nk-menu-item @if(\Request::route()->getName() == 'feature.index' || \Request::route()->getName() == 'feature.create' || \Request::route()->getName() == 'feature.edit') active @endif">
+                        <a href="{{ route('feature.index') }}" class="nk-menu-link">
+                            <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
+                            <span class="nk-menu-text">Feature</span>
+                        </a>
+                    </li><!-- .nk-menu-item -->
+
                     <li class="nk-menu-item @if(\Request::route()->getName() == 'question.index' || \Request::route()->getName() == 'question.create' || \Request::route()->getName() == 'question.edit') active @endif">
                         <a href="{{ route('question.index') }}" class="nk-menu-link">
                             <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
@@ -172,14 +179,6 @@
                                 <a href="{{ route('slider.index') }}" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
                                     <span class="nk-menu-text">Slider</span>
-                                </a>
-                            </li><!-- .nk-menu-item -->
-
-
-                            <li class="nk-menu-item @if(\Request::route()->getName() == 'feature.index' || \Request::route()->getName() == 'feature.create' || \Request::route()->getName() == 'feature.edit') active @endif">
-                                <a href="{{ route('feature.index') }}" class="nk-menu-link">
-                                    <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
-                                    <span class="nk-menu-text">Feature</span>
                                 </a>
                             </li><!-- .nk-menu-item -->
 

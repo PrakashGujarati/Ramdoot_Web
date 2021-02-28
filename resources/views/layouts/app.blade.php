@@ -13,6 +13,7 @@
     <!-- Ramdoot Education |  -->
     <title>@yield('title')</title>
     <!-- StyleSheets  -->
+    @yield('css')
     @include('layouts.style')
 </head>
 

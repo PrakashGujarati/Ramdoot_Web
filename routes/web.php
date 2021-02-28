@@ -161,7 +161,10 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('question/{id}/edit', [QuestionController::class, 'edit'])->name('question.edit');
 	Route::post('question/{id}/update', [QuestionController::class, 'update'])->name('question.update');
 	Route::get('question/{id}/delete', [QuestionController::class, 'distroy'])->name('question.distroy');
-
+	Route::get('import_question_view', [QuestionController::class, 'importQuestionView'])->name('import.question.view');
+	Route::post('question_import', [QuestionController::class, 'questionImport'])->name('question.import');
+	Route::get('question_export', [QuestionController::class, 'questionExport'])->name('question.export');
+	
 	/*exam*/
 	Route::get('exams', [ExamController::class, 'index'])->name('exam.index');
 	Route::get('exams/create', [ExamController::class, 'create'])->name('exam.create');
@@ -187,6 +190,9 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('exam_student/{id}/edit', [ExamStudentController::class, 'edit'])->name('exam_student.edit');
 	Route::post('exam_student/{id}/update', [ExamStudentController::class, 'update'])->name('exam_student.update');
 	Route::get('exam_student/{id}/delete', [ExamStudentController::class, 'distroy'])->name('exam_student.distroy');
+
+	Route::get('get_exam_student', [ExamStudentController::class, 'index'])->name('get.examStudent');
+	
 	
 	/*exam_student_question_answer*/
 	Route::get('student_question_answer', [StudentQuestionAnswerController::class, 'index'])->name('exam_student_question_answer.index');

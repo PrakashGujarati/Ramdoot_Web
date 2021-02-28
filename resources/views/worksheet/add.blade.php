@@ -87,9 +87,6 @@
                                 <div class="form-control-wrap">
                                     <select name="unit_id" class="form-control unit_id" id="unit_id">
                                         <option>--Select Unit--</option>
-                                        @foreach($units as $units_data)
-                                        <option value="{{ $units_data->id }}" @if(old('unit_id') == $units_data->id) selected="" @endif>{{ $units_data->title }}</option>
-                                        @endforeach
                                     </select>
                                     @error('unit_id')
                                         <span class="text-danger" role="alert">

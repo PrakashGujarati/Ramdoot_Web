@@ -1,5 +1,17 @@
 
 
+----------------------- 27-02-2021-------------------
+
+ALTER TABLE `features` ADD `board_id` INT(11) NOT NULL DEFAULT '0' AFTER `id`, ADD `standard_id` INT(11) NOT NULL DEFAULT '0' AFTER `board_id`, ADD `semester_id` INT(11) NOT NULL DEFAULT '0' AFTER `standard_id`, ADD `subject_id` INT(11) NOT NULL DEFAULT '0' AFTER `semester_id`;
+
+ALTER TABLE `features` ADD `unit_id` INT(11) NOT NULL DEFAULT '0' AFTER `subject_id`;
+
+ALTER TABLE `users` ADD `username` VARCHAR(255) NULL AFTER `name`;
+
+----------------------- 26-02-2021-------------------
+
+ALTER TABLE `exam_questions` CHANGE `question_id` `question_id` VARCHAR(255) NULL;
+
 ----------------------- 25-02-2021[v2]-------------------
 
 

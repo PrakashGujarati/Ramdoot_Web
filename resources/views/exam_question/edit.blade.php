@@ -114,12 +114,13 @@
                         <div class="form-group">
                             <label class="form-label">Question</label>
                             <div class="form-control-wrap">
-                                <select name="question_id" class="form-control" id="question_id">
+                                <input type="text" name="question_id" class="form-control" id="question_id" value="{{ $exam_questiondata->question_id }}">
+                                {{--<select name="question_id" class="form-control" id="question_id">
                                     <option>--Select Question--</option>
                                     @foreach($questions as $questions_data)
                                     <option value="{{ $questions_data->id }}" @if($exam_questiondata->question_id == $questions_data->id) selected="" @endif>{{ $questions_data->question }}</option>
                                     @endforeach
-                                </select>
+                                </select>--}}
                                 @error('question_id')
                                     <span class="text-danger" role="alert">
                                         <strong>{{ $message }}</strong>

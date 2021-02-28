@@ -15,10 +15,24 @@ class ExamStudentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $exams = exam::where('status','Active')->get();
         $examstudent_details = exam_student::where('status','Active')->get();
-        return view('exam_student.index',compact('examstudent_details'));
+        if($request->ajax())
+        {
+            if($request->exam_id != null){
+                $examstudent_details = exam_student::where(['exam_id' => $request->exam_id,'status' => 'Active'])->get();    
+            }else{
+                $examstudent_details = exam_student::where(['status' => 'Active'])->get();
+            }
+
+            $html=view('exam_student.dynamic_table',compact('examstudent_details'))->render();
+            return response()->json(['html'=>$html]);
+
+        }
+
+        return view('exam_student.index',compact('examstudent_details','exams'));
     }
 
     /**

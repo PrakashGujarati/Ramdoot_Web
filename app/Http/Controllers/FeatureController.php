@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\feature;
 use Illuminate\Http\Request;
+use App\Models\Board;
 
 class FeatureController extends Controller
 {
@@ -26,7 +27,8 @@ class FeatureController extends Controller
      */
     public function create()
     {
-        return view('feature.add');
+        $boards = Board::where('status','Active')->get();
+        return view('feature.add',compact('boards'));
     }
 
     /**
@@ -38,6 +40,11 @@ class FeatureController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
+            'board_id' => 'required',
+            'standard_id' => 'required',
+            'semester_id'  => 'required',
+            'subject_id' => 'required',
+            'unit_id' => 'required',
             'title' => 'required',
             'image' => 'required'
         ]);
@@ -64,6 +71,11 @@ class FeatureController extends Controller
         }
 
         $add = new feature;
+        $add->board_id = $request->board_id;
+        $add->standard_id = $request->standard_id;
+        $add->semester_id = $request->semester_id;
+        $add->subject_id = $request->subject_id;
+        $add->unit_id = $request->unit_id;
         $add->title = $request->title;
         $add->image = $new_name;
         $add->flag = $request->flag;
@@ -91,8 +103,9 @@ class FeatureController extends Controller
      */
     public function edit(feature $feature,$id)
     {
+        $boards = Board::where('status','Active')->get();
         $featuredata = feature::where('id',$id)->first();
-        return view('feature.edit',compact('featuredata'));
+        return view('feature.edit',compact('featuredata','boards'));
     }
 
     /**
@@ -105,6 +118,11 @@ class FeatureController extends Controller
     public function update(Request $request, feature $feature,$id)
     {
         $this->validate($request, [
+            'board_id' => 'required',
+            'standard_id' => 'required',
+            'semester_id'  => 'required',
+            'subject_id' => 'required',
+            'unit_id' => 'required',
             'title' => 'required'
         ]);
 
@@ -133,6 +151,11 @@ class FeatureController extends Controller
         }
 
         $update = feature::find($id);
+        $update->board_id = $request->board_id;
+        $update->standard_id = $request->standard_id;
+        $update->semester_id = $request->semester_id;
+        $update->subject_id = $request->subject_id;
+        $update->unit_id = $request->unit_id;
         $update->title = $request->title;
         $update->image = $new_name;
         $update->flag = $request->flag;

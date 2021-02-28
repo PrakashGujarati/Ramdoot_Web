@@ -132,6 +132,7 @@ class RegisterController extends Controller
 
 
             $update = User::find($checkuser->id);
+            $update->username = $request->username;
             $update->name = $request->name;
             $update->mobile = $request->mobile;
             $update->email = $request->email;
@@ -147,7 +148,7 @@ class RegisterController extends Controller
                 $image = env('APP_URL')."/upload/profile/".$update->profile_photo_path;    
             }
 
-            $data = ['name' => $update->name,'mobile' => $update->mobile,'email' => $update->email,'address' => $update->address,'pin_code' => $update->pin_code,'city' => $update->city,'birth_date' => $update->birth_date,'profile_photo' => $image];
+            $data = ['name' => $update->name,'mobile' => $update->mobile,'email' => $update->email,'address' => $update->address,'pin_code' => $update->pin_code,'city' => $update->city,'birth_date' => $update->birth_date,'profile_photo' => $image,'username' => $update->username];
 
             return response()->json([
                 "code" => 200,

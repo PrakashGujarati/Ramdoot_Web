@@ -4,6 +4,20 @@
 @endsection
 
 @section('content')
+
+@include('question.dynamic_import_form')
+
+@if(Session::has('success'))
+    <div class="alert alert-success">
+        {{Session::get('success')}}
+    </div>
+@endif
+@if(Session::has('error'))
+    <div class="alert alert-danger">
+        {{Session::get('error')}}
+    </div>
+@endif
+
 <div class="nk-block nk-block-lg">
     <div class="nk-block-head">
         <div class="nk-block-head-content">
@@ -17,10 +31,14 @@
 				</div>
 			@endif
         	<div class="row">
-        		<div class="col-lg-10">
+        		<div class="col-lg-8">
             		<h4 class="nk-block-title">Question List</h4>
             	</div>
-            	<div class="col-lg-2 text-right">
+                <div class="col-lg-4 text-right">
+                    <a href="{{ route('question.export') }}" class="btn btn-info text-light">Export</a>
+
+                    <a href="javascript:;" class="btn btn-success text-light importbtn">Import</a>
+                
             		<a href="{{ route('question.create') }}" class="btn btn-primary text-light">Add Question</a>
             	</div>
             </div>
@@ -64,6 +82,7 @@
 @endsection
 
 @section('scripts')
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.js"></script>
 
 <script type="text/javascript">
 	$('.distroy').on('click', function() {
@@ -87,6 +106,144 @@
 	        }
 	    });
 	})
+
+    $(document).on('click','.importbtn',function(){
+
+        // var getsid = $(this).attr('id');
+        // var id=$(this).data('id');
+        var url = "{{ route('import.question.view')}}";
+
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function(result) {
+                $('#import_view').modal({show:true});
+               $('#import_model_data').html(result.html);
+            } 
+        });
+
+    });
+
+    $(document).on('change','.board_id',function(){
+        var board_id = $('.board_id').val();
+        getStandard(board_id);
+    });
+
+    function getStandard(board_id){
+        $.ajax({
+            type: "GET",
+            url: "{{route('get.standard')}}",
+            data: {
+                "board_id":board_id,
+            },
+            success: function(result) {
+                $('#standard_id').html('');
+                $('#standard_id').html(result.html);
+            } 
+        });
+    }
+
+
+    $(document).on('change','.standard_id',function(){
+        var standard_id = $('.standard_id').val();
+        var board_id = $('.board_id').val();
+        getSemester(standard_id,board_id);
+    });
+
+    function getSemester(standard_id,board_id){
+        $.ajax({
+            type: "GET",
+            url: "{{route('get.semester')}}",
+            data: {
+                "board_id":board_id,
+                "standard_id":standard_id,
+            },
+            success: function(result) {
+                $('.semester_id').html('');
+                $('.semester_id').html(result.html);
+            } 
+        });
+    }
+
+
+    $(document).on('change','.semester_id',function(){
+        var standard_id = $('.standard_id').val();
+        var semester_id = $('.semester_id').val();
+        getSubject(standard_id,semester_id);
+    });
+
+
+    function getSubject(standard_id,semester_id){
+        $.ajax({
+            type: "GET",
+            url: "{{route('get.subject')}}",
+            data: {
+                "standard_id":standard_id,
+                "semester_id":semester_id,
+            },
+            success: function(result) {
+                $('.subject_id').html('');
+                $('.subject_id').html(result.html);
+            } 
+        });
+    }
+
+
+    $(document).on('change','.subject_id',function(){
+        var standard_id = $('.standard_id').val();
+        var semester_id = $('.semester_id').val();
+        var subject_id = $('.subject_id').val();
+        getUnit(standard_id,semester_id,subject_id);
+    });
+
+
+    function getUnit(standard_id,semester_id,subject_id){
+        $.ajax({
+            type: "GET",
+            url: "{{route('get.unit')}}",
+            data: {
+                "standard_id":standard_id,
+                "semester_id":semester_id,
+                "subject_id":subject_id,
+            },
+            success: function(result) {
+                $('.unit_id').html('');
+                $('.unit_id').html(result.html);
+            } 
+        });
+    }
+
+    $(document).ready(function () {
+    
+    $('#import_form').validate({
+         rules: {
+                board_id:"required",
+                standard_id:"required",
+                semester_id:"required",
+                subject_id:"required",
+                unit_id:"required",
+                file:{
+                    required:true,
+                    extension: "csv|xls|xlsx",
+                },
+            },
+        //For custom messages
+        messages: {
+            board_id:"Please select board.",
+            standard_id:"Please select standard.",
+            semester_id:"Please select semester.",
+            subject_id:"Please select subject.",
+            unit_id:"Please select unit.",
+            file:{
+                required:"Please select excel file.",
+                extension: "Please select valid excel file.",
+            },
+        },
+    });
+    
+});
+
+
 </script>
 
 @endsection

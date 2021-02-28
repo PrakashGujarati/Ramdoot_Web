@@ -1,6 +1,18 @@
 @extends('layouts.app')
 @section('title','Students')
 @section('css')
+<style type="text/css">
+    #exam_student_table{
+        border:1px solid #dbdfea!important;
+    }
+    #exam_student_table tr th{
+        border:1px solid #dbdfea!important;
+    }
+    #exam_student_table tr td{
+        border:1px solid #dbdfea;
+    }
+
+</style>
 @endsection
 
 @section('content')
@@ -28,33 +40,28 @@
     </div>
     <div class="card card-preview">
         <div class="card-inner">
-            <table class="datatable-init table">
-                <thead>
-                    <tr>
-                        <th>Exam</th>
-                        <th>Student</th>
-                        <!-- <th>Action</th> -->
-                    </tr>
-                </thead>
-                <tbody>
-                	@if(count($examstudent_details) > 0)
-                	@foreach($examstudent_details as $data)
-                    <tr>
-                        <td>{{ isset($data->exam->name) ? $data->exam->name:'' }}</td>
-                        <td>{{ isset($data->user->name) ? $data->user->name:'' }}</td>
-                        {{--<td>
-                        	<a href="#"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
-                        	<a href="javascript:;" data-url="#" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a>
-                        </td>--}}
-                    </tr>
-                    @endforeach
-                    @else
-                    <tr>
-                    	<td>No Record Found.</td>
-                    </tr>
-                    @endif
-                </tbody>
-            </table>
+            <div class="row">
+                <label class="form-label col-lg-1">Exam : </label>
+                <div class="form-group col-lg-4">
+                    <div class="form-control-wrap">
+                        <select name="exam_id" class="form-control exam_id" id="exam_id">
+                            <option value="">--Select Exam--</option>
+                            @foreach($exams as $exam_data)
+                            <option value="{{ $exam_data->id }}">{{ $exam_data->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('exam_id')
+                            <span class="text-danger" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                </div>
+            </div>
+            <br/>
+            <div class="dynamic_table">
+                @include('exam_student.dynamic_table')
+            </div>
         </div>
     </div><!-- .card-preview -->
 </div>
@@ -63,28 +70,54 @@
 
 @section('scripts')
 
+
 <script type="text/javascript">
-	$('.distroy').on('click', function() {
-	    let del_url = $(this).attr('data-url');
-	    bootbox.confirm({
-	        message: "Are you sure to delete this exam student ?",
-	        buttons: {
-	            confirm: {
-	                label: 'Yes',
-	                className: 'btn-success'
-	            },
-	            cancel: {
-	                label: 'No',
-	                className: 'btn-danger'
-	            }
-	        },
-	        callback: function(result) {
-	            if(result){
-	                location.replace(del_url);
-	            }
-	        }
-	    });
-	})
+
+    // $(document).ready(function() {
+    //      $('#exam_student_table').DataTable();
+    // });
+
+	// $('.distroy').on('click', function() {
+	//     let del_url = $(this).attr('data-url');
+	//     bootbox.confirm({
+	//         message: "Are you sure to delete this exam student ?",
+	//         buttons: {
+	//             confirm: {
+	//                 label: 'Yes',
+	//                 className: 'btn-success'
+	//             },
+	//             cancel: {
+	//                 label: 'No',
+	//                 className: 'btn-danger'
+	//             }
+	//         },
+	//         callback: function(result) {
+	//             if(result){
+	//                 location.replace(del_url);
+	//             }
+	//         }
+	//     });
+	// })
+
+    $(document).on('change','.exam_id',function(){
+        var exam_id = $(this).val();
+        $.ajax({
+            type: "GET",
+            url: "{{route('get.examStudent')}}",
+            data: {
+                "exam_id":exam_id,
+            },
+            success: function(result) {
+                //$('.dynamic_table').html('');
+                $('.dynamic_table').html(result.html);
+                //$('.datatable-init').DataTable();
+
+            } 
+        });
+
+    });
+
+    
 </script>
 
 @endsection
