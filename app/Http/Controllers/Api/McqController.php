@@ -45,7 +45,7 @@ class McqController extends Controller
         			$is_true_d=1;
         		}
 
-        		$data[] = ['id' => $value->id,'question' => $value->question,'answer' => $value->answer,'options' => [['option_a' => $value->option_a,'is_true' => $is_true_a],['option_b' => $value->option_b,'is_true' => $is_true_b],['option_c' => $value->option_c,'is_true' => $is_true_c],['option_d' => $value->option_d,'is_true' => $is_true_d]]];
+        		$data[] = ['id' => $value->id,'question' => $value->question,'answer' => $value->answer,'options' => [['option' => $value->option_a,'is_true' => $is_true_a],['option' => $value->option_b,'is_true' => $is_true_b],['option' => $value->option_c,'is_true' => $is_true_c],['option' => $value->option_d,'is_true' => $is_true_d]]];
         	}
 
         	return response()->json([

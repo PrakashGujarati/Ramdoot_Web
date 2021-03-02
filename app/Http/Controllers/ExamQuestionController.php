@@ -129,7 +129,7 @@ class ExamQuestionController extends Controller
 
         $getexam_detail = exam::where('id',$request->exam_id)->first();
 
-        $getexam = question::where(['standard_id' => $getexam_detail->standard_id,'semester_id' => $getexam_detail->semester_id,'subject_id' => $getexam_detail->subject_id,'unit_id' => $getexam_detail->unit_id])->take($getexam_detail->total_question)->get();
+        $getexam = question::where(['standard_id' => $getexam_detail->standard_id,'semester_id' => $getexam_detail->semester_id,'subject_id' => $getexam_detail->subject_id,'unit_id' => $getexam_detail->unit_id])->inRandomOrder()->take($getexam_detail->total_question)->get();
 
         // dd($getexam_detail);
         $html=view('exam_question.dynamic_exam_detail',compact('getexam_detail','getexam'))->render();
@@ -137,4 +137,10 @@ class ExamQuestionController extends Controller
 
         return response()->json(['html'=> $html,'getexam_detail' => $getexam_detail]); 
     }
+
+    public function getQuestionView(Request $request){
+
+    }
+
+    // $get_question = question::where(['unit_id' => $request->unit_id])->inRandomOrder()->limit($request->no_of_question)->get();
 }
