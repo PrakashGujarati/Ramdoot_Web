@@ -1,4 +1,8 @@
 
+----------------------- 01-03-2021-------------------
+
+
+ALTER TABLE `exam_questions` DROP `board_id`, DROP `standard_id`, DROP `semester_id`, DROP `subject_id`, DROP `unit_id`;
 
 ----------------------- 27-02-2021-------------------
 

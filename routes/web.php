@@ -183,6 +183,8 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::post('exam_question/{id}/update', [ExamQuestionController::class, 'update'])->name('exam_question.update');
 	Route::get('exam_question/{id}/delete', [ExamQuestionController::class, 'distroy'])->name('exam_question.distroy');
 
+	Route::get('get_exam_detail', [ExamQuestionController::class, 'getExamDetail'])->name('get.exam.detail');
+
 	/*exam_student*/
 	Route::get('exam_student', [ExamStudentController::class, 'index'])->name('exam_student.index');
 	Route::get('exam_student/create', [ExamStudentController::class, 'create'])->name('exam_student.create');

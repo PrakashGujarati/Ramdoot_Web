@@ -1,6 +1,43 @@
 @extends('layouts.app')
 @section('title','Add Exam Question')
 @section('css')
+
+<style type="text/css">
+.displaynone{
+    display: none;
+}
+.displayblock{
+    display: block;
+}
+.borderbottom{
+    
+}
+
+.borderbottom hr{
+    border-bottom:2px solid #fff;
+    margin:0px;
+}
+.question_list {
+  background-color: lightgray;
+  /*border: 4px solid #fff;*/
+  padding: 2em;
+  position: relative;
+  margin: 0 auto;
+}
+.question_list:before {
+  background: none;
+  border: 4px solid #fff;
+  content: "";
+  display: block;
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  pointer-events: none;
+}
+</style>
+
 @endsection
 
 @section('content')
@@ -115,7 +152,7 @@
                         <div class="form-group">
                             <label class="form-label">Question</label>
                             <div class="form-control-wrap">
-                            	<input type="text" name="question_id" class="form-control" id="question_id" value="{{ old('question_id') }}">
+                            	<input type="text" name="question_id" class="form-control" id="question_id" value="{{ old('question_id') }}" readonly="true">
                                 {{--<select name="question_id" class="form-control" id="question_id">
                                     <option>--Select Question--</option>
                                     @foreach($questions as $questions_data)
@@ -128,6 +165,10 @@
                                     </span>
                                 @enderror
                             </div>
+                        </div>
+
+                        <div class="dynamic_exam_detail displaynone">
+                            @include('exam_question.dynamic_exam_detail')
                         </div>
 
                         <div class="form-group">
@@ -259,9 +300,31 @@
             success: function(result) {
                 $('.exam_id').html('');
                 $('.exam_id').html(result.html);
+                $('.dynamic_exam_detail').html('');
             } 
         });
     }
+
+    $(document).on('change','.exam_id',function(){
+        var exam_id = $('.exam_id').val();
+                
+        $.ajax({
+            type: "GET",
+            url: "{{route('get.exam.detail')}}",
+            data: {
+                "exam_id":exam_id,
+            },
+            success: function(result) {
+
+                $('.dynamic_exam_detail').removeClass('displaynone').addClass('displayblock');
+                $('.dynamic_exam_detail').html(result.html);
+                $('#question_id').val(result.getexam_detail.total_question);
+                //var exam_id = $('.exam_id').val();
+            } 
+        });
+    });
+
+    
     
 
 </script>

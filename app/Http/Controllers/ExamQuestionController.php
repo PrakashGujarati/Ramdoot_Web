@@ -31,7 +31,9 @@ class ExamQuestionController extends Controller
         $exams = exam::where('status','Active')->get();
         $questions = question::where('status','Active')->get();
         $boards = Board::where('status','Active')->get();
-        return view('exam_question.add',compact('exams','questions','boards'));
+        $getexam_detail = [];
+        $getexam = [];
+        return view('exam_question.add',compact('exams','questions','boards','getexam_detail','getexam'));
     }
 
     /**
@@ -42,27 +44,20 @@ class ExamQuestionController extends Controller
      */
     public function store(Request $request)
     {
-        
         $this->validate($request, [
-            'board_id' => 'required',
-            'standard_id' => 'required',
-            'semester_id'  => 'required',
-            'subject_id' => 'required',
-            'unit_id' => 'required',
             'exam_id'     => 'required',
             'question_id' => 'required',
         ]);
 
-        
-        $add = new exam_question;
-        $add->board_id = $request->board_id;
-        $add->standard_id = $request->standard_id;
-        $add->semester_id = $request->semester_id;
-        $add->subject_id = $request->subject_id;
-        $add->unit_id = $request->unit_id;
-        $add->exam_id = $request->exam_id;
-        $add->question_id = $request->question_id;
-        $add->save();
+
+        if(count($request->question_id) > 0){
+            foreach ($request->question_id as $key => $value) {
+                $add = new exam_question;
+                $add->exam_id = $request->exam_id;
+                $add->question_id = $value;
+                $add->save();
+            }    
+        }
 
         return redirect()->route('exam_question.index')->with('success', 'Exam Question Added Successfully.');
     }
@@ -103,21 +98,11 @@ class ExamQuestionController extends Controller
     public function update(Request $request, exam_question $exam_question,$id)
     {
         $this->validate($request, [
-            'board_id' => 'required',
-            'standard_id' => 'required',
-            'semester_id'  => 'required',
-            'subject_id' => 'required',
-            'unit_id' => 'required',
             'exam_id'     => 'required',
             'question_id' => 'required',
         ]);
 
         $update = exam_question::find($id);
-        $update->board_id = $request->board_id;
-        $update->standard_id = $request->standard_id;
-        $update->semester_id = $request->semester_id;
-        $update->subject_id = $request->subject_id;
-        $update->unit_id = $request->unit_id;
         $update->exam_id = $request->exam_id;
         $update->question_id = $request->question_id;
         $update->save();
@@ -138,5 +123,18 @@ class ExamQuestionController extends Controller
         $delete->save();
 
         return redirect()->route('exam_question.index')->with('success', 'Exam Question Deleted Successfully.');
+    }
+
+    public function getExamDetail(Request $request){
+
+        $getexam_detail = exam::where('id',$request->exam_id)->first();
+
+        $getexam = question::where(['standard_id' => $getexam_detail->standard_id,'semester_id' => $getexam_detail->semester_id,'subject_id' => $getexam_detail->subject_id,'unit_id' => $getexam_detail->unit_id])->take($getexam_detail->total_question)->get();
+
+        // dd($getexam_detail);
+        $html=view('exam_question.dynamic_exam_detail',compact('getexam_detail','getexam'))->render();
+
+
+        return response()->json(['html'=> $html,'getexam_detail' => $getexam_detail]); 
     }
 }

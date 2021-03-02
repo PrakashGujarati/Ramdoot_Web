@@ -17,7 +17,7 @@ use App\Http\Controllers\api\WorksheetController;
 use App\Http\Controllers\api\UnitController;
 use App\Http\Controllers\api\FeatureController;
 use App\Http\Controllers\api\TextbookController;
-
+use App\Http\Controllers\api\McqController;
 
 
 
@@ -50,7 +50,7 @@ Route::group(['middleware'=>'api'], function()
     Route::post('features_list', [FeatureController::class, 'features_list']);
     Route::post('profile_update', [RegisterController::class, 'profile_update']);
     Route::post('all_in_one', [FeatureController::class, 'all_in_one']);
-    
+    Route::post('mcq_practice', [McqController::class, 'mcqPractice']);
 
 });
 

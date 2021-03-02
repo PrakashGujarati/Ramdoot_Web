@@ -7,17 +7,6 @@
 
 @include('question.dynamic_import_form')
 
-@if(Session::has('success'))
-    <div class="alert alert-success">
-        {{Session::get('success')}}
-    </div>
-@endif
-@if(Session::has('error'))
-    <div class="alert alert-danger">
-        {{Session::get('error')}}
-    </div>
-@endif
-
 <div class="nk-block nk-block-lg">
     <div class="nk-block-head">
         <div class="nk-block-head-content">
@@ -30,6 +19,15 @@
 					</div>
 				</div>
 			@endif
+            @if(session()->has('error'))
+                <div class="row mb-3">
+                    <div class="col-lg-12">
+                        <div class="alert alert-error">
+                            {{ session()->get('error') }}
+                        </div>
+                    </div>
+                </div>
+            @endif
         	<div class="row">
         		<div class="col-lg-8">
             		<h4 class="nk-block-title">Question List</h4>
