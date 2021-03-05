@@ -17,7 +17,8 @@ class ExamQuestionController extends Controller
      */
     public function index()
     {
-        $examquestion_details = exam_question::where('status','Active')->get();
+        $examquestion_details = exam_question::where('status','Active')->groupBy('exam_id')->get();
+        //dd(count($examquestion_details));
         return view('exam_question.index',compact('examquestion_details'));
     }
 
@@ -140,7 +141,56 @@ class ExamQuestionController extends Controller
 
     public function getQuestionView(Request $request){
 
+        $getexam_detail = exam::where('id',$request->exam_id)->first();
+
+        $srno = $request->sr_no;
+
+        $getexam = question::where(['standard_id' => $getexam_detail->standard_id,'semester_id' => $getexam_detail->semester_id,'subject_id' => $getexam_detail->subject_id,'unit_id' => $getexam_detail->unit_id])->get();
+
+        if($srno == 0){
+            $chk_limit = $getexam_detail->total_question;
+        }else{
+            $chk_limit = 1;    
+        }
+        
+
+        $html=view('exam_question.dynamic_question_model',compact('getexam_detail','getexam','chk_limit','srno'))->render();
+        return response()->json(['success'=>true,'html'=>$html,'srno' => $srno]);
     }
 
+    public function getQuestionChange(Request $request){
+
+       $getexam_detail = exam::where('id',$request->exam_id)->first();
+
+       if($request->srno != "0"){
+            $change_question_key = $request->srno - 1;
+            $getexam=[];
+            foreach ($request->hidden_question_id as $key => $value) {
+               
+               if($change_question_key == $key){
+                    $getexam[] = question::where(['id' => $request->select_question_id[0]])->first();
+               }
+               else{
+                    $getexam[] = question::where(['id' => $value])->first();
+               }
+            } 
+       }else{
+            foreach ($request->select_question_id as $key => $value) {
+                $getexam[] = question::where(['id' => $value])->first();
+            }
+       }
+
+       $html=view('exam_question.dynamic_exam_detail',compact('getexam_detail','getexam'))->render();
+        return response()->json(['html'=> $html,'getexam_detail' => $getexam_detail]); 
+    }
     // $get_question = question::where(['unit_id' => $request->unit_id])->inRandomOrder()->limit($request->no_of_question)->get();
+
+    public function getQuestionClear(Request $request){
+        $getexam_detail = exam::where('id',$request->exam_id)->first();
+       
+       $getexam=[];
+       
+       $html=view('exam_question.dynamic_exam_detail',compact('getexam_detail','getexam'))->render();
+        return response()->json(['html'=> $html,'getexam_detail' => $getexam_detail]); 
+    }
 }

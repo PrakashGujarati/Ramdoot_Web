@@ -32,7 +32,7 @@
                 <thead>
                     <tr>
                         <th>Exam</th>
-                        <th>Question</th>
+                        {{--<th>Question</th>--}}
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -41,7 +41,8 @@
                 	@foreach($examquestion_details as $data)
                     <tr>
                         <td>{{ isset($data->exam->name) ? $data->exam->name:'' }}</td>
-                        <td>{{ isset($data->question->question) ? $data->question->question:'' }}</td>
+                        {{--<td>View </td>
+                        <td>{{ isset($data->question->question) ? $data->question->question:'' }}</td>--}}
                         <td>
                         	<a href="{{ route('exam_question.edit',$data->id) }}"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
                         	<a href="javascript:;" data-url="{{ route('exam_question.distroy',$data->id) }}" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a>

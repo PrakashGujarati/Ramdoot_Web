@@ -118,7 +118,12 @@
                                 <input type="hidden" name="hidden_url" value="{{ $worksheetdata->url }}">
                                 <br/>
                                 @if($worksheetdata->url)
+                                    @php $ext = pathinfo($worksheetdata->url, PATHINFO_EXTENSION); @endphp
+                                    @if($ext == "png" || $ext == "jpg" || $ext == "jpeg")
                                     <img src="{{ asset('upload/worksheet/url/'.$worksheetdata->url) }}" class="thumbnail" height="100" width="100">
+                                    @else
+                                    <p>{{ $worksheetdata->url }}</p>
+                                    @endif
                                 @endif
                                 @error('url')
                                     <span class="text-danger" role="alert">

@@ -1,83 +1,52 @@
-<input type="hidden" id="token" name="_token" value="{{ csrf_token() }}">
+<div class="question_list mb-3"> 			
+	<input type="hidden" name="checkbox_limit" id="checkbox_limit" class="checkbox_limit" value="{{ $chk_limit }}">
+	@if(count($getexam) > 0)
+		@php $srno = 1; @endphp
+		@foreach($getexam as $examdata)
+		<input type="hidden" name="question_id[]" value="{{ $examdata->id }}">
+		<div class="borderbottom">
+			<div class="row">
+				<div class="col-md-1 pr-0 pt2">
+					<div class="form-control-wrap">
+                        <div class="g">
+                            <div class="custom-control custom-control-sm custom-checkbox">
+                                <input type="checkbox" class="custom-control-input chk_question" name="chk_question" value="1" id="chk_question_{{ $examdata->id }}" data-id="{{ $examdata->id }}">
+                                <label class="custom-control-label" for="chk_question_{{ $examdata->id }}"></label>
+                            </div>
+                        </div>
+                    </div>
+				</div>
+				<div class="col-md-11 pl-0">
+					<div class="row">
+						<div class="col-md-12">
+							<label class="mb-0">
+								<b>{{ $srno }}. {{ $examdata->question }}</b>
+							</label>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">A. {{ $examdata->option_a }}</div>
+						<div class="col-md-6">B. {{ $examdata->option_b }}</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">C. {{ $examdata->option_c }}</div>
+						<div class="col-md-6">D. {{ $examdata->option_d }}</div>
+					</div>
+				</div>
+			</div>
 
-<div class="row">
-	<div class="form-group col-lg-6">
-	    <label class="form-label">Board</label>
-	    <div class="form-control-wrap">
-	        <select name="board_id" class="form-control board_id" id="board_id">
-	            <option value="">--Select Board--</option>
-	            @foreach($boards as $boards_data)
-	            <option value="{{ $boards_data->id }}" @if(old('board_id') == $boards_data->id) selected="" @endif>{{ $boards_data->name." - ".$boards_data->medium}}</option>
-	            @endforeach
-	        </select>
-	        @error('board_id')
-	            <span class="text-danger" role="alert">
-	                <strong>{{ $message }}</strong>
-	            </span>
-	        @enderror
-	    </div>
-	</div>
-
-	<div class="form-group col-lg-6">
-	    <label class="form-label">Standard</label>
-	    <div class="form-control-wrap">
-	        <select name="standard_id" class="form-control standard_id" id="standard_id">
-	            <option value="">--Select Standard--</option>
-	        </select>
-	        @error('standard_id')
-	            <span class="text-danger" role="alert">
-	                <strong>{{ $message }}</strong>
-	            </span>
-	        @enderror
-	    </div>
-	</div>
+		@if(count($getexam) > $srno)<hr/>@endif
+		</div>
+		<br/>
+		@php $srno = $srno+1; @endphp
+		@endforeach
+	@else
+		<div class="row">
+			<div class="col-md-12">
+				<label class="mb-0">No Record Found.</b></label>
+			</div>
+		</div>
+	@endif
 </div>
 
-<div class="row">
-	<div class="form-group col-lg-6">
-	    <label class="form-label">Semester</label>
-	    <div class="form-control-wrap">
-	        <select name="semester_id" class="form-control semester_id" id="semester_id">
-	            <option value="">--Select Semester--</option>
-	        </select>
-	        @error('semester_id')
-	            <span class="text-danger" role="alert">
-	                <strong>{{ $message }}</strong>
-	            </span>
-	        @enderror
-	    </div>
-	</div>
 
-	<div class="form-group col-lg-6">
-	    <label class="form-label">Subject</label>
-	    <div class="form-control-wrap">
-	        <select name="subject_id" class="form-control subject_id" id="subject_id">
-	            <option value="">--Select Subject--</option>
-	        </select>
-	        @error('subject_id')
-	            <span class="text-danger" role="alert">
-	                <strong>{{ $message }}</strong>
-	            </span>
-	        @enderror
-	    </div>
-	</div>
-</div>
-
-<div class="form-group">
-	<label class="form-label">Units</label>
-	<div class="form-control-wrap">
-	    <select name="unit_id" class="form-control unit_id" id="unit_id">
-	        <option value="">--Select Unit--</option>
-	    </select>
-	    @error('unit_id')
-	        <span class="text-danger" role="alert">
-	            <strong>{{ $message }}</strong>
-	        </span>
-	    @enderror
-	</div>
-</div>
-
-<div class="form-group">
-	<label class="form-label">Select File</label>
-	<input type="file" name="file" class="form-control file" id="file">
-</div>

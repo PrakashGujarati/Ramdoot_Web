@@ -79,7 +79,12 @@
                                 <input type="hidden" name="hidden_url" value="{{ $unitdata->url }}">
                                 <br/>
                                 @if($unitdata->url)
+                                    @php $ext = pathinfo($unitdata->url, PATHINFO_EXTENSION); @endphp
+                                    @if($ext == "png" || $ext == "jpg" || $ext == "jpeg")
                                     <img src="{{ asset('upload/unit/url/'.$unitdata->url) }}" class="thumbnail" height="100" width="100">
+                                    @else
+                                    <p>{{ $unitdata->url }}</p>
+                                    @endif
                                 @endif
                                 @error('url')
                                     <span class="text-danger" role="alert">

@@ -55,7 +55,12 @@
                                 <input type="hidden" name="hidden_url" value="{{ $boarddata->url }}">
                                 <br/>
                                 @if($boarddata->url)
-                                <img src="{{ asset('upload/board/url/'.$boarddata->url) }}" class="thumbnail" height="100" width="100">
+                                    @php $ext = pathinfo($boarddata->url, PATHINFO_EXTENSION); @endphp
+                                    @if($ext == "png" || $ext == "jpg" || $ext == "jpeg")
+                                    <img src="{{ asset('upload/board/url/'.$boarddata->url) }}" class="thumbnail" height="100" width="100">
+                                    @else
+                                    <p>{{ $boarddata->url }}</p>
+                                    @endif
                                 @endif
                                 @error('url')
                                     <span class="text-danger" role="alert">

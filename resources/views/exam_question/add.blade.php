@@ -36,11 +36,16 @@
   bottom: 4px;
   pointer-events: none;
 }
+.pt2{
+    padding-top: 2px;
+}
 </style>
 
 @endsection
 
 @section('content')
+
+@include('exam_question.dynamic_question_form')
 
 <div class="nk-block nk-block-lg">
     <div class="row g-gs">
@@ -166,7 +171,7 @@
                                 @enderror
                             </div>
                         </div>
-
+                        <!-- displaynone -->
                         <div class="dynamic_exam_detail displaynone">
                             @include('exam_question.dynamic_exam_detail')
                         </div>
@@ -319,10 +324,157 @@
                 $('.dynamic_exam_detail').removeClass('displaynone').addClass('displayblock');
                 $('.dynamic_exam_detail').html(result.html);
                 $('#question_id').val(result.getexam_detail.total_question);
+                $('.add_question_btn').attr('disabled',true).css('cursor','not-allowed');
                 //var exam_id = $('.exam_id').val();
             } 
         });
     });
+
+    $(document).on('click','.edit_question',function(){
+        var exam_id = $('.exam_id').val();    
+        var sr_no = $(this).data('srno');
+
+        $.ajax({
+            type: "GET",
+            url: "{{route('get.question.view')}}",
+            data: {
+                "exam_id":exam_id,
+                "sr_no":sr_no,
+            },
+            success: function(result) {
+                $('#question_model_data').html(result.html);
+                $('#question_view').modal({show:true});
+                $('#hidden_srno').val(result.srno);
+            } 
+        });
+    });
+
+    $(document).on('change','.chk_question',function(){
+        var getsid = $(this).attr('id');
+        var id=$(this).data('id');
+        var checkbox_limit = $('.checkbox_limit').val();
+
+        var numberOfChecked = $('input:checkbox:checked').length;
+        
+
+        if ($("#"+getsid).prop('checked') == true)
+        {
+            if(numberOfChecked <= checkbox_limit){
+                $("#"+getsid).prop('checked',true);
+            }
+            else{
+                if(checkbox_limit == 1){
+                    $(".chk_question").prop('checked',false);
+                    $("#"+getsid).prop('checked',true);
+                }
+                else{
+                    $("#"+getsid).prop('checked',false);
+                    //$(".chk_question").prop('checked',false);
+                }    
+            }
+            
+        }
+    });
+
+    $(document).on('click','.select_question',function(){
+        //var hidden_question_id = $('.hidden_question_id').val();
+        var hidden_question_id = $('.hidden_question_id').map(function() {
+            return $(this).val();
+        }).get();
+
+        var select_question_id = $('.chk_question').map(function() {
+            if($(this).prop('checked') == true){
+                return $(this).data('id');    
+            }
+        }).get();
+
+        var srno = $('#hidden_srno').val();
+        var exam_id = $('.exam_id').val();
+
+        $.ajax({
+            type: "GET",
+            url: "{{route('get.question.change')}}",
+            data: {
+                "hidden_question_id":hidden_question_id,
+                "select_question_id":select_question_id,
+                "srno":srno,
+                "exam_id":exam_id,
+            },
+            success: function(result) {
+                $('#question_view').modal('hide');
+                $('.dynamic_exam_detail').html('');
+                $('.dynamic_exam_detail').removeClass('displaynone').addClass('displayblock');
+                $('.dynamic_exam_detail').html(result.html);
+                $('#question_id').val(result.getexam_detail.total_question);
+                //$('#question_model_data').html(result.html);
+               // $('#question_view').modal({show:true});
+                //$('#hidden_srno').val(result.srno);
+            } 
+        });
+    });
+
+    $(document).on('click','.clear_btn',function(){
+
+        var exam_id = $('.exam_id').val();
+
+        $.ajax({
+            type: "GET",
+            url: "{{route('question.clear')}}",
+            data: {
+                "exam_id":exam_id,
+            },
+            success: function(result) {
+                $('.dynamic_exam_detail').html('');
+                $('.dynamic_exam_detail').removeClass('displaynone').addClass('displayblock');
+                $('.dynamic_exam_detail').html(result.html);
+                $('.add_question_btn').attr('disabled',false).css('cursor','pointer');
+                $('#question_id').val(result.getexam_detail.total_question);
+                //$('#question_model_data').html(result.html);
+               // $('#question_view').modal({show:true});
+                //$('#hidden_srno').val(result.srno);
+            } 
+        });
+
+    });
+    
+    $(document).on('click','.add_question_btn',function(){
+
+        var exam_id = $('.exam_id').val();    
+        var sr_no = 0;
+
+        $.ajax({
+            type: "GET",
+            url: "{{route('get.question.view')}}",
+            data: {
+                "exam_id":exam_id,
+                "sr_no":sr_no,
+            },
+            success: function(result) {
+                $('#question_model_data').html(result.html);
+                $('#question_view').modal({show:true});
+               // $('#hidden_srno').val(result.srno);
+            } 
+        });
+
+        // var checkbox_limit = $('#question_id').val();
+
+        // var select_question_id = $('.chk_question').map(function() {
+        //     if($(this).prop('checked') == true){
+        //         return $(this).data('id');    
+        //     }
+        // }).get();
+        
+        // if(checkbox_limit == 1){
+        //     $(".chk_question").prop('checked',false);
+        //     $("#"+getsid).prop('checked',true);
+        // }else if(checkbox_limit > 1){
+        //     $(".chk_question").prop('checked',false);
+        // }
+        // else{
+        //     $(".chk_question").prop('checked',false);
+        // }
+    });
+    
 
     // get.question.view
     

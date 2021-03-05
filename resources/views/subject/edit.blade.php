@@ -77,7 +77,12 @@
                                 <input type="hidden" name="hidden_url" value="{{ $subjectdata->url }}">
                                 <br/>
                                 @if($subjectdata->url)
+                                    @php $ext = pathinfo($subjectdata->url, PATHINFO_EXTENSION); @endphp
+                                    @if($ext == "png" || $ext == "jpg" || $ext == "jpeg")
                                     <img src="{{ asset('upload/subject/url/'.$subjectdata->url) }}" class="thumbnail" height="100" width="100">
+                                    @else
+                                    <p>{{ $subjectdata->url }}</p>
+                                    @endif
                                 @endif
                                 @error('url')
                                     <span class="text-danger" role="alert">

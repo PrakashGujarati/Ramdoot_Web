@@ -112,7 +112,12 @@
                                 <input type="hidden" name="hidden_url" value="{{ $bookdata->url }}">
                                 <br/>
                                 @if($bookdata->url)
+                                    @php $ext = pathinfo($bookdata->url, PATHINFO_EXTENSION); @endphp
+                                    @if($ext == "png" || $ext == "jpg" || $ext == "jpeg")
                                     <img src="{{ asset('upload/book/url/'.$bookdata->url) }}" class="thumbnail" height="100" width="100">
+                                    @else
+                                    <p>{{ $bookdata->url }}</p>
+                                    @endif
                                 @endif
                             </div>
                         </div>

@@ -53,23 +53,13 @@ class PaperController extends Controller
         ]);
 
         $url_file='';
+
         if($request->has('url'))
         {
             $image = $request->file('url');
-
-            $url_file = rand() . '.' . $image->getClientOriginalExtension();
-
-            $valid_ext = array('png','jpeg','jpg');
-
-            // Location
-            $location = public_path('upload/paper/url/').$url_file;
-
-            $file_extension = pathinfo($location, PATHINFO_EXTENSION);
-            $file_extension = strtolower($file_extension);
-
-            if(in_array($file_extension,$valid_ext)){
-                $this->compressImage($image->getPathName(),$location,60);
-            }
+            $url_file = time().'.'.$image->getClientOriginalExtension();
+            $destinationPath = public_path('upload/paper/url/');
+            $image->move($destinationPath, $url_file);
         }
 
 
@@ -134,24 +124,13 @@ class PaperController extends Controller
         ]);
 
         $url_file='';
+        
         if($request->has('url'))
         {
-
             $image = $request->file('url');
-
-            $url_file = rand() . '.' . $image->getClientOriginalExtension();
-
-            $valid_ext = array('png','jpeg','jpg');
-
-            // Location
-            $location = public_path('upload/paper/url/').$url_file;
-
-            $file_extension = pathinfo($location, PATHINFO_EXTENSION);
-            $file_extension = strtolower($file_extension);
-
-            if(in_array($file_extension,$valid_ext)){
-                $this->compressImage($image->getPathName(),$location,60);
-            }
+            $url_file = time().'.'.$image->getClientOriginalExtension();
+            $destinationPath = public_path('upload/paper/url/');
+            $image->move($destinationPath, $url_file);
         }
         else{
             $url_file = $request->hidden_url;

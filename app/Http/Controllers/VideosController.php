@@ -80,22 +80,10 @@ class VideosController extends Controller
             $url_file='';
             if($request->has('url_file'))
             {
-
                 $image = $request->file('url_file');
-
-                $url_file = rand() . '.' . $image->getClientOriginalExtension();
-
-                $valid_ext = array('png','jpeg','jpg');
-
-                // Location
-                $location = public_path('upload/videos/url/').$url_file;
-
-                $file_extension = pathinfo($location, PATHINFO_EXTENSION);
-                $file_extension = strtolower($file_extension);
-
-                if(in_array($file_extension,$valid_ext)){
-                    $this->compressImage($image->getPathName(),$location,60);
-                }
+                $url_file = time().'.'.$image->getClientOriginalExtension();
+                $destinationPath = public_path('upload/videos/url/');
+                $image->move($destinationPath, $url_file);
             }    
         }
         else{
@@ -199,22 +187,10 @@ class VideosController extends Controller
             $url_file='';
             if($request->has('url_file'))
             {
-
                 $image = $request->file('url_file');
-
-                $url_file = rand() . '.' . $image->getClientOriginalExtension();
-
-                $valid_ext = array('png','jpeg','jpg');
-
-                // Location
-                $location = public_path('upload/videos/url/').$url_file;
-
-                $file_extension = pathinfo($location, PATHINFO_EXTENSION);
-                $file_extension = strtolower($file_extension);
-
-                if(in_array($file_extension,$valid_ext)){
-                    $this->compressImage($image->getPathName(),$location,60);
-                }
+                $url_file = time().'.'.$image->getClientOriginalExtension();
+                $destinationPath = public_path('upload/videos/url/');
+                $image->move($destinationPath, $url_file);
             }
             else{
                 $url_file = $request->hidden_url;
