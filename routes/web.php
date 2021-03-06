@@ -185,6 +185,8 @@ Route::group(['middleware' => 'auth'], function(){
 
 	Route::get('get_exam_detail', [ExamQuestionController::class, 'getExamDetail'])->name('get.exam.detail');
 
+	Route::get('view_exam_list', [ExamQuestionController::class, 'viewExamList'])->name('view.exam.list');
+
 	Route::get('get_question_view', [ExamQuestionController::class, 'getQuestionView'])->name('get.question.view');
 	Route::get('get_question_change', [ExamQuestionController::class, 'getQuestionChange'])->name('get.question.change');
 

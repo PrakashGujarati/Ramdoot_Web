@@ -52,6 +52,19 @@ Route::group(['middleware'=>'api'], function()
     Route::post('all_in_one', [FeatureController::class, 'all_in_one']);
     Route::post('mcq_practice', [McqController::class, 'mcqPractice']);
 
+    Route::post('mcq_practice', [McqController::class, 'mcqPractice']);
+
+    Route::post('add_bookmark', [TextbookController::class, 'addBookmark']);
+    Route::post('view_bookmark', [TextbookController::class, 'viewBookmark']);
+
+    Route::post('add_pdf_counter', [TextbookController::class, 'addPdfCount']);
+
+    Route::post('add_video_bookmark', [VideosController::class, 'addVideoBookmark']);
+    Route::post('view_video_bookmark', [VideosController::class, 'viewVideoBookmark']);
+
+    Route::post('add_solution_material_count', [VideosController::class, 'addSolutionMaterialCount']);
+    
+
 });
 
 Route::post('register', [RegisterController::class, 'register']);

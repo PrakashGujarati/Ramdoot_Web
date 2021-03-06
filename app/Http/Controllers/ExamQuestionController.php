@@ -193,4 +193,11 @@ class ExamQuestionController extends Controller
        $html=view('exam_question.dynamic_exam_detail',compact('getexam_detail','getexam'))->render();
         return response()->json(['html'=> $html,'getexam_detail' => $getexam_detail]); 
     }
+
+    public function viewExamList(Request $request){
+        $getexam_detail = exam::where('id',$request->exam_id)->first();
+        $getexam = exam_question::where('exam_id',$request->exam_id)->get();
+        $html=view('exam_question.dynamic_question_list_model',compact('getexam_detail','getexam'))->render();
+        return response()->json(['html'=> $html,'getexam_detail' => $getexam_detail]); 
+    }
 }

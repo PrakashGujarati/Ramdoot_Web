@@ -11,6 +11,10 @@ use Validator;
 use App\Models\Standard;
 use App\Models\Subject;
 use App\Models\semester;
+use App\Models\pdf_bookmark;
+use App\Models\feature;
+use App\Models\pdf_view;
+use App\Models\User;
 
 class TextbookController extends Controller
 {
@@ -93,5 +97,155 @@ class TextbookController extends Controller
 		        ]);
 	    	}		
         }
-    }	
+    }
+
+
+    public function addBookmark(Request $request){
+
+        $rules = array(
+            'user_id' => 'required',
+            'type' => 'required',
+            'type_id' => 'required',
+            'pageno' => 'required',
+        );
+        $messages = array(
+            'user_id.required' => 'Please enter user id.',
+            'type.required' => 'Please enter type.',
+            'type_id.required' => 'Please enter type id.',
+            'pageno.required' => 'Please enter page number.',
+        );
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            $msg = $validator->messages();
+            return ['status' => "false",'msg' => $msg];
+        }
+
+        $chkuser = User::where(['id' => $request->user_id])->first();
+
+        if($chkuser){
+
+            $add = new pdf_bookmark;
+            $add->user_id = $request->user_id;
+            $add->type_id = $request->type_id;
+            $add->pageno = $request->pageno;
+            $add->save(); 
+            
+            return response()->json([
+                "code" => 200,
+                "message" => "success"
+            ]);
+        }
+        else{
+            return response()->json([
+                "code" => 400,
+                "message" => "User not found."
+            ]);
+        }
+
+             
+    }
+
+    public function viewBookmark(Request $request){
+
+        $rules = array(
+            'user_id' => 'required',
+            'type' => 'required',
+            'type_id' => 'required'
+        );
+        $messages = array(
+            'user_id.required' => 'Please enter user id.',
+            'type.required' => 'Please enter type.',
+            'type_id.required' => 'Please enter type id.'
+        );
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            $msg = $validator->messages();
+            return ['status' => "false",'msg' => $msg];
+        }
+
+        $chkuser = User::where(['id' => $request->user_id])->first();
+
+        if($chkuser){
+            $getdata = pdf_bookmark::where(['type_id' => $request->type_id,'user_id' => $request->user_id])->get();
+        
+            $data=[];
+            if(count($getdata) > 0){
+                foreach ($getdata as $key => $value) { 
+                    $get_type =  feature::where(['id' => $value->type_id])->first(); 
+                    $data[]=['id' => $value->id,'type' => $get_type->title,'type_id' => $get_type->id,'user_id' => $value->user_id,'pageno' => $value->pageno];   
+                }
+            }
+
+            return response()->json([
+                "code" => 200,
+                "message" => "success",
+                "data" => $data,
+            ]);
+
+        }else{
+            return response()->json([
+                "code" => 400,
+                "message" => "User not found."
+            ]);
+        }
+
+         
+
+        
+           
+    }
+
+    public function addPdfCount(Request $request){
+
+        $rules = array(
+            'user_id' => 'required',
+            'type' => 'required',
+            'type_id' => 'required'
+        );
+        $messages = array(
+            'user_id.required' => 'Please enter user id.',
+            'type.required' => 'Please enter type.',
+            'type_id.required' => 'Please enter type id.'
+        );
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            $msg = $validator->messages();
+            return ['status' => "false",'msg' => $msg];
+        }
+
+        $chkuser = User::where(['id' => $request->user_id])->first();
+
+        if($chkuser){
+
+            $chkview = pdf_view::where(['type_id' => $request->type_id,'user_id' => $request->user_id])->first();
+
+            if($chkview){
+                pdf_view::where(['type_id' => $request->type_id,'user_id' => $request->user_id])->update(['count' => $chkview->count+1]);
+            }else{
+                $add =  new pdf_view;
+                $add->type_id = $request->type_id;
+                $add->user_id = $request->user_id;
+                $add->count = 1;
+                $add->save();
+            }
+
+            return response()->json([
+                "code" => 200,
+                "message" => "success"
+            ]);
+
+        }
+        else{
+            return response()->json([
+                "code" => 400,
+                "message" => "User not found."
+            ]);
+        }   
+    }
 }

@@ -11,6 +11,9 @@ use Validator;
 use App\Models\Standard;
 use App\Models\Subject;
 use App\Models\semester;
+use App\Models\video_bookmark;
+use App\Models\User;
+use App\Models\solution_material_count;
 
 class VideosController extends Controller
 {
@@ -100,4 +103,176 @@ class VideosController extends Controller
 	    	}		
         }
     }	
+
+
+    public function addVideoBookmark(Request $request){
+
+        $rules = array(
+            'user_id' => 'required',
+            'video_id' => 'required',
+            'start_time' => 'required',
+            'end_time' => 'required',
+            'duration' => 'required'
+        );
+        $messages = array(
+            'user_id' => 'Please enter user id.',
+            'video_id' => 'Please enter video id.',
+            'start_time' => 'Please enter start time.',
+            'end_time' => 'Please enter end time.',
+            'duration' => 'Please enter duration.'
+        );
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            $msg = $validator->messages();
+            return ['status' => "false",'msg' => $msg];
+        }
+
+        $chkuser = User::where(['id' => $request->user_id])->first();
+
+        if($chkuser)
+        {
+            $add = new video_bookmark;
+            $add->user_id = $request->user_id;
+            $add->video_id = $request->video_id;
+            $add->start_time = $request->start_time;
+            $add->end_time = $request->end_time;
+            $add->duration = $request->duration;
+            $add->save();
+
+            return response()->json([
+                "code" => 200,
+                "message" => "success",
+            ]);    
+        }else{
+            return response()->json([
+                "code" => 400,
+                "message" => "User not found."
+            ]);
+        }
+
+        
+
+    }
+
+    public function viewVideoBookmark(Request $request){
+        $rules = array(
+            'user_id' => 'required',
+            'video_id' => 'required'
+        );
+        $messages = array(
+            'user_id' => 'Please enter user id.',
+            'video_id' => 'Please enter video id.'
+        );
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            $msg = $validator->messages();
+            return ['status' => "false",'msg' => $msg];
+        }   
+
+        $chkuser = User::where(['id' => $request->user_id])->first();
+
+        if($chkuser)
+        {
+            $getdata = video_bookmark::where(['video_id' => $request->video_id,'user_id' => $request->user_id])->get();
+        
+            $data=[];
+            if(count($getdata) > 0){
+                foreach ($getdata as $key => $value) { 
+                    //$get_type =  feature::where(['id' => $value->type_id])->first(); 
+                    $data[]=['id' => $value->id,'video_id' => $value->video_id,'user_id' => $value->user_id,
+                    'start_time' => $value->start_time,'end_time' => $value->end_time,'duration' => $value->duration];   
+                }
+            }
+
+            return response()->json([
+                "code" => 200,
+                "message" => "success",
+                "data" => $data,
+            ]);
+            
+        }
+        else{
+            return response()->json([
+                "code" => 400,
+                "message" => "User not found."
+            ]);
+        }
+    }
+
+        public function addSolutionMaterialCount(Request $request){
+
+
+            $rules = array(
+                'user_id' => 'required',
+                'type' => 'required',
+                'type_id' => 'required',
+                'counttype' => 'required',
+            );
+            $messages = array(
+                'user_id.required' => 'Please enter user id.',
+                'type.required' => 'Please enter type.',
+                'type_id.required' => 'Please enter type id.',
+                'counttype.required' => 'Please enter count type.'
+            );
+
+            $chkuser = User::where(['id' => $request->user_id])->first();
+
+            if($chkuser){
+
+                $chkview = solution_material_count::where(['type_id' => $request->type_id,'user_id' => $request->user_id])->first();
+
+                if($chkview){
+
+                    if($request->counttype == "whatsapp_count"){
+                        solution_material_count::where(['type_id' => $request->type_id,'user_id' => $request->user_id])->update(['whatsapp_count' => $chkview->whatsapp_count+1]);    
+                    }
+                    elseif ($request->counttype == "share_count") {
+                        solution_material_count::where(['type_id' => $request->type_id,'user_id' => $request->user_id])->update(['share_count' => $chkview->share_count+1]);
+                    }
+                    elseif ($request->counttype == "show_count") {
+                        solution_material_count::where(['type_id' => $request->type_id,'user_id' => $request->user_id])->update(['show_count' => $chkview->show_count+1]);
+                    }
+                    
+                }else{
+
+                    $add =  new solution_material_count;
+                    $add->type_id = $request->type_id;
+                    $add->user_id = $request->user_id;
+
+                    if($request->counttype == "whatsapp_count"){
+                        $add->whatsapp_count = 1;    
+                    }
+                    elseif ($request->counttype == "share_count") {
+                        $add->share_count = 1;
+                    }
+                    elseif ($request->counttype == "show_count") {
+                        $add->show_count = 1;
+                    }
+                    
+                    $add->save();
+                }
+
+
+                return response()->json([
+                    "code" => 200,
+                    "message" => "success"
+                ]);
+
+            }
+            else{
+                return response()->json([
+                    "code" => 400,
+                    "message" => "User not found."
+                ]);
+            }
+
+            
+
+        }
+
+
 }

@@ -1,4 +1,77 @@
 
+
+----------------------- 05-03-2021-------------------
+
+CREATE TABLE `pdf_bookmarks` (
+  `id` int(11) NOT NULL,
+  `type_id` int(11) NOT NULL DEFAULT 0,
+  `user_id` int(11) NOT NULL DEFAULT 0,
+  `pageno` varchar(100) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+);
+
+ALTER TABLE `pdf_bookmarks`
+  ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `pdf_bookmarks`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+
+CREATE TABLE `pdf_views` (
+  `id` int(11) NOT NULL,
+  `type_id` int(11) NOT NULL DEFAULT 0,
+  `user_id` int(11) NOT NULL DEFAULT 0,
+  `count` int(11) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+);
+
+ALTER TABLE `pdf_views`
+  ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `pdf_views`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+
+CREATE TABLE `solution_material_counts` (
+  `id` int(11) NOT NULL,
+  `type_id` int(11) NOT NULL DEFAULT 0,
+  `user_id` int(11) NOT NULL DEFAULT 0,
+  `whatsapp_count` int(11) NOT NULL DEFAULT 0,
+  `share_count` int(11) NOT NULL DEFAULT 0,
+  `show_count` int(11) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+);
+
+ALTER TABLE `solution_material_counts`
+  ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `solution_material_counts`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+
+
+
+CREATE TABLE `video_bookmarks` (
+  `id` int(11) NOT NULL,
+  `video_id` int(11) NOT NULL DEFAULT 0,
+  `user_id` int(11) NOT NULL DEFAULT 0,
+  `start_time` datetime DEFAULT NULL,
+  `end_time` datetime DEFAULT NULL,
+  `duration` varchar(50) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+);
+
+ALTER TABLE `video_bookmarks`
+  ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `video_bookmarks`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+
 ----------------------- 01-03-2021-------------------
 
 
