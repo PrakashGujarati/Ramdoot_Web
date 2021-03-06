@@ -33,6 +33,7 @@
                     <tr>
                         <th>Unit</th>
                         <th>Title</th>
+                        <th>Sub Title</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -42,6 +43,7 @@
                     <tr>
                         <td>{{ isset($data->unit->title) ? $data->unit->title:'' }}</td>
                         <td>{{ $data->title }}</td>
+                        <td>{{ $data->sub_title }}</td>
                         <td>
                         	<a href="{{ route('book.edit',$data->id) }}"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
                         	<a href="javascript:;" data-url="{{ route('book.distroy',$data->id) }}" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a>

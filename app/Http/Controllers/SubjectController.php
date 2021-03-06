@@ -47,6 +47,7 @@ class SubjectController extends Controller
             'semester_id' => 'required',
             'standard_id'  => 'required',
             'subject_name' => 'required',
+            'sub_title' => 'required',
             'url' => 'required',
             'thumbnail'  => 'required',
         ]);
@@ -86,6 +87,7 @@ class SubjectController extends Controller
         $add->standard_id = $request->standard_id;
         $add->semester_id = $request->semester_id;
         $add->subject_name = $request->subject_name;
+        $add->sub_title = $request->sub_title;
         $add->url = $url_file;
         $add->thumbnail = $new_name;
         $add->save();
@@ -134,7 +136,8 @@ class SubjectController extends Controller
             'board_id'     => 'required',
             'semester_id' => 'required',
             'standard_id'  => 'required',
-            'subject_name' => 'required'
+            'subject_name' => 'required',
+            'sub_title' => 'required',
         ]);
 
         $new_name='';
@@ -178,6 +181,7 @@ class SubjectController extends Controller
         $update->standard_id = $request->standard_id;
         $update->semester_id = $request->semester_id;
         $update->subject_name = $request->subject_name;
+        $update->sub_title = $request->sub_title;
         $update->url = $url_file;
         $update->thumbnail = $new_name;
         $update->save();

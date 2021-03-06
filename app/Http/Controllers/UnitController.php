@@ -29,10 +29,11 @@ class UnitController extends Controller
      */
     public function create()
     {
+        $boards = Board::where('status','Active')->get();
         $semesters = semester::where('status','Active')->get();
         $standards = Standard::where('status','Active')->get();
         $subjects = Subject::where('status','Active')->get();
-        return view('unit.add',compact('subjects','standards','semesters'));
+        return view('unit.add',compact('subjects','standards','semesters','boards'));
     }
 
     /**
@@ -44,6 +45,7 @@ class UnitController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
+            'board_id'  => 'required',
             'standard_id'  => 'required',
             'semester_id' => 'required',
             'subject_id' => 'required',
@@ -84,6 +86,7 @@ class UnitController extends Controller
         }
 
         $add = new unit;
+        $add->board_id = $request->board_id;
         $add->standard_id = $request->standard_id;
         $add->semester_id = $request->semester_id;
         $add->subject_id = $request->subject_id;
@@ -117,10 +120,11 @@ class UnitController extends Controller
     public function edit(unit $unit,$id)
     {
         $unitdata = unit::where('id',$id)->first();
+        $boards = Board::where('status','Active')->get();
         $subjects = Subject::where('status','Active')->get();
         $semesters = semester::where('status','Active')->get();
         $standards = Standard::where('status','Active')->get();
-        return view('unit.edit',compact('unitdata','subjects','semesters','standards'));
+        return view('unit.edit',compact('unitdata','subjects','semesters','standards','boards'));
     }
 
     /**
@@ -133,6 +137,7 @@ class UnitController extends Controller
     public function update(Request $request, unit $unit,$id)
     {
         $this->validate($request, [
+            'board_id' => 'required',
             'standard_id'  => 'required',
             'semester_id' => 'required',
             'subject_id' => 'required',
@@ -177,6 +182,7 @@ class UnitController extends Controller
         }
 
         $update = unit::find($id);
+        $update->board_id = $request->board_id;
         $update->standard_id = $request->standard_id;
         $update->semester_id = $request->semester_id;
         $update->subject_id = $request->subject_id;

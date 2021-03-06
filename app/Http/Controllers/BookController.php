@@ -50,6 +50,7 @@ class BookController extends Controller
             'subject_id' => 'required',
             'unit_id' => 'required',
             'title' => 'required',
+            'sub_title' => 'required',
             'url' => 'required',
             'thumbnail'  => 'required',
             'pages' => 'required',
@@ -95,6 +96,7 @@ class BookController extends Controller
         $add->subject_id = $request->subject_id;
         $add->unit_id = $request->unit_id;
         $add->title = $request->title;
+        $add->sub_title = $request->sub_title;
         $add->url = $url_file;
         $add->thumbnail = $new_name;
         $add->pages = isset($request->pages) ? $request->pages:'';
@@ -148,6 +150,7 @@ class BookController extends Controller
             'subject_id' => 'required',
             'unit_id' => 'required',
             'title' => 'required',
+            'sub_title' => 'required',
             'pages' => 'required',
             'label' => 'required',
             'release_date' => 'required',
@@ -197,6 +200,7 @@ class BookController extends Controller
         $update->semester_id = $request->semester_id;
         $update->subject_id = $request->subject_id;
         $update->title = $request->title;
+        $update->sub_title = $request->sub_title;
         $update->url = $url_file;
         $update->thumbnail = $new_name;
         $update->pages = isset($request->pages) ? $request->pages:'';

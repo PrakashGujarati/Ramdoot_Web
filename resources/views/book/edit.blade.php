@@ -94,17 +94,33 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="form-label">Title</label>
-                            <div class="form-control-wrap">
-                                <input type="text" class="form-control" id="title" name="title" value="{{ $bookdata->title }}">
-                                @error('title')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+
+                        <div class="row">
+                            <div class="form-group col-lg-6">
+                                <label class="form-label">Title</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" id="title" name="title" value="{{ $bookdata->title }}">
+                                    @error('title')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group col-lg-6">
+                                <label class="form-label">Sub Title</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" id="sub_title" name="sub_title" value="{{ $bookdata->sub_title }}">
+                                    @error('sub_title')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
                             </div>
                         </div>
+
                         <div class="form-group">
                             <label class="form-label">Url</label>
                             <div class="form-control-wrap">

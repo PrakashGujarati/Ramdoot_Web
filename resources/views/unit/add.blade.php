@@ -15,15 +15,29 @@
                     </div>
                     <form action="{{ route('unit.store') }}" method="POST" enctype='multipart/form-data'>
                     @csrf
-                        
-                        <div class="form-group">
+                        <div class="row">
+                        <div class="form-group col-lg-6">
+                            <label class="form-label">Board</label>
+                            <div class="form-control-wrap">
+                                <select name="board_id" class="form-control board_id" id="board_id">
+                                    <option>--Select Board--</option>
+                                    @foreach($boards as $boards_data)
+                                    <option value="{{ $boards_data->id }}" @if(old('board_id') == $boards_data->id) selected="" @endif>{{ $boards_data->name." - ".$boards_data->medium }}</option>
+                                    @endforeach
+                                </select>
+                                @error('board_id')
+                                    <span class="text-danger" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group col-lg-6">
                             <label class="form-label">Standard</label>
                             <div class="form-control-wrap">
                                 <select name="standard_id" class="form-control standard_id" id="standard_id">
                                     <option>--Select Standard--</option>
-                                    @foreach($standards as $standards_data)
-                                    <option value="{{ $standards_data->id }}" @if(old('standard_id') == $standards_data->id) selected="" @endif>{{ $standards_data->standard }}</option>
-                                    @endforeach
                                 </select>
                                 @error('standard_id')
                                     <span class="text-danger" role="alert">
@@ -32,8 +46,9 @@
                                 @enderror
                             </div>
                         </div>
-
-                        <div class="form-group">
+                        </div>
+                        <div class="row">
+                        <div class="form-group col-lg-6">
                             <label class="form-label">Semester</label>
                             <div class="form-control-wrap">
                                 <select name="semester_id" class="form-control semester_id" id="semester_id">
@@ -47,7 +62,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group col-lg-6">
                             <label class="form-label">Subject</label>
                             <div class="form-control-wrap">
                                 <select name="subject_id" class="form-control subject_id" id="subject_id">
@@ -59,6 +74,7 @@
                                     </span>
                                 @enderror
                             </div>
+                        </div>
                         </div>
 
                         <div class="form-group">
@@ -136,6 +152,26 @@
 @section('scripts')
 
 <script type="text/javascript">
+
+$(document).on('change','.board_id',function(){
+    var board_id = $('.board_id').val();
+    getStandard(board_id);
+});
+
+function getStandard(board_id){
+    $.ajax({
+        type: "GET",
+        url: "{{route('get.standard')}}",
+        data: {
+            "board_id":board_id,
+        },
+        success: function(result) {
+            $('.standard_id').html('');
+            $('.standard_id').html(result.html);
+        } 
+    });
+}    
+
 
 $(document).on('change','.standard_id',function(){
     var standard_id = $('.standard_id').val();

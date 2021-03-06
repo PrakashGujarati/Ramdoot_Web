@@ -15,48 +15,66 @@
                     </div>
                     <form action="{{ route('unit.update',$unitdata->id) }}" method="POST" enctype='multipart/form-data'>
                     @csrf
-                        <div class="form-group">
-                            <label class="form-label">Standard</label>
-                            <div class="form-control-wrap">
-                                <select name="standard_id" class="form-control standard_id" id="standard_id">
-                                    <option>--Select Standard--</option>
-                                    @foreach($standards as $standards_data)
-                                    <option value="{{ $standards_data->id }}" @if($unitdata->standard_id == $standards_data->id) selected="" @endif>{{ $standards_data->standard }}</option>
-                                    @endforeach
-                                </select>
-                                @error('standard_id')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                        <div class="row">
+                            <div class="form-group col-lg-6">
+                                <label class="form-label">Board</label>
+                                <div class="form-control-wrap">
+                                    <select name="board_id" class="form-control board_id" id="board_id">
+                                        <option>--Select Board--</option>
+                                        @foreach($boards as $boards_data)
+                                        <option value="{{ $boards_data->id }}" @if($unitdata->board_id == $boards_data->id) selected="" @endif>{{ $boards_data->name." - ".$boards_data->medium }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('name')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group col-lg-6">
+                                <label class="form-label">Standard</label>
+                                <div class="form-control-wrap">
+                                    <select name="standard_id" class="form-control standard_id" id="standard_id">
+                                        <option>--Select Standard--</option>
+                                    </select>
+                                    @error('standard_id')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label class="form-label">Semester</label>
-                            <div class="form-control-wrap">
-                                <select name="semester_id" class="form-control semester_id" id="semester_id">
-                                    <option>--Select Semester--</option>
-                                </select>
-                                @error('semester_id')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                        <div class="row">
+                            <div class="form-group col-lg-6">
+                                <label class="form-label">Semester</label>
+                                <div class="form-control-wrap">
+                                    <select name="semester_id" class="form-control semester_id" id="semester_id">
+                                        <option>--Select Semester--</option>
+                                    </select>
+                                    @error('semester_id')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="form-group">
-                            <label class="form-label">Subject</label>
-                            <div class="form-control-wrap">
-                                <select name="subject_id" class="form-control subject_id" id="subject_id">
-                                    <option>--Select Subject--</option>
-                                </select>
-                                @error('subject_id')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                            <div class="form-group col-lg-6">
+                                <label class="form-label">Subject</label>
+                                <div class="form-control-wrap">
+                                    <select name="subject_id" class="form-control subject_id" id="subject_id">
+                                        <option>--Select Subject--</option>
+                                    </select>
+                                    @error('subject_id')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
                             </div>
                         </div>
 
@@ -152,14 +170,50 @@
 
 <script type="text/javascript">
 
-
 $( document ).ready(function() {
+    var board_id = $('.board_id').val();
     var standard_id = "{{ $unitdata->standard_id }}";
     var semester_id = "{{ $unitdata->semester_id }}";
     var subject_id = "{{ $unitdata->subject_id }}";
-    getSemesterEdit(standard_id,semester_id);
+    getStandardEdit(board_id,standard_id);
+    getSemesterEdit(board_id,standard_id,semester_id);
     getSubjectEdit(standard_id,semester_id,subject_id);
 });
+
+$(document).on('change','.board_id',function(){
+    var board_id = $('.board_id').val();
+    getStandard(board_id);
+});
+
+function getStandardEdit(board_id,standard_id){
+    
+    $.ajax({
+        type: "GET",
+        url: "{{route('get.standard')}}",
+        data: {
+            "board_id":board_id,
+            "standard_id":standard_id,
+        },
+        success: function(result) {
+            $('.standard_id').html('');
+            $('.standard_id').html(result.html);
+        } 
+    });
+}
+
+function getStandard(board_id){
+    $.ajax({
+        type: "GET",
+        url: "{{route('get.standard')}}",
+        data: {
+            "board_id":board_id,
+        },
+        success: function(result) {
+            $('.standard_id').html('');
+            $('.standard_id').html(result.html);
+        } 
+    });
+}
 
 $(document).on('change','.standard_id',function(){
     var standard_id = $('.standard_id').val();
