@@ -1,4 +1,7 @@
 
+----------------------- 08-03-2021-------------------
+
+ALTER TABLE `questions` ADD `level` VARCHAR(50) NULL AFTER `per_question_marks`;
 
 ----------------------- 06-03-2021-------------------
 

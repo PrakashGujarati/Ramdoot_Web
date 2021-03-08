@@ -16,7 +16,7 @@
                     <form action="{{ route('unit.store') }}" method="POST" enctype='multipart/form-data'>
                     @csrf
                         <div class="row">
-                        <div class="form-group col-lg-6">
+                        <div class="form-group col-lg-3">
                             <label class="form-label">Board</label>
                             <div class="form-control-wrap">
                                 <select name="board_id" class="form-control board_id" id="board_id">
@@ -33,7 +33,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group col-lg-6">
+                        <div class="form-group col-lg-3">
                             <label class="form-label">Standard</label>
                             <div class="form-control-wrap">
                                 <select name="standard_id" class="form-control standard_id" id="standard_id">
@@ -46,9 +46,7 @@
                                 @enderror
                             </div>
                         </div>
-                        </div>
-                        <div class="row">
-                        <div class="form-group col-lg-6">
+                        <div class="form-group col-lg-3">
                             <label class="form-label">Semester</label>
                             <div class="form-control-wrap">
                                 <select name="semester_id" class="form-control semester_id" id="semester_id">
@@ -62,7 +60,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group col-lg-6">
+                        <div class="form-group col-lg-3">
                             <label class="form-label">Subject</label>
                             <div class="form-control-wrap">
                                 <select name="subject_id" class="form-control subject_id" id="subject_id">
@@ -76,63 +74,77 @@
                             </div>
                         </div>
                         </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Title</label>
-                            <div class="form-control-wrap">
-                                <input type="text" class="form-control" id="title" name="title" value="{{ old('title') }}">
-                                @error('title')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Url</label>
-                            <div class="form-control-wrap">
-                                <input type="file" class="form-control" id="url" name="url" value="">
-                                @error('url')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Thumbnail</label>
-                            <div class="form-control-wrap">
-                                <input type="file" class="form-control" id="thumbnail" name="thumbnail" value="">
-                                @error('thumbnail')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Pages</label>
-                            <div class="form-control-wrap">
-                                <input type="text" class="form-control" id="pages" name="pages" value="{{ old('pages') }}">
-                                @error('pages')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
                         
-                        <div class="form-group">
-                            <label class="form-label">Description</label>
-                            <div class="form-control-wrap">
-                                <textarea class="form-control" id="description" name="description" value="{{ old('description') }}"></textarea>
-                                @error('description')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+
+                        <div class="row">
+                            <div class="form-group col-lg-3">
+                                <label class="form-label">Title</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" id="title" name="title[]" value="{{ old('title') }}">
+                                    @error('title')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
                             </div>
+                            <div class="form-group col-lg-2">
+                                <label class="form-label">Url</label>
+                                <div class="form-control-wrap">
+                                    <input type="file" class="form-control" id="url" name="url[]" value="">
+                                    @error('url')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-2">
+                                <label class="form-label">Thumbnail</label>
+                                <div class="form-control-wrap">
+                                    <input type="file" class="form-control" id="thumbnail" name="thumbnail[]" value="">
+                                    @error('thumbnail')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group col-lg-1">
+                                <label class="form-label">Pages</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" id="pages" name="pages[]" value="{{ old('pages') }}">
+                                    @error('pages')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                        
+                            <div class="form-group col-lg-3">
+                                <label class="form-label">Description</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" id="description" name="description[]" value="{{ old('description') }}">
+                                    @error('description')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group col-lg-1">
+                                <div class="form-control-wrap mt-4">
+                                    <button type="button" class="btn btn-success mt-1 add_row"><i class="icon ni ni-plus"></i></button>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="newPlus">
+                            
                         </div>
 
                         <div class="form-group">
@@ -213,6 +225,44 @@ function getSubject(standard_id,semester_id){
         } 
     });
 }
+
+var max_fields      = 50;
+var wrapper         = $(".newPlus");
+var add_button      = $(".add_row");
+
+var x = 1;
+$(add_button).click(function(e){
+    e.preventDefault();
+    if(x < max_fields){
+        x++;
+        $(wrapper).append('<div class="row newMinus"><div class="form-group col-lg-3"><label class="form-label">Title</label><div class="form-control-wrap"><input type="text" class="form-control" id="title" name="title[]" value=""></div></div><div class="form-group col-lg-2"><label class="form-label">Url</label><div class="form-control-wrap"><input type="file" class="form-control" id="url" name="url[]" value=""></div></div><div class="form-group col-lg-2"><label class="form-label">Thumbnail</label><div class="form-control-wrap"><input type="file" class="form-control" id="thumbnail" name="thumbnail[]" value=""></div></div><div class="form-group col-lg-1"><label class="form-label">Pages</label><div class="form-control-wrap"><input type="text" class="form-control" id="pages" name="pages[]" value=""></div></div><div class="form-group col-lg-3"><label class="form-label">Description</label><div class="form-control-wrap"><input type="text" class="form-control" id="description" name="description[]" value=""></div></div><div class="form-group col-lg-1"><div class="form-control-wrap mt-4"><button type="button" class="btn btn-danger mt-1 remove_field"><i class="icon ni ni-minus"></i></button></div></div></div>');     
+    }
+});
+
+
+$(wrapper).on("click",".remove_field", function(e){
+    e.preventDefault();
+    $(this).closest(".newMinus").remove();
+    x--;
+})
+
+$(wrapper).on("click",".remove_field", function(e){
+    e.preventDefault(); 
+    $(this).closest(".show").remove();
+    x--;
+})
+
+$(document).on("click",".remove_fields", function(e){
+    //alert('fdf');
+    e.preventDefault();
+    $(this).closest(".slab").remove();
+})
+
+$(document).on("click",".remove_fieldedit", function(e){
+    //alert('fdf');
+    e.preventDefault();
+    $(this).closest(".editslab").remove();
+})
 
 
 </script>

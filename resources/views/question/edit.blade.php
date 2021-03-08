@@ -50,7 +50,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="form-group col-lg-6">
+                            <div class="form-group col-lg-4">
                                 <label class="form-label">Semester</label>
                                 <div class="form-control-wrap">
                                     <select name="semester_id" class="form-control semester_id" id="semester_id">
@@ -65,7 +65,7 @@
                             </div>
                             
 
-                            <div class="form-group col-lg-6">
+                            <div class="form-group col-lg-4">
                                 <label class="form-label">Subject</label>
                                 <div class="form-control-wrap">
                                     <select name="subject_id" class="form-control subject_id" id="subject_id">
@@ -78,22 +78,24 @@
                                     @enderror
                                 </div>
                             </div>
+
+                            <div class="form-group col-lg-4">
+                                <label class="form-label">Units</label>
+                                <div class="form-control-wrap">
+                                    <select name="unit_id" class="form-control unit_id" id="unit_id">
+                                        <option>--Select Unit--</option>
+                                    </select>
+                                    @error('unit_id')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
                         </div>
 
                         
-                        <div class="form-group">
-                            <label class="form-label">Units</label>
-                            <div class="form-control-wrap">
-                                <select name="unit_id" class="form-control unit_id" id="unit_id">
-                                    <option>--Select Unit--</option>
-                                </select>
-                                @error('unit_id')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
+                        
                         
                         
                         <div class="form-group">
@@ -101,18 +103,6 @@
                             <div class="form-control-wrap">
                                 <input type="text" class="form-control" id="question" name="question" value="{{ $questiondata->question }}">
                                 @error('question')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">Note</label>
-                            <div class="form-control-wrap">
-                                <textarea class="form-control" id="note" name="note" value="{{ $questiondata->note }}">{{ $questiondata->note }}</textarea>
-                                @error('note')
                                     <span class="text-danger" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -179,18 +169,51 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label class="form-label">Per Question Marks</label>
-                            <div class="form-control-wrap">
-                                <input type="text" class="form-control" id="per_question_marks" name="per_question_marks" value="{{ $questiondata->per_question_marks }}">
-                                @error('per_question_marks')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                        <div class="row">
+                            <div class="form-group col-lg-7">
+                                <label class="form-label">Note</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" id="note" name="note" value="{{ $questiondata->note }}">
+                                    @error('note')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group col-lg-2">
+                                <label class="form-label">Per Question Marks</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" id="per_question_marks" name="per_question_marks" value="{{ $questiondata->per_question_marks }}">
+                                    @error('per_question_marks')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group col-lg-3">
+                                <label class="form-label">Level</label>
+                                <div class="form-control-wrap">
+                                    <select class="form-control" id="level" name="level">
+                                        <option value='' selected="" disabled="">-Select Level-</option>
+                                        <option value="Easy" @if($questiondata->level == "Easy") selected="" @endif>Easy</option>
+                                        <option value="Normal" @if($questiondata->level == "Normal") selected="" @endif>Normal</option>
+                                        <option value="Moderate" @if($questiondata->level == "Moderate") selected="" @endif>Moderate</option>
+                                        <option value="Hard" @if($questiondata->level == "Hard") selected="" @endif>Hard</option>
+                                        <option value="Expert" @if($questiondata->level == "Expert") selected="" @endif>Expert</option>
+                                    </select>
+                                    @error('level')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                    
+                                </div>
                             </div>
                         </div>
-
                         
 
                         <div class="form-group">

@@ -61,6 +61,7 @@ class QuestionController extends Controller
             'per_question_marks' => 'required', 
         ]);
 
+        for ($i = 0; $i < count($request->question); $i++) {
         
         $add = new question;
         $add->board_id = $request->board_id;
@@ -68,15 +69,19 @@ class QuestionController extends Controller
         $add->semester_id = $request->semester_id;
         $add->subject_id = $request->subject_id;
         $add->unit_id = $request->unit_id;
-        $add->note = $request->note;
-        $add->question = $request->question;
-        $add->option_a = $request->option_a;
-        $add->option_b = $request->option_b;
-        $add->option_c = $request->option_c;
-        $add->option_d = $request->option_d;
-        $add->answer = $request->answer;
-        $add->per_question_marks = $request->per_question_marks;
+        $add->note = $request->note[$i];
+        $add->question = $request->question[$i];
+        $add->option_a = $request->option_a[$i];
+        $add->option_b = $request->option_b[$i];
+        $add->option_c = $request->option_c[$i];
+        $add->option_d = $request->option_d[$i];
+        $add->answer = $request->answer[$i];
+        $add->per_question_marks = $request->per_question_marks[$i];
+        $add->level = $request->level[$i];
         $add->save();
+
+        }
+
 
         return redirect()->route('question.index')->with('success', 'Question Added Successfully.');
     }
@@ -146,6 +151,7 @@ class QuestionController extends Controller
         $update->option_d = $request->option_d;
         $update->answer = $request->answer;
         $update->per_question_marks = $request->per_question_marks;
+        $update->level = $request->level;
         $update->save();
 
         return redirect()->route('question.index')->with('success', 'Question Updated Successfully.');

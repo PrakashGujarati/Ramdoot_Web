@@ -50,7 +50,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="form-group col-lg-6">
+                            <div class="form-group col-lg-4">
                                 <label class="form-label">Semester</label>
                                 <div class="form-control-wrap">
                                     <select name="semester_id" class="form-control semester_id" id="semester_id">
@@ -65,7 +65,7 @@
                             </div>
                             
 
-                            <div class="form-group col-lg-6">
+                            <div class="form-group col-lg-4">
                                 <label class="form-label">Subject</label>
                                 <div class="form-control-wrap">
                                     <select name="subject_id" class="form-control subject_id" id="subject_id">
@@ -78,54 +78,43 @@
                                     @enderror
                                 </div>
                             </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">Units</label>
-                            <div class="form-control-wrap">
-                                <select name="unit_id" class="form-control unit_id" id="unit_id">
-                                    <option>--Select Unit--</option>
-                                </select>
-                                @error('unit_id')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-                        
 
-                        
-                        <div class="form-group">
-                            <label class="form-label">Question</label>
-                            <div class="form-control-wrap">
-                                <input type="text" class="form-control" id="question" name="question" value="{{ old('question') }}">
-                                @error('question')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                            <div class="form-group col-lg-4">
+                                <label class="form-label">Units</label>
+                                <div class="form-control-wrap">
+                                    <select name="unit_id" class="form-control unit_id" id="unit_id">
+                                        <option>--Select Unit--</option>
+                                    </select>
+                                    @error('unit_id')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="form-group">
-                            <label class="form-label">Note</label>
-                            <div class="form-control-wrap">
-                                <textarea class="form-control" id="note" name="note" value="{{ old('note') }}">{{ old('note') }}</textarea>
-                                @error('note')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
                         </div>
                         
+                        
+                        <div class="row mb-3">
+                            <div class="form-group col-lg-12">
+                                <label class="form-label">Question</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" id="question" name="question[]" value="{{ old('question') }}">
+                                    @error('question')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="row">
                             <div class="form-group col-lg-3">
                                 <label class="form-label">Option-A</label>
                                 <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="option_a" name="option_a" value="{{ old('option_a') }}">
+                                    <input type="text" class="form-control" id="option_a" name="option_a[]" value="{{ old('option_a') }}">
                                     @error('option_a')
                                         <span class="text-danger" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -136,7 +125,7 @@
                             <div class="form-group col-lg-3">
                                 <label class="form-label">Option-B</label>
                                 <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="option_b" name="option_b" value="{{ old('option_b') }}">
+                                    <input type="text" class="form-control" id="option_b" name="option_b[]" value="{{ old('option_b') }}">
                                     @error('option_b')
                                         <span class="text-danger" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -147,7 +136,7 @@
                             <div class="form-group col-lg-3">
                                 <label class="form-label">Option-C</label>
                                 <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="option_c" name="option_c" value="{{ old('option_c') }}">
+                                    <input type="text" class="form-control" id="option_c" name="option_c[]" value="{{ old('option_c') }}">
                                     @error('option_c')
                                         <span class="text-danger" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -158,7 +147,7 @@
                             <div class="form-group col-lg-3">
                                 <label class="form-label">Option-D</label>
                                 <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="option_d" name="option_d" value="{{ old('option_d') }}">
+                                    <input type="text" class="form-control" id="option_d" name="option_d[]" value="{{ old('option_d') }}">
                                     @error('option_d')
                                         <span class="text-danger" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -168,31 +157,75 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label class="form-label">Answer</label>
-                            <div class="form-control-wrap">
-                                <input type="text" class="form-control" id="answer" name="answer" value="{{ old('answer') }}">
-                                @error('answer')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                        <div class="row mb-3">
+                            <div class="form-group col-lg-12">
+                                <label class="form-label">Answer</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" id="answer" name="answer[]" value="{{ old('answer') }}">
+                                    @error('answer')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label class="form-label">Per Question Marks</label>
-                            <div class="form-control-wrap">
-                                <input type="text" class="form-control" id="per_question_marks" name="per_question_marks" value="{{ old('per_question_marks') }}">
-                                @error('per_question_marks')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                        <div class="row">
+                            <div class="form-group col-lg-7">
+                                <label class="form-label">Note</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" id="note" name="note[]" value="{{ old('note') }}">
+                                    @error('note')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
                             </div>
+
+                            <div class="form-group col-lg-2">
+                                <label class="form-label">Per Question Marks</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" id="per_question_marks" name="per_question_marks[]" value="{{ old('per_question_marks') }}">
+                                    @error('per_question_marks')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group col-lg-3">
+                                <label class="form-label">Level</label>
+                                <div class="form-control-wrap">
+                                    <select class="form-control" id="level" name="level[]">
+                                        <option value='' selected="" disabled="">-Select Level-</option>
+                                        <option value="Easy">Easy</option>
+                                        <option value="Normal">Normal</option>
+                                        <option value="Moderate">Moderate</option>
+                                        <option value="Hard">Hard</option>
+                                        <option value="Expert">Expert</option>
+                                    </select>
+                                    @error('level')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                    
+                                </div>
+                            </div>
+
                         </div>
 
-                        
+                        <div class="newPlus">
+                            
+                        </div>
+
+                        <div class="row">
+                        <div class="col-lg-12 text-right">
+                            <button type="button" class="btn btn-success mt-1 add_row"><i class="icon ni ni-plus"></i></button>
+                        </div></div>
 
                         <div class="form-group">
                             <button type="submit" class="btn btn-lg btn-primary">Submit</button>
@@ -300,6 +333,44 @@
             } 
         });
     }
+
+var max_fields      = 50;
+var wrapper         = $(".newPlus");
+var add_button      = $(".add_row");
+
+var x = 1;
+$(add_button).click(function(e){
+    e.preventDefault();
+    if(x < max_fields){
+        x++;
+$(wrapper).append('<div class="newMinus"><div class="row mb-3"><div class="col-lg-12 text-right"><button type="button" class="btn btn-danger mt-1 remove_field"><i class="icon ni ni-minus"></i></button></div><div class="form-group col-lg-12"><label class="form-label">Question</label><div class="form-control-wrap"><input type="text" class="form-control" id="question" name="question[]" value=""></div></div></div><div class="row"><div class="form-group col-lg-3"><label class="form-label">Option-A</label><div class="form-control-wrap"><input type="text" class="form-control" id="option_a" name="option_a[]" value=""></div></div><div class="form-group col-lg-3"><label class="form-label">Option-B</label><div class="form-control-wrap"><input type="text" class="form-control" id="option_b" name="option_b[]" value=""></div></div><div class="form-group col-lg-3"><label class="form-label">Option-C</label><div class="form-control-wrap"><input type="text" class="form-control" id="option_c" name="option_c[]" value=""></div></div><div class="form-group col-lg-3"><label class="form-label">Option-D</label><div class="form-control-wrap"><input type="text" class="form-control" id="option_d" name="option_d[]" value=""></div></div></div><div class="row mb-3"><div class="form-group col-lg-12"><label class="form-label">Answer</label><div class="form-control-wrap"><input type="text" class="form-control" id="answer" name="answer[]" value=""></div></div></div><div class="row"><div class="form-group col-lg-7"><label class="form-label">Note</label><div class="form-control-wrap"><input type="text" class="form-control" id="note" name="note[]" value=""></div></div><div class="form-group col-lg-2"><label class="form-label">Per Question Marks</label><div class="form-control-wrap"><input type="text" class="form-control" id="per_question_marks" name="per_question_marks[]" value=""></div></div><div class="form-group col-lg-3"><label class="form-label">Level</label><div class="form-control-wrap"><select class="form-control" id="level" name="level[]"><option value="" selected="" disabled="">-Select Level-</option><option value="Easy">Easy</option><option value="Normal">Normal</option><option value="Moderate">Moderate</option><option value="Hard">Hard</option><option value="Expert">Expert</option></select></div></div></div></div>');     
+    }
+});
+
+
+$(wrapper).on("click",".remove_field", function(e){
+    e.preventDefault();
+    $(this).closest(".newMinus").remove();
+    x--;
+})
+
+$(wrapper).on("click",".remove_field", function(e){
+    e.preventDefault(); 
+    $(this).closest(".show").remove();
+    x--;
+})
+
+$(document).on("click",".remove_fields", function(e){
+    //alert('fdf');
+    e.preventDefault();
+    $(this).closest(".slab").remove();
+})
+
+$(document).on("click",".remove_fieldedit", function(e){
+    //alert('fdf');
+    e.preventDefault();
+    $(this).closest(".editslab").remove();
+})
 
 </script>
 

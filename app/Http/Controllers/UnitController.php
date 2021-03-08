@@ -44,58 +44,64 @@ class UnitController extends Controller
      */
     public function store(Request $request)
     {
+        //dd($request->all());
+
         $this->validate($request, [
             'board_id'  => 'required',
             'standard_id'  => 'required',
             'semester_id' => 'required',
             'subject_id' => 'required',
-            'title' => 'required',
-            'url' => 'required',
-            'thumbnail' => 'required',
-            'pages' => 'required',
+            // 'title' => 'required',
+            // 'url' => 'required',
+            // 'thumbnail' => 'required',
+            // 'pages' => 'required',
         ]);
 
-        $new_name='';
-        if($request->has('thumbnail'))
-        {
-        
-            $image = $request->file('thumbnail');
+        for ($i = 0; $i < count($request->title); $i++) {
 
-            $new_name = rand() . '.' . $image->getClientOriginalExtension();
+            $new_name='';
+            if($request->thumbnail[$i])
+            {
+            
+                $image = $request->thumbnail[$i];
 
-            $valid_ext = array('png','jpeg','jpg');
+                $new_name = rand() . '.' . $image->getClientOriginalExtension();
 
-            // Location
-            $location = public_path('upload/unit/thumbnail/').$new_name;
+                $valid_ext = array('png','jpeg','jpg');
 
-            $file_extension = pathinfo($location, PATHINFO_EXTENSION);
-            $file_extension = strtolower($file_extension);
+                // Location
+                $location = public_path('upload/unit/thumbnail/').$new_name;
 
-            if(in_array($file_extension,$valid_ext)){
-                $this->compressImage($image->getPathName(),$location,60);
+                $file_extension = pathinfo($location, PATHINFO_EXTENSION);
+                $file_extension = strtolower($file_extension);
+
+                if(in_array($file_extension,$valid_ext)){
+                    $this->compressImage($image->getPathName(),$location,60);
+                }
             }
-        }
 
-        $url_file='';
-        if($request->has('url'))
-        {
-            $image = $request->file('url');
-            $url_file = time().'.'.$image->getClientOriginalExtension();
-            $destinationPath = public_path('upload/unit/url/');
-            $image->move($destinationPath, $url_file);
-        }
+            $url_file='';
+            if($request->url[$i])
+            {
+                $image = $request->url[$i];
+                $url_file = time().'.'.$image->getClientOriginalExtension();
+                $destinationPath = public_path('upload/unit/url/');
+                $image->move($destinationPath, $url_file);
+            }
 
-        $add = new unit;
-        $add->board_id = $request->board_id;
-        $add->standard_id = $request->standard_id;
-        $add->semester_id = $request->semester_id;
-        $add->subject_id = $request->subject_id;
-        $add->title = $request->title;
-        $add->url = $url_file;
-        $add->thumbnail = $new_name;
-        $add->pages = isset($request->pages) ? $request->pages:'';
-        $add->description = isset($request->description) ? $request->description:'';
-        $add->save();
+            $add = new unit;
+            $add->board_id = $request->board_id;
+            $add->standard_id = $request->standard_id;
+            $add->semester_id = $request->semester_id;
+            $add->subject_id = $request->subject_id;
+            $add->title = $request->title[$i];
+            $add->url = $url_file;
+            $add->thumbnail = $new_name;
+            $add->pages = isset($request->pages[$i]) ? $request->pages[$i]:'';
+            $add->description = isset($request->description[$i]) ? $request->description[$i]:'';
+            $add->save();
+                
+        }
 
         return redirect()->route('unit.index')->with('success', 'Unit Added Successfully.');
     }
