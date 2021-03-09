@@ -5,6 +5,8 @@
 
 @section('content')
 
+@include('exam_question.dynamic_question_form')
+
 <div class="nk-block nk-block-lg">
     <div class="row g-gs">
         <div class="col-lg-12">
@@ -13,7 +15,7 @@
                     <div class="card-head">
                         <h5 class="card-title">Edit Exam Question</h5>
                     </div>
-                    <form action="{{ route('exam_question.update',$exam_questiondata->id) }}" method="POST" enctype='multipart/form-data'>
+                    <form action="{{ route('exam_question.update',$getexam_detail->id) }}" method="POST" enctype='multipart/form-data'>
                     @csrf
                         
                         <div class="row">
@@ -23,7 +25,7 @@
                                     <select name="board_id" class="form-control board_id" id="board_id">
                                         <option>--Select Board--</option>
                                         @foreach($boards as $boards_data)
-                                        <option value="{{ $boards_data->id }}" @if($exam_questiondata->board_id == $boards_data->id) selected="" @endif>{{ $boards_data->name." - ".$boards_data->medium }}</option>
+                                        <option value="{{ $boards_data->id }}" @if($getexam_detail->board_id == $boards_data->id) selected="" @endif>{{ $boards_data->name." - ".$boards_data->medium }}</option>
                                         @endforeach
                                     </select>
                                     @error('board_id')
@@ -114,13 +116,7 @@
                         <div class="form-group">
                             <label class="form-label">Question</label>
                             <div class="form-control-wrap">
-                                <input type="text" name="question_id" class="form-control" id="question_id" value="{{ $exam_questiondata->question_id }}">
-                                {{--<select name="question_id" class="form-control" id="question_id">
-                                    <option>--Select Question--</option>
-                                    @foreach($questions as $questions_data)
-                                    <option value="{{ $questions_data->id }}" @if($exam_questiondata->question_id == $questions_data->id) selected="" @endif>{{ $questions_data->question }}</option>
-                                    @endforeach
-                                </select>--}}
+                                <input type="text" name="question_id" class="form-control" id="question_id" value="{{ $getexam_detail->total_question }}">
                                 @error('question_id')
                                     <span class="text-danger" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -129,7 +125,9 @@
                             </div>
                         </div>
 
-                        
+                        <div class="dynamic_exam_detail displaynone">
+                            @include('exam_question.dynamic_exam_detail')
+                        </div>
 
                         <div class="form-group">
                             <button type="submit" class="btn btn-lg btn-primary">Submit</button>
@@ -152,11 +150,11 @@
 
     $( document ).ready(function() {
         var board_id = $('.board_id').val();
-        var standard_id = "{{ $exam_questiondata->standard_id }}";
-        var semester_id = "{{ $exam_questiondata->semester_id }}";
-        var subject_id = "{{ $exam_questiondata->subject_id }}";
-        var unit_id = "{{ $exam_questiondata->unit_id }}";
-        var exam_id = "{{ $exam_questiondata->exam_id }}";
+        var standard_id = "{{ $getexam_detail->standard_id }}";
+        var semester_id = "{{ $getexam_detail->semester_id }}";
+        var subject_id = "{{ $getexam_detail->subject_id }}";
+        var unit_id = "{{ $getexam_detail->unit_id }}";
+        var exam_id = "{{ $getexam_detail->id }}";
 
         getStandardEdit(board_id,standard_id);
         getSemesterEdit(board_id,standard_id,semester_id);
@@ -364,6 +362,171 @@
             } 
         });
     }
+
+    $(document).on('change','.exam_id',function(){
+        var exam_id = $('.exam_id').val();
+                
+        $.ajax({
+            type: "GET",
+            url: "{{route('get.exam.detail')}}",
+            data: {
+                "exam_id":exam_id,
+            },
+            success: function(result) {
+
+                $('.dynamic_exam_detail').removeClass('displaynone').addClass('displayblock');
+                $('.dynamic_exam_detail').html(result.html);
+                $('#question_id').val(result.getexam_detail.total_question);
+                $('.add_question_btn').attr('disabled',true).css('cursor','not-allowed');
+                //var exam_id = $('.exam_id').val();
+            } 
+        });
+    });
+
+    $(document).on('click','.edit_question',function(){
+        var exam_id = $('.exam_id').val();    
+        var sr_no = $(this).data('srno');
+
+        $.ajax({
+            type: "GET",
+            url: "{{route('get.question.view')}}",
+            data: {
+                "exam_id":exam_id,
+                "sr_no":sr_no,
+            },
+            success: function(result) {
+                $('#question_model_data').html(result.html);
+                $('#question_view').modal({show:true});
+                $('#hidden_srno').val(result.srno);
+            } 
+        });
+    });
+
+    $(document).on('change','.chk_question',function(){
+        var getsid = $(this).attr('id');
+        var id=$(this).data('id');
+        var checkbox_limit = $('.checkbox_limit').val();
+
+        var numberOfChecked = $('input:checkbox:checked').length;
+        
+
+        if ($("#"+getsid).prop('checked') == true)
+        {
+            if(numberOfChecked <= checkbox_limit){
+                $("#"+getsid).prop('checked',true);
+            }
+            else{
+                if(checkbox_limit == 1){
+                    $(".chk_question").prop('checked',false);
+                    $("#"+getsid).prop('checked',true);
+                }
+                else{
+                    $("#"+getsid).prop('checked',false);
+                    //$(".chk_question").prop('checked',false);
+                }    
+            }
+            
+        }
+    });
+
+    $(document).on('click','.select_question',function(){
+        //var hidden_question_id = $('.hidden_question_id').val();
+        var hidden_question_id = $('.hidden_question_id').map(function() {
+            return $(this).val();
+        }).get();
+
+        var select_question_id = $('.chk_question').map(function() {
+            if($(this).prop('checked') == true){
+                return $(this).data('id');    
+            }
+        }).get();
+
+        var srno = $('#hidden_srno').val();
+        var exam_id = $('.exam_id').val();
+
+        $.ajax({
+            type: "GET",
+            url: "{{route('get.question.change')}}",
+            data: {
+                "hidden_question_id":hidden_question_id,
+                "select_question_id":select_question_id,
+                "srno":srno,
+                "exam_id":exam_id,
+            },
+            success: function(result) {
+                $('#question_view').modal('hide');
+                $('.dynamic_exam_detail').html('');
+                $('.dynamic_exam_detail').removeClass('displaynone').addClass('displayblock');
+                $('.dynamic_exam_detail').html(result.html);
+                $('#question_id').val(result.getexam_detail.total_question);
+                //$('#question_model_data').html(result.html);
+               // $('#question_view').modal({show:true});
+                //$('#hidden_srno').val(result.srno);
+            } 
+        });
+    });
+
+    $(document).on('click','.clear_btn',function(){
+
+        var exam_id = $('.exam_id').val();
+
+        $.ajax({
+            type: "GET",
+            url: "{{route('question.clear')}}",
+            data: {
+                "exam_id":exam_id,
+            },
+            success: function(result) {
+                $('.dynamic_exam_detail').html('');
+                $('.dynamic_exam_detail').removeClass('displaynone').addClass('displayblock');
+                $('.dynamic_exam_detail').html(result.html);
+                $('.add_question_btn').attr('disabled',false).css('cursor','pointer');
+                $('#question_id').val(result.getexam_detail.total_question);
+                //$('#question_model_data').html(result.html);
+               // $('#question_view').modal({show:true});
+                //$('#hidden_srno').val(result.srno);
+            } 
+        });
+
+    });
+    
+    $(document).on('click','.add_question_btn',function(){
+
+        var exam_id = $('.exam_id').val();    
+        var sr_no = 0;
+
+        $.ajax({
+            type: "GET",
+            url: "{{route('get.question.view')}}",
+            data: {
+                "exam_id":exam_id,
+                "sr_no":sr_no,
+            },
+            success: function(result) {
+                $('#question_model_data').html(result.html);
+                $('#question_view').modal({show:true});
+               // $('#hidden_srno').val(result.srno);
+            } 
+        });
+
+        // var checkbox_limit = $('#question_id').val();
+
+        // var select_question_id = $('.chk_question').map(function() {
+        //     if($(this).prop('checked') == true){
+        //         return $(this).data('id');    
+        //     }
+        // }).get();
+        
+        // if(checkbox_limit == 1){
+        //     $(".chk_question").prop('checked',false);
+        //     $("#"+getsid).prop('checked',true);
+        // }else if(checkbox_limit > 1){
+        //     $(".chk_question").prop('checked',false);
+        // }
+        // else{
+        //     $(".chk_question").prop('checked',false);
+        // }
+    });
 
 </script>
 

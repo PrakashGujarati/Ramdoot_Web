@@ -85,8 +85,24 @@ class ExamQuestionController extends Controller
         $exams = exam::where('status','Active')->get();
         $questions = question::where('status','Active')->get();
         $boards = Board::where('status','Active')->get();
-        $exam_questiondata = exam_question::where('id',$id)->first();
-        return view('exam_question.edit',compact('exam_questiondata','exams','questions','boards'));
+        //$exam_detail = exam::where(['id' => $id])->first();
+        
+        $exam_questiondata = exam_question::where('exam_id',$id)->get();
+
+        $getexam_detail = exam::where('id',$id)->first();
+
+        $getexam_question_details = exam_question::where('exam_id',$id)->get();
+
+        $getexam=[];
+        if(count($getexam_question_details) > 0){
+            foreach ($getexam_question_details as $question_data) {
+                $getexam[] = question::where(['id' => $question_data->question_id])->first();
+            }
+        }
+
+        // $getexam = question::where(['standard_id' => $getexam_detail->standard_id,'semester_id' => $getexam_detail->semester_id,'subject_id' => $getexam_detail->subject_id,'unit_id' => $getexam_detail->unit_id])->inRandomOrder()->take($getexam_detail->total_question)->get();
+
+        return view('exam_question.edit',compact('exam_questiondata','exams','questions','boards','getexam','getexam_detail'));
     }
 
     /**
@@ -98,15 +114,29 @@ class ExamQuestionController extends Controller
      */
     public function update(Request $request, exam_question $exam_question,$id)
     {
+
+        // dd($request->all());
+
         $this->validate($request, [
             'exam_id'     => 'required',
             'question_id' => 'required',
         ]);
 
-        $update = exam_question::find($id);
-        $update->exam_id = $request->exam_id;
-        $update->question_id = $request->question_id;
-        $update->save();
+        exam_question::where(['exam_id' => $request->exam_id])->delete();
+
+        if(count($request->question_id) > 0){
+            foreach ($request->question_id as $key => $value) {
+                $add = new exam_question;
+                $add->exam_id = $request->exam_id;
+                $add->question_id = $value;
+                $add->save();
+            }    
+        }
+
+        // $update = exam_question::find($id);
+        // $update->exam_id = $request->exam_id;
+        // $update->question_id = $request->question_id;
+        // $update->save();
 
         return redirect()->route('exam_question.index')->with('success', 'Exam Question Updated Successfully.');
     }
@@ -119,9 +149,10 @@ class ExamQuestionController extends Controller
      */
     public function distroy(exam_question $exam_question,$id)
     {
-        $delete = exam_question::find($id);
-        $delete->status = "Deleted";
-        $delete->save();
+        exam_question::where('exam_id',$id)->update(['status' => 'Deleted']);
+        // $delete = exam_question::find($id);
+        // $delete->status = "Deleted";
+        // $delete->save();
 
         return redirect()->route('exam_question.index')->with('success', 'Exam Question Deleted Successfully.');
     }

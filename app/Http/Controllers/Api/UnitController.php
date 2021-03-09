@@ -66,7 +66,7 @@ class UnitController extends Controller
                     foreach ($getdata as $value) {
                         $url = env('APP_URL')."/upload/subject/url/".$value->url;
                         $thumbnail = env('APP_URL')."/upload/subject/thumbnail/".$value->thumbnail;
-                        $data[] = ['id' => $value->id,'title' => $value->title,'url' => $url,'thumbnail' => $thumbnail,'description' => $value->description,"pages"=> $value->pages];
+                        $data[] = ['id' => $value->id,'title' => $value->title,'sub_title' => $value->description,'url' => $url,'thumbnail' => $thumbnail,"pages"=> $value->pages];
                     }
 
                     return response()->json([

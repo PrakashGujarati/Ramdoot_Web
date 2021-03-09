@@ -124,7 +124,7 @@
                             </div>
                         
                             <div class="form-group col-lg-3">
-                                <label class="form-label">Description</label>
+                                <label class="form-label">Sub Title</label>
                                 <div class="form-control-wrap">
                                     <input type="text" class="form-control" id="description" name="description[]" value="{{ old('description') }}">
                                     @error('description')

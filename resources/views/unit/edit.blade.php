@@ -141,7 +141,7 @@
                         </div>
                         
                         <div class="form-group">
-                            <label class="form-label">Description</label>
+                            <label class="form-label">Sub Title</label>
                             <div class="form-control-wrap">
                                 <textarea class="form-control" id="description" name="description" value="{{ $unitdata->description }}">{{ $unitdata->description }}</textarea>
                                 @error('description')
