@@ -1,4 +1,11 @@
 
+
+----------------------- 11-03-2021-------------------
+
+ALTER TABLE `exam_students` CHANGE `start_time` `start_time` DATETIME NULL DEFAULT NULL, CHANGE `end_time` `end_time` DATETIME NULL DEFAULT NULL;
+
+ALTER TABLE `users` CHANGE `email` `email` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL;
+
 ----------------------- 08-03-2021-------------------
 
 ALTER TABLE `questions` ADD `level` VARCHAR(50) NULL AFTER `per_question_marks`;

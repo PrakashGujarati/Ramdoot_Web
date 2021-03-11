@@ -76,6 +76,15 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::post('book/{id}/update', [BookController::class, 'update'])->name('book.update');
 	Route::get('book/{id}/delete', [BookController::class, 'distroy'])->name('book.distroy');
 
+	/* */
+	Route::get('note', [NoteController::class, 'index'])->name('note.index');
+	Route::get('note/create', [BookController::class, 'create'])->name('note.create');
+	Route::post('note/store', [BookController::class, 'store'])->name('note.store');
+	Route::get('note/{id}/edit', [BookController::class, 'edit'])->name('note.edit');
+	Route::post('note/{id}/update', [BookController::class, 'update'])->name('note.update');
+	Route::get('note/{id}/delete', [BookController::class, 'distroy'])->name('note.distroy');
+	
+
 	/*Semester*/
 	Route::get('semester', [SemesterController::class, 'index'])->name('semester.index');
 	Route::get('semester/create', [SemesterController::class, 'create'])->name('semester.create');

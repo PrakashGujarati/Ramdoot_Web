@@ -24,15 +24,33 @@ class RegisterController extends Controller
 
             $user = User::where('mobile',$request->mobile)->first();
             $token = $user->createToken('Ramdoot')->accessToken;
-           return response()->json(['token' => $token], 200);
-           
+            $image="";
+            if($user->profile_photo_path){
+                $image = env('APP_URL')."/upload/profile/".$user->profile_photo_path;    
+            }
+            $data = ['id' => $user->id,'name' => $user->name,'mobile' => $user->mobile,'email' => $user->email,'address' => $user->address,'pin_code' => $user->pin_code,'city' => $user->city,'birth_date' => $user->birth_date,'profile_photo' => $image,'username' => $user->username,'token' => $token];
+            return response()->json([
+                "code" => 200,
+                "message" => "success",
+                "data" => $data,
+            ]);
         }else{        
             $user = User::create([            
                 'mobile' => $request->mobile,            
             ]);
            
             $token = $user->createToken('Ramdoot')->accessToken;
-            return response()->json(['token' => $token], 200);
+            $image="";
+            if($user->profile_photo_path){
+                $image = env('APP_URL')."/upload/profile/".$user->profile_photo_path;    
+            }
+            $data = ['id' => $user->id,'name' => $user->name,'mobile' => $user->mobile,'email' => $user->email,'address' => $user->address,'pin_code' => $user->pin_code,'city' => $user->city,'birth_date' => $user->birth_date,'profile_photo' => $image,'username' => $user->username,'token' => $token];
+            return response()->json([
+                "code" => 200,
+                "message" => "success",
+                "data" => $data,
+            ]);
+            //return response()->json(['token' => $token], 200);
         }
 
         

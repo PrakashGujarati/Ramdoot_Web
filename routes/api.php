@@ -18,6 +18,7 @@ use App\Http\Controllers\api\UnitController;
 use App\Http\Controllers\api\FeatureController;
 use App\Http\Controllers\api\TextbookController;
 use App\Http\Controllers\api\McqController;
+use App\Http\Controllers\api\ExamController;
 
 
 
@@ -63,6 +64,11 @@ Route::group(['middleware'=>'api'], function()
     Route::post('view_video_bookmark', [VideosController::class, 'viewVideoBookmark']);
 
     Route::post('add_solution_material_count', [VideosController::class, 'addSolutionMaterialCount']);
+    Route::post('list_of_exams', [ExamController::class, 'listOfExams']);
+
+    Route::post('exam_questions', [ExamController::class, 'examQuestions']);
+    Route::post('submit_exam', [ExamController::class, 'submitExam']);        
+    Route::post('result_exam', [ExamController::class, 'resultExam']);
     
 
 });

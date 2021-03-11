@@ -38,7 +38,7 @@ class SubjectController extends Controller
         $chkbaord = Board::where(['id' => $request->board_id,'status' => 'Active'])->first();
         $chkstandard = Standard::where(['id' => $request->standard_id,'status' => 'Active'])->first();
         $chksemester = semester::where(['id' => $request->semester_id,'status' => 'Active'])->first();
-
+        //$chkfeatures = feature::where(['id' => $request->category_id,'status' => 'Active'])->first();
         if(empty($chkbaord)){
         	return response()->json([
     			"code" => 400,

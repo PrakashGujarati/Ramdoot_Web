@@ -22,7 +22,7 @@ class FeatureController extends Controller
             $data=[];
             foreach ($feature_details as $feature) {
                 $image = env('APP_URL')."/upload/feature/".$feature->image;
-                $data[] = ['id' => $feature->id,'title' => $feature->title,'image' => $image,"flag"=>$feature->flag];
+                $data[] = ['id' => $feature->id,'title' => $feature->title,'image' => $image,"flag"=> isset($feature->flag) ? $feature->flag:"0"];
             }
 
             return response()->json([
