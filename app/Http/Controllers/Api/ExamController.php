@@ -137,7 +137,7 @@ class ExamController extends Controller
         }
 
         $getexam = exam::where(['id' => $request->exam_id,'status' => 'Active'])->first();
-        $check_student = User::where(['id' => $request->students_id])->first();
+        $check_student = User::where(['id' => $request->student_id])->first();
 
         if(empty($getexam)){
 
@@ -236,7 +236,7 @@ class ExamController extends Controller
 
 
         $check_exam = exam::where(['id' => $request->exam_id,'status' => 'Active'])->first();
-        $check_student = User::where(['id' => $request->students_id])->first();
+        $check_student = User::where(['id' => $request->student_id])->first();
         $check_exam_student = exam_student::where(['id' => $request->exam_students_id,'status' => 'Active'])->first();
 
         if(empty($check_exam)){
@@ -261,27 +261,42 @@ class ExamController extends Controller
 	        ]);
         }
         else{
-        	$update = exam_student::find($request->exam_students_id);
-			$update->end_time = date('Y-m-d H:i:s');
-			$update->is_attend = 1;
-			$update->is_agree = 1;
-			$update->save();
-
-			if(count($questions_arr) > 0){
+        	$total_mark = 0;
+        	if(count($questions_arr) > 0){
 				for ($que=0; $que < count($questions_arr); $que++) {
-					$add =  new student_question_answer;
-					$add->exam_student_id = $request->exam_students_id;
-					$add->question_id = $questions_arr[$que];
-					$add->answer = $answer_arr[$que];
-					$add->save();
+										
+					$get_question_detail =  question::where(['id' => $questions_arr[$que]])->first();
+						
+					if($get_question_detail->answer == $answer_arr[$que]){
+						$total_mark = $total_mark + $get_question_detail->per_question_marks;
+					}
 				}
 			}
 
-			return response()->json([
-				"code" => 200,
-			  	"message" => "success",
-				"data" => [],
-	        ]);	
+     	$update = exam_student::find($request->exam_students_id);
+		$update->end_time = date('Y-m-d H:i:s');
+		$update->is_attend = 1;
+		$update->is_agree = 1;
+		$update->result = $total_mark;
+		$update->save();
+
+		if(count($questions_arr) > 0){
+			for ($que=0; $que < count($questions_arr); $que++) {
+				$add =  new student_question_answer;
+				$add->exam_student_id = $request->exam_students_id;
+				$add->question_id = $questions_arr[$que];
+				$add->answer = $answer_arr[$que];
+				$add->save();
+			}
+		}
+			
+
+		return response()->json([
+			"code" => 200,
+		  	"message" => "success",
+			"data" => [],
+        ]);
+
         }
     }
 
@@ -296,9 +311,9 @@ class ExamController extends Controller
         );
 
         $check_exam = exam::where(['id' => $request->exam_id,'status' => 'Active'])->first();
-        $check_student = User::where(['id' => $request->students_id])->first();
+        $check_student = User::where(['id' => $request->student_id])->first();
 
-        if(empty($getexam)){
+        if(empty($check_exam)){
 
         	return response()->json([
     			"code" => 400,
@@ -306,7 +321,7 @@ class ExamController extends Controller
 			  	"data" => [],
 	        ]);
         }
-        elseif(empty($chec_student)){
+        elseif(empty($check_student)){
         	return response()->json([
     			"code" => 400,
 			  	"message" => "Student not found.",
@@ -314,7 +329,34 @@ class ExamController extends Controller
 	        ]);
         }
         else{
-        	
+        	$get_result = exam_student::where(['exam_id' => $request->exam_id,'user_id' => $request->student_id])->first();
+
+
+        	$get_student_exam_details = student_question_answer::where(['exam_student_id' => $get_result->id])->get();
+
+        	$totalquestion=0;$notattemt=0;$attemptquestion=0;$obtainedmarks=0;$totalmarks=0;$takentime;$attemptexamdatetime;
+        	if(count($get_student_exam_details) > 0){
+				foreach ($get_student_exam_details as $key => $value) {
+					$getquestion = question::where(['id' => $value->question_id])->first();
+					$totalquestion = $totalquestion + 1;
+					$totalmarks = $totalmarks + $getquestion->per_question_marks;
+
+					if($value->answer == "N"){
+						$notattemt = $notattemt + 1;
+					}
+					else{
+						$attemptquestion = $attemptquestion + 1;
+					}
+				}
+			}
+
+			return response()->json([
+    			"code" => 400,
+			  	"message" => "Student not found.",
+			  	"data" => ['totalquestion' => $totalquestion,'notattemt' => $notattemt,'attemptquestion' => $attemptquestion,'obtainedmarks' => (int)$get_result->result,'totalmarks' => $totalmarks,'takentime' => '','attemptexamdatetime' => $get_result->start_time],
+	        ]);
+        	//dd($totalquestion,$total_marks);
+
         }
     }
 }
