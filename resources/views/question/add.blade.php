@@ -17,13 +17,13 @@
                     @csrf
                         
                         <div class="row">
-                            <div class="form-group col-lg-6">
+                            <div class="form-group col-lg-4">
                                 <label class="form-label">Board</label>
                                 <div class="form-control-wrap">
                                     <select name="board_id" class="form-control board_id" id="board_id">
                                         <option>--Select Board--</option>
                                         @foreach($boards as $boards_data)
-                                        <option value="{{ $boards_data->id }}" @if(old('board_id') == $boards_data->id) selected="" @endif>{{ $boards_data->name." - ".$boards_data->medium}}</option>
+                                        <option value="{{ $boards_data->id }}" @if(old('board_id') == $boards_data->id) selected="" @endif>{{ $boards_data->name }}</option>
                                         @endforeach
                                     </select>
                                     @error('board_id')
@@ -34,7 +34,21 @@
                                 </div>
                             </div>
 
-                            <div class="form-group col-lg-6">
+                            <div class="form-group col-lg-4">
+                                <label class="form-label">Medium</label>
+                                <div class="form-control-wrap">
+                                    <select name="medium_id" class="form-control medium_id" id="medium_id">
+                                        <option>--Select Medium--</option>
+                                    </select>
+                                    @error('medium_id')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group col-lg-4">
                                 <label class="form-label">Standard</label>
                                 <div class="form-control-wrap">
                                     <select name="standard_id" class="form-control standard_id" id="standard_id">
@@ -244,95 +258,132 @@
 @section('scripts')
 
 <script type="text/javascript">
+
+
+$(document).on('change','.board_id',function(){
+    var board_id = $('.board_id').val();
+    getMedium(board_id);
+});
+
+function getMedium(board_id){
+    $.ajax({
+        type: "GET",
+        url: "{{route('get.medium')}}",
+        data: {
+            "board_id":board_id,
+        },
+        success: function(result) {
+            $('.medium_id').html('');
+            $('.medium_id').html(result.html);
+        } 
+    });
+} 
+
+$(document).on('change','.medium_id',function(){
+    var board_id = $('.board_id').val();
+    var medium_id = $('.medium_id').val();
+    getStandard(board_id,medium_id);
+});
+
+
+function getStandard(board_id,medium_id){
+    $.ajax({
+        type: "GET",
+        url: "{{route('get.standard')}}",
+        data: {
+            "board_id":board_id,
+            "medium_id":medium_id,
+
+        },
+        success: function(result) {
+            $('#standard_id').html('');
+            $('#standard_id').html(result.html);
+        } 
+    });
+}
+
+
+$(document).on('change','.standard_id',function(){
+    var standard_id = $('.standard_id').val();
+    var medium_id = $('.medium_id').val();
+    var board_id = $('.board_id').val();
+    getSemester(standard_id,medium_id,board_id);
+});
+
+function getSemester(standard_id,medium_id,board_id){
+    $.ajax({
+        type: "GET",
+        url: "{{route('get.semester')}}",
+        data: {
+            "board_id":board_id,
+            "medium_id":medium_id,
+            "standard_id":standard_id,
+        },
+        success: function(result) {
+            $('.semester_id').html('');
+            $('.semester_id').html(result.html);
+        } 
+    });
+}
+
+
+$(document).on('change','.semester_id',function(){
+    var standard_id = $('.standard_id').val();
+    var semester_id = $('.semester_id').val();
+    var medium_id = $('.medium_id').val();
+    var board_id = $('.board_id').val();
+    getSubject(board_id,medium_id,standard_id,semester_id);
+});
+
+
+function getSubject(board_id,medium_id,standard_id,semester_id){
+    $.ajax({
+        type: "GET",
+        url: "{{route('get.subject')}}",
+        data: {
+            "board_id":board_id,
+            "medium_id":medium_id,
+            "standard_id":standard_id,
+            "semester_id":semester_id,
+        },
+        success: function(result) {
+            $('.subject_id').html('');
+            $('.subject_id').html(result.html);
+        } 
+    });
+}
+
+
+$(document).on('change','.subject_id',function(){
+
+    var board_id = $('.board_id').val();
+    var medium_id = $('.medium_id').val();
+    var standard_id = $('.standard_id').val();
+    var semester_id = $('.semester_id').val();
+    var subject_id = $('.subject_id').val();
+    getUnit(board_id,medium_id,standard_id,semester_id,subject_id);
+});
+
+
+function getUnit(board_id,medium_id,standard_id,semester_id,subject_id){
+    $.ajax({
+        type: "GET",
+        url: "{{route('get.unit')}}",
+        data: {
+            "board_id":board_id,
+            "medium_id":medium_id,
+            "standard_id":standard_id,
+            "semester_id":semester_id,
+            "subject_id":subject_id,
+        },
+        success: function(result) { 
+            $('.unit_id').html('');
+            $('.unit_id').html(result.html);
+        } 
+    });
+}
     
-    $(document).on('change','.board_id',function(){
-        var board_id = $('.board_id').val();
-        getStandard(board_id);
-    });
-
-    function getStandard(board_id){
-        $.ajax({
-            type: "GET",
-            url: "{{route('get.standard')}}",
-            data: {
-                "board_id":board_id,
-            },
-            success: function(result) {
-                $('#standard_id').html('');
-                $('#standard_id').html(result.html);
-            } 
-        });
-    }
-
-
-    $(document).on('change','.standard_id',function(){
-        var standard_id = $('.standard_id').val();
-        var board_id = $('.board_id').val();
-        getSemester(standard_id,board_id);
-    });
-
-    function getSemester(standard_id,board_id){
-        $.ajax({
-            type: "GET",
-            url: "{{route('get.semester')}}",
-            data: {
-                "board_id":board_id,
-                "standard_id":standard_id,
-            },
-            success: function(result) {
-                $('.semester_id').html('');
-                $('.semester_id').html(result.html);
-            } 
-        });
-    }
-
-
-    $(document).on('change','.semester_id',function(){
-        var standard_id = $('.standard_id').val();
-        var semester_id = $('.semester_id').val();
-        getSubject(standard_id,semester_id);
-    });
-
-
-    function getSubject(standard_id,semester_id){
-        $.ajax({
-            type: "GET",
-            url: "{{route('get.subject')}}",
-            data: {
-                "standard_id":standard_id,
-                "semester_id":semester_id,
-            },
-            success: function(result) {
-                $('.subject_id').html('');
-                $('.subject_id').html(result.html);
-            } 
-        });
-    }
-
-
-    $(document).on('change','.subject_id',function(){
-        var standard_id = $('.standard_id').val();
-        var semester_id = $('.semester_id').val();
-        var subject_id = $('.subject_id').val();
-        getUnit(standard_id,semester_id,subject_id);
-    });
-
-
-    function getUnit(standard_id,semester_id,subject_id){
-        $.ajax({
-            type: "GET",
-            url: "{{route('get.unit')}}",
-            data: {
-                "standard_id":standard_id,
-                "semester_id":semester_id,
-                "subject_id":subject_id,
-            },
-            success: function(result) {
-                $('.unit_id').html('');
-                $('.unit_id').html(result.html);
-            } 
-        });
-    }
+    
 
 var max_fields      = 50;
 var wrapper         = $(".newPlus");

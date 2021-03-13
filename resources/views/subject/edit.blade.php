@@ -11,24 +11,40 @@
             <div class="card h-100">
                 <div class="card-inner">
                     <div class="card-head">
-                        <h5 class="card-title">Edit Board</h5>
+                        <h5 class="card-title">Edit Subject</h5>
                     </div>
                     <form action="{{ route('subject.update',$subjectdata->id) }}" method="POST" enctype='multipart/form-data'>
                     @csrf
-                        <div class="form-group">
-                            <label class="form-label">Board</label>
-                            <div class="form-control-wrap">
-                                <select name="board_id" class="form-control board_id" id="board_id">
-                                    <option>--Select Board--</option>
-                                    @foreach($boards as $boards_data)
-                                    <option value="{{ $boards_data->id }}" @if($subjectdata->board_id == $boards_data->id) selected="" @endif>{{ $boards_data->name." - ".$boards_data->medium }}</option>
-                                    @endforeach
-                                </select>
-                                @error('name')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                        <div class="row">
+                            <div class="form-group col-lg-6">
+                                <label class="form-label">Board</label>
+                                <div class="form-control-wrap">
+                                    <select name="board_id" class="form-control board_id" id="board_id">
+                                        <option>--Select Board--</option>
+                                        @foreach($boards as $boards_data)
+                                        <option value="{{ $boards_data->id }}" @if($subjectdata->board_id == $boards_data->id) selected="" @endif>{{ $boards_data->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('name')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group col-lg-6">
+                                <label class="form-label">Medium</label>
+                                <div class="form-control-wrap">
+                                    <select name="medium_id" class="form-control medium_id" id="medium_id">
+                                        <option>--Select Medium--</option>
+                                    </select>
+                                    @error('medium_id')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
                             </div>
                         </div>
                         <div class="form-group">
@@ -143,24 +159,58 @@
 
 $( document ).ready(function() {
     var board_id = $('.board_id').val();
+    var medium_id = "{{ $subjectdata->medium_id }}";
     var standard_id = "{{ $subjectdata->standard_id }}";
     var semester_id = "{{ $subjectdata->semester_id }}";
-    getStandardEdit(board_id,standard_id);
-    getSemesterEdit(board_id,standard_id,semester_id);
+    getMediumEdit(board_id,medium_id);
+    getStandardEdit(board_id,medium_id,standard_id);
+    getSemesterEdit(board_id,medium_id,standard_id,semester_id);
 });
 
 $(document).on('change','.board_id',function(){
     var board_id = $('.board_id').val();
-    getStandard(board_id);
+    getMedium(board_id);
 });
 
-function getStandardEdit(board_id,standard_id){
+function getMediumEdit(board_id,medium_id){
+    
+    $.ajax({
+        type: "GET",
+        url: "{{route('get.medium')}}",
+        data: {
+            "board_id":board_id,
+            "medium_id":medium_id,
+        },
+        success: function(result) {
+            $('.medium_id').html('');
+            $('.medium_id').html(result.html);
+        } 
+    });
+}
+
+
+function getMedium(board_id){   
+    $.ajax({
+        type: "GET",
+        url: "{{route('get.medium')}}",
+        data: {
+            "board_id":board_id,
+        },
+        success: function(result) {
+            $('.medium_id').html('');
+            $('.medium_id').html(result.html);
+        } 
+    });
+} 
+
+function getStandardEdit(board_id,medium_id,standard_id){
     
     $.ajax({
         type: "GET",
         url: "{{route('get.standard')}}",
         data: {
             "board_id":board_id,
+            "medium_id":medium_id,
             "standard_id":standard_id,
         },
         success: function(result) {
@@ -170,12 +220,19 @@ function getStandardEdit(board_id,standard_id){
     });
 }
 
-function getStandard(board_id){
+$(document).on('change','.medium_id',function(){
+    var board_id = $('.board_id').val();
+    var medium_id = $('.medium_id').val();
+    getStandard(board_id,medium_id);
+});
+
+function getStandard(board_id,medium_id){
     $.ajax({
         type: "GET",
         url: "{{route('get.standard')}}",
         data: {
             "board_id":board_id,
+            "medium_id":medium_id,
         },
         success: function(result) {
             $('.standard_id').html('');
@@ -189,16 +246,18 @@ function getStandard(board_id){
 $(document).on('change','.standard_id',function(){
     var standard_id = $('.standard_id').val();
     var board_id = $('.board_id').val();
-    getSemester(standard_id,board_id);
+    var medium_id = $('.medium_id').val();
+    getSemester(standard_id,board_id,medium_id);
 });
 
-function getSemesterEdit(board_id,standard_id,semester_id){
+function getSemesterEdit(board_id,medium_id,standard_id,semester_id){
     
     $.ajax({
         type: "GET",
         url: "{{route('get.semester')}}",
         data: {
             "board_id":board_id,
+            "medium_id":medium_id,
             "standard_id":standard_id,
             "semester_id":semester_id,
         },
@@ -209,12 +268,13 @@ function getSemesterEdit(board_id,standard_id,semester_id){
     });
 }
 
-function getSemester(standard_id,board_id){
+function getSemester(standard_id,medium_id,board_id){
     $.ajax({
         type: "GET",
         url: "{{route('get.semester')}}",
         data: {
             "board_id":board_id,
+            "medium_id":medium_id,
             "standard_id":standard_id,
         },
         success: function(result) {

@@ -21,6 +21,8 @@ use App\Http\Controllers\ExamQuestionController;
 use App\Http\Controllers\ExamStudentController;
 use App\Http\Controllers\StudentQuestionAnswerController;
 use App\Http\Controllers\FeatureController;
+use App\Http\Controllers\MediumController;
+
 
 
 
@@ -76,6 +78,15 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::post('book/{id}/update', [BookController::class, 'update'])->name('book.update');
 	Route::get('book/{id}/delete', [BookController::class, 'distroy'])->name('book.distroy');
 
+	/*Book*/
+	Route::get('medium', [MediumController::class, 'index'])->name('medium.index');
+	Route::get('medium/create', [MediumController::class, 'create'])->name('medium.create');
+	Route::post('medium/store', [MediumController::class, 'store'])->name('medium.store');
+	Route::get('medium/{id}/edit', [MediumController::class, 'edit'])->name('medium.edit');
+	Route::post('medium/{id}/update', [MediumController::class, 'update'])->name('medium.update');
+	Route::get('medium/{id}/delete', [MediumController::class, 'distroy'])->name('medium.distroy');
+
+	Route::get('get_medium', [MediumController::class, 'getMedium'])->name('get.medium');
 	/* */
 	Route::get('note', [NoteController::class, 'index'])->name('note.index');
 	Route::get('note/create', [BookController::class, 'create'])->name('note.create');

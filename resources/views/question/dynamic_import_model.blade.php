@@ -7,7 +7,7 @@
 	        <select name="board_id" class="form-control board_id" id="board_id">
 	            <option value="">--Select Board--</option>
 	            @foreach($boards as $boards_data)
-	            <option value="{{ $boards_data->id }}" @if(old('board_id') == $boards_data->id) selected="" @endif>{{ $boards_data->name." - ".$boards_data->medium}}</option>
+	            <option value="{{ $boards_data->id }}" @if(old('board_id') == $boards_data->id) selected="" @endif>{{ $boards_data->name}}</option>
 	            @endforeach
 	        </select>
 	        @error('board_id')
@@ -17,6 +17,24 @@
 	        @enderror
 	    </div>
 	</div>
+
+	<div class="form-group col-lg-6">
+        <label class="form-label">Medium</label>
+        <div class="form-control-wrap">
+            <select name="medium_id" class="form-control medium_id" id="medium_id">
+                <option>--Select Medium--</option>
+            </select>
+            @error('medium_id')
+                <span class="text-danger" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
+        </div>
+    </div>
+
+</div>
+
+<div class="row">
 
 	<div class="form-group col-lg-6">
 	    <label class="form-label">Standard</label>
@@ -31,9 +49,7 @@
 	        @enderror
 	    </div>
 	</div>
-</div>
 
-<div class="row">
 	<div class="form-group col-lg-6">
 	    <label class="form-label">Semester</label>
 	    <div class="form-control-wrap">
@@ -48,6 +64,10 @@
 	    </div>
 	</div>
 
+</div>
+
+
+<div class="row">
 	<div class="form-group col-lg-6">
 	    <label class="form-label">Subject</label>
 	    <div class="form-control-wrap">
@@ -61,19 +81,19 @@
 	        @enderror
 	    </div>
 	</div>
-</div>
 
-<div class="form-group">
-	<label class="form-label">Units</label>
-	<div class="form-control-wrap">
-	    <select name="unit_id" class="form-control unit_id" id="unit_id">
-	        <option value="">--Select Unit--</option>
-	    </select>
-	    @error('unit_id')
-	        <span class="text-danger" role="alert">
-	            <strong>{{ $message }}</strong>
-	        </span>
-	    @enderror
+	<div class="form-group col-lg-6">
+		<label class="form-label">Units</label>
+		<div class="form-control-wrap">
+		    <select name="unit_id" class="form-control unit_id" id="unit_id">
+		        <option value="">--Select Unit--</option>
+		    </select>
+		    @error('unit_id')
+		        <span class="text-danger" role="alert">
+		            <strong>{{ $message }}</strong>
+		        </span>
+		    @enderror
+		</div>
 	</div>
 </div>
 

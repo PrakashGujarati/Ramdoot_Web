@@ -42,12 +42,14 @@ class SemesterController extends Controller
     {
         $this->validate($request, [
             'board_id'     => 'required',
+            'medium_id'  => 'required',
             'standard_id'  => 'required',
             'semester' => 'required',
         ]);
 
         $add = new semester;
         $add->board_id = $request->board_id;
+        $add->medium_id = $request->medium_id;
         $add->standard_id = $request->standard_id;
         $add->semester = $request->semester;
         $add->save();
@@ -91,12 +93,14 @@ class SemesterController extends Controller
     {
         $this->validate($request, [
             'board_id'     => 'required',
+            'medium_id'  => 'required',
             'standard_id'  => 'required',
             'semester' => 'required',
         ]);
 
         $update = semester::find($id);
         $update->board_id = $request->board_id;
+        $update->medium_id = $request->medium_id;
         $update->standard_id = $request->standard_id;
         $update->semester = $request->semester;
         $update->save();
@@ -137,7 +141,7 @@ class SemesterController extends Controller
 
     public function getSemester(Request $request){
 
-        $getsemester = semester::where(['board_id' => $request->board_id,'standard_id' => $request->standard_id])->get();
+        $getsemester = semester::where(['board_id' => $request->board_id,'medium_id' => $request->medium_id,'standard_id' => $request->standard_id,'status' => 'Active'])->get();
 
         $result="<option value=''>--Select Semester--</option>";
         if(count($getsemester) > 0)
@@ -161,7 +165,7 @@ class SemesterController extends Controller
 
     public function getSemesterUnit(Request $request){
 
-        $getsemester = semester::where(['standard_id' => $request->standard_id])->get();
+        $getsemester = semester::where(['standard_id' => $request->standard_id,'status' => 'Active'])->get();
 
         $result="<option value=''>--Select Semester--</option>";
         if(count($getsemester) > 0)

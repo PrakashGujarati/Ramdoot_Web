@@ -39,7 +39,9 @@ class StandardController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
+
             'board_id'     => 'required',
+            'medium_id'  => 'required',
             'standard'  => 'required',
             //'semester' => 'required',
             'section' => 'required',
@@ -68,6 +70,7 @@ class StandardController extends Controller
         }
 
         $add = new Standard;
+        $add->medium_id = $request->medium_id;
         $add->board_id = $request->board_id;
         $add->standard = $request->standard;
         $add->section = $request->section;
@@ -112,6 +115,7 @@ class StandardController extends Controller
     {
         $this->validate($request, [
             'board_id'     => 'required',
+            'medium_id'  => 'required',
             'standard'  => 'required',
            // 'semester' => 'required',
             'section' => 'required',
@@ -143,6 +147,7 @@ class StandardController extends Controller
 
         $update = Standard::find($id);
         $update->board_id = $request->board_id;
+        $update->medium_id = $request->medium_id;
         $update->standard = $request->standard;
         $update->section = $request->section;
         $update->thumbnail = $new_name;
@@ -184,7 +189,7 @@ class StandardController extends Controller
 
     public function getStandard(Request $request){
 
-        $getstandard = Standard::where(['board_id' => $request->board_id])->get();
+        $getstandard = Standard::where(['board_id' => $request->board_id,'medium_id' => $request->medium_id,'status' => 'Active'])->get();
 
         $result="<option value=''>--Select Standard--</option>";
         if(count($getstandard) > 0)

@@ -17,13 +17,13 @@
                     @csrf
                         
                         <div class="row">
-                            <div class="form-group col-lg-6">
+                            <div class="form-group col-lg-4">
                                 <label class="form-label">Board</label>
                                 <div class="form-control-wrap">
                                     <select name="board_id" class="form-control board_id" id="board_id">
                                         <option>--Select Board--</option>
                                         @foreach($boards as $boards_data)
-                                        <option value="{{ $boards_data->id }}" @if($worksheetdata->board_id == $boards_data->id) selected="" @endif>{{ $boards_data->name." - ".$boards_data->medium }}</option>
+                                        <option value="{{ $boards_data->id }}" @if($worksheetdata->board_id == $boards_data->id) selected="" @endif>{{ $boards_data->name }}</option>
                                         @endforeach
                                     </select>
                                     @error('board_id')
@@ -34,7 +34,21 @@
                                 </div>
                             </div>
 
-                            <div class="form-group col-lg-6">
+                            <div class="form-group col-lg-4">
+                                <label class="form-label">Medium</label>
+                                <div class="form-control-wrap">
+                                    <select name="medium_id" class="form-control medium_id" id="medium_id">
+                                        <option>--Select Medium--</option>
+                                    </select>
+                                    @error('medium_id')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group col-lg-4">
                                 <label class="form-label">Standard</label>
                                 <div class="form-control-wrap">
                                     <select name="standard_id" class="form-control standard_id" id="standard_id">
@@ -50,7 +64,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="form-group col-lg-6">
+                            <div class="form-group col-lg-4">
                                 <label class="form-label">Semester</label>
                                 <div class="form-control-wrap">
                                     <select name="semester_id" class="form-control semester_id" id="semester_id">
@@ -65,7 +79,7 @@
                             </div>
                             
 
-                            <div class="form-group col-lg-6">
+                            <div class="form-group col-lg-4">
                                 <label class="form-label">Subject</label>
                                 <div class="form-control-wrap">
                                     <select name="subject_id" class="form-control subject_id" id="subject_id">
@@ -78,12 +92,8 @@
                                     @enderror
                                 </div>
                             </div>
-                        </div>
-                            
 
-                        <div class="row">
-
-                            <div class="form-group col-lg-6">
+                            <div class="form-group col-lg-4">
                                 <label class="form-label">Units</label>
                                 <div class="form-control-wrap">
                                     <select name="unit_id" class="form-control unit_id" id="unit_id">
@@ -96,6 +106,12 @@
                                     @enderror
                                 </div>
                             </div>
+                        </div>
+                            
+
+                        <div class="row">
+
+                            
                             
                             <div class="form-group col-lg-6">
                                 <label class="form-label">Title</label>
@@ -109,9 +125,7 @@
                                 </div>
                             </div>
 
-                        </div>
-
-                        <div class="form-group">
+                            <div class="form-group col-lg-6">
                             <label class="form-label">Url</label>
                             <div class="form-control-wrap">
                                 <input type="file" class="form-control" id="url" name="url" value="">
@@ -132,6 +146,10 @@
                                 @enderror
                             </div>
                         </div>
+
+                        </div>
+
+                        
                     
                         
 
@@ -199,30 +217,69 @@
 
     $( document ).ready(function() {
         var board_id = $('.board_id').val();
+        var medium_id = "{{ $worksheetdata->medium_id }}";
         var standard_id = "{{ $worksheetdata->standard_id }}";
         var semester_id = "{{ $worksheetdata->semester_id }}";
         var subject_id = "{{ $worksheetdata->subject_id }}";
         var unit_id = "{{ $worksheetdata->unit_id }}";
 
-        getStandardEdit(board_id,standard_id);
-        getSemesterEdit(board_id,standard_id,semester_id);
-        getSubjectEdit(standard_id,semester_id,subject_id);
-        getUnitEdit(standard_id,semester_id,subject_id,unit_id);
+        getMediumEdit(board_id,medium_id);
+        getStandardEdit(board_id,medium_id,standard_id);
+        getSemesterEdit(board_id,medium_id,standard_id,semester_id);
+        getSubjectEdit(board_id,medium_id,standard_id,semester_id,subject_id);
+        getUnitEdit(board_id,medium_id,standard_id,semester_id,subject_id,unit_id);
 
     });
 
     $(document).on('change','.board_id',function(){
         var board_id = $('.board_id').val();
-        getStandard(board_id);
+        getMedium(board_id);
     });
 
-    function getStandardEdit(board_id,standard_id){
+    function getMediumEdit(board_id,medium_id){
+    
+        $.ajax({
+            type: "GET",
+            url: "{{route('get.medium')}}",
+            data: {
+                "board_id":board_id,
+                "medium_id":medium_id,
+            },
+            success: function(result) {
+                $('.medium_id').html('');
+                $('.medium_id').html(result.html);
+            } 
+        });
+    }
+
+    function getMedium(board_id){
+        $.ajax({
+            type: "GET",
+            url: "{{route('get.medium')}}",
+            data: {
+                "board_id":board_id,
+            },
+            success: function(result) {
+                $('.medium_id').html('');
+                $('.medium_id').html(result.html);
+            } 
+        });
+    }
+
+    $(document).on('change','.medium_id',function(){
+        var board_id = $('.board_id').val();
+        var medium_id = $('.medium_id').val();
+        getStandard(board_id,medium_id);
+    });
+
+    function getStandardEdit(board_id,medium_id,standard_id){
         
         $.ajax({
             type: "GET",
             url: "{{route('get.standard')}}",
             data: {
                 "board_id":board_id,
+                "medium_id":medium_id,
                 "standard_id":standard_id,
             },
             success: function(result) {
@@ -232,12 +289,13 @@
         });
     }
 
-    function getStandard(board_id){
+    function getStandard(board_id,medium_id){
         $.ajax({
             type: "GET",
             url: "{{route('get.standard')}}",
             data: {
                 "board_id":board_id,
+                "medium_id":medium_id,
             },
             success: function(result) {
                 $('.standard_id').html('');
@@ -250,16 +308,18 @@
     $(document).on('change','.standard_id',function(){
         var standard_id = $('.standard_id').val();
         var board_id = $('.board_id').val();
-        getSemester(standard_id,board_id);
+        var medium_id = $('.medium_id').val();
+        getSemester(standard_id,medium_id,board_id);
     });
 
-    function getSemesterEdit(board_id,standard_id,semester_id){
+    function getSemesterEdit(board_id,medium_id,standard_id,semester_id){
         
         $.ajax({
             type: "GET",
             url: "{{route('get.semester')}}",
             data: {
                 "board_id":board_id,
+                "medium_id":medium_id,
                 "standard_id":standard_id,
                 "semester_id":semester_id,
             },
@@ -270,12 +330,13 @@
         });
     }
 
-    function getSemester(standard_id,board_id){
+    function getSemester(standard_id,medium_id,board_id){
         $.ajax({
             type: "GET",
             url: "{{route('get.semester')}}",
             data: {
                 "board_id":board_id,
+                "medium_id":medium_id,
                 "standard_id":standard_id,
             },
             success: function(result) {
@@ -286,16 +347,20 @@
     }
 
     $(document).on('change','.semester_id',function(){
+        var board_id = $('.board_id').val();
+        var medium_id = $('.medium_id').val();
         var standard_id = $('.standard_id').val();
         var semester_id = $('.semester_id').val();
-        getSubject(standard_id,semester_id);
+        getSubject(board_id,medium_id,standard_id,semester_id);
     });
 
-    function getSubjectEdit(standard_id,semester_id,subject_id){
+    function getSubjectEdit(board_id,medium_id,standard_id,semester_id,subject_id){
         $.ajax({
             type: "GET",
             url: "{{route('get.subject')}}",
             data: {
+                "board_id":board_id,
+                "medium_id":medium_id,
                 "standard_id":standard_id,
                 "semester_id":semester_id,
                 "subject_id":subject_id,
@@ -308,11 +373,13 @@
     }
 
 
-    function getSubject(standard_id,semester_id){
+    function getSubject(board_id,medium_id,standard_id,semester_id){
         $.ajax({
             type: "GET",
             url: "{{route('get.subject')}}",
             data: {
+                "board_id":board_id,
+                "medium_id":medium_id,
                 "standard_id":standard_id,
                 "semester_id":semester_id,
             },
@@ -325,18 +392,22 @@
 
 
     $(document).on('change','.subject_id',function(){
+        var board_id = $('.board_id').val();
+        var medium_id = $('.medium_id').val();
         var standard_id = $('.standard_id').val();
         var semester_id = $('.semester_id').val();
         var subject_id = $('.subject_id').val();
-        getUnit(standard_id,semester_id,subject_id);
+        getUnit(board_id,medium_id,standard_id,semester_id,subject_id);
     });
 
-    function getUnitEdit(standard_id,semester_id,subject_id,unit_id){
+    function getUnitEdit(board_id,medium_id,standard_id,semester_id,subject_id,unit_id){
         
         $.ajax({
             type: "GET",
             url: "{{route('get.unit')}}",
             data: {
+                "board_id":board_id,
+                "medium_id":medium_id,
                 "standard_id":standard_id,
                 "semester_id":semester_id,
                 "subject_id":subject_id,
@@ -350,11 +421,13 @@
     }
 
 
-    function getUnit(standard_id,semester_id,subject_id){
+    function getUnit(board_id,medium_id,standard_id,semester_id,subject_id){
         $.ajax({
             type: "GET",
             url: "{{route('get.unit')}}",
             data: {
+                "board_id":board_id,
+                "medium_id":medium_id,
                 "standard_id":standard_id,
                 "semester_id":semester_id,
                 "subject_id":subject_id,

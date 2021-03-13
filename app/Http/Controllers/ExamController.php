@@ -44,6 +44,7 @@ class ExamController extends Controller
 
         $this->validate($request, [
             'board_id' => 'required',
+            'medium_id'  => 'required',
             'standard_id' => 'required',
             'semester_id'  => 'required',
             'subject_id' => 'required',
@@ -60,6 +61,7 @@ class ExamController extends Controller
         
         $add = new exam;
         $add->board_id = $request->board_id;
+        $add->medium_id = $request->medium_id;
         $add->standard_id = $request->standard_id;
         $add->semester_id = $request->semester_id;
         $add->subject_id = $request->subject_id;
@@ -117,6 +119,7 @@ class ExamController extends Controller
     {
         $this->validate($request, [
             'board_id' => 'required',
+            'medium_id'  => 'required',
             'standard_id' => 'required',
             'semester_id'  => 'required',
             'subject_id' => 'required',
@@ -133,6 +136,7 @@ class ExamController extends Controller
         
         $update = exam::find($id);
         $update->board_id = $request->board_id;
+        $update->medium_id = $request->medium_id;
         $update->standard_id = $request->standard_id;
         $update->semester_id = $request->semester_id;
         $update->subject_id = $request->subject_id;

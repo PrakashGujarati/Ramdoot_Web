@@ -1,5 +1,63 @@
 
 
+
+
+----------------------- 12-03-2020-------------------
+
+ALTER TABLE `standards` ADD `medium_id` INT(11) NOT NULL DEFAULT '0' AFTER `board_id`;
+
+
+ALTER TABLE `subjects` ADD `medium_id` INT(11) NOT NULL DEFAULT '0' AFTER `board_id`;
+
+
+ALTER TABLE `semesters` ADD `medium_id` INT(11) NOT NULL DEFAULT '0' AFTER `board_id`;
+
+
+ALTER TABLE `units` ADD `medium_id` INT(11) NOT NULL DEFAULT '0' AFTER `board_id`;
+
+ALTER TABLE `books` ADD `medium_id` INT(11) NOT NULL DEFAULT '0' AFTER `board_id`;
+ALTER TABLE `solutions` ADD `medium_id` INT(11) NOT NULL DEFAULT '0' AFTER `board_id`;
+ALTER TABLE `materials` ADD `medium_id` INT(11) NOT NULL DEFAULT '0' AFTER `board_id`;
+ALTER TABLE `videos` ADD `medium_id` INT(11) NOT NULL DEFAULT '0' AFTER `board_id`;
+ALTER TABLE `worksheets` ADD `medium_id` INT(11) NOT NULL DEFAULT '0' AFTER `board_id`;
+ALTER TABLE `papers` ADD `medium_id` INT(11) NOT NULL DEFAULT '0' AFTER `board_id`;
+
+ALTER TABLE `questions` ADD `medium_id` INT(11) NOT NULL DEFAULT '0' AFTER `board_id`;
+ALTER TABLE `exams` ADD `medium_id` INT(11) NOT NULL DEFAULT '0' AFTER `board_id`;
+
+
+
+
+
+CREATE TABLE `mediums` (
+  `id` int(11) NOT NULL,
+  `board_id` int(11) NOT NULL DEFAULT 0,
+  `medium_name` varchar(255) DEFAULT '',
+  `status` enum('Active','Inactive','Deleted') DEFAULT 'Active',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT NULL
+);
+
+
+ALTER TABLE `mediums`
+  ADD PRIMARY KEY (`id`);
+
+
+ALTER TABLE `mediums`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+
+
+
+
+
+
+
+
+
+
+
+
 ----------------------- 11-03-2021-------------------
 
 ALTER TABLE `exam_students` CHANGE `start_time` `start_time` DATETIME NULL DEFAULT NULL, CHANGE `end_time` `end_time` DATETIME NULL DEFAULT NULL;

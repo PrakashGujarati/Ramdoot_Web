@@ -24,6 +24,7 @@ class QuestionImport implements ToModel,WithHeadingRow
         $request=$this->request;   
         return new question([
             'board_id' => $request->board_id,
+            'medium_id' => $request->medium_id,
             'standard_id' => $request->standard_id,
             'semester_id' => $request->semester_id,
             'subject_id' => $request->subject_id,

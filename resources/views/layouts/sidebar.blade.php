@@ -38,6 +38,13 @@
                                 </a>
                             </li><!-- .nk-menu-item -->
 
+                            <li class="nk-menu-item @if(\Request::route()->getName() == 'medium.index' || \Request::route()->getName() == 'medium.create' || \Request::route()->getName() == 'medium.edit') active @endif">
+                                <a href="{{ route('medium.index') }}" class="nk-menu-link">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
+                                    <span class="nk-menu-text">Medium</span>
+                                </a>
+                            </li><!-- .nk-menu-item -->
+
                             <li class="nk-menu-item @if(\Request::route()->getName() == 'standard.index' || \Request::route()->getName() == 'standard.create' || \Request::route()->getName() == 'standard.edit') active @endif">
                                 <a href="{{ route('standard.index') }}" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>

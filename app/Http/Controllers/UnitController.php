@@ -48,6 +48,7 @@ class UnitController extends Controller
 
         $this->validate($request, [
             'board_id'  => 'required',
+            'medium_id'  => 'required',
             'standard_id'  => 'required',
             'semester_id' => 'required',
             'subject_id' => 'required',
@@ -91,6 +92,7 @@ class UnitController extends Controller
 
             $add = new unit;
             $add->board_id = $request->board_id;
+            $add->medium_id = $request->medium_id;
             $add->standard_id = $request->standard_id;
             $add->semester_id = $request->semester_id;
             $add->subject_id = $request->subject_id;
@@ -144,6 +146,7 @@ class UnitController extends Controller
     {
         $this->validate($request, [
             'board_id' => 'required',
+            'medium_id'  => 'required',
             'standard_id'  => 'required',
             'semester_id' => 'required',
             'subject_id' => 'required',
@@ -189,6 +192,7 @@ class UnitController extends Controller
 
         $update = unit::find($id);
         $update->board_id = $request->board_id;
+        $update->medium_id = $request->medium_id;
         $update->standard_id = $request->standard_id;
         $update->semester_id = $request->semester_id;
         $update->subject_id = $request->subject_id;
@@ -236,7 +240,7 @@ class UnitController extends Controller
     public function getUnit(Request $request){
 
        //$getunit = unit::where(['unit_id' => $request->board_id])->get();
-       $getunit = unit::where(['standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'subject_id' => $request->subject_id])->get();
+       $getunit = unit::where(['board_id' => $request->board_id,'medium_id' => $request->medium_id,'standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'subject_id' => $request->subject_id,'status' => 'Active'])->get();
 
         $result="<option value=''>--Select Unit--</option>";
         if(count($getunit) > 0)

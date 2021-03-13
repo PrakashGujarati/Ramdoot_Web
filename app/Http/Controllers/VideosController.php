@@ -44,6 +44,7 @@ class VideosController extends Controller
         $this->validate($request, [
             'unit_id'     => 'required',
             'board_id' => 'required',
+            'medium_id'  => 'required',
             'standard_id' => 'required',
             'semester_id'  => 'required',
             'subject_id' => 'required',
@@ -96,6 +97,7 @@ class VideosController extends Controller
         $add->user_id  = Auth::user()->id;
         $add->unit_id = $request->unit_id;
         $add->board_id = $request->board_id;
+        $add->medium_id = $request->medium_id;
         $add->standard_id = $request->standard_id;
         $add->semester_id = $request->semester_id;
         $add->subject_id = $request->subject_id;
@@ -149,6 +151,7 @@ class VideosController extends Controller
         $this->validate($request, [
             'unit_id' => 'required',
             'board_id' => 'required',
+            'medium_id'  => 'required',
             'standard_id' => 'required',
             'semester_id'  => 'required',
             'subject_id' => 'required',
@@ -204,6 +207,7 @@ class VideosController extends Controller
         $update = videos::find($id);
         $update->unit_id = $request->unit_id;
         $update->board_id = $request->board_id;
+        $update->medium_id = $request->medium_id;
         $update->standard_id = $request->standard_id;
         $update->semester_id = $request->semester_id;
         $update->subject_id = $request->subject_id;

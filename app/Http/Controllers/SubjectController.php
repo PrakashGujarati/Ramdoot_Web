@@ -44,6 +44,7 @@ class SubjectController extends Controller
     {
         $this->validate($request, [
             'board_id'     => 'required',
+            'medium_id'  => 'required',
             'semester_id' => 'required',
             'standard_id'  => 'required',
             'subject_name' => 'required',
@@ -84,6 +85,7 @@ class SubjectController extends Controller
 
         $add = new Subject;
         $add->board_id = $request->board_id;
+        $add->medium_id = $request->medium_id;
         $add->standard_id = $request->standard_id;
         $add->semester_id = $request->semester_id;
         $add->subject_name = $request->subject_name;
@@ -134,6 +136,7 @@ class SubjectController extends Controller
     {
         $this->validate($request, [
             'board_id'     => 'required',
+            'medium_id'  => 'required',
             'semester_id' => 'required',
             'standard_id'  => 'required',
             'subject_name' => 'required',
@@ -178,6 +181,7 @@ class SubjectController extends Controller
 
         $update = Subject::find($id);
         $update->board_id = $request->board_id;
+        $update->medium_id = $request->medium_id;
         $update->standard_id = $request->standard_id;
         $update->semester_id = $request->semester_id;
         $update->subject_name = $request->subject_name;
@@ -222,7 +226,7 @@ class SubjectController extends Controller
 
     public function getSubject(Request $request){
 
-        $getsubject = Subject::where(['standard_id' => $request->standard_id,'semester_id' => $request->semester_id])->get();
+        $getsubject = Subject::where(['board_id' => $request->board_id,'standard_id' => $request->standard_id,'medium_id' => $request->medium_id,'semester_id' => $request->semester_id,'status' => 'Active'])->get();
 
         $result="<option value=''>--Select Subject--</option>";
         if(count($getsubject) > 0)
