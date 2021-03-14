@@ -22,7 +22,7 @@ use App\Http\Controllers\ExamStudentController;
 use App\Http\Controllers\StudentQuestionAnswerController;
 use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\MediumController;
-
+use App\Http\Controllers\NoteController;
 
 
 
@@ -89,11 +89,11 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('get_medium', [MediumController::class, 'getMedium'])->name('get.medium');
 	/* */
 	Route::get('note', [NoteController::class, 'index'])->name('note.index');
-	Route::get('note/create', [BookController::class, 'create'])->name('note.create');
-	Route::post('note/store', [BookController::class, 'store'])->name('note.store');
-	Route::get('note/{id}/edit', [BookController::class, 'edit'])->name('note.edit');
-	Route::post('note/{id}/update', [BookController::class, 'update'])->name('note.update');
-	Route::get('note/{id}/delete', [BookController::class, 'distroy'])->name('note.distroy');
+	Route::get('note/create', [NoteController::class, 'create'])->name('note.create');
+	Route::post('note/store', [NoteController::class, 'store'])->name('note.store');
+	Route::get('note/{id}/edit', [NoteController::class, 'edit'])->name('note.edit');
+	Route::post('note/{id}/update', [NoteController::class, 'update'])->name('note.update');
+	Route::get('note/{id}/delete', [NoteController::class, 'distroy'])->name('note.distroy');
 	
 
 	/*Semester*/

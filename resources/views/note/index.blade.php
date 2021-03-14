@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title','Book')
+@section('title','Notes')
 @section('css')
 @endsection
 
@@ -18,10 +18,10 @@
 			@endif
         	<div class="row">
         		<div class="col-lg-10">
-            		<h4 class="nk-block-title">Book List</h4>
+            		<h4 class="nk-block-title">Note List</h4>
             	</div>
             	<div class="col-lg-2 text-right">
-            		<a href="{{ route('book.create') }}" class="btn btn-primary text-light">Add Book</a>
+            		<a href="{{ route('note.create') }}" class="btn btn-primary text-light">Add Note</a>
             	</div>
             </div>
         </div>
@@ -34,20 +34,20 @@
                         <th>Unit</th>
                         <th>Title</th>
                         <th>Sub Title</th>
-                        <th>Action</th>
+                        <!-- <th>Action</th> -->
                     </tr>
                 </thead>
                 <tbody>
-                	@if(count($book_details) > 0)
-                	@foreach($book_details as $data)
+                	@if(count($note_details) > 0)
+                	@foreach($note_details as $data)
                     <tr>
                         <td>{{ isset($data->unit->title) ? $data->unit->title:'' }}</td>
                         <td>{{ $data->title }}</td>
                         <td>{{ $data->sub_title }}</td>
-                        <td>
-                        	<a href="{{ route('book.edit',$data->id) }}"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
-                        	<a href="javascript:;" data-url="{{ route('book.distroy',$data->id) }}" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a>
-                        </td>
+                        {{--<td>
+                        	<a href="{{ route('note.edit',$data->id) }}"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
+                        	<a href="javascript:;" data-url="{{ route('note.distroy',$data->id) }}" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a> 
+                        </td>--}}
                     </tr>
                     @endforeach
                     @else
@@ -69,7 +69,7 @@
 	$('.distroy').on('click', function() {
 	    let del_url = $(this).attr('data-url');
 	    bootbox.confirm({
-	        message: "Are you sure to delete this book ?",
+	        message: "Are you sure to delete this note ?",
 	        buttons: {
 	            confirm: {
 	                label: 'Yes',

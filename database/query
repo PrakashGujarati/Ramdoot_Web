@@ -1,6 +1,32 @@
 
 
+CREATE TABLE `notes` (
+  `id` int(11) NOT NULL,
+  `board_id` int(11) NOT NULL DEFAULT 0,
+  `medium_id` int(11) NOT NULL DEFAULT 0,
+  `standard_id` int(11) NOT NULL DEFAULT 0,
+  `semester_id` int(11) NOT NULL DEFAULT 0,
+  `subject_id` int(11) NOT NULL DEFAULT 0,
+  `unit_id` int(11) NOT NULL DEFAULT 0,
+  `user_id` int(11) NOT NULL DEFAULT 0,
+  `title` varchar(255) DEFAULT NULL,
+  `sub_title` varchar(255) DEFAULT NULL,
+  `url` varchar(255) DEFAULT NULL,
+  `thumbnail` varchar(255) DEFAULT NULL,
+  `pages` varchar(255) DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  `label` varchar(255) DEFAULT NULL,
+  `release_date` datetime DEFAULT NULL,
+  `status` enum('Active','Inactive','Deleted') DEFAULT 'Active',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT NULL
+);
 
+ALTER TABLE `notes`
+  ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `notes`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 ----------------------- 12-03-2020-------------------
 
@@ -45,17 +71,6 @@ ALTER TABLE `mediums`
 
 ALTER TABLE `mediums`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
-
-
-
-
-
-
-
-
-
-
 
 
 ----------------------- 11-03-2021-------------------

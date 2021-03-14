@@ -107,12 +107,12 @@
                                 </a>
                             </li><!-- .nk-menu-item -->    
 
-                            <!-- <li class="nk-menu-item @if(\Request::route()->getName() == 'note.index' || \Request::route()->getName() == 'note.create' || \Request::route()->getName() == 'note.edit') active @endif">
+                            <li class="nk-menu-item @if(\Request::route()->getName() == 'note.index' || \Request::route()->getName() == 'note.create' || \Request::route()->getName() == 'note.edit') active @endif">
                                 <a href="{{ route('note.index') }}" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
                                     <span class="nk-menu-text">Note</span>
                                 </a>
-                            </li> -->
+                            </li>
 
 
                             <li class="nk-menu-item @if(\Request::route()->getName() == 'videos.index' || \Request::route()->getName() == 'videos.create' || \Request::route()->getName() == 'videos.edit') active @endif">
