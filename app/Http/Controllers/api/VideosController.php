@@ -220,7 +220,7 @@ class VideosController extends Controller
             );
 
             $chkuser = User::where(['id' => $request->user_id])->first();
-
+            $count=0;
             if($chkuser){
 
                 $chkview = solution_material_count::where(['type_id' => $request->type_id,'user_id' => $request->user_id])->first();
@@ -228,13 +228,16 @@ class VideosController extends Controller
                 if($chkview){
 
                     if($request->counttype == "whatsapp_count"){
-                        solution_material_count::where(['type_id' => $request->type_id,'user_id' => $request->user_id])->update(['whatsapp_count' => $chkview->whatsapp_count+1]);    
+                        solution_material_count::where(['type_id' => $request->type_id,'user_id' => $request->user_id])->update(['whatsapp_count' => $chkview->whatsapp_count+1]);  
+                        $count=$chkview->whatsapp_count+1;
                     }
                     elseif ($request->counttype == "share_count") {
                         solution_material_count::where(['type_id' => $request->type_id,'user_id' => $request->user_id])->update(['share_count' => $chkview->share_count+1]);
+                        $count=$chkview->share_count+1;
                     }
                     elseif ($request->counttype == "show_count") {
                         solution_material_count::where(['type_id' => $request->type_id,'user_id' => $request->user_id])->update(['show_count' => $chkview->show_count+1]);
+                        $count=$chkview->show_count+1;
                     }
                     
                 }else{
@@ -254,12 +257,14 @@ class VideosController extends Controller
                     }
                     
                     $add->save();
+                    $count=1;
                 }
 
 
                 return response()->json([
                     "code" => 200,
-                    "message" => "success"
+                    "message" => "success",
+                    "count"=>$count
                 ]);
 
             }
