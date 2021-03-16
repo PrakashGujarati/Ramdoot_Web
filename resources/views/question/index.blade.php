@@ -47,9 +47,21 @@
             <table class="datatable-init table">
                 <thead>
                     <tr>
+                        <th>Board</th>
+                        <th>Medium</th>
+                        <th>Standard</th>
+                        <th>Semester</th>
+                        <th>Subject</th>
                         <th>Unit</th>
                         <th>Question</th>
+                        <th>Option A</th>
+                        <th>Option B</th>
+                        <th>Option C</th>
+                        <th>Option D</th>
                         <th>Answer</th>
+                        <th>Note</th>
+                        <th>Per Question Marks</th>
+                        <th>Level</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -57,11 +69,23 @@
                 	@if(count($question_details) > 0)
                 	@foreach($question_details as $data)
                     <tr>
+                        <td>{{ isset($data->board->name) ? $data->board->name:'' }}</td>
+                        <td>{{ isset($data->medium->medium_name) ? $data->medium->medium_name:'' }}</td>
+                        <td>{{ isset($data->standard->standard) ? $data->standard->standard:'' }}</td>
+                        <td>{{ isset($data->semester->semester) ? $data->semester->semester:'' }}</td>
+                        <td>{{ isset($data->subject->subject_name) ? $data->subject->subject_name:'' }}</td>
                         <td>{{ isset($data->unit->title) ? $data->unit->title:'' }}</td>
                         <td>{{ $data->question }}</td>
+                        <td>{{ $data->option_a }}</td>
+                        <td>{{ $data->option_b }}</td>
+                        <td>{{ $data->option_c }}</td>
+                        <td>{{ $data->option_d }}</td>
                         <td>{{ $data->answer }}</td>
+                        <td>{{ $data->note }}</td>
+                        <td>{{ $data->per_question_marks }}</td>
+                        <td>{{ $data->level }}</td>
                         <td>
-                        	<a href="{{ route('question.edit',$data->id) }}"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
+                        	<a href="{{ route('question.edit',$data->id) }}" class="mr-1"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
                         	<a href="javascript:;" data-url="{{ route('question.distroy',$data->id) }}" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a>
                         </td>
                     </tr>
@@ -83,7 +107,7 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.js"></script>
 
 <script type="text/javascript">
-	$('.distroy').on('click', function() {
+	$(document).on('click','.distroy', function() {
 	    let del_url = $(this).attr('data-url');
 	    bootbox.confirm({
 	        message: "Are you sure to delete this question ?",

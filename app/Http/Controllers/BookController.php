@@ -81,12 +81,16 @@ class BookController extends Controller
         }
 
         $url_file='';
-        if($request->has('url'))
-        {
-            $image = $request->file('url');
-            $url_file = time().'.'.$image->getClientOriginalExtension();
-            $destinationPath = public_path('upload/book/url/');
-            $image->move($destinationPath, $url_file);
+        if($request->url_type == 'file'){
+            if($request->file('url'))
+            {
+                $image = $request->file('url');
+                $url_file = time().'.'.$image->getClientOriginalExtension();
+                $destinationPath = public_path('upload/book/url/');
+                $image->move($destinationPath, $url_file);
+            }
+        }else{
+            $url_file = $request->url;
         }
 
         $add = new Book;
@@ -99,6 +103,7 @@ class BookController extends Controller
         $add->unit_id = $request->unit_id;
         $add->title = $request->title;
         $add->sub_title = $request->sub_title;
+        $add->url_type = $request->url_type;
         $add->url = $url_file;
         $add->thumbnail = $new_name;
         $add->pages = isset($request->pages) ? $request->pages:'';
@@ -184,15 +189,19 @@ class BookController extends Controller
         }
 
         $url_file='';
-        if($request->has('url'))
-        {
-            $image = $request->file('url');
-            $url_file = time().'.'.$image->getClientOriginalExtension();
-            $destinationPath = public_path('upload/book/url/');
-            $image->move($destinationPath, $url_file);
-        }
-        else{
-            $url_file = $request->hidden_url;
+        if($request->url_type == 'file'){
+            if($request->file('url'))
+            {
+                $image = $request->file('url');
+                $url_file = time().'.'.$image->getClientOriginalExtension();
+                $destinationPath = public_path('upload/book/url/');
+                $image->move($destinationPath, $url_file);
+            }
+            else{
+                $url_file = $request->hidden_url;
+            }
+        }else{
+            $url_file = $request->url;
         }
 
 
@@ -205,6 +214,7 @@ class BookController extends Controller
         $update->subject_id = $request->subject_id;
         $update->title = $request->title;
         $update->sub_title = $request->sub_title;
+        $update->url_type = $request->url_type;
         $update->url = $url_file;
         $update->thumbnail = $new_name;
         $update->pages = isset($request->pages) ? $request->pages:'';

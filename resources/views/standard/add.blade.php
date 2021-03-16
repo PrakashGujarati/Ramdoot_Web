@@ -11,7 +11,7 @@
             <div class="card h-100">
                 <div class="card-inner">
                     <div class="card-head">
-                        <h5 class="card-title">Add Standard</h5>
+                        <h5 class="card-title">Add Standard / Class</h5>
                     </div>
                     <form action="{{ route('standard.store') }}" method="POST" enctype='multipart/form-data'>
                     @csrf

@@ -17,11 +17,11 @@
 				</div>
 			@endif
         	<div class="row">
-        		<div class="col-lg-10">
-            		<h4 class="nk-block-title">Board List</h4>
+        		<div class="col-lg-8">
+            		<h4 class="nk-block-title">Board / Organisation List</h4>
             	</div>
-            	<div class="col-lg-2 text-right">
-            		<a href="{{ route('board.create') }}" class="btn btn-primary text-light">Add Board</a>
+            	<div class="col-lg-4 text-right">
+            		<a href="{{ route('board.create') }}" class="btn btn-primary text-light">Add Board / Organisation</a>
             	</div>
             </div>
         </div>
@@ -32,8 +32,8 @@
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Medium</th>
                         <th>Abbreviation</th>
+                        <th>Thumbnail</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -42,10 +42,14 @@
                 	@foreach($boards_details as $data)
                     <tr>
                         <td>{{ $data->name }}</td>
-                        <td>{{ $data->medium }}</td>
                         <td>{{ $data->abbreviation }}</td>
                         <td>
-                        	<a href="{{ route('board.edit',$data->id) }}"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
+                            @if($data->thumbnail)
+                            <img src="{{ asset('upload/board/thumbnail/'.$data->thumbnail) }}" class="thumbnail" height="50" width="50">
+                            @endif
+                        </td>
+                        <td>
+                        	<a href="{{ route('board.edit',$data->id) }}" class="mr-1"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
                         	<a href="javascript:;" data-url="{{ route('board.distroy',$data->id) }}" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a>
                         </td>
                     </tr>

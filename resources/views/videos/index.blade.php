@@ -31,8 +31,18 @@
             <table class="datatable-init table">
                 <thead>
                     <tr>
+                        <th>Board</th>
+                        <th>Medium</th>
+                        <th>Standard</th>
+                        <th>Semester</th>
+                        <th>Subject</th>
                         <th>Unit</th>
                         <th>Title</th>
+                        <th>URL</th>
+                        <th>Duration</th>
+                        <th>Label</th>
+                        <th>Release Date</th>
+                        <th>Thumbnail</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -40,10 +50,32 @@
                 	@if(count($videos_details) > 0)
                 	@foreach($videos_details as $data)
                     <tr>
+                        <td>{{ isset($data->board->name) ? $data->board->name:'' }}</td>
+                        <td>{{ isset($data->medium->medium_name) ? $data->medium->medium_name:'' }}</td>
+                        <td>{{ isset($data->standard->standard) ? $data->standard->standard:'' }}</td>
+                        <td>{{ isset($data->semester->semester) ? $data->semester->semester:'' }}</td>
+                        <td>{{ isset($data->subject->subject_name) ? $data->subject->subject_name:'' }}</td>
                         <td>{{ isset($data->unit->title) ? $data->unit->title:'' }}</td>
                         <td>{{ $data->title }}</td>
                         <td>
-                        	<a href="{{ route('videos.edit',$data->id) }}"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
+                            @if($data->url)
+                            @if($data->type == "File")
+                            <img src="{{ asset('upload/videos/url/'.$data->url) }}" class="thumbnail" height="50" width="50">
+                            @else
+                            {{ $data->url }}
+                            @endif
+                            @endif
+                        </td>
+                        <td>{{ $data->duration }}</td>
+                        <td>{{ $data->label }}</td>
+                        <td>{{ $data->release_date }}</td>
+                        <td>
+                            @if($data->thumbnail)
+                            <img src="{{ asset('upload/videos/thumbnail/'.$data->thumbnail) }}" class="thumbnail" height="50" width="50">
+                            @endif
+                        </td>
+                        <td>
+                        	<a href="{{ route('videos.edit',$data->id) }}" class="mr-1"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
                         	<a href="javascript:;" data-url="{{ route('videos.distroy',$data->id) }}" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a>
                         </td>
                     </tr>
@@ -64,7 +96,7 @@
 @section('scripts')
 
 <script type="text/javascript">
-	$('.distroy').on('click', function() {
+	$(document).on('click','.distroy', function() {
 	    let del_url = $(this).attr('data-url');
 	    bootbox.confirm({
 	        message: "Are you sure to delete this video ?",

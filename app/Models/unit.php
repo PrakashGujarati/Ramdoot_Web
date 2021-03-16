@@ -23,7 +23,15 @@ class unit extends Model
     {
     	return $this->belongsTo(Subject::class,'subject_id');
     }
+    
+    public function board()
+    {
+        return $this->belongsTo(Board::class,'board_id');
+    }
 
-
+    public function medium()
+    {
+        return $this->belongsTo(Medium::class,'medium_id');
+    }
 
 }

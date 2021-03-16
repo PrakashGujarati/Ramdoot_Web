@@ -38,9 +38,9 @@ class BoardController extends Controller
     {
         $this->validate($request, [
             'name'     => 'required',
-            'medium'  => 'required',
+            //'medium'  => 'required',
             'abbreviation' => 'required',
-            'url'  => 'required',
+           // 'url'  => 'required',
             'thumbnail'  => 'required',
         ]);
 
@@ -65,20 +65,20 @@ class BoardController extends Controller
             }
         }
 
-        $url_file='';
-        if($request->has('url'))
-        {
-            $image = $request->file('url');
-            $url_file = time().'.'.$image->getClientOriginalExtension();
-            $destinationPath = public_path('upload/board/url/');
-            $image->move($destinationPath, $url_file);
-        }
+        // $url_file='';
+        // if($request->has('url'))
+        // {
+        //     $image = $request->file('url');
+        //     $url_file = time().'.'.$image->getClientOriginalExtension();
+        //     $destinationPath = public_path('upload/board/url/');
+        //     $image->move($destinationPath, $url_file);
+        // }
 
         $add = new Board;
         $add->name = $request->name;
-        $add->medium = $request->medium;
+        //$add->medium = $request->medium;
         $add->abbreviation = $request->abbreviation;
-        $add->url = $url_file;
+        //$add->url = $url_file;
         $add->thumbnail = $new_name;
         $add->save();
 
@@ -119,7 +119,7 @@ class BoardController extends Controller
     {
         $this->validate($request, [
             'name'     => 'required',
-            'medium'  => 'required',
+           // 'medium'  => 'required',
             'abbreviation' => 'required'
         ]);
 
@@ -148,25 +148,25 @@ class BoardController extends Controller
         }
 
 
-        $url_file='';
-        if($request->has('url'))
-        {
-            $image = $request->file('url');
-            $url_file = time().'.'.$image->getClientOriginalExtension();
-            $destinationPath = public_path('upload/board/url/');
-            $image->move($destinationPath, $url_file);
-        }
-        else{
-            $url_file = $request->hidden_url;
-        }
+        // $url_file='';
+        // if($request->has('url'))
+        // {
+        //     $image = $request->file('url');
+        //     $url_file = time().'.'.$image->getClientOriginalExtension();
+        //     $destinationPath = public_path('upload/board/url/');
+        //     $image->move($destinationPath, $url_file);
+        // }
+        // else{
+        //     $url_file = $request->hidden_url;
+        // }
 
         
 
         $update = Board::find($id);
         $update->name = $request->name;
-        $update->medium = $request->medium;
+       // $update->medium = $request->medium;
         $update->abbreviation = $request->abbreviation;
-        $update->url = $url_file;
+        //$update->url = $url_file;
         $update->thumbnail = $new_name;
         $update->save();
 

@@ -31,8 +31,21 @@
             <table class="datatable-init table">
                 <thead>
                     <tr>
+                        <th>Board</th>
+                        <th>Medium</th>
+                        <th>Standard</th>
+                        <th>Semester</th>
+                        <th>Subject</th>
                         <th>Unit</th>
                         <th>Name</th>
+                        <th>Note</th>
+                        <th>Time Duration</th>
+                        <th>Exam Date</th>
+                        <th>Total Marks</th>
+                        <th>Total Question</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Negative Marks</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -40,10 +53,23 @@
                 	@if(count($exam_details) > 0)
                 	@foreach($exam_details as $data)
                     <tr>
+                        <td>{{ isset($data->board->name) ? $data->board->name:'' }}</td>
+                        <td>{{ isset($data->medium->medium_name) ? $data->medium->medium_name:'' }}</td>
+                        <td>{{ isset($data->standard->standard) ? $data->standard->standard:'' }}</td>
+                        <td>{{ isset($data->semester->semester) ? $data->semester->semester:'' }}</td>
+                        <td>{{ isset($data->subject->subject_name) ? $data->subject->subject_name:'' }}</td>
                         <td>{{ isset($data->unit->title) ? $data->unit->title:'' }}</td>
                         <td>{{ $data->name }}</td>
+                        <th>{{ $data->note }}</th>
+                        <th>{{ $data->time_duration }}</th>
+                        <th>{{ $data->exam_date }}</th>
+                        <th>{{ $data->total_marks }}</th>
+                        <th>{{ $data->total_question }}</th>
+                        <th>{{ $data->start_time }}</th>
+                        <th>{{ $data->end_time }}</th>
+                        <th>{{ $data->negative_marks }}</th>
                         <td>
-                        	<a href="{{ route('exam.edit',$data->id) }}"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
+                        	<a href="{{ route('exam.edit',$data->id) }}" class="mr-1"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
                         	<a href="javascript:;" data-url="{{ route('exam.distroy',$data->id) }}" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a>
                         </td>
                     </tr>
@@ -64,7 +90,7 @@
 @section('scripts')
 
 <script type="text/javascript">
-	$('.distroy').on('click', function() {
+	$(document).on('click','.distroy', function() {
 	    let del_url = $(this).attr('data-url');
 	    bootbox.confirm({
 	        message: "Are you sure to delete this exam ?",

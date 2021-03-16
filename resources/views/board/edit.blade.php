@@ -11,7 +11,7 @@
             <div class="card h-100">
                 <div class="card-inner">
                     <div class="card-head">
-                        <h5 class="card-title">Edit Board</h5>
+                        <h5 class="card-title">Edit Board / Organisation</h5>
                     </div>
                     <form action="{{ route('board.update',$boarddata->id) }}" method="POST" enctype='multipart/form-data'>
                     @csrf
@@ -26,7 +26,7 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="form-group">
+                        {{--<div class="form-group">
                             <label class="form-label">Medium</label>
                             <div class="form-control-wrap">
                                 <input type="text" class="form-control" id="medium" name="medium" value="{{ $boarddata->medium }}">
@@ -36,7 +36,7 @@
                                     </span>
                                 @enderror
                             </div>
-                        </div>
+                        </div>--}}
                         <div class="form-group">
                             <label class="form-label">Abbreviation</label>
                             <div class="form-control-wrap">
@@ -48,7 +48,7 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="form-group">
+                        {{--<div class="form-group">
                             <label class="form-label">Url</label>
                             <div class="form-control-wrap">
                                 <input type="file" class="form-control" id="url" name="url" value="">
@@ -68,7 +68,7 @@
                                     </span>
                                 @enderror
                             </div>
-                        </div>
+                        </div>--}}
                         <div class="form-group">
                             <label class="form-label">Thumbnail</label>
                             <div class="form-control-wrap">

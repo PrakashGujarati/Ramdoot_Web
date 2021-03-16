@@ -138,12 +138,24 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label class="form-label">Url</label>
+                        <div class="row">
+                        <div class="form-group col-lg-6">
+                            <div class="row">
+                                <input type="hidden" name="url_type" class="url_type" id="url_type" value="file">
+                                <div class="col-lg-6"><label class="form-label">Url</label></div>
+                                <div class="col-lg-6 text-right"><div class="g">
+                                    <div class="custom-control custom-control-sm custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input urlchk" name="instant_result" value="{{ $bookdata->url_type }}" id="instant_result">
+                                        <label class="custom-control-label" for="instant_result"></label>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
                             <div class="form-control-wrap">
                                 <input type="file" class="form-control" id="url" name="url" value="">
                                 <input type="hidden" name="hidden_url" value="{{ $bookdata->url }}">
                                 <br/>
+                                @if($bookdata->url_type == "file")
                                 @if($bookdata->url)
                                     @php $ext = pathinfo($bookdata->url, PATHINFO_EXTENSION); @endphp
                                     @if($ext == "png" || $ext == "jpg" || $ext == "jpeg")
@@ -152,9 +164,10 @@
                                     <p>{{ $bookdata->url }}</p>
                                     @endif
                                 @endif
+                                @endif
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group col-lg-6">
                             <label class="form-label">Thumbnail</label>
                             <div class="form-control-wrap">
                                 <input type="file" class="form-control" id="thumbnail" name="thumbnail" value="">
@@ -169,6 +182,7 @@
                                     </span>
                                 @enderror
                             </div>
+                        </div>
                         </div>
 
                         <div class="form-group">
@@ -254,6 +268,19 @@
         getSemesterEdit(board_id,medium_id,standard_id,semester_id);
         getSubjectEdit(board_id,medium_id,standard_id,semester_id,subject_id);
         getUnitEdit(board_id,medium_id,standard_id,semester_id,subject_id,unit_id);
+
+        var chkval = $('.urlchk').val();
+        if(chkval == "text"){
+            $('.urlchk').prop('checked',true);
+            $("#url").attr('type', 'text');
+            var urlval = "{{ $bookdata->url }}";
+            $("#url").val(urlval);
+            $('#url_type').val('text');
+        }
+        else if(chkval == "file"){
+            $("#url").attr('type', 'file');
+            $('#url_type').val('file');
+        }
 
     });
 
@@ -464,6 +491,17 @@
             } 
         });
     }
+
+    $(document).on('change','.urlchk',function(){
+        if($(this).prop("checked") == true){
+            $("#url").attr('type', 'text');
+            $('#url_type').val('text');
+        }
+        else if($(this).prop("checked") == false){
+            $("#url").attr('type', 'file');
+            $('#url_type').val('file');
+        }
+    });
 
 </script>
 

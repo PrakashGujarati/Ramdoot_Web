@@ -13,6 +13,10 @@ class semester extends Model
     {
     	return $this->belongsTo(Board::class,'board_id');
     }
+    public function medium()
+    {
+    	return $this->belongsTo(Medium::class,'medium_id');
+    }
 
     public function standard()
     {

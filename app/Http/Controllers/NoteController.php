@@ -36,6 +36,7 @@ class NoteController extends Controller
             'unit_id' => 'required',
             'title' => 'required',
             'sub_title' => 'required',
+            'url' => 'required',
             // 'url' => 'required',
             // 'thumbnail'  => 'required',
             // 'pages' => 'required',

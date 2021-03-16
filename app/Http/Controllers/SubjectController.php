@@ -49,7 +49,7 @@ class SubjectController extends Controller
             'standard_id'  => 'required',
             'subject_name' => 'required',
             'sub_title' => 'required',
-            'url' => 'required',
+            //'url' => 'required',
             'thumbnail'  => 'required',
         ]);
 
@@ -74,14 +74,14 @@ class SubjectController extends Controller
             }
         }
 
-        $url_file='';
-        if($request->has('url'))
-        {
-            $image = $request->file('url');
-            $url_file = time().'.'.$image->getClientOriginalExtension();
-            $destinationPath = public_path('upload/subject/url/');
-            $image->move($destinationPath, $url_file);
-        }
+        //$url_file='';
+        // if($request->has('url'))
+        // {
+        //     $image = $request->file('url');
+        //     $url_file = time().'.'.$image->getClientOriginalExtension();
+        //     $destinationPath = public_path('upload/subject/url/');
+        //     $image->move($destinationPath, $url_file);
+        // }
 
         $add = new Subject;
         $add->board_id = $request->board_id;
@@ -90,7 +90,7 @@ class SubjectController extends Controller
         $add->semester_id = $request->semester_id;
         $add->subject_name = $request->subject_name;
         $add->sub_title = $request->sub_title;
-        $add->url = $url_file;
+        //$add->url = $url_file;
         $add->thumbnail = $new_name;
         $add->save();
 
@@ -167,17 +167,17 @@ class SubjectController extends Controller
             $new_name = $request->hidden_thumbnail;
         }
 
-        $url_file='';
-        if($request->has('url'))
-        {
-            $image = $request->file('url');
-            $url_file = time().'.'.$image->getClientOriginalExtension();
-            $destinationPath = public_path('upload/subject/url/');
-            $image->move($destinationPath, $url_file);
-        }
-        else{
-            $url_file = $request->hidden_url;
-        }
+        // $url_file='';
+        // if($request->has('url'))
+        // {
+        //     $image = $request->file('url');
+        //     $url_file = time().'.'.$image->getClientOriginalExtension();
+        //     $destinationPath = public_path('upload/subject/url/');
+        //     $image->move($destinationPath, $url_file);
+        // }
+        // else{
+        //     $url_file = $request->hidden_url;
+        // }
 
         $update = Subject::find($id);
         $update->board_id = $request->board_id;
@@ -186,7 +186,7 @@ class SubjectController extends Controller
         $update->semester_id = $request->semester_id;
         $update->subject_name = $request->subject_name;
         $update->sub_title = $request->sub_title;
-        $update->url = $url_file;
+        //$update->url = $url_file;
         $update->thumbnail = $new_name;
         $update->save();
 

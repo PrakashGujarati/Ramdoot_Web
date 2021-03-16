@@ -101,7 +101,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        {{--<div class="form-group">
                             <label class="form-label">Url</label>
                             <div class="form-control-wrap">
                                 <input type="file" class="form-control" id="url" name="url" value="">
@@ -121,7 +121,7 @@
                                     </span>
                                 @enderror
                             </div>
-                        </div>
+                        </div>--}}
                         <div class="form-group">
                             <label class="form-label">Thumbnail</label>
                             <div class="form-control-wrap">

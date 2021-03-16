@@ -137,8 +137,20 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="form-label">Url</label>
+
+                        <div class="row">
+                        <div class="form-group col-lg-6">
+                            <div class="row">
+                                <input type="hidden" name="url_type" class="url_type" id="url_type" value="file">
+                                <div class="col-lg-6"><label class="form-label">Url</label></div>
+                                <div class="col-lg-6 text-right"><div class="g">
+                                    <div class="custom-control custom-control-sm custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input urlchk" name="instant_result" value="1" id="instant_result">
+                                        <label class="custom-control-label" for="instant_result"></label>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
                             <div class="form-control-wrap">
                                 <input type="file" class="form-control" id="url" name="url" value="">
                                 @error('url')
@@ -148,7 +160,7 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group col-lg-6">
                             <label class="form-label">Thumbnail</label>
                             <div class="form-control-wrap">
                                 <input type="file" class="form-control" id="thumbnail" name="thumbnail" value="">
@@ -158,6 +170,7 @@
                                     </span>
                                 @enderror
                             </div>
+                        </div>
                         </div>
 
                         <div class="form-group">
@@ -350,6 +363,17 @@ function getUnit(board_id,medium_id,standard_id,semester_id,subject_id){
         } 
     });
 }
+
+$(document).on('change','.urlchk',function(){
+    if($(this).prop("checked") == true){
+        $("#url").attr('type', 'text');
+        $('#url_type').val('text');
+    }
+    else if($(this).prop("checked") == false){
+        $("#url").attr('type', 'file');
+        $('#url_type').val('file');
+    }
+});
 
 </script>
 
