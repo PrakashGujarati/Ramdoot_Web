@@ -120,7 +120,7 @@ class RegisterController extends Controller
 
         if ($validator->fails()) {
             $msg = $validator->messages();
-            return ['status' => "false",'msg' => $msg];
+            return ['code' => 500,'message'=>'Invalid input','data' => $msg];
         }
 
         $checkuser = User::where('mobile',$request->mobile)->first();
@@ -166,7 +166,7 @@ class RegisterController extends Controller
                 $image = env('APP_URL')."/upload/profile/".$update->profile_photo_path;    
             }
 
-            $data = ['name' => $update->name,'mobile' => $update->mobile,'email' => $update->email,'address' => $update->address,'pin_code' => $update->pin_code,'city' => $update->city,'birth_date' => $update->birth_date,'profile_photo' => $image,'username' => $update->username];
+            $data = ['name' => $update->name,'mobile' => $update->mobile,'email' => $update->email,'address' => $update->address,'pin_code' => $update->pin_code,'city' => $update->city,'birth_date' => $update->birth_date,'profile_photo' => $image,'username' => $update->username,'user_id'=>$checkuser->id];
 
             return response()->json([
                 "code" => 200,
@@ -176,7 +176,7 @@ class RegisterController extends Controller
         }
         else{
             return response()->json([
-                "code" => 400,
+                "code" => 500,
                 "message" => "User not found.",
                 "data" => [],
             ]); 

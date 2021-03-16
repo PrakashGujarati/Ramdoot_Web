@@ -228,17 +228,20 @@ class TextbookController extends Controller
 
             if($chkview){
                 pdf_view::where(['type_id' => $request->type_id,'user_id' => $request->user_id])->update(['count' => $chkview->count+1]);
+                $count=$chkview->count+1;
             }else{
                 $add =  new pdf_view;
                 $add->type_id = $request->type_id;
                 $add->user_id = $request->user_id;
                 $add->count = 1;
                 $add->save();
+                $count=1;
             }
 
             return response()->json([
                 "code" => 200,
-                "message" => "success"
+                "message" => "success",
+                "data"=>['count'=>$count]
             ]);
 
         }
