@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\question;
+use App\Models\Question;
 use Illuminate\Http\Request;
-use App\Models\unit;
+use App\Models\Unit;
 use App\Models\Board;
 use Excel;
 use App\Imports\QuestionImport;
@@ -21,7 +21,7 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        $question_details = question::where('status','Active')->get();
+        $question_details = Question::where('status','Active')->get();
         return view('question.index',compact('question_details'));
     }
 
@@ -32,7 +32,7 @@ class QuestionController extends Controller
      */
     public function create()
     {
-        $units = unit::where('status','Active')->get();
+        $units = Unit::where('status','Active')->get();
         $boards = Board::where('status','Active')->get();
         return view('question.add',compact('units','boards'));
     }
@@ -64,7 +64,7 @@ class QuestionController extends Controller
 
         for ($i = 0; $i < count($request->question); $i++) {
         
-        $add = new question;
+        $add = new Question;
         $add->board_id = $request->board_id;
         $add->medium_id = $request->medium_id;
         $add->standard_id = $request->standard_id;
@@ -94,7 +94,7 @@ class QuestionController extends Controller
      * @param  \App\Models\question  $question
      * @return \Illuminate\Http\Response
      */
-    public function show(question $question)
+    public function show(Question $question)
     {
         //
     }
@@ -105,11 +105,11 @@ class QuestionController extends Controller
      * @param  \App\Models\question  $question
      * @return \Illuminate\Http\Response
      */
-    public function edit(question $question,$id)
+    public function edit(Question $question,$id)
     {
-        $units = unit::where('status','Active')->get();
+        $units = Unit::where('status','Active')->get();
         $boards = Board::where('status','Active')->get();
-        $questiondata = question::where('id',$id)->first();
+        $questiondata = Question::where('id',$id)->first();
         return view('question.edit',compact('questiondata','units','boards'));
     }
 
@@ -120,7 +120,7 @@ class QuestionController extends Controller
      * @param  \App\Models\question  $question
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, question $question,$id)
+    public function update(Request $request, Question $question,$id)
     {
         $this->validate($request, [
             'board_id' => 'required',
@@ -140,7 +140,7 @@ class QuestionController extends Controller
         ]);
 
         
-        $update = question::find($id);
+        $update = Question::find($id);
         $update->board_id = $request->board_id;
         $update->medium_id = $request->medium_id;
         $update->standard_id = $request->standard_id;
@@ -167,9 +167,9 @@ class QuestionController extends Controller
      * @param  \App\Models\question  $question
      * @return \Illuminate\Http\Response
      */
-    public function distroy(question $question,$id)
+    public function distroy(Question $question,$id)
     {
-        $delete = question::find($id);
+        $delete = Question::find($id);
         $delete->status = "Deleted";
         $delete->save();
 

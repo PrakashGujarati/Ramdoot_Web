@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\slider;
+use App\Models\Slider;
 use Illuminate\Http\Request;
 
 class SliderController extends Controller
@@ -14,7 +14,7 @@ class SliderController extends Controller
      */
     public function index()
     {
-        $slider_details = slider::where('status','Active')->get();
+        $slider_details = Slider::where('status','Active')->get();
         return view('slider.index',compact('slider_details'));
     }
 
@@ -65,7 +65,7 @@ class SliderController extends Controller
             }
         }
 
-        $add = new slider;
+        $add = new Slider;
         $add->area = $request->area;
         $add->url = $request->url;
         $add->text = $request->text;
@@ -82,7 +82,7 @@ class SliderController extends Controller
      * @param  \App\Models\slider  $slider
      * @return \Illuminate\Http\Response
      */
-    public function show(slider $slider)
+    public function show(Slider $slider)
     {
         //
     }
@@ -93,9 +93,9 @@ class SliderController extends Controller
      * @param  \App\Models\slider  $slider
      * @return \Illuminate\Http\Response
      */
-    public function edit(slider $slider,$id)
+    public function edit(Slider $slider,$id)
     {
-        $sliderdata = slider::where('id',$id)->first();
+        $sliderdata = Slider::where('id',$id)->first();
         return view('slider.edit',compact('sliderdata'));
     }
 
@@ -106,7 +106,7 @@ class SliderController extends Controller
      * @param  \App\Models\slider  $slider
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, slider $slider,$id)
+    public function update(Request $request, Slider $slider,$id)
     {
         $this->validate($request, [
             'area' => 'required',
@@ -139,7 +139,7 @@ class SliderController extends Controller
             $new_name = $request->hidden_image;
         }
 
-        $update = slider::find($id);
+        $update = Slider::find($id);
         $update->area = $request->area;
         $update->url = $request->url;
         $update->text = $request->text;
@@ -156,9 +156,9 @@ class SliderController extends Controller
      * @param  \App\Models\slider  $slider
      * @return \Illuminate\Http\Response
      */
-    public function distroy(slider $slider,$id)
+    public function distroy(Slider $slider,$id)
     {
-        $delete = slider::find($id);
+        $delete = Slider::find($id);
         $delete->status = "Deleted";
         $delete->save();
 

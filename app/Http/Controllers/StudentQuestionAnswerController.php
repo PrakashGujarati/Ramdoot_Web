@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\student_question_answer;
+use App\Models\StudentQuestionAnswer;
 use Illuminate\Http\Request;
 
 class StudentQuestionAnswerController extends Controller
@@ -14,7 +14,7 @@ class StudentQuestionAnswerController extends Controller
      */
     public function index()
     {
-        $student_question_answer_details = student_question_answer::all();
+        $student_question_answer_details = StudentQuestionAnswer::all();
         return view('exam_student_question_answer.index',compact('student_question_answer_details'));
     }
 
@@ -45,7 +45,7 @@ class StudentQuestionAnswerController extends Controller
      * @param  \App\Models\student_question_answer  $student_question_answer
      * @return \Illuminate\Http\Response
      */
-    public function show(student_question_answer $student_question_answer)
+    public function show(StudentQuestionAnswer $student_question_answer)
     {
         //
     }
@@ -56,7 +56,7 @@ class StudentQuestionAnswerController extends Controller
      * @param  \App\Models\student_question_answer  $student_question_answer
      * @return \Illuminate\Http\Response
      */
-    public function edit(student_question_answer $student_question_answer)
+    public function edit(StudentQuestionAnswer $student_question_answer)
     {
         //
     }
@@ -68,7 +68,7 @@ class StudentQuestionAnswerController extends Controller
      * @param  \App\Models\student_question_answer  $student_question_answer
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, student_question_answer $student_question_answer)
+    public function update(Request $request, StudentQuestionAnswer $student_question_answer)
     {
         //
     }
@@ -79,7 +79,7 @@ class StudentQuestionAnswerController extends Controller
      * @param  \App\Models\student_question_answer  $student_question_answer
      * @return \Illuminate\Http\Response
      */
-    public function destroy(student_question_answer $student_question_answer)
+    public function destroy(StudentQuestionAnswer $student_question_answer)
     {
         //
     }

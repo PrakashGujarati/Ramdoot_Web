@@ -4,13 +4,13 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\solution;
-use App\Models\unit;
+use App\Models\Solution;
+use App\Models\Unit;
 use DB;
 use Validator;
 use App\Models\Standard;
 use App\Models\Subject;
-use App\Models\semester;
+use App\Models\Semester;
 
 class SolutionController extends Controller
 {
@@ -30,7 +30,7 @@ class SolutionController extends Controller
             return ['status' => "false",'msg' => $msg];
         }
 
-        $chkunit = unit::where(['id' => $request->unit_id,'status' => 'Active'])->first();
+        $chkunit = Unit::where(['id' => $request->unit_id,'status' => 'Active'])->first();
 
         if(empty($chkunit)){
         	return response()->json([
@@ -41,13 +41,13 @@ class SolutionController extends Controller
         }
         else{
 
-        	$getdata = unit::where(['id' => $request->unit_id,'status' => 'Active']);
+        	$getdata = Unit::where(['id' => $request->unit_id,'status' => 'Active']);
         	
 	    	if($getdata->count() > 0){
 	    		$data=[];$getdata=[];
 				$title="";
 
-	    		$getdata = solution::where(['unit_id' => $request->unit_id,'status' => 'Active'])->get();
+	    		$getdata = Solution::where(['unit_id' => $request->unit_id,'status' => 'Active'])->get();
 	    			$solutiondata=[];
 	    			foreach ($getdata as $value1) {
 	    				$image = env('APP_URL')."/upload/solution/thumbnail/".$value1->image;

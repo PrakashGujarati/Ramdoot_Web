@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\note;
+use App\Models\Note;
 
 class NoteController extends Controller
 {
@@ -61,7 +61,7 @@ class NoteController extends Controller
 	    	if(count($getunit) > 0){
 	    		$data=[];$getdata=[];
 	    		foreach ($getunit as $value) {
-	    			$getdata = note::where(['unit_id' => $value->id,'status' => 'Active'])->get();
+	    			$getdata = Note::where(['unit_id' => $value->id,'status' => 'Active'])->get();
 	    			$bookdata=[];
 	    			foreach ($getdata as $value1) {
                         $url = env('APP_URL')."/upload/book/url/".$value1->url;

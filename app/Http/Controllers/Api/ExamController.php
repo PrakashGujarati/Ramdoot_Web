@@ -5,21 +5,21 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Book;
-use App\Models\unit;
+use App\Models\Unit;
 use DB;
 use Validator;
 use App\Models\Standard;
 use App\Models\Subject;
-use App\Models\semester;
-use App\Models\pdf_bookmark;
-use App\Models\feature;
+use App\Models\Semester;
+use App\Models\PdfBookmark;
+use App\Models\Feature;
 use App\Models\pdf_view;
 use App\Models\User;
-use App\Models\exam;
+use App\Models\Exam;
 use App\Models\exam_student;
-use App\Models\exam_question;
-use App\Models\question;
-use App\Models\student_question_answer;
+use App\Models\ExamQuestion;
+use App\Models\Question;
+use App\Models\StudentQuestionAnswer;
 
 class ExamController extends Controller
 {
@@ -46,7 +46,7 @@ class ExamController extends Controller
         }
 
         $chkstandard = Standard::where(['id' => $request->standard_id,'status' => 'Active'])->first();
-        $chksemester = semester::where(['id' => $request->semester_id,'status' => 'Active'])->first();
+        $chksemester = Semester::where(['id' => $request->semester_id,'status' => 'Active'])->first();
         $chksuject = Subject::where(['id' => $request->subject_id,'status' => 'Active'])->first();
         $chkuser = User::where(['id' => $request->student_id])->first();
 
@@ -81,12 +81,12 @@ class ExamController extends Controller
         else{
 
 
-        	$getexam = exam::where(['standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'subject_id' => $request->subject_id,'status' => 'Active'])->get();
+        	$getexam = Exam::where(['standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'subject_id' => $request->subject_id,'status' => 'Active'])->get();
         	$examdata=[];
         	if(count($getexam) > 0){
         		foreach ($getexam as $value) {
         			
-        			$getunit = unit::where(['id' => $value->unit_id,'status' => 'Active'])->first();
+        			$getunit = Unit::where(['id' => $value->unit_id,'status' => 'Active'])->first();
 
         			$chk_student = exam_student::where(['exam_id' => $value->id,'user_id' => $request->student_id])->first();
 
@@ -136,7 +136,7 @@ class ExamController extends Controller
             return ['status' => "false",'msg' => $msg];
         }
 
-        $getexam = exam::where(['id' => $request->exam_id,'status' => 'Active'])->first();
+        $getexam = Exam::where(['id' => $request->exam_id,'status' => 'Active'])->first();
         $check_student = User::where(['id' => $request->student_id])->first();
 
         if(empty($getexam)){
@@ -155,12 +155,12 @@ class ExamController extends Controller
 	        ]);
         }
         else{
-       		$get_exam_question = exam_question::where(['exam_id' => $request->exam_id,'status' => 'Active'])->get(); 	
+       		$get_exam_question = ExamQuestion::where(['exam_id' => $request->exam_id,'status' => 'Active'])->get(); 	
 
        		if(count($get_exam_question) > 0){
        			foreach ($get_exam_question as $question_data) {
 
-       				$get_question =  question::where(['id' => $question_data->question_id])->first();
+       				$get_question =  Question::where(['id' => $question_data->question_id])->first();
 
        				if($get_question){
        					$is_true_a=0;$is_true_b=0;$is_true_c=0;$is_true_d=0;
@@ -235,7 +235,7 @@ class ExamController extends Controller
         date_default_timezone_set('Asia/Kolkata');
 
 
-        $check_exam = exam::where(['id' => $request->exam_id,'status' => 'Active'])->first();
+        $check_exam = Exam::where(['id' => $request->exam_id,'status' => 'Active'])->first();
         $check_student = User::where(['id' => $request->student_id])->first();
         $check_exam_student = exam_student::where(['id' => $request->exam_students_id,'status' => 'Active'])->first();
 
@@ -265,7 +265,7 @@ class ExamController extends Controller
         	if(count($questions_arr) > 0){
 				for ($que=0; $que < count($questions_arr); $que++) {
 										
-					$get_question_detail =  question::where(['id' => $questions_arr[$que]])->first();
+					$get_question_detail =  Question::where(['id' => $questions_arr[$que]])->first();
 						
 					if($get_question_detail->answer == $answer_arr[$que]){
 						$total_mark = $total_mark + $get_question_detail->per_question_marks;
@@ -282,7 +282,7 @@ class ExamController extends Controller
 
 		if(count($questions_arr) > 0){
 			for ($que=0; $que < count($questions_arr); $que++) {
-				$add =  new student_question_answer;
+				$add =  new StudentQuestionAnswer;
 				$add->exam_student_id = $request->exam_students_id;
 				$add->question_id = $questions_arr[$que];
 				$add->answer = $answer_arr[$que];
@@ -310,7 +310,7 @@ class ExamController extends Controller
             'student_id.required' => 'Please enter semester id.'
         );
 
-        $check_exam = exam::where(['id' => $request->exam_id,'status' => 'Active'])->first();
+        $check_exam = Exam::where(['id' => $request->exam_id,'status' => 'Active'])->first();
         $check_student = User::where(['id' => $request->student_id])->first();
 
         if(empty($check_exam)){
@@ -332,12 +332,12 @@ class ExamController extends Controller
         	$get_result = exam_student::where(['exam_id' => $request->exam_id,'user_id' => $request->student_id])->first();
 
 
-        	$get_student_exam_details = student_question_answer::where(['exam_student_id' => $get_result->id])->get();
+        	$get_student_exam_details = StudentQuestionAnswer::where(['exam_student_id' => $get_result->id])->get();
 
         	$totalquestion=0;$notattemt=0;$attemptquestion=0;$obtainedmarks=0;$totalmarks=0;$takentime;$attemptexamdatetime;
         	if(count($get_student_exam_details) > 0){
 				foreach ($get_student_exam_details as $key => $value) {
-					$getquestion = question::where(['id' => $value->question_id])->first();
+					$getquestion = Question::where(['id' => $value->question_id])->first();
 					$totalquestion = $totalquestion + 1;
 					$totalmarks = $totalmarks + $getquestion->per_question_marks;
 

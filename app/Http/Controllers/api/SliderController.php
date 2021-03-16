@@ -4,12 +4,12 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\slider;
+use App\Models\Slider;
 
 class SliderController extends Controller
 {
     public function slider(){
-    	$getdata = slider::where(['status' => 'Active'])->get();
+    	$getdata = Slider::where(['status' => 'Active'])->get();
 
     	if(count($getdata) > 0){
     		$data=[];

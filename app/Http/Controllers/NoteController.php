@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\note;
+use App\Models\Note;
 use App\Models\Board;
 use Auth;
 
@@ -11,13 +11,13 @@ class NoteController extends Controller
 {
     public function index()
     {
-        $note_details = note::where('status','Active')->get();
+        $note_details = Note::where('status','Active')->get();
         return view('note.index',compact('note_details'));
     }
 
     public function create()
     {
-    	$note_details = note::where('status','Active')->get();
+    	$note_details = Note::where('status','Active')->get();
         $boards = Board::where('status','Active')->get();
         return view('note.add',compact('boards','note_details'));
     }
@@ -75,7 +75,7 @@ class NoteController extends Controller
         }
         
 
-        $add = new note;
+        $add = new Note;
         $add->user_id  = Auth::user()->id;
         $add->board_id = $request->board_id;
         $add->medium_id = $request->medium_id;
@@ -94,7 +94,7 @@ class NoteController extends Controller
         $add->release_date = $request->release_date;
         $add->save();
 
-        $note_details = note::where('status','Active')->get();
+        $note_details = Note::where('status','Active')->get();
         
         // $html=view('note.dynamic_table',compact('note_details'))->render();
         return view('note.dynamic_table',compact('note_details'));

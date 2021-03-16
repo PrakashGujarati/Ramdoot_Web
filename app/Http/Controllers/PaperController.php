@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\paper;
+use App\Models\Paper;
 use Illuminate\Http\Request;
-use App\Models\unit;
+use App\Models\Unit;
 use Auth;
 use App\Models\Board;
 
@@ -17,7 +17,7 @@ class PaperController extends Controller
      */
     public function index()
     {
-        $paper_details = paper::where('status','Active')->get();
+        $paper_details = Paper::where('status','Active')->get();
         return view('paper.index',compact('paper_details'));
     }
 
@@ -28,7 +28,7 @@ class PaperController extends Controller
      */
     public function create()
     {
-        $units = unit::where('status','Active')->get();
+        $units = Unit::where('status','Active')->get();
         $boards = Board::where('status','Active')->get();
         return view('paper.add',compact('units','boards'));
     }
@@ -64,7 +64,7 @@ class PaperController extends Controller
         }
 
 
-        $add = new paper;
+        $add = new Paper;
         $add->user_id  = Auth::user()->id;
         $add->unit_id = $request->unit_id;
         $add->board_id = $request->board_id;
@@ -87,7 +87,7 @@ class PaperController extends Controller
      * @param  \App\Models\paper  $paper
      * @return \Illuminate\Http\Response
      */
-    public function show(paper $paper)
+    public function show(Paper $paper)
     {
         //
     }
@@ -98,10 +98,10 @@ class PaperController extends Controller
      * @param  \App\Models\paper  $paper
      * @return \Illuminate\Http\Response
      */
-    public function edit(paper $paper,$id)
+    public function edit(Paper $paper,$id)
     {
-        $units = unit::where('status','Active')->get();
-        $paperdata = paper::where('id',$id)->first();
+        $units = Unit::where('status','Active')->get();
+        $paperdata = Paper::where('id',$id)->first();
         $boards = Board::where('status','Active')->get();
         return view('paper.edit',compact('paperdata','units','boards'));
     }
@@ -113,7 +113,7 @@ class PaperController extends Controller
      * @param  \App\Models\paper  $paper
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, paper $paper,$id)
+    public function update(Request $request, Paper $paper,$id)
     {
         $this->validate($request, [
             'unit_id'     => 'required',
@@ -139,7 +139,7 @@ class PaperController extends Controller
             $url_file = $request->hidden_url;
         }
 
-        $update = paper::find($id);
+        $update = Paper::find($id);
         $update->user_id  = Auth::user()->id;
         $update->unit_id = $request->unit_id;
         $update->board_id = $request->board_id;
@@ -162,9 +162,9 @@ class PaperController extends Controller
      * @param  \App\Models\paper  $paper
      * @return \Illuminate\Http\Response
      */
-    public function distroy(paper $paper,$id)
+    public function distroy(Paper $paper,$id)
     {
-        $delete = paper::find($id);
+        $delete = Paper::find($id);
         $delete->status = "Deleted";
         $delete->save();
 

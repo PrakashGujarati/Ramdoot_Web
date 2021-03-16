@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\semester;
+use App\Models\Semester;
 use App\Models\Board;
-use App\Models\unit;
+use App\Models\Unit;
 use App\Models\Standard;
 use App\Models\Subject;
 use DB;
@@ -34,7 +34,7 @@ class UnitController extends Controller
             }
 
             $chkstandard = Standard::where(['id' => $request->standard_id,'status' => 'Active'])->first();
-            $chksemester = semester::where(['id' => $request->semester_id,'status' => 'Active'])->first();
+            $chksemester = Semester::where(['id' => $request->semester_id,'status' => 'Active'])->first();
             $chksubject = subject::where(['id' => $request->subject_id,'status' => 'Active'])->first();
 
             if (empty($chkstandard)) {
@@ -59,7 +59,7 @@ class UnitController extends Controller
                 ]);
             }
             else{
-                $getdata = unit::where(['subject_id' => $request->subject_id,'standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'status' => 'Active'])->get();
+                $getdata = Unit::where(['subject_id' => $request->subject_id,'standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'status' => 'Active'])->get();
                 
                 if(count($getdata) > 0){
                     $data=[];

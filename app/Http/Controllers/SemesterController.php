@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\semester;
+use App\Models\Semester;
 use Illuminate\Http\Request;
 use App\Models\Board;
 use App\Models\Standard;
@@ -16,7 +16,7 @@ class SemesterController extends Controller
      */
     public function index()
     {
-        $semester_details = semester::where('status','Active')->get();
+        $semester_details = Semester::where('status','Active')->get();
         return view('semester.index',compact('semester_details'));
     }
 
@@ -47,7 +47,7 @@ class SemesterController extends Controller
             'semester' => 'required',
         ]);
 
-        $add = new semester;
+        $add = new Semester;
         $add->board_id = $request->board_id;
         $add->medium_id = $request->medium_id;
         $add->standard_id = $request->standard_id;
@@ -63,7 +63,7 @@ class SemesterController extends Controller
      * @param  \App\Models\semester  $semester
      * @return \Illuminate\Http\Response
      */
-    public function show(semester $semester)
+    public function show(Semester $semester)
     {
         //
     }
@@ -74,9 +74,9 @@ class SemesterController extends Controller
      * @param  \App\Models\semester  $semester
      * @return \Illuminate\Http\Response
      */
-    public function edit(semester $semester,$id)
+    public function edit(Semester $semester,$id)
     {
-        $semesterdata = semester::where('id',$id)->first();
+        $semesterdata = Semester::where('id',$id)->first();
         $boards = Board::where('status','Active')->get();
         $standards = Standard::where('status','Active')->get();
         return view('semester.edit',compact('semesterdata','boards','standards'));
@@ -89,7 +89,7 @@ class SemesterController extends Controller
      * @param  \App\Models\semester  $semester
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, semester $semester,$id)
+    public function update(Request $request, Semester $semester,$id)
     {
         $this->validate($request, [
             'board_id'     => 'required',
@@ -98,7 +98,7 @@ class SemesterController extends Controller
             'semester' => 'required',
         ]);
 
-        $update = semester::find($id);
+        $update = Semester::find($id);
         $update->board_id = $request->board_id;
         $update->medium_id = $request->medium_id;
         $update->standard_id = $request->standard_id;
@@ -114,7 +114,7 @@ class SemesterController extends Controller
      * @param  \App\Models\semester  $semester
      * @return \Illuminate\Http\Response
      */
-    public function distroy(semester $semester,$id)
+    public function distroy(Semester $semester,$id)
     {
         $delete = semester::find($id);
         $delete->status = "Deleted";
@@ -141,7 +141,7 @@ class SemesterController extends Controller
 
     public function getSemester(Request $request){
 
-        $getsemester = semester::where(['board_id' => $request->board_id,'medium_id' => $request->medium_id,'standard_id' => $request->standard_id,'status' => 'Active'])->get();
+        $getsemester = Semester::where(['board_id' => $request->board_id,'medium_id' => $request->medium_id,'standard_id' => $request->standard_id,'status' => 'Active'])->get();
 
         $result="<option value=''>--Select Semester--</option>";
         if(count($getsemester) > 0)
@@ -165,7 +165,7 @@ class SemesterController extends Controller
 
     public function getSemesterUnit(Request $request){
 
-        $getsemester = semester::where(['standard_id' => $request->standard_id,'status' => 'Active'])->get();
+        $getsemester = Semester::where(['standard_id' => $request->standard_id,'status' => 'Active'])->get();
 
         $result="<option value=''>--Select Semester--</option>";
         if(count($getsemester) > 0)

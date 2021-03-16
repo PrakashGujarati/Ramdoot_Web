@@ -4,16 +4,16 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\videos;
-use App\Models\unit;
+use App\Models\Videos;
+use App\Models\Unit;
 use DB;
 use Validator;
 use App\Models\Standard;
 use App\Models\Subject;
-use App\Models\semester;
-use App\Models\video_bookmark;
+use App\Models\Semester;
+use App\Models\VideoBookmark;
 use App\Models\User;
-use App\Models\solution_material_count;
+use App\Models\SolutionMaterialCount;
 
 class VideosController extends Controller
 {
@@ -40,7 +40,7 @@ class VideosController extends Controller
 
 
         $chkstandard = Standard::where(['id' => $request->standard_id,'status' => 'Active'])->first();
-        $chksemester = semester::where(['id' => $request->semester_id,'status' => 'Active'])->first();
+        $chksemester = Semester::where(['id' => $request->semester_id,'status' => 'Active'])->first();
         $chksuject = Subject::where(['id' => $request->subject_id,'status' => 'Active'])->first();
 
         if(empty($chkstandard)){
@@ -66,12 +66,12 @@ class VideosController extends Controller
         }
         else{
 
-        	$getunit = unit::where(['standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'subject_id' => $request->subject_id,'status' => 'Active'])->get();
+        	$getunit = Unit::where(['standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'subject_id' => $request->subject_id,'status' => 'Active'])->get();
         	//$getdata = videos::where(['unit_id' => $request->unit_id,'status' => 'Active'])->get();
 	    	if(count($getunit) > 0){
 	    		$data=[];$getdata=[];
 	    		foreach ($getunit as $value) {
-	    			$getdata = videos::where(['unit_id' => $value->id,'status' => 'Active'])->get();
+	    			$getdata = Videos::where(['unit_id' => $value->id,'status' => 'Active'])->get();
 	    			$videodata=[];
 	    			foreach ($getdata as $value1) {
                         $url='';
@@ -133,7 +133,7 @@ class VideosController extends Controller
 
         if($chkuser)
         {
-            $add = new video_bookmark;
+            $add = new VideoBookmark;
             $add->user_id = $request->user_id;
             $add->video_id = $request->video_id;
             $add->start_time = $request->start_time;
@@ -177,7 +177,7 @@ class VideosController extends Controller
 
         if($chkuser)
         {
-            $getdata = video_bookmark::where(['video_id' => $request->video_id,'user_id' => $request->user_id])->get();
+            $getdata = VideoBookmark::where(['video_id' => $request->video_id,'user_id' => $request->user_id])->get();
         
             $data=[];
             if(count($getdata) > 0){

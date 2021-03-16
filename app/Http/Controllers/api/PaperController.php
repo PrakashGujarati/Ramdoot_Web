@@ -4,13 +4,13 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\paper;
-use App\Models\unit;
+use App\Models\Paper;
+use App\Models\Unit;
 use DB;
 use Validator;
 use App\Models\Standard;
 use App\Models\Subject;
-use App\Models\semester;
+use App\Models\Semester;
 
 class PaperController extends Controller
 {
@@ -35,7 +35,7 @@ class PaperController extends Controller
         }
 
         $chkstandard = Standard::where(['id' => $request->standard_id,'status' => 'Active'])->first();
-        $chksemester = semester::where(['id' => $request->semester_id,'status' => 'Active'])->first();
+        $chksemester = Semester::where(['id' => $request->semester_id,'status' => 'Active'])->first();
         $chksuject = Subject::where(['id' => $request->subject_id,'status' => 'Active'])->first();
 
         if(empty($chkstandard)){
@@ -61,12 +61,12 @@ class PaperController extends Controller
         }
         else{
 
-        	$getunit = unit::where(['standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'subject_id' => $request->subject_id,'status' => 'Active'])->get();
+        	$getunit = Unit::where(['standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'subject_id' => $request->subject_id,'status' => 'Active'])->get();
         	//$getdata = videos::where(['unit_id' => $request->unit_id,'status' => 'Active'])->get();
 	    	if(count($getunit) > 0){
 	    		$data=[];$getdata=[];
 	    		foreach ($getunit as $value) {
-	    			$getdata = paper::where(['unit_id' => $value->id,'status' => 'Active'])->get();
+	    			$getdata = Paper::where(['unit_id' => $value->id,'status' => 'Active'])->get();
 	    			$paperdata=[];
 	    			foreach ($getdata as $value1) {
                         $url = env('APP_URL')."/upload/paper/url/".$value1->url;

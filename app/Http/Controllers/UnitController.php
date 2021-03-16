@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\unit;
+use App\Models\Unit;
 use Illuminate\Http\Request;
 use App\Models\Board;
 use App\Models\Standard;
-use App\Models\semester;
+use App\Models\Semester;
 use App\Models\Subject;
 
 class UnitController extends Controller
@@ -18,7 +18,7 @@ class UnitController extends Controller
      */
     public function index()
     {
-        $unit_details = unit::where('status','Active')->get();
+        $unit_details = Unit::where('status','Active')->get();
         return view('unit.index',compact('unit_details'));
     }
 
@@ -30,7 +30,7 @@ class UnitController extends Controller
     public function create()
     {
         $boards = Board::where('status','Active')->get();
-        $semesters = semester::where('status','Active')->get();
+        $semesters = Semester::where('status','Active')->get();
         $standards = Standard::where('status','Active')->get();
         $subjects = Subject::where('status','Active')->get();
         return view('unit.add',compact('subjects','standards','semesters','boards'));
@@ -90,7 +90,7 @@ class UnitController extends Controller
                 $image->move($destinationPath, $url_file);
             }
 
-            $add = new unit;
+            $add = new Unit;
             $add->board_id = $request->board_id;
             $add->medium_id = $request->medium_id;
             $add->standard_id = $request->standard_id;
@@ -114,7 +114,7 @@ class UnitController extends Controller
      * @param  \App\Models\unit  $unit
      * @return \Illuminate\Http\Response
      */
-    public function show(unit $unit)
+    public function show(Unit $unit)
     {
         //
     }
@@ -125,12 +125,12 @@ class UnitController extends Controller
      * @param  \App\Models\unit  $unit
      * @return \Illuminate\Http\Response
      */
-    public function edit(unit $unit,$id)
+    public function edit(Unit $unit,$id)
     {
-        $unitdata = unit::where('id',$id)->first();
+        $unitdata = Unit::where('id',$id)->first();
         $boards = Board::where('status','Active')->get();
         $subjects = Subject::where('status','Active')->get();
-        $semesters = semester::where('status','Active')->get();
+        $semesters = Semester::where('status','Active')->get();
         $standards = Standard::where('status','Active')->get();
         return view('unit.edit',compact('unitdata','subjects','semesters','standards','boards'));
     }
@@ -142,7 +142,7 @@ class UnitController extends Controller
      * @param  \App\Models\unit  $unit
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, unit $unit,$id)
+    public function update(Request $request, Unit $unit,$id)
     {
         $this->validate($request, [
             'board_id' => 'required',
@@ -190,7 +190,7 @@ class UnitController extends Controller
             $url_file = $request->hidden_url;
         }
 
-        $update = unit::find($id);
+        $update = Unit::find($id);
         $update->board_id = $request->board_id;
         $update->medium_id = $request->medium_id;
         $update->standard_id = $request->standard_id;
@@ -212,7 +212,7 @@ class UnitController extends Controller
      * @param  \App\Models\unit  $unit
      * @return \Illuminate\Http\Response
      */
-    public function distroy(unit $unit,$id)
+    public function distroy(Unit $unit,$id)
     {
         $delete = unit::find($id);
         $delete->status = "Deleted";

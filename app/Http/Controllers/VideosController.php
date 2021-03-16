@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\videos;
+use App\Models\Videos;
 use Illuminate\Http\Request;
-use App\Models\unit;
+use App\Models\Unit;
 use Auth;
 use App\Models\Board;
 
@@ -17,7 +17,7 @@ class VideosController extends Controller
      */
     public function index()
     {
-        $videos_details = videos::where('status','Active')->get();
+        $videos_details = Videos::where('status','Active')->get();
         return view('videos.index',compact('videos_details'));
     }
 
@@ -28,7 +28,7 @@ class VideosController extends Controller
      */
     public function create()
     {
-        $units = unit::where('status','Active')->get();
+        $units = Unit::where('status','Active')->get();
         $boards = Board::where('status','Active')->get();
         return view('videos.add',compact('units','boards'));
     }
@@ -93,7 +93,7 @@ class VideosController extends Controller
 
         
 
-        $add = new videos;
+        $add = new Videos;
         $add->user_id  = Auth::user()->id;
         $add->unit_id = $request->unit_id;
         $add->board_id = $request->board_id;
@@ -120,7 +120,7 @@ class VideosController extends Controller
      * @param  \App\Models\videos  $videos
      * @return \Illuminate\Http\Response
      */
-    public function show(videos $videos)
+    public function show(Videos $videos)
     {
         //
     }
@@ -131,9 +131,9 @@ class VideosController extends Controller
      * @param  \App\Models\videos  $videos
      * @return \Illuminate\Http\Response
      */
-    public function edit(videos $videos,$id)
+    public function edit(Videos $videos,$id)
     {
-        $units = unit::where('status','Active')->get();
+        $units = Unit::where('status','Active')->get();
         $videodata = videos::where('id',$id)->first();
         $boards = Board::where('status','Active')->get();
         return view('videos.edit',compact('videodata','units','boards'));
@@ -146,7 +146,7 @@ class VideosController extends Controller
      * @param  \App\Models\videos  $videos
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, videos $videos,$id)
+    public function update(Request $request, Videos $videos,$id)
     {
         $this->validate($request, [
             'unit_id' => 'required',
@@ -204,7 +204,7 @@ class VideosController extends Controller
         }
 
 
-        $update = videos::find($id);
+        $update = Videos::find($id);
         $update->unit_id = $request->unit_id;
         $update->board_id = $request->board_id;
         $update->medium_id = $request->medium_id;
@@ -230,9 +230,9 @@ class VideosController extends Controller
      * @param  \App\Models\videos  $videos
      * @return \Illuminate\Http\Response
      */
-    public function distroy(videos $videos,$id)
+    public function distroy(Videos $videos,$id)
     {
-        $delete = videos::find($id);
+        $delete = Videos::find($id);
         $delete->status = "Deleted";
         $delete->save();
 

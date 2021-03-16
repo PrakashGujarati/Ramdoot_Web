@@ -4,18 +4,18 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\feature;
+use App\Models\Feature;
 use Validator;
 use App\Models\Standard;
 use App\Models\Subject;
-use App\Models\semester;
-use App\Models\unit;
+use App\Models\Semester;
+use App\Models\Unit;
 
 class FeatureController extends Controller
 {
     public function features_list(Request $request){
         
-        $feature_details = feature::where('status','Active')->get();
+        $feature_details = Feature::where('status','Active')->get();
 
         if(count($feature_details) > 0){
 
@@ -69,7 +69,7 @@ class FeatureController extends Controller
         }
 
         $chkstandard = Standard::where(['id' => $request->standard_id,'status' => 'Active'])->first();
-        $chksemester = semester::where(['id' => $request->semester_id,'status' => 'Active'])->first();
+        $chksemester = Semester::where(['id' => $request->semester_id,'status' => 'Active'])->first();
         $chksuject = Subject::where(['id' => $request->subject_id,'status' => 'Active'])->first();
 
         if(empty($chkstandard)){
@@ -95,12 +95,12 @@ class FeatureController extends Controller
         }
         else{
 
-            $getunit = unit::where(['standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'subject_id' => $request->subject_id,'status' => 'Active'])->get();
+            $getunit = Unit::where(['standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'subject_id' => $request->subject_id,'status' => 'Active'])->get();
             //$getdata = videos::where(['unit_id' => $request->unit_id,'status' => 'Active'])->get();
             if(count($getunit) > 0){
                 $data=[];$getdata=[];
                 foreach ($getunit as $value) {
-                    $getdata = feature::where(['unit_id' => $value->id,'status' => 'Active'])->get();
+                    $getdata = Feature::where(['unit_id' => $value->id,'status' => 'Active'])->get();
                     $featuredata = [];
                     foreach ($getdata as $value1) {
                         $image = env('APP_URL')."/upload/feature/".$value1->image;

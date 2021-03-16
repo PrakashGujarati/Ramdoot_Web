@@ -4,7 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\semester;
+use App\Models\Semester;
 use App\Models\Board;
 use App\Models\Standard;
 use DB;
@@ -48,7 +48,7 @@ class SemesterController extends Controller
 			  	"data" => [],
 	        ]);
         }else{
-        	$getdata = semester::where(['board_id' => $request->board_id,'standard_id' => $request->standard_id,'status' => 'Active'])->get();
+        	$getdata = Semester::where(['board_id' => $request->board_id,'standard_id' => $request->standard_id,'status' => 'Active'])->get();
 
 	    	if(count($getdata) > 0){
 	    		$data=[];

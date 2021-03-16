@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\exam_question;
+use App\Models\ExamQuestion;
 use Illuminate\Http\Request;
-use App\Models\exam;
-use App\Models\question;
+use App\Models\Exam;
+use App\Models\Question;
 use App\Models\Board;
 
 class ExamQuestionController extends Controller
@@ -17,7 +17,7 @@ class ExamQuestionController extends Controller
      */
     public function index()
     {
-        $examquestion_details = exam_question::where('status','Active')->groupBy('exam_id')->get();
+        $examquestion_details = ExamQuestion::where('status','Active')->groupBy('exam_id')->get();
         //dd(count($examquestion_details));
         return view('exam_question.index',compact('examquestion_details'));
     }
@@ -29,8 +29,8 @@ class ExamQuestionController extends Controller
      */
     public function create()
     {
-        $exams = exam::where('status','Active')->get();
-        $questions = question::where('status','Active')->get();
+        $exams = Exam::where('status','Active')->get();
+        $questions = Question::where('status','Active')->get();
         $boards = Board::where('status','Active')->get();
         $getexam_detail = [];
         $getexam = [];
@@ -53,7 +53,7 @@ class ExamQuestionController extends Controller
 
         if(count($request->question_id) > 0){
             foreach ($request->question_id as $key => $value) {
-                $add = new exam_question;
+                $add = new ExamQuestion;
                 $add->exam_id = $request->exam_id;
                 $add->question_id = $value;
                 $add->save();
@@ -69,7 +69,7 @@ class ExamQuestionController extends Controller
      * @param  \App\Models\exam_question  $exam_question
      * @return \Illuminate\Http\Response
      */
-    public function show(exam_question $exam_question)
+    public function show(ExamQuestion $exam_question)
     {
         //
     }
@@ -80,23 +80,23 @@ class ExamQuestionController extends Controller
      * @param  \App\Models\exam_question  $exam_question
      * @return \Illuminate\Http\Response
      */
-    public function edit(exam_question $exam_question,$id)
+    public function edit(ExamQuestion $exam_question,$id)
     {
-        $exams = exam::where('status','Active')->get();
-        $questions = question::where('status','Active')->get();
+        $exams = Exam::where('status','Active')->get();
+        $questions = Question::where('status','Active')->get();
         $boards = Board::where('status','Active')->get();
         //$exam_detail = exam::where(['id' => $id])->first();
         
-        $exam_questiondata = exam_question::where('exam_id',$id)->get();
+        $exam_questiondata = ExamQuestion::where('exam_id',$id)->get();
 
-        $getexam_detail = exam::where('id',$id)->first();
+        $getexam_detail = Exam::where('id',$id)->first();
 
-        $getexam_question_details = exam_question::where('exam_id',$id)->get();
+        $getexam_question_details = ExamQuestion::where('exam_id',$id)->get();
 
         $getexam=[];
         if(count($getexam_question_details) > 0){
             foreach ($getexam_question_details as $question_data) {
-                $getexam[] = question::where(['id' => $question_data->question_id])->first();
+                $getexam[] = Question::where(['id' => $question_data->question_id])->first();
             }
         }
 
@@ -112,7 +112,7 @@ class ExamQuestionController extends Controller
      * @param  \App\Models\exam_question  $exam_question
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, exam_question $exam_question,$id)
+    public function update(Request $request, ExamQuestion $exam_question,$id)
     {
 
         // dd($request->all());
@@ -122,11 +122,11 @@ class ExamQuestionController extends Controller
             'question_id' => 'required',
         ]);
 
-        exam_question::where(['exam_id' => $request->exam_id])->delete();
+        ExamQuestion::where(['exam_id' => $request->exam_id])->delete();
 
         if(count($request->question_id) > 0){
             foreach ($request->question_id as $key => $value) {
-                $add = new exam_question;
+                $add = new ExamQuestion;
                 $add->exam_id = $request->exam_id;
                 $add->question_id = $value;
                 $add->save();
@@ -147,9 +147,9 @@ class ExamQuestionController extends Controller
      * @param  \App\Models\exam_question  $exam_question
      * @return \Illuminate\Http\Response
      */
-    public function distroy(exam_question $exam_question,$id)
+    public function distroy(ExamQuestion $exam_question,$id)
     {
-        exam_question::where('exam_id',$id)->update(['status' => 'Deleted']);
+        ExamQuestion::where('exam_id',$id)->update(['status' => 'Deleted']);
         // $delete = exam_question::find($id);
         // $delete->status = "Deleted";
         // $delete->save();
@@ -159,9 +159,9 @@ class ExamQuestionController extends Controller
 
     public function getExamDetail(Request $request){
 
-        $getexam_detail = exam::where('id',$request->exam_id)->first();
+        $getexam_detail = Exam::where('id',$request->exam_id)->first();
 
-        $getexam = question::where(['standard_id' => $getexam_detail->standard_id,'semester_id' => $getexam_detail->semester_id,'subject_id' => $getexam_detail->subject_id,'unit_id' => $getexam_detail->unit_id])->inRandomOrder()->take($getexam_detail->total_question)->get();
+        $getexam = Question::where(['standard_id' => $getexam_detail->standard_id,'semester_id' => $getexam_detail->semester_id,'subject_id' => $getexam_detail->subject_id,'unit_id' => $getexam_detail->unit_id])->inRandomOrder()->take($getexam_detail->total_question)->get();
 
         // dd($getexam_detail);
         $html=view('exam_question.dynamic_exam_detail',compact('getexam_detail','getexam'))->render();
@@ -172,11 +172,11 @@ class ExamQuestionController extends Controller
 
     public function getQuestionView(Request $request){
 
-        $getexam_detail = exam::where('id',$request->exam_id)->first();
+        $getexam_detail = Exam::where('id',$request->exam_id)->first();
 
         $srno = $request->sr_no;
 
-        $getexam = question::where(['standard_id' => $getexam_detail->standard_id,'semester_id' => $getexam_detail->semester_id,'subject_id' => $getexam_detail->subject_id,'unit_id' => $getexam_detail->unit_id])->get();
+        $getexam = Question::where(['standard_id' => $getexam_detail->standard_id,'semester_id' => $getexam_detail->semester_id,'subject_id' => $getexam_detail->subject_id,'unit_id' => $getexam_detail->unit_id])->get();
 
         if($srno == 0){
             $chk_limit = $getexam_detail->total_question;
@@ -191,7 +191,7 @@ class ExamQuestionController extends Controller
 
     public function getQuestionChange(Request $request){
 
-       $getexam_detail = exam::where('id',$request->exam_id)->first();
+       $getexam_detail = Exam::where('id',$request->exam_id)->first();
 
        if($request->srno != "0"){
             $change_question_key = $request->srno - 1;
@@ -199,15 +199,15 @@ class ExamQuestionController extends Controller
             foreach ($request->hidden_question_id as $key => $value) {
                
                if($change_question_key == $key){
-                    $getexam[] = question::where(['id' => $request->select_question_id[0]])->first();
+                    $getexam[] = Question::where(['id' => $request->select_question_id[0]])->first();
                }
                else{
-                    $getexam[] = question::where(['id' => $value])->first();
+                    $getexam[] = Question::where(['id' => $value])->first();
                }
             } 
        }else{
             foreach ($request->select_question_id as $key => $value) {
-                $getexam[] = question::where(['id' => $value])->first();
+                $getexam[] = Question::where(['id' => $value])->first();
             }
        }
 
@@ -217,7 +217,7 @@ class ExamQuestionController extends Controller
     // $get_question = question::where(['unit_id' => $request->unit_id])->inRandomOrder()->limit($request->no_of_question)->get();
 
     public function getQuestionClear(Request $request){
-        $getexam_detail = exam::where('id',$request->exam_id)->first();
+        $getexam_detail = Exam::where('id',$request->exam_id)->first();
        
        $getexam=[];
        
@@ -226,8 +226,8 @@ class ExamQuestionController extends Controller
     }
 
     public function viewExamList(Request $request){
-        $getexam_detail = exam::where('id',$request->exam_id)->first();
-        $getexam = exam_question::where('exam_id',$request->exam_id)->get();
+        $getexam_detail = Exam::where('id',$request->exam_id)->first();
+        $getexam = ExamQuestion::where('exam_id',$request->exam_id)->get();
         $html=view('exam_question.dynamic_question_list_model',compact('getexam_detail','getexam'))->render();
         return response()->json(['html'=> $html,'getexam_detail' => $getexam_detail]); 
     }

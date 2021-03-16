@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\exam_student;
 use Illuminate\Http\Request;
-use App\Models\exam;
+use App\Models\Exam;
 use App\Models\User;
 use Auth;
 
@@ -17,7 +17,7 @@ class ExamStudentController extends Controller
      */
     public function index(Request $request)
     {
-        $exams = exam::where('status','Active')->get();
+        $exams = Exam::where('status','Active')->get();
         $examstudent_details = exam_student::where('status','Active')->get();
         if($request->ajax())
         {
@@ -42,7 +42,7 @@ class ExamStudentController extends Controller
      */
     public function create()
     {
-        $exams = exam::where('status','Active')->get();
+        $exams = Exam::where('status','Active')->get();
         $users = User::where('id','!=',Auth::user()->id)->where('name','!=','')->get();
         return view('exam_student.add',compact('exams','users'));
     }
@@ -97,7 +97,7 @@ class ExamStudentController extends Controller
      */
     public function edit(exam_student $exam_student,$id)
     {
-        $exams = exam::where('status','Active')->get();
+        $exams = Exam::where('status','Active')->get();
         $users = User::where('id','!=',Auth::user()->id)->where('name','!=','')->get();
         $examstudentdata = exam_student::where('id',$id)->first();
         return view('exam_student.edit',compact('examstudentdata','users','exams'));

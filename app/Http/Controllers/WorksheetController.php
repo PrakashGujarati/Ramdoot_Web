@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\worksheet;
+use App\Models\Worksheet;
 use Illuminate\Http\Request;
-use App\Models\unit;
+use App\Models\Unit;
 use Auth;
 use App\Models\Board;
 
@@ -17,7 +17,7 @@ class WorksheetController extends Controller
      */
     public function index()
     {
-        $worksheet_details = worksheet::where('status','Active')->get();
+        $worksheet_details = Worksheet::where('status','Active')->get();
         return view('worksheet.index',compact('worksheet_details'));
     }
 
@@ -28,7 +28,7 @@ class WorksheetController extends Controller
      */
     public function create()
     {
-        $units = unit::where('status','Active')->get();
+        $units = Unit::where('status','Active')->get();
         $boards = Board::where('status','Active')->get();
         return view('worksheet.add',compact('units','boards'));
     }
@@ -63,7 +63,7 @@ class WorksheetController extends Controller
             $image->move($destinationPath, $url_file);
         }
 
-        $add = new worksheet;
+        $add = new Worksheet;
         $add->user_id  = Auth::user()->id;
         $add->unit_id = $request->unit_id;
         $add->board_id = $request->board_id;
@@ -87,7 +87,7 @@ class WorksheetController extends Controller
      * @param  \App\Models\worksheet  $worksheet
      * @return \Illuminate\Http\Response
      */
-    public function show(worksheet $worksheet)
+    public function show(Worksheet $worksheet)
     {
         //
     }
@@ -100,8 +100,8 @@ class WorksheetController extends Controller
      */
     public function edit(worksheet $worksheet,$id)
     {
-        $units = unit::where('status','Active')->get();
-        $worksheetdata = worksheet::where('id',$id)->first();
+        $units = Unit::where('status','Active')->get();
+        $worksheetdata = Worksheet::where('id',$id)->first();
         $boards = Board::where('status','Active')->get();
         return view('worksheet.edit',compact('worksheetdata','units','boards'));
     }
@@ -113,7 +113,7 @@ class WorksheetController extends Controller
      * @param  \App\Models\worksheet  $worksheet
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, worksheet $worksheet,$id)
+    public function update(Request $request, Worksheet $worksheet,$id)
     {
         $this->validate($request, [
             'unit_id'     => 'required',
@@ -139,7 +139,7 @@ class WorksheetController extends Controller
             $url_file = $request->hidden_url;
         }
 
-        $update = worksheet::find($id);
+        $update = Worksheet::find($id);
         $update->user_id  = Auth::user()->id;
         $update->unit_id = $request->unit_id;
         $update->board_id = $request->board_id;
@@ -163,9 +163,9 @@ class WorksheetController extends Controller
      * @param  \App\Models\worksheet  $worksheet
      * @return \Illuminate\Http\Response
      */
-    public function distroy(worksheet $worksheet,$id)
+    public function distroy(Worksheet $worksheet,$id)
     {
-        $delete = worksheet::find($id);
+        $delete = Worksheet::find($id);
         $delete->status = "Deleted";
         $delete->save();
 

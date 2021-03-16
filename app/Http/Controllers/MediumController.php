@@ -54,7 +54,7 @@ class MediumController extends Controller
      * @param  \App\Models\exam_question  $exam_question
      * @return \Illuminate\Http\Response
      */
-    public function show(exam_question $exam_question)
+    public function show(ExamQuestion $exam_question)
     {
         //
     }

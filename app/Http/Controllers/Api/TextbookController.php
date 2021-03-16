@@ -5,17 +5,17 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Book;
-use App\Models\unit;
+use App\Models\Unit;
 use DB;
 use Validator;
 use App\Models\Standard;
 use App\Models\Subject;
-use App\Models\semester;
-use App\Models\pdf_bookmark;
-use App\Models\feature;
+use App\Models\Semester;
+use App\Models\PdfBookmark;
+use App\Models\Feature;
 use App\Models\pdf_view;
 use App\Models\User;
-use App\Models\note;
+use App\Models\Note;
 
 class TextbookController extends Controller
 {
@@ -41,7 +41,7 @@ class TextbookController extends Controller
 
 
         $chkstandard = Standard::where(['id' => $request->standard_id,'status' => 'Active'])->first();
-        $chksemester = semester::where(['id' => $request->semester_id,'status' => 'Active'])->first();
+        $chksemester = Semester::where(['id' => $request->semester_id,'status' => 'Active'])->first();
         $chksuject = Subject::where(['id' => $request->subject_id,'status' => 'Active'])->first();
 
         if(empty($chkstandard)){
@@ -67,7 +67,7 @@ class TextbookController extends Controller
         }
         else{
 
-        	$getunit = unit::where(['standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'subject_id' => $request->subject_id,'status' => 'Active'])->get();
+        	$getunit = Unit::where(['standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'subject_id' => $request->subject_id,'status' => 'Active'])->get();
         	//$getdata = Books::where(['unit_id' => $request->unit_id,'status' => 'Active'])->get();
 	    	if(count($getunit) > 0){
 	    		$data=[];$getdata=[];
@@ -128,7 +128,7 @@ class TextbookController extends Controller
 
         if($chkuser){
 
-            $add = new pdf_bookmark;
+            $add = new PdfBookmark;
             $add->user_id = $request->user_id;
             $add->type_id = $request->type_id;
             $add->pageno = $request->pageno;
@@ -172,12 +172,12 @@ class TextbookController extends Controller
         $chkuser = User::where(['id' => $request->user_id])->first();
 
         if($chkuser){
-            $getdata = pdf_bookmark::where(['type_id' => $request->type_id,'user_id' => $request->user_id])->get();
+            $getdata = PdfBookmark::where(['type_id' => $request->type_id,'user_id' => $request->user_id])->get();
         
             $data=[];
             if(count($getdata) > 0){
                 foreach ($getdata as $key => $value) { 
-                    $get_type =  feature::where(['id' => $value->type_id])->first(); 
+                    $get_type =  Feature::where(['id' => $value->type_id])->first(); 
                     $data[]=['id' => $value->id,'type' => $get_type->title,'type_id' => $get_type->id,'user_id' => $value->user_id,'pageno' => $value->pageno];   
                 }
             }
@@ -276,7 +276,7 @@ class TextbookController extends Controller
 
 
         $chkstandard = Standard::where(['id' => $request->standard_id,'status' => 'Active'])->first();
-        $chksemester = semester::where(['id' => $request->semester_id,'status' => 'Active'])->first();
+        $chksemester = Semester::where(['id' => $request->semester_id,'status' => 'Active'])->first();
         $chksuject = Subject::where(['id' => $request->subject_id,'status' => 'Active'])->first();
 
         if(empty($chkstandard)){
@@ -302,12 +302,12 @@ class TextbookController extends Controller
         }
         else{
 
-            $getunit = unit::where(['standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'subject_id' => $request->subject_id,'status' => 'Active'])->get();
+            $getunit = Unit::where(['standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'subject_id' => $request->subject_id,'status' => 'Active'])->get();
             //$getdata = Books::where(['unit_id' => $request->unit_id,'status' => 'Active'])->get();
             if(count($getunit) > 0){
                 $data=[];$getdata=[];
                 foreach ($getunit as $value) {
-                    $getdata = note::where(['unit_id' => $value->id,'status' => 'Active'])->get();
+                    $getdata = Note::where(['unit_id' => $value->id,'status' => 'Active'])->get();
                     $bookdata=[];
                     foreach ($getdata as $value1) {
                         $url = env('APP_URL')."/upload/book/url/".$value1->url;

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\feature;
+use App\Models\Feature;
 use Illuminate\Http\Request;
 use App\Models\Board;
 
@@ -15,7 +15,7 @@ class FeatureController extends Controller
      */
     public function index()
     {
-        $feature_details = feature::where('status','Active')->get();
+        $feature_details = Feature::where('status','Active')->get();
         return view('feature.index',compact('feature_details'));
     }
 
@@ -70,7 +70,7 @@ class FeatureController extends Controller
             }
         }
 
-        $add = new feature;
+        $add = new Feature;
         $add->board_id = $request->board_id;
         $add->standard_id = $request->standard_id;
         $add->semester_id = $request->semester_id;
@@ -90,7 +90,7 @@ class FeatureController extends Controller
      * @param  \App\Models\feature  $feature
      * @return \Illuminate\Http\Response
      */
-    public function show(feature $feature)
+    public function show(Feature $feature)
     {
         //
     }
@@ -101,10 +101,10 @@ class FeatureController extends Controller
      * @param  \App\Models\feature  $feature
      * @return \Illuminate\Http\Response
      */
-    public function edit(feature $feature,$id)
+    public function edit(Feature $feature,$id)
     {
         $boards = Board::where('status','Active')->get();
-        $featuredata = feature::where('id',$id)->first();
+        $featuredata = Feature::where('id',$id)->first();
         return view('feature.edit',compact('featuredata','boards'));
     }
 
@@ -115,7 +115,7 @@ class FeatureController extends Controller
      * @param  \App\Models\feature  $feature
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, feature $feature,$id)
+    public function update(Request $request, Feature $feature,$id)
     {
         $this->validate($request, [
             'board_id' => 'required',
@@ -150,7 +150,7 @@ class FeatureController extends Controller
             $new_name = $request->hidden_image;
         }
 
-        $update = feature::find($id);
+        $update = Feature::find($id);
         $update->board_id = $request->board_id;
         $update->standard_id = $request->standard_id;
         $update->semester_id = $request->semester_id;
@@ -170,9 +170,9 @@ class FeatureController extends Controller
      * @param  \App\Models\feature  $feature
      * @return \Illuminate\Http\Response
      */
-    public function distroy(feature $feature,$id)
+    public function distroy(Feature $feature,$id)
     {
-        $delete = feature::find($id);
+        $delete = Feature::find($id);
         $delete->status = "Deleted";
         $delete->save();
 

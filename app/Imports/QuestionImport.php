@@ -2,7 +2,7 @@
 
 namespace App\Imports;
 
-use App\Models\question;
+use App\Models\Question;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
@@ -22,7 +22,7 @@ class QuestionImport implements ToModel,WithHeadingRow
     public function model(array $row)
     {
         $request=$this->request;   
-        return new question([
+        return new Question([
             'board_id' => $request->board_id,
             'medium_id' => $request->medium_id,
             'standard_id' => $request->standard_id,

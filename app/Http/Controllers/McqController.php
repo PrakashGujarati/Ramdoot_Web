@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\mcq;
+use App\Models\Mcq;
 use Illuminate\Http\Request;
-use App\Models\unit;
+use App\Models\Unit;
 use Auth;
 
 class McqController extends Controller
@@ -16,7 +16,7 @@ class McqController extends Controller
      */
     public function index()
     {
-        $mcq_details = mcq::where('status','Active')->get();
+        $mcq_details = Mcq::where('status','Active')->get();
         return view('mcq.index',compact('mcq_details'));
     }
 
@@ -27,7 +27,7 @@ class McqController extends Controller
      */
     public function create()
     {
-        $units = unit::where('status','Active')->get();
+        $units = Unit::where('status','Active')->get();
         return view('mcq.add',compact('units'));
     }
 
@@ -51,7 +51,7 @@ class McqController extends Controller
         ]);
 
         
-        $add = new mcq;
+        $add = new Mcq;
         $add->unit_id = $request->unit_id;
         $add->question = $request->question;
         $add->opt1 = $request->opt1;
@@ -71,7 +71,7 @@ class McqController extends Controller
      * @param  \App\Models\mcq  $mcq
      * @return \Illuminate\Http\Response
      */
-    public function show(mcq $mcq)
+    public function show(Mcq $mcq)
     {
         
     }
@@ -82,10 +82,10 @@ class McqController extends Controller
      * @param  \App\Models\mcq  $mcq
      * @return \Illuminate\Http\Response
      */
-    public function edit(mcq $mcq,$id)
+    public function edit(Mcq $mcq,$id)
     {
-        $units = unit::where('status','Active')->get();
-        $mcqdata = mcq::where('id',$id)->first();
+        $units = Unit::where('status','Active')->get();
+        $mcqdata = Mcq::where('id',$id)->first();
         return view('mcq.edit',compact('mcqdata','units'));
     }
 
@@ -96,7 +96,7 @@ class McqController extends Controller
      * @param  \App\Models\mcq  $mcq
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, mcq $mcq,$id)
+    public function update(Request $request, Mcq $mcq,$id)
     {
         
         $this->validate($request, [
@@ -111,7 +111,7 @@ class McqController extends Controller
         ]);
 
         
-        $add = mcq::find($id);
+        $add = Mcq::find($id);
         $add->unit_id = $request->unit_id;
         $add->question = $request->question;
         $add->opt1 = $request->opt1;
@@ -131,9 +131,9 @@ class McqController extends Controller
      * @param  \App\Models\mcq  $mcq
      * @return \Illuminate\Http\Response
      */
-    public function distroy(mcq $mcq,$id)
+    public function distroy(Mcq $mcq,$id)
     {
-        $delete = mcq::find($id);
+        $delete = Mcq::find($id);
         $delete->status = "Deleted";
         $delete->save();
 

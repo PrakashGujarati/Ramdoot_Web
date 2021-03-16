@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Models\question;
+use App\Models\Question;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -35,7 +35,7 @@ class QuestionExport implements WithHeadings,ShouldAutoSize, WithEvents
     public function headings(): array
     {
         return [
-        	"question",
+        	"Question",
         	"note",
             "option_a",
             "option_b",

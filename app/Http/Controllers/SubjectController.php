@@ -6,7 +6,7 @@ use App\Models\Subject;
 use Illuminate\Http\Request;
 use App\Models\Board;
 use App\Models\Standard;
-use App\Models\semester;
+use App\Models\Semester;
 
 class SubjectController extends Controller
 {
@@ -30,7 +30,7 @@ class SubjectController extends Controller
     {
         $boards = Board::where('status','Active')->get();
         $standards = Standard::where('status','Active')->get();
-        $semesters = semester::where('status','Active')->get();
+        $semesters = Semester::where('status','Active')->get();
         return view('subject.add',compact('boards','standards','semesters'));
     }
 
@@ -120,7 +120,7 @@ class SubjectController extends Controller
         $subjectdata = Subject::where('id',$id)->first();
         $boards = Board::where('status','Active')->get();
         $standards = Standard::where('status','Active')->get();
-        $semesters = semester::where('status','Active')->get();
+        $semesters = Semester::where('status','Active')->get();
         return view('subject.edit',compact('subjectdata','boards','standards','semesters'));
 
     }

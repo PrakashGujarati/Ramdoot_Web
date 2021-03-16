@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\exam;
+use App\Models\Exam;
 use Illuminate\Http\Request;
-use App\Models\unit;
+use App\Models\Unit;
 use App\Models\Board;
 
 class ExamController extends Controller
@@ -16,7 +16,7 @@ class ExamController extends Controller
      */
     public function index()
     {
-        $exam_details = exam::where('status','Active')->get();
+        $exam_details = Exam::where('status','Active')->get();
         return view('exam.index',compact('exam_details'));
     }
 
@@ -29,7 +29,7 @@ class ExamController extends Controller
     {
 
         $boards = Board::where('status','Active')->get();
-        $units = unit::where('status','Active')->get();
+        $units = Unit::where('status','Active')->get();
         return view('exam.add',compact('units','boards'));
     }
 
@@ -59,7 +59,7 @@ class ExamController extends Controller
         ]);
 
         
-        $add = new exam;
+        $add = new Exam;
         $add->board_id = $request->board_id;
         $add->medium_id = $request->medium_id;
         $add->standard_id = $request->standard_id;
@@ -89,7 +89,7 @@ class ExamController extends Controller
      * @param  \App\Models\exam  $exam
      * @return \Illuminate\Http\Response
      */
-    public function show(exam $exam)
+    public function show(Exam $exam)
     {
         
     }
@@ -100,11 +100,11 @@ class ExamController extends Controller
      * @param  \App\Models\exam  $exam
      * @return \Illuminate\Http\Response
      */
-    public function edit(exam $exam,$id)
+    public function edit(Exam $exam,$id)
     {
-        $units = unit::where('status','Active')->get();
+        $units = Unit::where('status','Active')->get();
         $boards = Board::where('status','Active')->get();
-        $examdata = exam::where('id',$id)->first();
+        $examdata = Exam::where('id',$id)->first();
         return view('exam.edit',compact('examdata','units','boards'));
     }
 
@@ -115,7 +115,7 @@ class ExamController extends Controller
      * @param  \App\Models\exam  $exam
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, exam $exam,$id)
+    public function update(Request $request, Exam $exam,$id)
     {
         $this->validate($request, [
             'board_id' => 'required',
@@ -134,7 +134,7 @@ class ExamController extends Controller
         ]);
 
         
-        $update = exam::find($id);
+        $update = Exam::find($id);
         $update->board_id = $request->board_id;
         $update->medium_id = $request->medium_id;
         $update->standard_id = $request->standard_id;
@@ -164,9 +164,9 @@ class ExamController extends Controller
      * @param  \App\Models\exam  $exam
      * @return \Illuminate\Http\Response
      */
-    public function distroy(exam $exam,$id)
+    public function distroy(Exam $exam,$id)
     {
-        $delete = exam::find($id);
+        $delete = Exam::find($id);
         $delete->status = "Deleted";
         $delete->save();
 
@@ -178,7 +178,7 @@ class ExamController extends Controller
     public function getExam(Request $request){
 
        //$getunit = unit::where(['unit_id' => $request->board_id])->get();
-       $getexam = exam::where(['standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'subject_id' => $request->subject_id,'unit_id' => $request->unit_id])->get();
+       $getexam = Exam::where(['standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'subject_id' => $request->subject_id,'unit_id' => $request->unit_id])->get();
 
         $result="<option value=''>--Select Exam--</option>";
         if(count($getexam) > 0)

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Book;
 use Illuminate\Http\Request;
 use App\Models\Subject;
-use App\Models\unit;
+use App\Models\Unit;
 use Auth;
 use App\Models\Board;
 
@@ -29,7 +29,7 @@ class BookController extends Controller
      */
     public function create()
     {
-        $units = unit::where('status','Active')->get();
+        $units = Unit::where('status','Active')->get();
         $boards = Board::where('status','Active')->get();
         return view('book.add',compact('units','boards'));
     }
@@ -135,7 +135,7 @@ class BookController extends Controller
      */
     public function edit(Book $book,$id)
     {
-        $units = unit::where('status','Active')->get();
+        $units = Unit::where('status','Active')->get();
         $boards = Board::where('status','Active')->get();
         $bookdata = Book::where('id',$id)->first();
         return view('book.edit',compact('bookdata','units','boards'));

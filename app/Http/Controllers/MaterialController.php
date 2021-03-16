@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\material;
+use App\Models\Material;
 use Illuminate\Http\Request;
-use App\Models\unit;
+use App\Models\Unit;
 use Auth;
 use App\Models\Board;
 
@@ -17,7 +17,7 @@ class MaterialController extends Controller
      */
     public function index()
     {
-        $material_details = material::where('status','Active')->get();
+        $material_details = Material::where('status','Active')->get();
         return view('material.index',compact('material_details'));
     }
 
@@ -28,7 +28,7 @@ class MaterialController extends Controller
      */
     public function create()
     {
-        $units = unit::where('status','Active')->get();
+        $units = Unit::where('status','Active')->get();
         $boards = Board::where('status','Active')->get();
         return view('material.add',compact('units','boards'));
     }
@@ -77,7 +77,7 @@ class MaterialController extends Controller
         }
 
 
-        $add = new material;
+        $add = new Material;
         $add->user_id  = Auth::user()->id;
         $add->unit_id = $request->unit_id;
         $add->board_id = $request->board_id;
@@ -101,7 +101,7 @@ class MaterialController extends Controller
      * @param  \App\Models\material  $material
      * @return \Illuminate\Http\Response
      */
-    public function show(material $material)
+    public function show(Material $material)
     {
         //
     }
@@ -112,10 +112,10 @@ class MaterialController extends Controller
      * @param  \App\Models\material  $material
      * @return \Illuminate\Http\Response
      */
-    public function edit(material $material,$id)
+    public function edit(Material $material,$id)
     {
-        $units = unit::where('status','Active')->get();
-        $materialdata = material::where('id',$id)->first();
+        $units = Unit::where('status','Active')->get();
+        $materialdata = Material::where('id',$id)->first();
         $boards = Board::where('status','Active')->get();
         return view('material.edit',compact('materialdata','units','boards'));
     }
@@ -127,7 +127,7 @@ class MaterialController extends Controller
      * @param  \App\Models\material  $material
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, material $material,$id)
+    public function update(Request $request, Material $material,$id)
     {
         $this->validate($request, [
             'unit_id'     => 'required',
@@ -166,7 +166,7 @@ class MaterialController extends Controller
             $new_name = $request->hidden_image;
         }
 
-        $update = material::find($id);
+        $update = Material::find($id);
         $update->user_id  = Auth::user()->id;
         $update->unit_id = $request->unit_id;
         $update->board_id = $request->board_id;
@@ -190,9 +190,9 @@ class MaterialController extends Controller
      * @param  \App\Models\material  $material
      * @return \Illuminate\Http\Response
      */
-    public function distroy(material $material,$id)
+    public function distroy(Material $material,$id)
     {
-        $delete = material::find($id);
+        $delete = Material::find($id);
         $delete->status = "Deleted";
         $delete->save();
 

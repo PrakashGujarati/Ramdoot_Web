@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\solution;
+use App\Models\Solution;
 use Illuminate\Http\Request;
-use App\Models\unit;
+use App\Models\Unit;
 use Auth;
 use App\Models\Board;
 
@@ -17,7 +17,7 @@ class SolutionController extends Controller
      */
     public function index()
     {
-        $solution_details = solution::where('status','Active')->get();
+        $solution_details = Solution::where('status','Active')->get();
         return view('solution.index',compact('solution_details'));
     }
 
@@ -28,7 +28,7 @@ class SolutionController extends Controller
      */
     public function create()
     {
-        $units = unit::where('status','Active')->get();
+        $units = Unit::where('status','Active')->get();
         $boards = Board::where('status','Active')->get();
         return view('solution.add',compact('units','boards'));
     }
@@ -76,7 +76,7 @@ class SolutionController extends Controller
             }
         }
 
-        $add = new solution;
+        $add = new Solution;
         $add->user_id  = Auth::user()->id;
         $add->unit_id = $request->unit_id;
         $add->board_id = $request->board_id;
@@ -100,7 +100,7 @@ class SolutionController extends Controller
      * @param  \App\Models\solution  $solution
      * @return \Illuminate\Http\Response
      */
-    public function show(solution $solution)
+    public function show(Solution $solution)
     {
         
     }
@@ -111,9 +111,9 @@ class SolutionController extends Controller
      * @param  \App\Models\solution  $solution
      * @return \Illuminate\Http\Response
      */
-    public function edit(solution $solution,$id)
+    public function edit(Solution $solution,$id)
     {
-        $units = unit::where('status','Active')->get();
+        $units = Unit::where('status','Active')->get();
         $solutiondata = solution::where('id',$id)->first();
         $boards = Board::where('status','Active')->get();
         return view('solution.edit',compact('solutiondata','units','boards'));
@@ -126,7 +126,7 @@ class SolutionController extends Controller
      * @param  \App\Models\solution  $solution
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, solution $solution,$id)
+    public function update(Request $request, Solution $solution,$id)
     {
         $this->validate($request, [
             'unit_id'     => 'required',
@@ -165,7 +165,7 @@ class SolutionController extends Controller
             $new_name = $request->hidden_image;
         }
 
-        $update = solution::find($id);
+        $update = Solution::find($id);
         $update->user_id  = Auth::user()->id;
         $update->unit_id = $request->unit_id;
         $update->board_id = $request->board_id;
@@ -189,9 +189,9 @@ class SolutionController extends Controller
      * @param  \App\Models\solution  $solution
      * @return \Illuminate\Http\Response
      */
-    public function distroy(solution $solution,$id)
+    public function distroy(Solution $solution,$id)
     {
-        $delete = solution::find($id);
+        $delete = Solution::find($id);
         $delete->status = "Deleted";
         $delete->save();
 
