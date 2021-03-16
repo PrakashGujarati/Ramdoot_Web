@@ -20,12 +20,14 @@ class SubjectController extends Controller
     	$rules = array(
             'board_id' => 'required',
             'standard_id' => 'required',
-            'semester_id' => 'required'
+            'semester_id' => 'required',
+            'feature_id' => 'required'
         );
         $messages = array(
             'board_id.required' => 'Please enter board id.',
             'standard_id.required' => 'Please enter standard id.',
-            'semester_id.required' => 'Please enter semester id.'
+            'semester_id.required' => 'Please enter semester id.',
+            'feature_id.required' => 'Please enter feature id.'
         );
 
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -71,6 +73,7 @@ class SubjectController extends Controller
 	    			$thumbnail = env('APP_URL')."/upload/subject/thumbnail/".$value->thumbnail;
 	    			$data[] = ['id' => $value->id,'name' => $value->subject_name,'sub_title' => $value->sub_title,'url' => $url,'thumbnail' => $thumbnail,"units"=>$unitcount];
 	    		}
+                //remove unit counter and add counter of feature whether it is video or image and send message of that for ex total video,etc 
 
 	    		return response()->json([
 	    			"code" => 200,

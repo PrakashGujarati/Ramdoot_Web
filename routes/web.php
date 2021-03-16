@@ -23,6 +23,7 @@ use App\Http\Controllers\StudentQuestionAnswerController;
 use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\MediumController;
 use App\Http\Controllers\NoteController;
+use App\Http\Controllers\SettingController;
 
 
 
@@ -233,5 +234,14 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('feature/{id}/edit', [FeatureController::class, 'edit'])->name('feature.edit');
 	Route::post('feature/{id}/update', [FeatureController::class, 'update'])->name('feature.update');
 	Route::get('feature/{id}/delete', [FeatureController::class, 'distroy'])->name('feature.distroy');
+
+	Route::get('settings',[SettingController::class,'setting'])->name('settings');
+
+	Route::get('role', [RoleController::class, 'index'])->name('role.index');
+	Route::get('role/create', [RoleController::class, 'create'])->name('role.create');
+	Route::post('role/store', [RoleController::class, 'store'])->name('role.store');
+	Route::get('role/{id}/edit', [RoleController::class, 'edit'])->name('role.edit');
+	Route::post('role/{id}/update', [RoleController::class, 'update'])->name('role.update');
+	Route::get('role/{id}/delete', [RoleController::class, 'distroy'])->name('role.distroy');	
 
 });

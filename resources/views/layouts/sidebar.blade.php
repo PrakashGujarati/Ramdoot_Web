@@ -228,7 +228,13 @@
                         </ul><!-- .nk-menu-sub -->
                     </li>
 
-                    
+    
+                    <li class="nk-menu-item has-sub">
+                        <a href="{{route('settings')}}" class="nk-menu-link">
+                            <span class="nk-menu-icon"><em class="icon ni ni-align-right"></em></span>
+                            <span class="nk-menu-text">Settings</span>
+                        </a>
+                    </li>                    
 
 
 
