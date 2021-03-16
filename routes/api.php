@@ -43,7 +43,7 @@ Route::group(['middleware'=>'auth:api'], function()
     Route::post('subject_list', [SubjectController::class, 'subjectList']);
     Route::post('unit_list', [UnitController::class, 'unitList']);
     Route::post('video_list', [VideosController::class, 'videoList']);
-    Route::post('book_list', [TextbookController::class, 'textbookList']);
+    Route::post('book_list', [TextbookControsller::class, 'textbookList']);
     Route::post('solution_list', [SolutionController::class, 'solutionList']);
     Route::post('material_list', [MaterialController::class, 'materialList']);
     Route::post('paper_list', [PaperController::class, 'paperList']);
@@ -70,7 +70,7 @@ Route::group(['middleware'=>'auth:api'], function()
     Route::post('submit_exam', [ExamController::class, 'submitExam']);        
     Route::post('result_exam', [ExamController::class, 'resultExam']);
     
-
+    Route::post('note_list', [TextbookController::class, 'note_list']);
 });
 
 Route::post('register', [RegisterController::class, 'register']);
