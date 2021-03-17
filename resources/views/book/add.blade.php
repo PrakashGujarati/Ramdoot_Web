@@ -13,7 +13,7 @@
                     <div class="card-head">
                         <h5 class="card-title">Add Book</h5>
                     </div>
-                    <form action="{{ route('book.store') }}" method="POST" enctype='multipart/form-data'>
+                    <form action="{{ route('book.store') }}" method="POST" enctype='multipart/form-data' id="book_form">
                     @csrf
 
                         <div class="row">
@@ -21,7 +21,7 @@
                                 <label class="form-label">Board</label>
                                 <div class="form-control-wrap">
                                     <select name="board_id" class="form-control board_id" id="board_id">
-                                        <option>--Select Board--</option>
+                                        <option value="">--Select Board--</option>
                                         @foreach($boards as $boards_data)
                                         <option value="{{ $boards_data->id }}" @if(old('board_id') == $boards_data->id) selected="" @endif>{{ $boards_data->name }}</option>
                                         @endforeach
@@ -38,7 +38,7 @@
                                 <label class="form-label">Medium</label>
                                 <div class="form-control-wrap">
                                     <select name="medium_id" class="form-control medium_id" id="medium_id">
-                                        <option>--Select Medium--</option>
+                                        <option value="">--Select Medium--</option>
                                     </select>
                                     @error('medium_id')
                                         <span class="text-danger" role="alert">
@@ -52,7 +52,7 @@
                                 <label class="form-label">Standard</label>
                                 <div class="form-control-wrap">
                                     <select name="standard_id" class="form-control standard_id" id="standard_id">
-                                        <option>--Select Standard--</option>
+                                        <option value="">--Select Standard--</option>
                                     </select>
                                     @error('standard_id')
                                         <span class="text-danger" role="alert">
@@ -72,7 +72,7 @@
                                 <label class="form-label">Semester</label>
                                 <div class="form-control-wrap">
                                     <select name="semester_id" class="form-control semester_id" id="semester_id">
-                                        <option>--Select Semester--</option>
+                                        <option value="">--Select Semester--</option>
                                     </select>
                                     @error('semester_id')
                                         <span class="text-danger" role="alert">
@@ -86,7 +86,7 @@
                                 <label class="form-label">Subject</label>
                                 <div class="form-control-wrap">
                                     <select name="subject_id" class="form-control subject_id" id="subject_id">
-                                        <option>--Select Subject--</option>
+                                        <option value="">--Select Subject--</option>
                                     </select>
                                     @error('subject_id')
                                         <span class="text-danger" role="alert">
@@ -100,7 +100,7 @@
                                 <label class="form-label">Units</label>
                                 <div class="form-control-wrap">
                                     <select name="unit_id" class="form-control unit_id" id="unit_id">
-                                        <option>--Select Unit--</option>
+                                        <option value="">--Select Unit--</option>
                                     </select>
                                     @error('unit_id')
                                         <span class="text-danger" role="alert">
@@ -113,7 +113,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="form-group col-lg-6">
+                            <div class="form-group col-lg-4">
                                 <label class="form-label">Title</label>
                                 <div class="form-control-wrap">
                                     <input type="text" class="form-control" id="title" name="title" value="{{ old('title') }}">
@@ -125,7 +125,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group col-lg-6">
+                            <div class="form-group col-lg-4">
                                 <label class="form-label">Sub Title</label>
                                 <div class="form-control-wrap">
                                     <input type="text" class="form-control" id="sub_title" name="sub_title" value="{{ old('sub_title') }}">
@@ -136,69 +136,56 @@
                                     @enderror
                                 </div>
                             </div>
+
+                            <div class="form-group col-lg-4">
+                                <label class="form-label">Pages</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" id="pages" name="pages" value="{{ old('pages') }}">
+                                    @error('pages')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
                         </div>
 
                         <div class="row">
-                        <div class="form-group col-lg-6">
-                            <div class="row">
-                                <input type="hidden" name="url_type" class="url_type" id="url_type" value="file">
-                                <div class="col-lg-6"><label class="form-label">Url</label></div>
-                                <div class="col-lg-6 text-right"><div class="g">
-                                    <div class="custom-control custom-control-sm custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input urlchk" name="instant_result" value="1" id="instant_result">
-                                        <label class="custom-control-label" for="instant_result"></label>
+                            <div class="form-group col-lg-4">
+                                <div class="row">
+                                    <input type="hidden" name="url_type" class="url_type" id="url_type" value="file">
+                                    <div class="col-lg-6"><label class="form-label">Url</label></div>
+                                    <div class="col-lg-6 text-right"><div class="g">
+                                        <div class="custom-control custom-control-sm custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input urlchk" name="instant_result" value="1" id="instant_result">
+                                            <label class="custom-control-label" for="instant_result"></label>
+                                        </div>
+                                    </div>
                                     </div>
                                 </div>
+                                <div class="form-control-wrap">
+                                    <input type="file" class="form-control" id="url" name="url" value="">
+                                    @error('url')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                                 </div>
                             </div>
-                            <div class="form-control-wrap">
-                                <input type="file" class="form-control" id="url" name="url" value="">
-                                @error('url')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                            <div class="form-group col-lg-4">
+                                <label class="form-label">Thumbnail</label>
+                                <div class="form-control-wrap">
+                                    <input type="file" class="form-control" id="thumbnail" name="thumbnail" value="">
+                                    @error('thumbnail')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group col-lg-6">
-                            <label class="form-label">Thumbnail</label>
-                            <div class="form-control-wrap">
-                                <input type="file" class="form-control" id="thumbnail" name="thumbnail" value="">
-                                @error('thumbnail')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-                        </div>
 
-                        <div class="form-group">
-                            <label class="form-label">Pages</label>
-                            <div class="form-control-wrap">
-                                <input type="text" class="form-control" id="pages" name="pages" value="{{ old('pages') }}">
-                                @error('pages')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">Description</label>
-                            <div class="form-control-wrap">
-                                <textarea class="form-control" id="description" name="description" value="{{ old('description') }}"></textarea>
-                                @error('description')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="form-group col-lg-6">
+                            <div class="form-group col-lg-4">
                                 <label class="form-label">Label</label>
                                 <div class="form-control-wrap">
                                     <input type="text" class="form-control" id="label" name="label" value="{{ old('label') }}">
@@ -209,8 +196,23 @@
                                     @enderror
                                 </div>
                             </div>
+                        </div>
 
-                            <div class="form-group col-lg-6">
+                        
+                        <div class="row">
+                            <div class="form-group col-lg-8">
+                                <label class="form-label">Description</label>
+                                <div class="form-control-wrap">
+                                    <input class="form-control" id="description" name="description" value="{{ old('description') }}">
+                                    @error('description')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group col-lg-4">
                                 <label class="form-label">Release Date</label>
                                 <div class="form-control-wrap">
                                     <input type="date" class="form-control" id="release_date" name="release_date" value="{{ old('release_date') }}">
@@ -222,7 +224,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="form-group">
                             <button type="submit" class="btn btn-lg btn-primary">Submit</button>
                             <a type="button" href="{{ route('book.index') }}" class="btn btn-lg btn-danger text-light">Cancel</a>
@@ -234,6 +236,11 @@
             
     </div>
 </div><!-- .nk-block -->
+<br/>
+<div class="dyamictable">
+    @include('book.dynamic_table')
+</div>
+
 
 @endsection
 
@@ -373,6 +380,66 @@ $(document).on('change','.urlchk',function(){
         $("#url").attr('type', 'file');
         $('#url_type').val('file');
     }
+});
+
+$(document).ready(function () {
+    
+    $('#book_form').validate({
+         rules: {
+                board_id:"required",
+                medium_id:"required",
+                standard_id:"required",
+                semester_id:"required",
+                subject_id:"required",
+                unit_id:"required",
+                title:"required",
+                sub_title:"required",
+            },
+        //For custom messages
+        messages: {
+
+            board_id:"Please select board.",
+            medium_id:"Please select medium.",
+            standard_id:"Please select standard.",
+            semester_id:"Please select semester.",
+            subject_id:"Please select subject.",
+            unit_id:"Please select unit.",
+            title:"Please enter title.",
+            sub_title:"Please enter sub title"
+        },
+        submitHandler: function(form) {
+            var formData = new FormData($("#book_form")[0]);
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="token"]').attr('content')
+                },
+                url: form.action,
+                type: form.method,
+                data: formData,//$(form).serialize(),
+                mimeType: "multipart/form-data",
+                contentType: false,
+                processData: false,
+                dataType: 'html',
+                success: function(data) {
+                    confirm("Book Added Successfully.");
+                    $('#title').val('');
+                    $('#sub_title').val('');
+                    $('#url').val('');
+                    $('#thumbnail').val('');
+                    $('#pages').val('');
+                    $('#description').val('');
+                    $('#label').val('');
+                    $('#release_date').val('');
+                    
+                    
+                    $('.dyamictable').empty();
+                    $('.dyamictable').html(data);
+                }            
+            });
+        }
+    });
+    
 });
 
 </script>

@@ -30,7 +30,8 @@ class PaperController extends Controller
     {
         $units = Unit::where('status','Active')->get();
         $boards = Board::where('status','Active')->get();
-        return view('paper.add',compact('units','boards'));
+        $paper_details = Paper::where('status','Active')->get();
+        return view('paper.add',compact('units','boards','paper_details'));
     }
 
     /**
@@ -78,7 +79,9 @@ class PaperController extends Controller
         $add->description = isset($request->description) ? $request->description:'';
         $add->save();
 
-        return redirect()->route('paper.index')->with('success', 'Paper Added Successfully.');
+        $paper_details = Paper::where('status','Active')->get();
+        return view('paper.dynamic_table',compact('paper_details'));
+        //return redirect()->route('paper.index')->with('success', 'Paper Added Successfully.');
     }
 
     /**

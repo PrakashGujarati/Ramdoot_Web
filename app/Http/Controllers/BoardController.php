@@ -25,7 +25,8 @@ class BoardController extends Controller
      */
     public function create()
     {
-        return view('board.add');
+        $boards_details = Board::where('status','Active')->get();
+        return view('board.add',compact('boards_details'));
     }
 
     /**
@@ -82,7 +83,9 @@ class BoardController extends Controller
         $add->thumbnail = $new_name;
         $add->save();
 
-        return redirect()->route('board.index')->with('success', 'Board Added Successfully.');
+        $boards_details = Board::where('status','Active')->get();
+        return view('board.dynamic_table',compact('boards_details'));
+        //return redirect()->route('board.index')->with('success', 'Board Added Successfully.');
     }
 
     /**

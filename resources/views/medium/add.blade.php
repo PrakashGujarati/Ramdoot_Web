@@ -13,7 +13,7 @@
                     <div class="card-head">
                         <h5 class="card-title">Add Medium</h5>
                     </div>
-                    <form action="{{ route('medium.store') }}" method="POST" enctype='multipart/form-data'>
+                    <form action="{{ route('medium.store') }}" method="POST" enctype='multipart/form-data' id="medium_form">
                     @csrf
 
                         <div class="row">
@@ -60,13 +60,56 @@
             
     </div>
 </div><!-- .nk-block -->
+<br/>
+<div class="dyamictable">
+    @include('medium.dynamic_table')
+</div>
 
 @endsection
 
 @section('scripts')
 
 <script type="text/javascript">
+    $(document).ready(function () {
+    
+    $('#medium_form').validate({
+         rules: {
+                board_id:"required",
+                medium_name:"required",
+            },
+        //For custom messages
+        messages: {
 
+            board_id:"Please select board.",
+            medium_name:"Please select medium.",
+        },
+        submitHandler: function(form) {
+            var formData = new FormData($("#medium_form")[0]);
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="token"]').attr('content')
+                },
+                url: form.action,
+                type: form.method,
+                data: formData,//$(form).serialize(),
+                mimeType: "multipart/form-data",
+                contentType: false,
+                processData: false,
+                dataType: 'html',
+                success: function(data) {
+                    confirm("Medium Added Successfully.");
+                    $('#medium_name').val('');
+                    
+                    
+                    $('.dyamictable').empty();
+                    $('.dyamictable').html(data);
+                }            
+            });
+        }
+    });
+    
+});
 
 
 </script>

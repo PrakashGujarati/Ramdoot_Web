@@ -26,8 +26,9 @@ class StandardController extends Controller
      */
     public function create()
     {
+        $standard_details = Standard::where('status','Active')->get();
         $boards = Board::where('status','Active')->get();
-        return view('standard.add',compact('boards'));
+        return view('standard.add',compact('boards','standard_details'));
     }
 
     /**
@@ -77,7 +78,9 @@ class StandardController extends Controller
         $add->thumbnail = $new_name;
         $add->save();
 
-        return redirect()->route('standard.index')->with('success', 'Standard Added Successfully.');
+        $standard_details = Standard::where('status','Active')->get();
+        return view('standard.dynamic_table',compact('standard_details'));
+        //return redirect()->route('standard.index')->with('success', 'Standard Added Successfully.');
     }
 
     /**

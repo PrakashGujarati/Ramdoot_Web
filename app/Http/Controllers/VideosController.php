@@ -30,7 +30,8 @@ class VideosController extends Controller
     {
         $units = Unit::where('status','Active')->get();
         $boards = Board::where('status','Active')->get();
-        return view('videos.add',compact('units','boards'));
+        $videos_details = Videos::where('status','Active')->get();
+        return view('videos.add',compact('units','boards','videos_details'));
     }
 
     /**
@@ -111,7 +112,10 @@ class VideosController extends Controller
         $add->release_date = $request->release_date;
         $add->save();
 
-        return redirect()->route('videos.index')->with('success', 'Videos Added Successfully.');
+
+        $videos_details = Videos::where('status','Active')->get();
+        return view('videos.dynamic_table',compact('videos_details'));
+        //return redirect()->route('videos.index')->with('success', 'Videos Added Successfully.');
     }
 
     /**

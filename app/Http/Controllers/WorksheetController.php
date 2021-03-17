@@ -30,7 +30,8 @@ class WorksheetController extends Controller
     {
         $units = Unit::where('status','Active')->get();
         $boards = Board::where('status','Active')->get();
-        return view('worksheet.add',compact('units','boards'));
+        $worksheet_details = Worksheet::where('status','Active')->get();
+        return view('worksheet.add',compact('units','boards','worksheet_details'));
     }
 
     /**
@@ -78,7 +79,10 @@ class WorksheetController extends Controller
         $add->description = isset($request->description) ? $request->description:'';
         $add->save();
 
-        return redirect()->route('worksheet.index')->with('success', 'Worksheet Added Successfully.');
+
+        $worksheet_details = Worksheet::where('status','Active')->get();
+        return view('worksheet.dynamic_table',compact('worksheet_details'));
+        //return redirect()->route('worksheet.index')->with('success', 'Worksheet Added Successfully.');
     }
 
     /**

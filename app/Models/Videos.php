@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Note extends Model
+class Videos extends Model
 {
     use HasFactory;
-    protected $table = 'notes';
+
+    protected $table="videos";
 
     public function board()
 	{
@@ -28,7 +29,7 @@ class Note extends Model
 
 	public function semester()
 	{
-	  return $this->belongsTo(semester::class,'semester_id');
+	  return $this->belongsTo(Semester::class,'semester_id');
 	}
 
 	public function subject()
@@ -38,7 +39,6 @@ class Note extends Model
 
     public function unit()
     {
-    	return $this->belongsTo(unit::class,'unit_id');
+    	return $this->belongsTo(Unit::class,'unit_id');
     }
-
 }

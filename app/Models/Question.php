@@ -5,9 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Worksheet extends Model
+class Question extends Model
 {
     use HasFactory;
+    
+    protected $fillable = ['board_id','medium_id','standard_id','semester_id','subject_id','unit_id','question','note','option_a','option_b','option_c','option_d','answer','per_question_marks'];
+
 
     public function board()
 	{
@@ -27,7 +30,7 @@ class Worksheet extends Model
 
 	public function semester()
 	{
-	  return $this->belongsTo(semester::class,'semester_id');
+	  return $this->belongsTo(Semester::class,'semester_id');
 	}
 
 	public function subject()
@@ -35,8 +38,9 @@ class Worksheet extends Model
 	  return $this->belongsTo(Subject::class,'subject_id');
 	}
 
+
     public function unit()
     {
-    	return $this->belongsTo(unit::class,'unit_id');
+    	return $this->belongsTo(Unit::class,'unit_id');
     }
 }

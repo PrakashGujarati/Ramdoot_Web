@@ -21,8 +21,9 @@ class MediumController extends Controller
      */
     public function create()
     {
+        $mediums_details = Medium::where('status','Active')->get();
         $boards = Board::where('status','Active')->get();
-        return view('medium.add',compact('boards'));
+        return view('medium.add',compact('boards','mediums_details'));
     }
 
     /**
@@ -45,7 +46,9 @@ class MediumController extends Controller
         $add->save();
         
 
-        return redirect()->route('medium.index')->with('success', 'Medium Added Successfully.');
+        $mediums_details = Medium::where('status','Active')->get();
+        return view('medium.dynamic_table',compact('mediums_details'));
+        //return redirect()->route('medium.index')->with('success', 'Medium Added Successfully.');
     }
 
     /**

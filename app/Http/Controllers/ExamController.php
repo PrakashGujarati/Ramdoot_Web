@@ -177,7 +177,7 @@ class ExamController extends Controller
 
     public function getExam(Request $request){
 
-       //$getunit = unit::where(['unit_id' => $request->board_id])->get();
+       //$getunit = Unit::where(['unit_id' => $request->board_id])->get();
        $getexam = Exam::where(['standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'subject_id' => $request->subject_id,'unit_id' => $request->unit_id])->get();
 
         $result="<option value=''>--Select Exam--</option>";

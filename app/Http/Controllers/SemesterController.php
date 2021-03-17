@@ -29,7 +29,8 @@ class SemesterController extends Controller
     {
         $boards = Board::where('status','Active')->get();
         $standards = Standard::where('status','Active')->get();
-        return view('semester.add',compact('boards','standards'));
+        $semester_details = Semester::where('status','Active')->get();
+        return view('semester.add',compact('boards','standards','semester_details'));
     }
 
     /**
@@ -54,7 +55,9 @@ class SemesterController extends Controller
         $add->semester = $request->semester;
         $add->save();
 
-        return redirect()->route('semester.index')->with('success', 'Semester Added Successfully.');
+        $semester_details = Semester::where('status','Active')->get();
+        return view('semester.dynamic_table',compact('semester_details'));
+        //return redirect()->route('semester.index')->with('success', 'Semester Added Successfully.');
     }
 
     /**
@@ -116,7 +119,7 @@ class SemesterController extends Controller
      */
     public function distroy(Semester $semester,$id)
     {
-        $delete = semester::find($id);
+        $delete = Semester::find($id);
         $delete->status = "Deleted";
         $delete->save();
 

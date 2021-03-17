@@ -13,7 +13,7 @@
                     <div class="card-head">
                         <h5 class="card-title">Add Video</h5>
                     </div>
-                    <form action="{{ route('videos.store') }}" method="POST" enctype='multipart/form-data'>
+                    <form action="{{ route('videos.store') }}" method="POST" enctype='multipart/form-data' id="videos_form">
                     @csrf
 
 
@@ -22,7 +22,7 @@
                                 <label class="form-label">Board</label>
                                 <div class="form-control-wrap">
                                     <select name="board_id" class="form-control board_id" id="board_id">
-                                        <option>--Select Board--</option>
+                                        <option value="">--Select Board--</option>
                                         @foreach($boards as $boards_data)
                                         <option value="{{ $boards_data->id }}" @if(old('board_id') == $boards_data->id) selected="" @endif>{{ $boards_data->name}}</option>
                                         @endforeach
@@ -39,7 +39,7 @@
                                 <label class="form-label">Medium</label>
                                 <div class="form-control-wrap">
                                     <select name="medium_id" class="form-control medium_id" id="medium_id">
-                                        <option>--Select Medium--</option>
+                                        <option value="">--Select Medium--</option>
                                     </select>
                                     @error('medium_id')
                                         <span class="text-danger" role="alert">
@@ -53,7 +53,7 @@
                                 <label class="form-label">Standard</label>
                                 <div class="form-control-wrap">
                                     <select name="standard_id" class="form-control standard_id" id="standard_id">
-                                        <option>--Select Standard--</option>
+                                        <option value="">--Select Standard--</option>
                                     </select>
                                     @error('standard_id')
                                         <span class="text-danger" role="alert">
@@ -69,7 +69,7 @@
                                 <label class="form-label">Semester</label>
                                 <div class="form-control-wrap">
                                     <select name="semester_id" class="form-control semester_id" id="semester_id">
-                                        <option>--Select Semester--</option>
+                                        <option value="">--Select Semester--</option>
                                     </select>
                                     @error('semester_id')
                                         <span class="text-danger" role="alert">
@@ -84,7 +84,7 @@
                                 <label class="form-label">Subject</label>
                                 <div class="form-control-wrap">
                                     <select name="subject_id" class="form-control subject_id" id="subject_id">
-                                        <option>--Select Subject--</option>
+                                        <option value="">--Select Subject--</option>
                                     </select>
                                     @error('subject_id')
                                         <span class="text-danger" role="alert">
@@ -97,7 +97,7 @@
                                 <label class="form-label">Units</label>
                                 <div class="form-control-wrap">
                                     <select name="unit_id" class="form-control unit_id" id="unit_id">
-                                        <option>--Select Unit--</option>
+                                        <option value="">--Select Unit--</option>
                                         @foreach($units as $units_data)
                                         <option value="{{ $units_data->id }}" @if(old('unit_id') == $units_data->id) selected="" @endif>{{ $units_data->title }}</option>
                                         @endforeach
@@ -142,7 +142,7 @@
                             <div class="form-group col-lg-4">
                                 <label class="form-label">Url</label>
                                 <div class="form-control-wrap">
-                                    <input type="text" class="form-control url" id="url" name="url" value="{{ old('url') }}">
+                                    <input type="text" class="form-control" id="url" name="url" value="{{ old('url') }}">
                                     <input type="file" class="form-control url_file" id="url_file" name="url_file" value="">
                                     @error('url')
                                         <span class="text-danger" role="alert">
@@ -228,6 +228,10 @@
             
     </div>
 </div><!-- .nk-block -->
+<br/>
+<div class="dyamictable">
+    @include('videos.dynamic_table')
+</div>
 
 @endsection
 
@@ -248,10 +252,10 @@
     function getType(type){
         if(type == "File"){
             $('.url_file').css('display','block');
-            $('.url').css('display','none');
+            $('#url').css('display','none');
         }else{
             $('.url_file').css('display','none');
-            $('.url').css('display','block');
+            $('#url').css('display','block');
         }
     }
 
@@ -378,6 +382,65 @@ function getUnit(board_id,medium_id,standard_id,semester_id,subject_id){
         } 
     });
 }
+
+$(document).ready(function () {
+    
+    $('#videos_form').validate({
+         rules: {
+                board_id:"required",
+                medium_id:"required",
+                standard_id:"required",
+                semester_id:"required",
+                subject_id:"required",
+                unit_id:"required",
+                title:"required",
+                sub_title:"required",
+            },
+        //For custom messages
+        messages: {
+
+            board_id:"Please select board.",
+            medium_id:"Please select medium.",
+            standard_id:"Please select standard.",
+            semester_id:"Please select semester.",
+            subject_id:"Please select subject.",
+            unit_id:"Please select unit.",
+            title:"Please enter title.",
+            sub_title:"Please enter sub title"
+        },
+        submitHandler: function(form) {
+            var formData = new FormData($("#videos_form")[0]);
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="token"]').attr('content')
+                },
+                url: form.action,
+                type: form.method,
+                data: formData,//$(form).serialize(),
+                mimeType: "multipart/form-data",
+                contentType: false,
+                processData: false,
+                dataType: 'html',
+                success: function(data) {
+                    confirm("Video Added Successfully.");
+                    $('#title').val('');
+                    $('#sub_title').val('');
+                    $('#url').val('');
+                    $('#thumbnail').val('');
+                    $('#duration').val('');
+                    $('#label').val('');
+                    $('#release_date').val('');
+                    
+                    
+                    $('.dyamictable').empty();
+                    $('.dyamictable').html(data);
+                }            
+            });
+        }
+    });
+    
+});
 
 
 
