@@ -11,6 +11,7 @@ use App\Models\Standard;
 use App\Models\Subject;
 use DB;
 use Validator;
+use App\Models\Feature;
 
 class SubjectController extends Controller
 {
@@ -20,12 +21,14 @@ class SubjectController extends Controller
     	$rules = array(
             'board_id' => 'required',
             'standard_id' => 'required',
-            'semester_id' => 'required'
+            'semester_id' => 'required',
+            'feature_id' => 'required'
         );
         $messages = array(
             'board_id.required' => 'Please enter board id.',
             'standard_id.required' => 'Please enter standard id.',
-            'semester_id.required' => 'Please enter semester id.'
+            'semester_id.required' => 'Please enter semester id.',
+            'feature_id.required' => 'Please enter feature id.'
         );
 
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -38,7 +41,7 @@ class SubjectController extends Controller
         $chkbaord = Board::where(['id' => $request->board_id,'status' => 'Active'])->first();
         $chkstandard = Standard::where(['id' => $request->standard_id,'status' => 'Active'])->first();
         $chksemester = Semester::where(['id' => $request->semester_id,'status' => 'Active'])->first();
-        //$chkfeatures = Feature::where(['id' => $request->category_id,'status' => 'Active'])->first();
+        $chkfeatures = Feature::where(['id' => $request->feature_id,'status' => 'Active'])->first();
         if(empty($chkbaord)){
         	return response()->json([
     			"code" => 400,
@@ -60,16 +63,24 @@ class SubjectController extends Controller
 			  	"data" => [],
 	        ]);
         }
+        elseif (empty($chkfeatures)) {
+            return response()->json([
+                "code" => 400,
+                "message" => "Feature not found.",
+                "data" => [],
+            ]);
+        }
         else{
 			$getdata = Subject::where(['board_id' => $request->board_id,'standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'status' => 'Active'])->get();
 			$subjectids = Subject::where(['board_id' => $request->board_id,'standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'status' => 'Active'])->pluck('id');
-			$unitcount = Unit::whereIn('subject_id',$subjectids)->count();
+			//$unitcount = Unit::whereIn('subject_id',$subjectids)->count();
+            $featurecount = Feature::whereIn('subject_id',$subjectids)->count();
 	    	if(count($getdata) > 0){
 	    		$data=[];
 	    		foreach ($getdata as $value) {
                     $url = env('APP_URL')."/upload/subject/url/".$value->url;
 	    			$thumbnail = env('APP_URL')."/upload/subject/thumbnail/".$value->thumbnail;
-	    			$data[] = ['id' => $value->id,'name' => $value->subject_name,'sub_title' => $value->sub_title,'url' => $url,'thumbnail' => $thumbnail,"units"=>$unitcount];
+	    			$data[] = ['id' => $value->id,'name' => $value->subject_name,'sub_title' => $value->sub_title,'url' => $url,'thumbnail' => $thumbnail,"count"=>$featurecount,'count_label'=>"Total ".$chkfeatures->title];
 	    		}
 
 	    		return response()->json([
