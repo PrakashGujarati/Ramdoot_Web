@@ -31,7 +31,8 @@ class BookController extends Controller
     {
         $units = Unit::where('status','Active')->get();
         $boards = Board::where('status','Active')->get();
-        return view('book.add',compact('units','boards'));
+        $book_details = Book::where('status','Active')->get();
+        return view('book.add',compact('units','boards','book_details'));
     }
 
     /**
@@ -112,7 +113,9 @@ class BookController extends Controller
         $add->release_date = $request->release_date;
         $add->save();
 
-        return redirect()->route('book.index')->with('success', 'Book Added Successfully.');
+        $book_details = Book::where('status','Active')->get();
+        return view('book.dynamic_table',compact('book_details'));
+        //return redirect()->route('book.index')->with('success', 'Book Added Successfully.');
 
     }
 

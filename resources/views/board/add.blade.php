@@ -13,7 +13,7 @@
                     <div class="card-head">
                         <h5 class="card-title">Add Board / Organisation</h5>
                     </div>
-                    <form action="{{ route('board.store') }}" method="POST" enctype='multipart/form-data'>
+                    <form action="{{ route('board.store') }}" method="POST" enctype='multipart/form-data' id="board_form">
                     @csrf
                         <div class="form-group">
                             <label class="form-label">Name</label>
@@ -82,8 +82,58 @@
             
     </div>
 </div><!-- .nk-block -->
+<br/>
+<div class="dyamictable">
+    @include('board.dynamic_table')
+</div>
 
 @endsection
 
 @section('scripts')
+
+<script type="text/javascript">
+    $(document).ready(function () {
+    
+    $('#board_form').validate({
+         rules: {
+                name:"required",
+                abbreviation:"required",
+            },
+        //For custom messages
+        messages: {
+
+            name:"Please enter name.",
+            abbreviation:"Please enter abbreviation.",
+        },
+        submitHandler: function(form) {
+            var formData = new FormData($("#board_form")[0]);
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="token"]').attr('content')
+                },
+                url: form.action,
+                type: form.method,
+                data: formData,//$(form).serialize(),
+                mimeType: "multipart/form-data",
+                contentType: false,
+                processData: false,
+                dataType: 'html',
+                success: function(data) {
+                    confirm("Board Added Successfully.");
+                    $('#name').val('');
+                    $('#abbreviation').val('');
+                    $('#thumbnail').val('');
+                    
+                    
+                    $('.dyamictable').empty();
+                    $('.dyamictable').html(data);
+                }            
+            });
+        }
+    });
+    
+});
+</script>
+
 @endsection

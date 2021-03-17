@@ -30,7 +30,8 @@ class SolutionController extends Controller
     {
         $units = Unit::where('status','Active')->get();
         $boards = Board::where('status','Active')->get();
-        return view('solution.add',compact('units','boards'));
+        $solution_details = Solution::where('status','Active')->get();
+        return view('solution.add',compact('units','boards','solution_details'));
     }
 
     /**
@@ -91,7 +92,10 @@ class SolutionController extends Controller
         $add->label = $request->label;
         $add->save();
 
-        return redirect()->route('solution.index')->with('success', 'Solution Added Successfully.');
+
+        $solution_details = Solution::where('status','Active')->get();
+        return view('solution.dynamic_table',compact('solution_details'));
+        //return redirect()->route('solution.index')->with('success', 'Solution Added Successfully.');
     }
 
     /**

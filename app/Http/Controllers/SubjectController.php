@@ -31,7 +31,8 @@ class SubjectController extends Controller
         $boards = Board::where('status','Active')->get();
         $standards = Standard::where('status','Active')->get();
         $semesters = Semester::where('status','Active')->get();
-        return view('subject.add',compact('boards','standards','semesters'));
+        $subject_details = Subject::where('status','Active')->get();
+        return view('subject.add',compact('boards','standards','semesters','subject_details'));
     }
 
     /**
@@ -94,7 +95,9 @@ class SubjectController extends Controller
         $add->thumbnail = $new_name;
         $add->save();
 
-        return redirect()->route('subject.index')->with('success', 'Subject Added Successfully.');
+        $subject_details = Subject::where('status','Active')->get();
+        return view('subject.dynamic_table',compact('subject_details'));
+        //return redirect()->route('subject.index')->with('success', 'Subject Added Successfully.');
 
     }
 

@@ -13,7 +13,7 @@
                     <div class="card-head">
                         <h5 class="card-title">Add Solution</h5>
                     </div>
-                    <form action="{{ route('solution.store') }}" method="POST" enctype='multipart/form-data'>
+                    <form action="{{ route('solution.store') }}" method="POST" enctype='multipart/form-data' id="solution_form">
                     @csrf
 
                         <div class="row">
@@ -21,7 +21,7 @@
                                 <label class="form-label">Board</label>
                                 <div class="form-control-wrap">
                                     <select name="board_id" class="form-control board_id" id="board_id">
-                                        <option>--Select Board--</option>
+                                        <option value="">--Select Board--</option>
                                         @foreach($boards as $boards_data)
                                         <option value="{{ $boards_data->id }}" @if(old('board_id') == $boards_data->id) selected="" @endif>{{ $boards_data->name }}</option>
                                         @endforeach
@@ -38,7 +38,7 @@
                                 <label class="form-label">Medium</label>
                                 <div class="form-control-wrap">
                                     <select name="medium_id" class="form-control medium_id" id="medium_id">
-                                        <option>--Select Medium--</option>
+                                        <option value="">--Select Medium--</option>
                                     </select>
                                     @error('medium_id')
                                         <span class="text-danger" role="alert">
@@ -68,7 +68,7 @@
                                 <label class="form-label">Semester</label>
                                 <div class="form-control-wrap">
                                     <select name="semester_id" class="form-control semester_id" id="semester_id">
-                                        <option>--Select Semester--</option>
+                                        <option value="">--Select Semester--</option>
                                     </select>
                                     @error('semester_id')
                                         <span class="text-danger" role="alert">
@@ -83,7 +83,7 @@
                                 <label class="form-label">Subject</label>
                                 <div class="form-control-wrap">
                                     <select name="subject_id" class="form-control subject_id" id="subject_id">
-                                        <option>--Select Subject--</option>
+                                        <option value="">--Select Subject--</option>
                                     </select>
                                     @error('subject_id')
                                         <span class="text-danger" role="alert">
@@ -97,7 +97,7 @@
                                 <label class="form-label">Units</label>
                                 <div class="form-control-wrap">
                                     <select name="unit_id" class="form-control unit_id" id="unit_id">
-                                        <option>--Select Unit--</option>
+                                        <option value="">--Select Unit--</option>
                                         @foreach($units as $units_data)
                                         <option value="{{ $units_data->id }}" @if(old('unit_id') == $units_data->id) selected="" @endif>{{ $units_data->title }}</option>
                                         @endforeach
@@ -193,6 +193,10 @@
             
     </div>
 </div><!-- .nk-block -->
+<br/>
+<div class="dyamictable">
+    @include('solution.dynamic_table')
+</div>
 
 @endsection
 
@@ -322,6 +326,66 @@ function getUnit(board_id,medium_id,standard_id,semester_id,subject_id){
         } 
     });
 }
+
+$(document).ready(function () {
+    
+    $('#solution_form').validate({
+         rules: {
+                board_id:"required",
+                medium_id:"required",
+                standard_id:"required",
+                semester_id:"required",
+                subject_id:"required",
+                unit_id:"required",
+                question:"required",
+                answer:"required",
+                marks:"required"
+            },
+        //For custom messages
+        messages: {
+
+            board_id:"Please select board.",
+            medium_id:"Please select medium.",
+            standard_id:"Please select standard.",
+            semester_id:"Please select semester.",
+            subject_id:"Please select subject.",
+            unit_id:"Please select unit.",
+            question:"Please enter question.",
+            answer:"Please enter answer.",
+            marks:"Please enter marks."
+        },
+        submitHandler: function(form) {
+            var formData = new FormData($("#solution_form")[0]);
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="token"]').attr('content')
+                },
+                url: form.action,
+                type: form.method,
+                data: formData,//$(form).serialize(),
+                mimeType: "multipart/form-data",
+                contentType: false,
+                processData: false,
+                dataType: 'html',
+                success: function(data) {
+                    confirm("Solution Added Successfully.");
+                    $('#image').val('');
+                    $('#question').val('');
+                    $('#marks').val('');
+                    $('#answer').val('');
+                    $('#label').val('');
+                    
+                    
+                    $('.dyamictable').empty();
+                    $('.dyamictable').html(data);
+                }            
+            });
+        }
+    });
+    
+});
+
 </script>
 
 @endsection

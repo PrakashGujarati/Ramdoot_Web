@@ -30,7 +30,8 @@ class MaterialController extends Controller
     {
         $units = Unit::where('status','Active')->get();
         $boards = Board::where('status','Active')->get();
-        return view('material.add',compact('units','boards'));
+        $material_details = Material::where('status','Active')->get();
+        return view('material.add',compact('units','boards','material_details'));
     }
 
     /**
@@ -92,7 +93,9 @@ class MaterialController extends Controller
         $add->label = $request->label;
         $add->save();
 
-        return redirect()->route('material.index')->with('success', 'Material Added Successfully.');
+        $material_details = Material::where('status','Active')->get();
+        return view('material.dynamic_table',compact('material_details'));
+        //return redirect()->route('material.index')->with('success', 'Material Added Successfully.');
     }
 
     /**

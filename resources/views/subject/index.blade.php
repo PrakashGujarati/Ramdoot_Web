@@ -50,12 +50,12 @@
                         <td>{{ isset($data->standard->standard) ? $data->standard->standard:'' }}</td>
                         <td>{{ isset($data->semester->semester) ? $data->semester->semester:'' }}</td>
                         <td>{{ $data->subject_name }}</td>
-                        <th>{{ $data->sub_title }}</th>
-                        <th>
+                        <td>{{ $data->sub_title }}</td>
+                        <td>
                             @if($data->thumbnail)
                             <img src="{{ asset('upload/subject/thumbnail/'.$data->thumbnail) }}" class="thumbnail" height="50" width="50">
                             @endif
-                        </th>
+                        </td>
                         <td>
                         	<a href="{{ route('subject.edit',$data->id) }}" class="mr-1"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
                         	<a href="javascript:;" data-url="{{ route('subject.distroy',$data->id) }}" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a>

@@ -13,14 +13,14 @@
                     <div class="card-head">
                         <h5 class="card-title">Add Standard / Class</h5>
                     </div>
-                    <form action="{{ route('standard.store') }}" method="POST" enctype='multipart/form-data'>
+                    <form action="{{ route('standard.store') }}" method="POST" enctype='multipart/form-data' id="standard_form">
                     @csrf
                         <div class="row">
                             <div class="form-group col-lg-6">
                                 <label class="form-label">Board</label>
                                 <div class="form-control-wrap">
                                     <select name="board_id" class="form-control board_id" id="board_id">
-                                        <option>--Select Board--</option>
+                                        <option value="">--Select Board--</option>
                                         @foreach($boards as $boards_data)
                                         <option value="{{ $boards_data->id }}" @if(old('board_id') == $boards_data->id) selected="" @endif>{{ $boards_data->name }}</option>
                                         @endforeach
@@ -36,7 +36,7 @@
                                 <label class="form-label">Medium</label>
                                 <div class="form-control-wrap">
                                     <select name="medium_id" class="form-control medium_id" id="medium_id">
-                                        <option>--Select Medium--</option>
+                                        <option value="">--Select Medium--</option>
                                     </select>
                                     @error('medium_id')
                                         <span class="text-danger" role="alert">
@@ -102,6 +102,10 @@
             
     </div>
 </div><!-- .nk-block -->
+<br/>
+<div class="dyamictable">
+    @include('standard.dynamic_table')
+</div>
 
 @endsection
 
@@ -128,6 +132,51 @@ function getMedium(board_id){
     });
 } 
 
+$(document).ready(function () {
+    
+    $('#standard_form').validate({
+         rules: {
+                board_id:"required",
+                medium_id:"required",
+                standard:"required",
+                section:"required",
+            },
+        //For custom messages
+        messages: {
+                board_id:"Please selete board.",
+                medium_id:"Please selete medium.",
+                standard:"Please enter standard.",
+                section:"Please enter section.",
+        },
+        submitHandler: function(form) {
+            var formData = new FormData($("#standard_form")[0]);
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="token"]').attr('content')
+                },
+                url: form.action,
+                type: form.method,
+                data: formData,//$(form).serialize(),
+                mimeType: "multipart/form-data",
+                contentType: false,
+                processData: false,
+                dataType: 'html',
+                success: function(data) {
+                    confirm("Standard Added Successfully.");
+                    $('#standard').val('');
+                    $('#section').val('');
+                    $('#thumbnail').val('');
+                    
+                    
+                    $('.dyamictable').empty();
+                    $('.dyamictable').html(data);
+                }            
+            });
+        }
+    });
+    
+});
     
 
 </script>

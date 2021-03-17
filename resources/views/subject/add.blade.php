@@ -13,7 +13,7 @@
                     <div class="card-head">
                         <h5 class="card-title">Add Subject</h5>
                     </div>
-                    <form action="{{ route('subject.store') }}" method="POST" enctype='multipart/form-data'>
+                    <form action="{{ route('subject.store') }}" method="POST" enctype='multipart/form-data' id="subject_form">
                     @csrf
 
                         <div class="row">
@@ -22,7 +22,7 @@
                                 <label class="form-label">Board</label>
                                 <div class="form-control-wrap">
                                     <select name="board_id" class="form-control board_id" id="board_id">
-                                        <option>--Select Board--</option>
+                                        <option value="">--Select Board--</option>
                                         @foreach($boards as $boards_data)
                                         <option value="{{ $boards_data->id }}" @if(old('board_id') == $boards_data->id) selected="" @endif>{{ $boards_data->name }}</option>
                                         @endforeach
@@ -39,7 +39,7 @@
                                 <label class="form-label">Medium</label>
                                 <div class="form-control-wrap">
                                     <select name="medium_id" class="form-control medium_id" id="medium_id">
-                                        <option>--Select Medium--</option>
+                                        <option value="">--Select Medium--</option>
                                     </select>
                                     @error('medium_id')
                                         <span class="text-danger" role="alert">
@@ -55,7 +55,7 @@
                             <label class="form-label">Standard</label>
                             <div class="form-control-wrap">
                                 <select name="standard_id" class="form-control standard_id" id="standard_id">
-                                    <option>--Select Standard--</option>
+                                    <option value="">--Select Standard--</option>
                                 </select>
                                 @error('standard_id')
                                     <span class="text-danger" role="alert">
@@ -69,7 +69,7 @@
                             <label class="form-label">Semester</label>
                             <div class="form-control-wrap">
                                 <select name="semester_id" class="form-control semester_id" id="semester_id">
-                                    <option>--Select Semester--</option>
+                                    <option value="">--Select Semester--</option>
                                 </select>
                                 @error('semester_id')
                                     <span class="text-danger" role="alert">
@@ -139,7 +139,10 @@
             
     </div>
 </div><!-- .nk-block -->
-
+<br/>
+<div class="dyamictable">
+    @include('subject.dynamic_table')
+</div>
 @endsection
 
 @section('scripts')
@@ -208,6 +211,57 @@ function getSemester(standard_id,board_id,medium_id){
         } 
     });
 }
+
+
+$(document).ready(function () {
+    
+    $('#subject_form').validate({
+         rules: {
+                board_id:"required",
+                medium_id:"required",
+                standard_id:"required",
+                semester_id:"required",
+                subject_name:"required",
+                sub_title:"required"
+
+            },
+        //For custom messages
+        messages: {
+                board_id:"Please selete board.",
+                medium_id:"Please selete medium.",
+                standard_id:"Please selete standard.",
+                semester_id:"Please enter semester.",
+                subject_name:"Please enter subject name.",
+                sub_title:"Please enter sub title."
+        },
+        submitHandler: function(form) {
+            var formData = new FormData($("#subject_form")[0]);
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="token"]').attr('content')
+                },
+                url: form.action,
+                type: form.method,
+                data: formData,//$(form).serialize(),
+                mimeType: "multipart/form-data",
+                contentType: false,
+                processData: false,
+                dataType: 'html',
+                success: function(data) {
+                    confirm("Subject Added Successfully.");
+                    $('#subject_name').val('');
+                    $('#sub_title').val('');
+                    $('#thumbnail').val();
+                    
+                    $('.dyamictable').empty();
+                    $('.dyamictable').html(data);
+                }            
+            });
+        }
+    });
+    
+});
 
 </script>
 
