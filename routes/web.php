@@ -24,7 +24,7 @@ use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\MediumController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\SettingController;
-
+use App\Http\Controllers\PermissionController;
 
 
 /*
@@ -237,11 +237,11 @@ Route::group(['middleware' => 'auth'], function(){
 
 	Route::get('settings',[SettingController::class,'setting'])->name('settings');
 
-	Route::get('role', [RoleController::class, 'index'])->name('role.index');
-	Route::get('role/create', [RoleController::class, 'create'])->name('role.create');
-	Route::post('role/store', [RoleController::class, 'store'])->name('role.store');
-	Route::get('role/{id}/edit', [RoleController::class, 'edit'])->name('role.edit');
-	Route::post('role/{id}/update', [RoleController::class, 'update'])->name('role.update');
-	Route::get('role/{id}/delete', [RoleController::class, 'distroy'])->name('role.distroy');	
+	Route::get('permission', [PermissionController::class, 'index'])->name('permission.index');
+	Route::get('permission/create', [PermissionController::class, 'create'])->name('permission.create');
+	Route::post('permission/store', [PermissionController::class, 'store'])->name('permission.store');
+	Route::get('permission/{id}/edit', [PermissionController::class, 'edit'])->name('permission.edit');
+	Route::post('permission/{id}/update', [PermissionController::class, 'update'])->name('permission.update');
+	Route::get('permission/{id}/delete', [PermissionController::class, 'distroy'])->name('permission.distroy');	
 
 });

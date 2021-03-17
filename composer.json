@@ -14,6 +14,7 @@
         "guzzlehttp/guzzle": "^7.0.1",
         "huddledigital/zendesk-laravel": "^3.5",
         "laravel/framework": "^8.12",
+        "laravel/helpers": "^1.4",
         "laravel/jetstream": "^2.1",
         "laravel/passport": "^10.1",
         "laravel/sanctum": "^2.6",

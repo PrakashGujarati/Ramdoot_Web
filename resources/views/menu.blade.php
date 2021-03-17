@@ -10,7 +10,7 @@
 	<div class="card card-preview">
         <div class="card-inner">
         	<ul style="list-style-type:circle">
-        		<li><strong><a href="{{route('create.role')}}">Roles</a></strong></li>	
+        		<li><strong><a href="{{route('permission.index')}}">Permission</a></strong></li>	
         	</ul>
         </div>
     </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Role;
+use Session;
 
 class RoleController extends Controller
 {
@@ -23,6 +24,7 @@ class RoleController extends Controller
     	$add->name=$name;
     	$add->guard_name="web";
     	$add->save();
+        Session::flash('success','Role added successfully..');
     	return redirect()->route('role.index');
     }
     public function edit($id)
@@ -37,10 +39,12 @@ class RoleController extends Controller
     	$add->name=$name;
     	$add->guard_name="web";
     	$add->save();
+        Session::flash('success','Role updated successfully..');
     	return redirect()->route('role.index');	
     }
     public function distroy($id)
     {
-    	
+        Session::flash('success','Role deleted successfully..');
+        return redirect()->route('role.index');	
     }
 }
