@@ -94,7 +94,7 @@ class SolutionController extends Controller
         }
 
         $chkstandard = Standard::where(['id' => $request->standard_id,'status' => 'Active'])->first();
-        $chksemester = semester::where(['id' => $request->semester_id,'status' => 'Active'])->first();
+        $chksemester = Semester::where(['id' => $request->semester_id,'status' => 'Active'])->first();
         $chksuject = Subject::where(['id' => $request->subject_id,'status' => 'Active'])->first();
 
         if(empty($chkstandard)){
@@ -120,12 +120,12 @@ class SolutionController extends Controller
         }
         else{
 
-        	$getunit = unit::where(['standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'subject_id' => $request->subject_id,'status' => 'Active'])->get();
+        	$getunit = Unit::where(['standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'subject_id' => $request->subject_id,'status' => 'Active'])->get();
         	//$getdata = videos::where(['unit_id' => $request->unit_id,'status' => 'Active'])->get();
 	    	if(count($getunit) > 0){
 	    		$data=[];$getdata=[];
 	    		foreach ($getunit as $value) {
-	    			$getdata = solution::where(['unit_id' => $value->id,'status' => 'Active'])->get();
+	    			$getdata = Solution::where(['unit_id' => $value->id,'status' => 'Active'])->get();
 	    			$solutiondata=[];
 	    			foreach ($getdata as $value1) {
 	    				$image = env('APP_URL')."/upload/solution/".$value1->image;

@@ -182,7 +182,7 @@ class VideosController extends Controller
             $data=[];
             if(count($getdata) > 0){
                 foreach ($getdata as $key => $value) { 
-                    //$get_type =  feature::where(['id' => $value->type_id])->first(); 
+                    //$get_type =  Feature::where(['id' => $value->type_id])->first(); 
                     $data[]=['id' => $value->id,'video_id' => $value->video_id,'user_id' => $value->user_id,
                     'start_time' => $value->start_time,'end_time' => $value->end_time,'duration' => $value->duration];   
                 }
@@ -223,20 +223,20 @@ class VideosController extends Controller
             $count=0;
             if($chkuser){
 
-                $chkview = solution_material_count::where(['type_id' => $request->type_id,'user_id' => $request->user_id])->first();
+                $chkview = SolutionMaterialCount::where(['type_id' => $request->type_id,'user_id' => $request->user_id])->first();
 
                 if($chkview){
 
                     if($request->counttype == "whatsapp_count"){
-                        solution_material_count::where(['type_id' => $request->type_id,'user_id' => $request->user_id])->update(['whatsapp_count' => $chkview->whatsapp_count+1]);  
+                        SolutionMaterialCount::where(['type_id' => $request->type_id,'user_id' => $request->user_id])->update(['whatsapp_count' => $chkview->whatsapp_count+1]);  
                         $count=$chkview->whatsapp_count+1;
                     }
                     elseif ($request->counttype == "share_count") {
-                        solution_material_count::where(['type_id' => $request->type_id,'user_id' => $request->user_id])->update(['share_count' => $chkview->share_count+1]);
+                        SolutionMaterialCount::where(['type_id' => $request->type_id,'user_id' => $request->user_id])->update(['share_count' => $chkview->share_count+1]);
                         $count=$chkview->share_count+1;
                     }
                     elseif ($request->counttype == "show_count") {
-                        solution_material_count::where(['type_id' => $request->type_id,'user_id' => $request->user_id])->update(['show_count' => $chkview->show_count+1]);
+                        SolutionMaterialCount::where(['type_id' => $request->type_id,'user_id' => $request->user_id])->update(['show_count' => $chkview->show_count+1]);
                         $count=$chkview->show_count+1;
                     }
                     

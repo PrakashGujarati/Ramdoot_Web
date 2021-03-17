@@ -119,7 +119,7 @@ class SemesterController extends Controller
      */
     public function distroy(Semester $semester,$id)
     {
-        $delete = semester::find($id);
+        $delete = Semester::find($id);
         $delete->status = "Deleted";
         $delete->save();
 

@@ -29,7 +29,7 @@ class Videos extends Model
 
 	public function semester()
 	{
-	  return $this->belongsTo(semester::class,'semester_id');
+	  return $this->belongsTo(Semester::class,'semester_id');
 	}
 
 	public function subject()
@@ -39,6 +39,6 @@ class Videos extends Model
 
     public function unit()
     {
-    	return $this->belongsTo(unit::class,'unit_id');
+    	return $this->belongsTo(Unit::class,'unit_id');
     }
 }

@@ -16,7 +16,7 @@ class Unit extends Model
 
     public function semester()
     {
-    	return $this->belongsTo(semester::class,'semester_id');
+    	return $this->belongsTo(Semester::class,'semester_id');
     }
 
     public function subject()

@@ -11,6 +11,6 @@ class Mcq extends Model
 
     public function unit()
     {
-    	return $this->belongsTo(unit::class,'unit_id');
+    	return $this->belongsTo(Unit::class,'unit_id');
     }
 }

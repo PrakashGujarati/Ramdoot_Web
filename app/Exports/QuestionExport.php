@@ -18,8 +18,8 @@ class QuestionExport implements WithHeadings,ShouldAutoSize, WithEvents
     */
     // public function collection()
     // {
-    //     //return question::all();
-    //     //return question::select(['question','note','option_a','option_b','option_c','option_d','answer','per_question_marks'])->get();
+    //     //return Question::all();
+    //     //return Question::select(['question','note','option_a','option_b','option_c','option_d','answer','per_question_marks'])->get();
     // }
 
     protected $data;
