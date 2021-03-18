@@ -71,7 +71,7 @@ class NoteController extends Controller
                         'pages' => $value1->pages,'description' => $value1->description,'label' => $value1->label,'release_date' => $value1->release_date];
 	    			}
 
-	    			$data[] = ['id' => $value->id,'unit_title' =>$value->title,'book' => $bookdata];
+	    			$data[] = ['id' => $value->id,'unit_title' =>$value->title,'book' => $bookdata,'sub_title'=>$value->description];
 	    		}
 	    		
 	    		return response()->json([

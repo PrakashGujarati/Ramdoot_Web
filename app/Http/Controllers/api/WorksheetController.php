@@ -74,7 +74,7 @@ class WorksheetController extends Controller
 	    				$worksheetdata[] = ['id' => $value1->id,'title' => $value1->title,'url' => $url,'type' => $value1->type,'description' => $value1->description,'label' => $value1->label];
 	    			}
 
-	    			$data[] = ['id' => $value->id,'unit_title' =>$value->title,'worksheet' => $worksheetdata];
+	    			$data[] = ['id' => $value->id,'unit_title' =>$value->title,'worksheet' => $worksheetdata,'sub_title'=>$value->description];
 	    		}
 	    		
 	    		return response()->json([

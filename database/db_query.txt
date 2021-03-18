@@ -1,0 +1,1 @@
+ALTER TABLE `units` ADD `sub_title` TEXT NULL AFTER `title`;
