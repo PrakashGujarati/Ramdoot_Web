@@ -108,18 +108,30 @@
                         </div>
                         
                         <div class="form-group">
-                            <label class="form-label">Url</label>
+                            <div class="row">
+                                <input type="hidden" name="url_type" class="url_type" id="url_type" value="file">
+                                <div class="col-lg-6"><label class="form-label">Url</label></div>
+                                <div class="col-lg-6 text-right"><div class="g">
+                                    <div class="custom-control custom-control-sm custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input urlchk" name="instant_result" value="{{ $unitdata->url_type }}" id="instant_result">
+                                        <label class="custom-control-label" for="instant_result"></label>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
                             <div class="form-control-wrap">
                                 <input type="file" class="form-control" id="url" name="url" value="">
                                 <input type="hidden" name="hidden_url" value="{{ $unitdata->url }}">
                                 <br/>
+                                @if($unitdata->url_type == "file")
                                 @if($unitdata->url)
                                     @php $ext = pathinfo($unitdata->url, PATHINFO_EXTENSION); @endphp
                                     @if($ext == "png" || $ext == "jpg" || $ext == "jpeg")
-                                    <img src="{{ asset('upload/unit/url/'.$unitdata->url) }}" class="thumbnail" height="100" width="100">
+                                    <img src="{{ asset('upload/unit/url/'.$unitdata->url) }}" class="thumbnail image_preview" height="100" width="100">
                                     @else
                                     <p>{{ $unitdata->url }}</p>
                                     @endif
+                                @endif
                                 @endif
                                 @error('url')
                                     <span class="text-danger" role="alert">
@@ -197,6 +209,19 @@ $( document ).ready(function() {
     getStandardEdit(board_id,medium_id,standard_id);
     getSemesterEdit(board_id,medium_id,standard_id,semester_id);
     getSubjectEdit(board_id,medium_id,standard_id,semester_id,subject_id);
+
+    var chkval = $('.urlchk').val();
+    if(chkval == "text"){
+        $('.urlchk').prop('checked',true);
+        $("#url").attr('type', 'text');
+        var urlval = "{{ $unitdata->url }}";
+        $("#url").val(urlval);
+        $('#url_type').val('text');
+    }
+    else if(chkval == "file"){
+        $("#url").attr('type', 'file');
+        $('#url_type').val('file');
+    }
 });
 
 $(document).on('change','.board_id',function(){
@@ -353,6 +378,18 @@ function getSubject(board_id,medium_id,standard_id,semester_id){
         } 
     });
 }
+
+$(document).on('change','.urlchk',function(){
+    if($(this).prop("checked") == true){
+        $("#url").attr('type', 'text');
+        $('#url_type').val('text');
+        $('.image_preview').css('display','none');
+    }
+    else if($(this).prop("checked") == false){
+        $("#url").attr('type', 'file');
+        $('#url_type').val('file');
+    }
+});
 
 </script>
 

@@ -13,7 +13,7 @@
                     <div class="card-head">
                         <h5 class="card-title">Add Unit</h5>
                     </div>
-                    <form action="{{ route('unit.store') }}" method="POST" enctype='multipart/form-data'>
+                    <form action="{{ route('unit.store') }}" method="POST" enctype='multipart/form-data' id="unit_form">
                     @csrf
                         <div class="row">
                             <div class="form-group col-lg-6">
@@ -94,10 +94,10 @@
                         
 
                         <div class="row">
-                            <div class="form-group col-lg-3">
+                            <div class="form-group col-lg-4">
                                 <label class="form-label">Title</label>
                                 <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="title" name="title[]" value="{{ old('title') }}">
+                                    <input type="text" class="form-control" id="title" name="title" value="{{ old('title') }}">
                                     @error('title')
                                         <span class="text-danger" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -105,10 +105,33 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="form-group col-lg-2">
-                                <label class="form-label">Url</label>
+
+                            <div class="form-group col-lg-3">
+                                <label class="form-label">Sub Title</label>
                                 <div class="form-control-wrap">
-                                    <input type="file" class="form-control" id="url" name="url[]" value="">
+                                    <input type="text" class="form-control" id="description" name="description" value="{{ old('description') }}">
+                                    @error('description')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group col-lg-2">
+                                <div class="row">
+                                    <input type="hidden" name="url_type" class="url_type" id="url_type" value="file">
+                                    <div class="col-lg-6"><label class="form-label">Url</label></div>
+                                    <div class="col-lg-6 text-right"><div class="g">
+                                        <div class="custom-control custom-control-sm custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input urlchk" name="instant_result" value="1" id="instant_result">
+                                            <label class="custom-control-label" for="instant_result"></label>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                                <div class="form-control-wrap">
+                                    <input type="file" class="form-control" id="url" name="url" value="">
                                     @error('url')
                                         <span class="text-danger" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -119,7 +142,7 @@
                             <div class="form-group col-lg-2">
                                 <label class="form-label">Thumbnail</label>
                                 <div class="form-control-wrap">
-                                    <input type="file" class="form-control" id="thumbnail" name="thumbnail[]" value="">
+                                    <input type="file" class="form-control" id="thumbnail" name="thumbnail" value="">
                                     @error('thumbnail')
                                         <span class="text-danger" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -131,7 +154,7 @@
                             <div class="form-group col-lg-1">
                                 <label class="form-label">Pages</label>
                                 <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="pages" name="pages[]" value="{{ old('pages') }}">
+                                    <input type="text" class="form-control" id="pages" name="pages" value="{{ old('pages') }}">
                                     @error('pages')
                                         <span class="text-danger" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -140,31 +163,21 @@
                                 </div>
                             </div>
                         
-                            <div class="form-group col-lg-3">
-                                <label class="form-label">Sub Title</label>
-                                <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="description" name="description[]" value="{{ old('description') }}">
-                                    @error('description')
-                                        <span class="text-danger" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
+                            
 
-                            <div class="form-group col-lg-1">
+                            <!-- <div class="form-group col-lg-1">
                                 <div class="form-control-wrap mt-4">
                                     <button type="button" class="btn btn-success mt-1 add_row"><i class="icon ni ni-plus"></i></button>
                                 </div>
-                            </div>
+                            </div> -->
 
                         </div>
 
-                        <div class="newPlus">
+                        <!-- <div class="newPlus">
                             
-                        </div>
+                        </div> -->
 
-                        <div class="form-group">
+                        <div class="form-group text-right">
                             <button type="submit" class="btn btn-lg btn-primary">Submit</button>
                             <a type="button" href="{{ route('unit.index') }}" class="btn btn-lg btn-danger text-light">Cancel</a>
                         </div>
@@ -175,6 +188,10 @@
             
     </div>
 </div><!-- .nk-block -->
+<br/>
+<div class="dyamictable">
+    @include('unit.dynamic_table')
+</div>
 
 @endsection
 
@@ -273,43 +290,110 @@ function getSubject(board_id,medium_id,standard_id,semester_id){
     });
 }
 
-var max_fields      = 50;
-var wrapper         = $(".newPlus");
-var add_button      = $(".add_row");
-
-var x = 1;
-$(add_button).click(function(e){
-    e.preventDefault();
-    if(x < max_fields){
-        x++;
-        $(wrapper).append('<div class="row newMinus"><div class="form-group col-lg-3"><label class="form-label">Title</label><div class="form-control-wrap"><input type="text" class="form-control" id="title" name="title[]" value=""></div></div><div class="form-group col-lg-2"><label class="form-label">Url</label><div class="form-control-wrap"><input type="file" class="form-control" id="url" name="url[]" value=""></div></div><div class="form-group col-lg-2"><label class="form-label">Thumbnail</label><div class="form-control-wrap"><input type="file" class="form-control" id="thumbnail" name="thumbnail[]" value=""></div></div><div class="form-group col-lg-1"><label class="form-label">Pages</label><div class="form-control-wrap"><input type="text" class="form-control" id="pages" name="pages[]" value=""></div></div><div class="form-group col-lg-3"><label class="form-label">Description</label><div class="form-control-wrap"><input type="text" class="form-control" id="description" name="description[]" value=""></div></div><div class="form-group col-lg-1"><div class="form-control-wrap mt-4"><button type="button" class="btn btn-danger mt-1 remove_field"><i class="icon ni ni-minus"></i></button></div></div></div>');     
+$(document).on('change','.urlchk',function(){
+    if($(this).prop("checked") == true){
+        $("#url").attr('type', 'text');
+        $('#url_type').val('text');
+    }
+    else if($(this).prop("checked") == false){
+        $("#url").attr('type', 'file');
+        $('#url_type').val('file');
     }
 });
 
+$(document).ready(function () {
+    
+    $('#unit_form').validate({
+         rules: {
+                board_id:"required",
+                medium_id:"required",
+                standard_id:"required",
+                semester_id:"required",
+                title:"required",
+                description:"required"
 
-$(wrapper).on("click",".remove_field", function(e){
-    e.preventDefault();
-    $(this).closest(".newMinus").remove();
-    x--;
-})
+            },
+        //For custom messages
+        messages: {
+                board_id:"Please selete board.",
+                medium_id:"Please selete medium.",
+                standard_id:"Please selete standard.",
+                semester_id:"Please enter semester.",
+                title:"Please enter title.",
+                description:"Please enter sub title."
+        },
+        submitHandler: function(form) {
+            var formData = new FormData($("#unit_form")[0]);
 
-$(wrapper).on("click",".remove_field", function(e){
-    e.preventDefault(); 
-    $(this).closest(".show").remove();
-    x--;
-})
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="token"]').attr('content')
+                },
+                url: form.action,
+                type: form.method,
+                data: formData,//$(form).serialize(),
+                mimeType: "multipart/form-data",
+                contentType: false,
+                processData: false,
+                dataType: 'html',
+                success: function(data) {
+                    confirm("Unit Added Successfully.");
+                    $('#title').val('');
+                    $('#description').val('');
+                    $('#url').val('');
+                    $('#thumbnail').val();
 
-$(document).on("click",".remove_fields", function(e){
-    //alert('fdf');
-    e.preventDefault();
-    $(this).closest(".slab").remove();
-})
+                    $(".urlchk").prop("checked",false);
+                    $("#url").attr('type', 'file');
+                    $('#url_type').val('file');
+                    
+                    $('.dyamictable').empty();
+                    $('.dyamictable').html(data);
+                }            
+            });
+        }
+    });
+    
+});
 
-$(document).on("click",".remove_fieldedit", function(e){
-    //alert('fdf');
-    e.preventDefault();
-    $(this).closest(".editslab").remove();
-})
+
+// var max_fields      = 50;
+// var wrapper         = $(".newPlus");
+// var add_button      = $(".add_row");
+
+// var x = 1;
+// $(add_button).click(function(e){
+//     e.preventDefault();
+//     if(x < max_fields){
+//         x++;
+//         $(wrapper).append('<div class="row newMinus"><div class="form-group col-lg-3"><label class="form-label">Title</label><div class="form-control-wrap"><input type="text" class="form-control" id="title" name="title[]" value=""></div></div><div class="form-group col-lg-2"><label class="form-label">Url</label><div class="form-control-wrap"><input type="file" class="form-control" id="url" name="url[]" value=""></div></div><div class="form-group col-lg-2"><label class="form-label">Thumbnail</label><div class="form-control-wrap"><input type="file" class="form-control" id="thumbnail" name="thumbnail[]" value=""></div></div><div class="form-group col-lg-1"><label class="form-label">Pages</label><div class="form-control-wrap"><input type="text" class="form-control" id="pages" name="pages[]" value=""></div></div><div class="form-group col-lg-3"><label class="form-label">Description</label><div class="form-control-wrap"><input type="text" class="form-control" id="description" name="description[]" value=""></div></div><div class="form-group col-lg-1"><div class="form-control-wrap mt-4"><button type="button" class="btn btn-danger mt-1 remove_field"><i class="icon ni ni-minus"></i></button></div></div></div>');     
+//     }
+// });
+
+
+// $(wrapper).on("click",".remove_field", function(e){
+//     e.preventDefault();
+//     $(this).closest(".newMinus").remove();
+//     x--;
+// })
+
+// $(wrapper).on("click",".remove_field", function(e){
+//     e.preventDefault(); 
+//     $(this).closest(".show").remove();
+//     x--;
+// })
+
+// $(document).on("click",".remove_fields", function(e){
+//     //alert('fdf');
+//     e.preventDefault();
+//     $(this).closest(".slab").remove();
+// })
+
+// $(document).on("click",".remove_fieldedit", function(e){
+//     //alert('fdf');
+//     e.preventDefault();
+//     $(this).closest(".editslab").remove();
+// })
 
 
 </script>

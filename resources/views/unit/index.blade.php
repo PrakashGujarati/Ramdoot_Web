@@ -56,8 +56,12 @@
                         <td>{{ isset($data->title) ? $data->title:'' }}</td>
                         <td>{{ isset($data->description) ? $data->description:'' }}</td>
                         <td>
+                            @if($data->url_type == 'file')
                             @if($data->url)
                             <img src="{{ asset('upload/unit/url/'.$data->url) }}" class="thumbnail" height="50" width="50">
+                            @endif
+                            @else
+                            {{ $data->url }}
                             @endif
                         </td>
                         <td>
@@ -65,7 +69,7 @@
                             <img src="{{ asset('upload/unit/thumbnail/'.$data->thumbnail) }}" class="thumbnail" height="50" width="50">
                             @endif
                         </td>
-                        <th>{{ isset($data->pages) ? $data->pages:'' }}</th>
+                        <td>{{ isset($data->pages) ? $data->pages:'' }}</td>
                         <td>
                         	<a href="{{ route('unit.edit',$data->id) }}" class="mr-1"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
                         	<a href="javascript:;" data-url="{{ route('unit.distroy',$data->id) }}" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a>

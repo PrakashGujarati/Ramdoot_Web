@@ -33,7 +33,8 @@ class UnitController extends Controller
         $semesters = Semester::where('status','Active')->get();
         $standards = Standard::where('status','Active')->get();
         $subjects = Subject::where('status','Active')->get();
-        return view('unit.add',compact('subjects','standards','semesters','boards'));
+        $unit_details = Unit::where('status','Active')->get();
+        return view('unit.add',compact('subjects','standards','semesters','boards','unit_details'));
     }
 
     /**
@@ -58,13 +59,13 @@ class UnitController extends Controller
             // 'pages' => 'required',
         ]);
 
-        for ($i = 0; $i < count($request->title); $i++) {
+        // for ($i = 0; $i < count($request->title); $i++) {
 
             $new_name='';
-            if($request->thumbnail[$i])
+            if($request->thumbnail)
             {
             
-                $image = $request->thumbnail[$i];
+                $image = $request->thumbnail;
 
                 $new_name = rand() . '.' . $image->getClientOriginalExtension();
 
@@ -82,12 +83,16 @@ class UnitController extends Controller
             }
 
             $url_file='';
-            if($request->url[$i])
-            {
-                $image = $request->url[$i];
-                $url_file = time().'.'.$image->getClientOriginalExtension();
-                $destinationPath = public_path('upload/unit/url/');
-                $image->move($destinationPath, $url_file);
+            if($request->url_type == 'file'){
+                if($request->url)
+                {
+                    $image = $request->url;
+                    $url_file = time().'.'.$image->getClientOriginalExtension();
+                    $destinationPath = public_path('upload/unit/url/');
+                    $image->move($destinationPath, $url_file);
+                }
+            }else{
+                $url_file = $request->url;
             }
 
             $add = new Unit;
@@ -96,16 +101,21 @@ class UnitController extends Controller
             $add->standard_id = $request->standard_id;
             $add->semester_id = $request->semester_id;
             $add->subject_id = $request->subject_id;
-            $add->title = $request->title[$i];
+            $add->title = $request->title;
+            $add->url_type = $request->url_type;
             $add->url = $url_file;
             $add->thumbnail = $new_name;
-            $add->pages = isset($request->pages[$i]) ? $request->pages[$i]:'';
-            $add->description = isset($request->description[$i]) ? $request->description[$i]:'';
+            $add->pages = isset($request->pages) ? $request->pages:'';
+            $add->description = isset($request->description) ? $request->description:'';
             $add->save();
                 
-        }
 
-        return redirect()->route('unit.index')->with('success', 'Unit Added Successfully.');
+           $unit_details = Unit::where('status','Active')->get();
+           return view('unit.dynamic_table',compact('unit_details'));
+           //return redirect()->route('unit.index')->with('success', 'Unit Added Successfully.');     
+        // }
+
+        
     }
 
     /**
@@ -150,8 +160,8 @@ class UnitController extends Controller
             'standard_id'  => 'required',
             'semester_id' => 'required',
             'subject_id' => 'required',
-            'title' => 'required',
-            'pages' => 'required',
+            // 'title' => 'required',
+            // 'pages' => 'required',
         ]);
 
         $new_name='';
@@ -179,15 +189,20 @@ class UnitController extends Controller
         }
 
         $url_file='';
-        if($request->has('url'))
-        {
-            $image = $request->file('url');
-            $url_file = time().'.'.$image->getClientOriginalExtension();
-            $destinationPath = public_path('upload/unit/url/');
-            $image->move($destinationPath, $url_file);
+        if($request->url_type == 'file'){
+            if($request->file('url'))
+            {
+                $image = $request->file('url');
+                $url_file = time().'.'.$image->getClientOriginalExtension();
+                $destinationPath = public_path('upload/unit/url/');
+                $image->move($destinationPath, $url_file);
+            }
+            else{
+                $url_file = $request->hidden_url;
+            }
         }
         else{
-            $url_file = $request->hidden_url;
+            $url_file = $request->url;
         }
 
         $update = Unit::find($id);
@@ -197,6 +212,7 @@ class UnitController extends Controller
         $update->semester_id = $request->semester_id;
         $update->subject_id = $request->subject_id;
         $update->title = $request->title;
+        $update->url_type = $request->url_type;
         $update->url = $url_file;
         $update->thumbnail = $new_name;
         $update->pages = isset($request->pages) ? $request->pages:'';
