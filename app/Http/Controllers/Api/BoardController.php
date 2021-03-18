@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Board;
+use App\Models\Medium;
 use DB;
 
 class BoardController extends Controller
