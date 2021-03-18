@@ -31,7 +31,15 @@
             <table class="datatable-init table">
                 <thead>
                     <tr>
+                        <th>Board</th>
+                        <th>Medium</th>
+                        <th>Standard</th>
+                        <th>Semester</th>
+                        <th>Subject</th>
+                        <th>Unit</th>
                         <th>Title</th>
+                        <th>Order</th>
+                        <th>Image</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -39,7 +47,19 @@
                 	@if(count($feature_details) > 0)
                 	@foreach($feature_details as $data)
                     <tr>
+                        <td>{{ isset($data->board->name) ? $data->board->name:'' }}</td>
+                        <td>{{ isset($data->medium->medium_name) ? $data->medium->medium_name:'' }}</td>
+                        <td>{{ isset($data->standard->standard) ? $data->standard->standard:'' }}</td>
+                        <td>{{ isset($data->semester->semester) ? $data->semester->semester:'' }}</td>
+                        <td>{{ isset($data->subject->subject_name) ? $data->subject->subject_name:'' }}</td>
+                        <td>{{ isset($data->unit->title) ? $data->unit->title:'' }}</td>
                         <td>{{ $data->title }}</td>
+                        <td>{{ $data->flag }}</td>
+                        <td>
+                            @if($data->image)
+                            <img src="{{ asset('upload/feature/'.$data->image) }}" class="thumbnail" height="50" width="50">
+                            @endif
+                        </td>
                         <td>
                         	<a href="{{ route('feature.edit',$data->id) }}"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
                         	<a href="javascript:;" data-url="{{ route('feature.distroy',$data->id) }}" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a>

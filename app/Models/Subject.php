@@ -21,7 +21,7 @@ class Subject extends Model
 
     public function standard()
     {
-    	return $this->belongsTo(Standard::class,'board_id');
+    	return $this->belongsTo(Standard::class,'standard_id');
     }
 
     public function semester()

@@ -1,4 +1,10 @@
 
+----------------------- 17-03-2020-------------------
+
+ALTER TABLE `features` ADD `medium_id` INT(11) NOT NULL DEFAULT '0' AFTER `board_id`;
+
+ALTER TABLE `units` ADD `url_type` VARCHAR(50) NULL AFTER `title`;
+
 ----------------------- 15-03-2020-------------------
 
 ALTER TABLE `books` ADD `url_type` VARCHAR(50) NULL AFTER `sub_title`;

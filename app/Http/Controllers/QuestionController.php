@@ -34,7 +34,8 @@ class QuestionController extends Controller
     {
         $units = Unit::where('status','Active')->get();
         $boards = Board::where('status','Active')->get();
-        return view('question.add',compact('units','boards'));
+        $question_details = Question::where('status','Active')->get();
+        return view('question.add',compact('units','boards','question_details'));
     }
 
     /**
@@ -53,7 +54,7 @@ class QuestionController extends Controller
             'subject_id' => 'required',
             'unit_id'     => 'required',
             'question' => 'required',
-            'note' => 'required',
+            // 'note' => 'required',
             'option_a' => 'required',
             'option_b' => 'required',
             'option_c' => 'required',
@@ -62,7 +63,7 @@ class QuestionController extends Controller
             'per_question_marks' => 'required', 
         ]);
 
-        for ($i = 0; $i < count($request->question); $i++) {
+        // for ($i = 0; $i < count($request->question); $i++) {
         
         $add = new Question;
         $add->board_id = $request->board_id;
@@ -71,21 +72,23 @@ class QuestionController extends Controller
         $add->semester_id = $request->semester_id;
         $add->subject_id = $request->subject_id;
         $add->unit_id = $request->unit_id;
-        $add->note = $request->note[$i];
-        $add->question = $request->question[$i];
-        $add->option_a = $request->option_a[$i];
-        $add->option_b = $request->option_b[$i];
-        $add->option_c = $request->option_c[$i];
-        $add->option_d = $request->option_d[$i];
-        $add->answer = $request->answer[$i];
-        $add->per_question_marks = $request->per_question_marks[$i];
-        $add->level = $request->level[$i];
+        $add->note = $request->note;
+        $add->question = $request->question;
+        $add->option_a = $request->option_a;
+        $add->option_b = $request->option_b;
+        $add->option_c = $request->option_c;
+        $add->option_d = $request->option_d;
+        $add->answer = $request->answer;
+        $add->per_question_marks = $request->per_question_marks;
+        $add->level = $request->level;
         $add->save();
 
-        }
+        $question_details = Question::where('status','Active')->get();
+        return view('question.dynamic_table',compact('question_details'));
+        // }
 
 
-        return redirect()->route('question.index')->with('success', 'Question Added Successfully.');
+        //return redirect()->route('question.index')->with('success', 'Question Added Successfully.');
     }
 
     /**

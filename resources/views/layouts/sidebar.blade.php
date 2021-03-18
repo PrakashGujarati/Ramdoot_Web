@@ -164,7 +164,7 @@
                             <li class="nk-menu-item @if(\Request::route()->getName() == 'question.index' || \Request::route()->getName() == 'question.create' || \Request::route()->getName() == 'question.edit') active @endif">
                                 <a href="{{ route('question.index') }}" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
-                                    <span class="nk-menu-text">Question</span>
+                                    <span class="nk-menu-text">MCQ Question</span>
                                 </a>
                             </li><!-- .nk-menu-item -->
                         </ul><!-- .nk-menu-sub -->
