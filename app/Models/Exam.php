@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Material extends Model
+class Exam extends Model
 {
     use HasFactory;
 
@@ -27,7 +27,7 @@ class Material extends Model
 
 	public function semester()
 	{
-	  return $this->belongsTo(semester::class,'semester_id');
+	  return $this->belongsTo(Semester::class,'semester_id');
 	}
 
 	public function subject()
@@ -35,8 +35,10 @@ class Material extends Model
 	  return $this->belongsTo(Subject::class,'subject_id');
 	}
 
+
     public function unit()
     {
-    	return $this->belongsTo(unit::class,'unit_id');
+    	return $this->belongsTo(Unit::class,'unit_id');
     }
+
 }

@@ -30,7 +30,7 @@ class NoteController extends Controller
 
 
         $chkstandard = Standard::where(['id' => $request->standard_id,'status' => 'Active'])->first();
-        $chksemester = semester::where(['id' => $request->semester_id,'status' => 'Active'])->first();
+        $chksemester = Semester::where(['id' => $request->semester_id,'status' => 'Active'])->first();
         $chksuject = Subject::where(['id' => $request->subject_id,'status' => 'Active'])->first();
 
         if(empty($chkstandard)){
@@ -56,7 +56,7 @@ class NoteController extends Controller
         }
         else{
 
-        	$getunit = unit::where(['standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'subject_id' => $request->subject_id,'status' => 'Active'])->get();
+        	$getunit = Unit::where(['standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'subject_id' => $request->subject_id,'status' => 'Active'])->get();
         	//$getdata = Books::where(['unit_id' => $request->unit_id,'status' => 'Active'])->get();
 	    	if(count($getunit) > 0){
 	    		$data=[];$getdata=[];

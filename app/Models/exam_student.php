@@ -11,7 +11,7 @@ class exam_student extends Model
 
     public function exam()
     {
-     	return $this->belongsTo(exam::class,'exam_id');
+     	return $this->belongsTo(Exam::class,'exam_id');
     }
 
     public function user()

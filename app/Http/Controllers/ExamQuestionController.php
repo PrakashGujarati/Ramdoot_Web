@@ -85,7 +85,7 @@ class ExamQuestionController extends Controller
         $exams = Exam::where('status','Active')->get();
         $questions = Question::where('status','Active')->get();
         $boards = Board::where('status','Active')->get();
-        //$exam_detail = exam::where(['id' => $id])->first();
+        //$exam_detail = Exam::where(['id' => $id])->first();
         
         $exam_questiondata = ExamQuestion::where('exam_id',$id)->get();
 
@@ -100,7 +100,7 @@ class ExamQuestionController extends Controller
             }
         }
 
-        // $getexam = question::where(['standard_id' => $getexam_detail->standard_id,'semester_id' => $getexam_detail->semester_id,'subject_id' => $getexam_detail->subject_id,'unit_id' => $getexam_detail->unit_id])->inRandomOrder()->take($getexam_detail->total_question)->get();
+        // $getexam = Question::where(['standard_id' => $getexam_detail->standard_id,'semester_id' => $getexam_detail->semester_id,'subject_id' => $getexam_detail->subject_id,'unit_id' => $getexam_detail->unit_id])->inRandomOrder()->take($getexam_detail->total_question)->get();
 
         return view('exam_question.edit',compact('exam_questiondata','exams','questions','boards','getexam','getexam_detail'));
     }
@@ -133,7 +133,7 @@ class ExamQuestionController extends Controller
             }    
         }
 
-        // $update = exam_question::find($id);
+        // $update = exam_Question::find($id);
         // $update->exam_id = $request->exam_id;
         // $update->question_id = $request->question_id;
         // $update->save();
@@ -150,7 +150,7 @@ class ExamQuestionController extends Controller
     public function distroy(ExamQuestion $exam_question,$id)
     {
         ExamQuestion::where('exam_id',$id)->update(['status' => 'Deleted']);
-        // $delete = exam_question::find($id);
+        // $delete = exam_Question::find($id);
         // $delete->status = "Deleted";
         // $delete->save();
 
@@ -214,7 +214,7 @@ class ExamQuestionController extends Controller
        $html=view('exam_question.dynamic_exam_detail',compact('getexam_detail','getexam'))->render();
         return response()->json(['html'=> $html,'getexam_detail' => $getexam_detail]); 
     }
-    // $get_question = question::where(['unit_id' => $request->unit_id])->inRandomOrder()->limit($request->no_of_question)->get();
+    // $get_question = Question::where(['unit_id' => $request->unit_id])->inRandomOrder()->limit($request->no_of_question)->get();
 
     public function getQuestionClear(Request $request){
         $getexam_detail = Exam::where('id',$request->exam_id)->first();

@@ -5,9 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class video_bookmark extends Model
+class Mcq extends Model
 {
     use HasFactory;
-    
-   	protected $table = 'video_bookmarks';
+
+    public function unit()
+    {
+    	return $this->belongsTo(Unit::class,'unit_id');
+    }
 }

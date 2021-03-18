@@ -230,7 +230,7 @@ class UnitController extends Controller
      */
     public function distroy(Unit $unit,$id)
     {
-        $delete = unit::find($id);
+        $delete = Unit::find($id);
         $delete->status = "Deleted";
         $delete->save();
 
@@ -255,8 +255,8 @@ class UnitController extends Controller
 
     public function getUnit(Request $request){
 
-       //$getunit = unit::where(['unit_id' => $request->board_id])->get();
-       $getunit = unit::where(['board_id' => $request->board_id,'medium_id' => $request->medium_id,'standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'subject_id' => $request->subject_id,'status' => 'Active'])->get();
+       //$getunit = Unit::where(['unit_id' => $request->board_id])->get();
+       $getunit = Unit::where(['board_id' => $request->board_id,'medium_id' => $request->medium_id,'standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'subject_id' => $request->subject_id,'status' => 'Active'])->get();
 
         $result="<option value=''>--Select Unit--</option>";
         if(count($getunit) > 0)

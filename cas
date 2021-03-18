@@ -1,0 +1,363 @@
+[33mcommit 5300fa839a0dcc02c537365018edfdfc6a018b39[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Merge: 9aba85a 98ff99c
+Author: vagadiyashyam <shyamvagadiya@gmail.com>
+Date:   Wed Mar 17 19:12:11 2021 +0530
+
+    Merge branch 'main' of https://github.com/PrakashGujarati/Ramdoot_Web into main
+
+[33mcommit 9aba85af89d3594f11c4eaac7aff4c3809447d05[m
+Author: vagadiyashyam <shyamvagadiya@gmail.com>
+Date:   Wed Mar 17 19:11:55 2021 +0530
+
+    conflict solved
+
+[33mcommit 98ff99c6af872e8f9cc2a30af1d88b653220249a[m
+Author: prakashgujarati <prakash@vsc.edu.in>
+Date:   Wed Mar 17 17:26:16 2021 +0530
+
+    model remain
+
+[33mcommit bf64b071e1cba1b7acecaa52a5e1fa3cd4b86c5e[m
+Author: prakashgujarati <prakash@vsc.edu.in>
+Date:   Wed Mar 17 17:12:30 2021 +0530
+
+    without model
+
+[33mcommit 606bf41649a3a144cccd32c11253a7d24b53e4c3[m
+Author: prakashgujarati <prakash@vsc.edu.in>
+Date:   Wed Mar 17 17:10:47 2021 +0530
+
+    model rename
+
+[33mcommit c3beeac199e82bf3fdbd61a0ca22699d252a0978[m
+Author: keyurschauhan <65502373+keyurschauhan@users.noreply.github.com>
+Date:   Wed Mar 17 09:07:16 2021 +0530
+
+    changes points
+
+[33mcommit 053a5d51a57361df56239c422de9c9cf2bb49284[m
+Author: vagadiyashyam <shyamvagadiya@gmail.com>
+Date:   Tue Mar 16 23:10:22 2021 +0530
+
+    chnages done for models
+
+[33mcommit 70754f95c7517a052ff8ce64b50596bd4bd46d41[m
+Author: vagadiyashyam <shyamvagadiya@gmail.com>
+Date:   Tue Mar 16 21:54:59 2021 +0530
+
+    bug solved
+
+[33mcommit bbe45dc565bbfa86debb6d172c70586a68a03159[m
+Author: vagadiyashyam <shyamvagadiya@gmail.com>
+Date:   Tue Mar 16 19:55:14 2021 +0530
+
+    api changes done
+
+[33mcommit c5e892e951783a7bb350272972e66bb61275040c[m
+Merge: 5692dc2 7fb31ce
+Author: keyurschauhan <65502373+keyurschauhan@users.noreply.github.com>
+Date:   Tue Mar 16 08:54:19 2021 +0530
+
+    Merge branch 'main' of https://github.com/PrakashGujarati/Ramdoot_Web into main
+
+[33mcommit 5692dc2a5c142fe6367f5f3a07b323c927438037[m
+Author: keyurschauhan <65502373+keyurschauhan@users.noreply.github.com>
+Date:   Tue Mar 16 08:53:43 2021 +0530
+
+    listing changes
+
+[33mcommit 7fb31ce72faccb1541ea0e1eb8f2ea5d52bd00ee[m
+Author: vagadiyashyam <shyamvagadiya@gmail.com>
+Date:   Mon Mar 15 21:53:05 2021 +0530
+
+    api changes dpme
+
+[33mcommit 7da318631996620215b33331328b085c39d54d49[m
+Author: keyurschauhan <65502373+keyurschauhan@users.noreply.github.com>
+Date:   Sun Mar 14 11:34:28 2021 +0530
+
+    changes fix
+
+[33mcommit a21b7976096fbc7bb2796b5890ddc36adbde167f[m
+Author: keyurschauhan <65502373+keyurschauhan@users.noreply.github.com>
+Date:   Sat Mar 13 20:07:54 2021 +0530
+
+    medium module and drop down changes
+
+[33mcommit 62f1d7566b371244ae8755a0852e632411daf813[m
+Author: keyurschauhan <65502373+keyurschauhan@users.noreply.github.com>
+Date:   Thu Mar 11 22:54:40 2021 +0530
+
+    menu changes
+
+[33mcommit 79c8e220e1cc62feeb8c4c0983929d8ee6dca5d6[m
+Author: keyurschauhan <65502373+keyurschauhan@users.noreply.github.com>
+Date:   Thu Mar 11 20:47:35 2021 +0530
+
+    changes fix
+
+[33mcommit 04c83efa74c506b6def961eb6052fd649ff78290[m
+Author: keyurschauhan <65502373+keyurschauhan@users.noreply.github.com>
+Date:   Thu Mar 11 08:37:56 2021 +0530
+
+    exam related api and other api changes
+
+[33mcommit 4337f01eb5e4bb80277bce3ddf95d115cc891b7d[m
+Author: keyurschauhan <65502373+keyurschauhan@users.noreply.github.com>
+Date:   Tue Mar 9 23:06:00 2021 +0530
+
+    changes fix and exam question module
+
+[33mcommit 4d9790df14e32a1e111fd86192136aa630e8f8aa[m
+Author: keyurschauhan <65502373+keyurschauhan@users.noreply.github.com>
+Date:   Mon Mar 8 23:44:18 2021 +0530
+
+    changes fix
+
+[33mcommit 818ec4ad98e735129e54c4e94391b65647b5d601[m
+Author: keyurschauhan <65502373+keyurschauhan@users.noreply.github.com>
+Date:   Sat Mar 6 21:59:24 2021 +0530
+
+    changes fi
+
+[33mcommit 6868fdf2af5e4e8a4e5271423d0649a00495005a[m
+Author: keyurschauhan <65502373+keyurschauhan@users.noreply.github.com>
+Date:   Sat Mar 6 08:38:42 2021 +0530
+
+    bookmark and counter apies
+
+[33mcommit 5bb61100989b24ceef6a7f2643a3e551892ed157[m
+Author: keyurschauhan <65502373+keyurschauhan@users.noreply.github.com>
+Date:   Fri Mar 5 08:47:22 2021 +0530
+
+    exam question module and url changes
+
+[33mcommit c6da8792f376074b036b50b4e800d1c8951740a4[m
+Author: keyurschauhan <65502373+keyurschauhan@users.noreply.github.com>
+Date:   Tue Mar 2 23:20:07 2021 +0530
+
+    admin changes and mcq practice api
+
+[33mcommit fd3da16804e8655095744672e429d0feaf3c42bc[m
+Author: keyurschauhan <65502373+keyurschauhan@users.noreply.github.com>
+Date:   Tue Mar 2 23:18:11 2021 +0530
+
+    changes fix
+
+[33mcommit f37fb7941e8aee8b7445eb9bc2b1e4d2d60a5e3c[m
+Author: keyurschauhan <65502373+keyurschauhan@users.noreply.github.com>
+Date:   Tue Mar 2 21:21:36 2021 +0530
+
+    admin changes and mcq practice api
+
+[33mcommit 741a8b6c37230eebfb1cc309749f9bd690425e49[m
+Author: keyurschauhan <65502373+keyurschauhan@users.noreply.github.com>
+Date:   Sun Feb 28 12:17:15 2021 +0530
+
+    api and question import
+
+[33mcommit c5e09fc07fc6458035ef423947fdf62248c14b6b[m
+Author: keyurschauhan <65502373+keyurschauhan@users.noreply.github.com>
+Date:   Fri Feb 26 19:39:49 2021 +0530
+
+    changes fix
+
+[33mcommit 5db944296f6d06d0c8377767aaad29de55209827[m
+Author: keyurschauhan <65502373+keyurschauhan@users.noreply.github.com>
+Date:   Thu Feb 25 21:32:23 2021 +0530
+
+    admin changes and api changes
+
+[33mcommit 8acad8495c9653a66516aa910dcba765d795c430[m
+Author: keyurschauhan <65502373+keyurschauhan@users.noreply.github.com>
+Date:   Wed Feb 24 23:35:14 2021 +0530
+
+    changes fix and exam student module
+
+[33mcommit 2a59fe45b22505fd04240281e76b4adabf79da55[m
+Author: prakashgujarati <prakash@vsc.edu.in>
+Date:   Wed Feb 24 19:30:13 2021 +0530
+
+    updateapi
+
+[33mcommit 959109a1238957350493ab6c1cc6573649d7ce2d[m
+Author: keyurschauhan <65502373+keyurschauhan@users.noreply.github.com>
+Date:   Tue Feb 23 23:20:47 2021 +0530
+
+    changes fix
+
+[33mcommit 92c5c31bb937d599b1ba62fe168a77020677919a[m
+Author: keyurschauhan <65502373+keyurschauhan@users.noreply.github.com>
+Date:   Mon Feb 22 23:22:40 2021 +0530
+
+    changes fix
+
+[33mcommit 99ee66c712ffcf9f2c13ffe9c2e7740f1f6ebaa1[m
+Author: keyurschauhan <65502373+keyurschauhan@users.noreply.github.com>
+Date:   Mon Feb 22 23:18:43 2021 +0530
+
+    api changes and feature module
+
+[33mcommit 7baba200fb9bfbed51db3daabb1728fba85f4831[m
+Author: keyurschauhan <65502373+keyurschauhan@users.noreply.github.com>
+Date:   Sun Feb 21 12:31:09 2021 +0530
+
+    changes fix
+
+[33mcommit 459ed3fd0064f0ca32621c13947f03610fa4c98a[m
+Author: keyurschauhan <65502373+keyurschauhan@users.noreply.github.com>
+Date:   Sun Feb 21 12:28:36 2021 +0530
+
+    module added and api changes
+
+[33mcommit f17b872396bbfff723c84130f4a519d216d4aeac[m
+Author: keyurschauhan <65502373+keyurschauhan@users.noreply.github.com>
+Date:   Fri Feb 19 21:53:52 2021 +0530
+
+    changes fix
+
+[33mcommit d264f69a1603e700d3264a90987d2c3dc2ba568c[m
+Author: prakashgujarati <prakash@vsc.edu.in>
+Date:   Thu Feb 18 18:46:21 2021 +0530
+
+    api
+
+[33mcommit 912d82d0f275e0429cb1dc29442edc802b020778[m
+Author: prakashgujarati <prakash@vsc.edu.in>
+Date:   Thu Feb 18 18:44:24 2021 +0530
+
+    book api
+
+[33mcommit 0179262e42bb7d03eea5c712629f43f9b101e1ac[m
+Author: prakashgujarati <prakash@vsc.edu.in>
+Date:   Thu Feb 18 18:32:24 2021 +0530
+
+    update:
+
+[33mcommit 3206369a33d4af8575fbd0fc496c4b8ea3d7c9db[m
+Author: prakashgujarati <prakash@vsc.edu.in>
+Date:   Thu Feb 18 18:29:27 2021 +0530
+
+    update in solution
+
+[33mcommit 7c99c7a48a21a58c7f65178f580ebd3d29b015ab[m
+Author: prakashgujarati <prakash@vsc.edu.in>
+Date:   Wed Feb 17 20:57:59 2021 +0530
+
+    feature update
+
+[33mcommit f515081620df01333f3d16ea9d68c3082eca3c44[m
+Author: unknown <prakash@vsc.edu.in>
+Date:   Wed Feb 17 15:33:49 2021 +0530
+
+    update
+
+[33mcommit d796269b485f4f5576abb5505dbd41b03727a2c9[m
+Author: prakashgujarati <prakash@vsc.edu.in>
+Date:   Wed Feb 17 09:56:48 2021 +0530
+
+    update
+
+[33mcommit a1f0e169f12e1fe90422e52c7963cd4fad343410[m
+Merge: 9904e1b 39b298d
+Author: prakashgujarati <prakash@vsc.edu.in>
+Date:   Mon Feb 15 22:44:18 2021 +0530
+
+    Merge branch 'main' of https://github.com/PrakashGujarati/Ramdoot_Web into main
+
+[33mcommit 9904e1b0898911987cbb79c8117349d43a207019[m
+Author: prakashgujarati <prakash@vsc.edu.in>
+Date:   Mon Feb 15 22:38:48 2021 +0530
+
+    api update
+
+[33mcommit 39b298da303a7796159cab82e16c4e05b8045561[m
+Author: Prakash Gujarati <prakash@vsc.edu.in>
+Date:   Mon Feb 15 08:56:06 2021 +0530
+
+    update api
+
+[33mcommit 763de893b03521a8ade7c3c5f774234798a178f1[m
+Author: Prakash Gujarati <prakash@vsc.edu.in>
+Date:   Mon Feb 15 08:53:35 2021 +0530
+
+    registercontroller update
+
+[33mcommit 304850782cc0a7c52d3338c1565f6b179ab0fd7a[m
+Author: Prakash Gujarati <prakash@vsc.edu.in>
+Date:   Mon Feb 15 08:52:26 2021 +0530
+
+    update register api
+
+[33mcommit 5b08e2a4eddc15cc8289bcd2dc1e4543882f006c[m
+Author: Prakash Gujarati <prakash@vsc.edu.in>
+Date:   Mon Feb 15 08:51:49 2021 +0530
+
+    update api
+
+[33mcommit 1cec12aab7ecfaab42c2e5b55658216c05f1676e[m
+Author: Prakash Gujarati <prakash@vsc.edu.in>
+Date:   Mon Feb 15 08:50:51 2021 +0530
+
+    update api
+
+[33mcommit 7a4224a09373892f07de9a2d72ea241b10552b2d[m
+Author: Prakash Gujarati <prakash@vsc.edu.in>
+Date:   Mon Feb 15 08:42:26 2021 +0530
+
+    update api
+
+[33mcommit cd194a0c3480b0d70e7733e988053abfeb2cb4e0[m
+Author: prakashgujarati <prakash@vsc.edu.in>
+Date:   Sun Feb 14 22:44:59 2021 +0530
+
+    api update
+
+[33mcommit 85dd558a519503ed7e802b56e82115ef5f1ced9b[m
+Merge: cd79c96 8f31cfb
+Author: prakashgujarati <prakash@vsc.edu.in>
+Date:   Sun Feb 14 18:50:03 2021 +0530
+
+    passport token with api
+
+[33mcommit cd79c965863cfa369e9f382c735fb9cd0f36a9d1[m
+Author: prakashgujarati <prakash@vsc.edu.in>
+Date:   Sun Feb 14 18:46:45 2021 +0530
+
+    Passport Token Api
+
+[33mcommit 8f31cfb5b5f1d60199f4a6ce87e6cb5245084d0e[m
+Author: keyurschauhan <65502373+keyurschauhan@users.noreply.github.com>
+Date:   Sun Feb 14 15:00:10 2021 +0530
+
+    apies
+
+[33mcommit 3ef60f890a70697bddf16f016d068e0b6c489087[m
+Author: keyurschauhan <65502373+keyurschauhan@users.noreply.github.com>
+Date:   Sat Feb 13 00:12:46 2021 +0530
+
+    changes fix and module add
+
+[33mcommit 64daa8f7cb7391eadf160ff0e925920da7c8e83c[m
+Author: keyurschauhan <65502373+keyurschauhan@users.noreply.github.com>
+Date:   Thu Feb 11 23:27:06 2021 +0530
+
+    slider module,login page design and other changes
+
+[33mcommit ac945070dab7aeecb6e350a18c8eaca1462d7b6d[m
+Author: keyurschauhan <65502373+keyurschauhan@users.noreply.github.com>
+Date:   Wed Feb 10 23:45:23 2021 +0530
+
+    semeter and unit module & changes fix
+
+[33mcommit 44efd967de18cc13cd40f6ee020b24b2ec2341dc[m
+Author: unknown <prakash@vsc.edu.in>
+Date:   Wed Feb 10 08:34:31 2021 +0530
+
+    first init
+
+[33mcommit 2bcbb769cca8f3904d2ae9e72688e47b52304747[m
+Author: Prakash Gujarati <prakash@vsc.edu.in>
+Date:   Wed Feb 10 08:25:32 2021 +0530
+
+    Initial commit
