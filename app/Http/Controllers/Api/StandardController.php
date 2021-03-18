@@ -7,17 +7,17 @@ use Illuminate\Http\Request;
 use App\Models\Standard;
 use DB;
 use Validator;
-use App\Models\Board;
+use App\Models\Medium;
 
 class StandardController extends Controller
 {
     public function standardList(Request $request){
 
     	$rules = array(
-            'board_id' => 'required'
+            'medium_id' => 'required'
         );
         $messages = array(
-            'board_id.required' => 'Please Enter Board Id.'
+            'medium_id.required' => 'Please Enter Medium Id.'
         );
 
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -27,10 +27,10 @@ class StandardController extends Controller
             return ['status' => "false",'msg' => $msg];
         }
 
-        $chkbaord = Board::where(['id' => $request->board_id,'status' => 'Active'])->first();
+        $chkmedium = Medium::where(['id' => $request->medium_id,'status' => 'Active'])->first();
 
-        if($chkbaord){
-        	$getboard_details = Standard::where(['board_id' => $request->board_id,'status' => 'Active'])->select('id','section')->groupBy('section')->get();
+        if($chkmedium){
+        	$getboard_details = Standard::where(['medium_id' => $request->medium_id,'status' => 'Active'])->select('id','section')->groupBy('section')->get();
 
 	    	if(count($getboard_details) > 0){
 
