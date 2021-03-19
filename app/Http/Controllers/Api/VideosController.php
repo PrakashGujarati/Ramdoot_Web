@@ -85,7 +85,7 @@ class VideosController extends Controller
 	    				$videodata[] = ['id' => $value1->id,'title' => $value1->title,'url' => $url,'thumbnail' => $thumbnail,'duration' => $value1->duration,'description' => $value1->description,'label' => $value1->label,'release_date' => $value1->release_date];
 	    			}
 
-	    			$data[] = ['id' => $value->id,'unit_title' =>$value->title,'video' => $videodata];
+	    			$data[] = ['id' => $value->id,'unit_title' =>$value->title,'video' => $videodata,'sub_title'=>$value->description];
 	    		}
 	    		
 	    		return response()->json([

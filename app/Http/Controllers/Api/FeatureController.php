@@ -107,7 +107,7 @@ class FeatureController extends Controller
                         $featuredata[] = ['id' => $value1->id,'title' => $value1->title,'image' => $image,"flag"=>$value1->flag];
                     }
 
-                    $data[] = ['id' => $value->id,'unit_title' =>$value->title,'page_no' => $value->pages,'features' => $featuredata];
+                    $data[] = ['id' => $value->id,'unit_title' =>$value->title,'page_no' => $value->pages,'features' => $featuredata,'sub_title'=>$value->description];
                 }
                 
                 return response()->json([

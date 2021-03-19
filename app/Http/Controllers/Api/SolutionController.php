@@ -54,8 +54,16 @@ class SolutionController extends Controller
 						$title = $value1->label;
 	    				$solutiondata[] = ['id' => $value1->id,'question' => $value1->question,'answer' => $value1->answer,'marks' => $value1->marks,'image' => $image,'label' => $value1->label];
 	    			}
-
-	    			$data[] = ['id' => $request->unit_id,'unit_title' =>$title,'solution' => $solutiondata];
+	    			$sub_title = Unit::where(['id' => $request->unit_id,'status' => 'Active'])->first();
+	    			if($sub_title)
+	    			{
+	    				$sub_title=$sub_title->description;
+	    			}
+	    			else
+	    			{
+	    				$sub_title="";
+	    			}	
+	    			$data[] = ['id' => $request->unit_id,'unit_title' =>$title,'solution' => $solutiondata,"sub_title"=>$sub_title];
 	    		
 	    		return response()->json([
 	    			"code" => 200,

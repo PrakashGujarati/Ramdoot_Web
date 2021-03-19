@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Board;
+use App\Models\Medium;
 use DB;
 
 class BoardController extends Controller
@@ -17,7 +18,7 @@ class BoardController extends Controller
     	if(count($getboard_details) > 0){
     		$data=[];$getdata=[];
     		foreach ($getboard_details as $value) {
-    			$getdata = Board::select('id','medium')->where('name',$value->name)->get();
+    			$getdata = Medium::select('id','medium_name')->where('board_id',$value->id)->get();
     			$data[] = ['id' => $value->id,'board_name' => $value->name,'medium' => $getdata];
     		}
 
