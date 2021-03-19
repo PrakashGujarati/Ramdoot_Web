@@ -144,7 +144,7 @@
 
 
                         <div class="row">
-                            <div class="form-group col-lg-6">
+                            <div class="form-group col-lg-3">
                                 <label class="form-label">Marks</label>
                                 <div class="form-control-wrap">
                                     <input type="text" class="form-control" id="marks" name="marks" value="{{ old('marks') }}">
@@ -156,7 +156,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group col-lg-6">
+                            <div class="form-group col-lg-3">
                                 <label class="form-label">Label</label>
                                 <div class="form-control-wrap">
                                     <input type="text" class="form-control" id="label" name="label" value="{{ old('label') }}">
@@ -165,6 +165,43 @@
                                             <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group col-lg-3">
+                                <label class="form-label">Question Type</label>
+                                <div class="form-control-wrap">
+                                    <select class="form-control" id="question_type" name="question_type">
+                                        <option value="">--Select Question Type--</option>
+                                        @foreach($question_type_details as $question_type)
+                                            <option value="{{ $question_type->id }}">{{ $question_type->question_type }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('question_type')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group col-lg-3">
+                                <label class="form-label">Level</label>
+                                <div class="form-control-wrap">
+                                    <select class="form-control" id="level" name="level">
+                                        <option value='' selected="" disabled="">-Select Level-</option>
+                                        <option value="Easy">Easy</option>
+                                        <option value="Normal">Normal</option>
+                                        <option value="Moderate">Moderate</option>
+                                        <option value="Hard">Hard</option>
+                                        <option value="Expert">Expert</option>
+                                    </select>
+                                    @error('level')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                    
                                 </div>
                             </div>    
 
@@ -375,6 +412,8 @@ $(document).ready(function () {
                     $('#marks').val('');
                     $('#answer').val('');
                     $('#label').val('');
+                    $('#question_type').val('');
+                    $('#level').val('');
                     
                     
                     $('.dyamictable').empty();

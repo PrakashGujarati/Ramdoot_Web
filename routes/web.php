@@ -23,7 +23,7 @@ use App\Http\Controllers\StudentQuestionAnswerController;
 use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\MediumController;
 use App\Http\Controllers\NoteController;
-
+use App\Http\Controllers\QuestionTypeController;
 
 
 /*
@@ -233,5 +233,15 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('feature/{id}/edit', [FeatureController::class, 'edit'])->name('feature.edit');
 	Route::post('feature/{id}/update', [FeatureController::class, 'update'])->name('feature.update');
 	Route::get('feature/{id}/delete', [FeatureController::class, 'distroy'])->name('feature.distroy');
+
+	/*feature*/
+	Route::get('question_type', [QuestionTypeController::class, 'index'])->name('question_type.index');
+	Route::get('question_type/create', [QuestionTypeController::class, 'create'])->name('question_type.create');
+	Route::post('question_type/store', [QuestionTypeController::class, 'store'])->name('question_type.store');
+	Route::get('question_type/edit', [QuestionTypeController::class, 'edit'])->name('question_type.edit');
+	Route::post('question_type/{id}/update', [QuestionTypeController::class, 'update'])->name('question_type.update');
+	Route::get('question_type/delete', [QuestionTypeController::class, 'distroy'])->name('question_type.distroy');
+
+	
 
 });
