@@ -25,6 +25,8 @@ use App\Http\Controllers\MediumController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\SpatieRolePermissionController;
+
 
 
 /*
@@ -244,4 +246,8 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::post('permission/{id}/update', [PermissionController::class, 'update'])->name('permission.update');
 	Route::get('permission/{id}/delete', [PermissionController::class, 'distroy'])->name('permission.distroy');	
 
+	Route::get('role_permission', [SpatieRolePermissionController::class, 'index_roles'])->name('role_permission.index');
+	Route::get('/roles', [SpatieRolePermissionController::class, 'index_roles'])->name('role.get');	
+	Route::post('/role/{role_id}/assign-permissions',[SpatieRolePermissionController::class, 'assign_permissions'])->name('role.assign_permission');
+	
 });

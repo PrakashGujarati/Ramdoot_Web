@@ -47,6 +47,7 @@ class PermissionController extends Controller
     }
     public function distroy($id)
     {
+        $add=Permission::where($id)->delete();
         Session::flash('success','Permission deleted successfully..');
         return redirect()->route('permission.index');	
     }

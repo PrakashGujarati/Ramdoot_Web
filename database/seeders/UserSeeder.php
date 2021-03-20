@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -20,8 +22,7 @@ class UserSeeder extends Seeder
                 $user = User::create([
                     'email' => "$role@gmail.com",
                     'password' => Hash::make("123456789"),
-                    'first_name' => "$role",
-                    'last_name' => ucfirst($role),
+                    'name' => "$role"
                 ]);
 //                $user->syncRoles($roles);
                 $user->syncRoles([$role]);

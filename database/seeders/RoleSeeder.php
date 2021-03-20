@@ -1,5 +1,6 @@
 <?php
 
+namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 
@@ -15,20 +16,29 @@ class RoleSeeder extends Seeder
         if (Role::count() <= 0) {
             $roles = [
                 [
-                    "name" => "super_admin", "slug" => "Super-Admin",
+                    "name" => "super_admin",
+                    "slug" => "Super-Admin",
                 ],
                 [
                     "name" => "admin",
                     "slug" => "Admin",
                 ],
                 [
-                    "name" => "teacher", "slug" => "Teacher",
+                    "name" => "datamanager",
+                    "slug" => "Data Manager",
                 ],
                 [
-                    "name" => "student",
-                    "slug" => "Student",
+                    "name" => "examiner",
+                    "slug" => "Examiner",
                 ],
-                
+                [
+                    "name" => "faculties",
+                    "slug" => "Faculties",
+                ],
+                [
+                    "name" => "analist",
+                    "slug" => "Analist",
+                ],
             ];
             $created_roles = Role::insert($roles);
             if ($created_roles) {

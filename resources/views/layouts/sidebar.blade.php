@@ -30,13 +30,18 @@
                             <span class="nk-menu-icon"><em class="icon ni ni-layers-fill"></em></span>
                             <span class="nk-menu-text">Resources</span>
                         </a>
+
                         <ul class="nk-menu-sub">
+
+                            @canany(['view-board'])
+
                             <li class="nk-menu-item @if(\Request::route()->getName() == 'board.index' || \Request::route()->getName() == 'board.create' || \Request::route()->getName() == 'board.edit') active @endif">
                                 <a href="{{ route('board.index') }}" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
                                     <span class="nk-menu-text">Board / Organisation</span>
                                 </a>
                             </li><!-- .nk-menu-item -->
+                            @endcanany
 
                             <li class="nk-menu-item @if(\Request::route()->getName() == 'medium.index' || \Request::route()->getName() == 'medium.create' || \Request::route()->getName() == 'medium.edit') active @endif">
                                 <a href="{{ route('medium.index') }}" class="nk-menu-link">
