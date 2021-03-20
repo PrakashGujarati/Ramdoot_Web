@@ -74,13 +74,14 @@ class SubjectController extends Controller
 			$getdata = Subject::where(['board_id' => $request->board_id,'standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'status' => 'Active'])->get();
 			$subjectids = Subject::where(['board_id' => $request->board_id,'standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'status' => 'Active'])->pluck('id');
 			//$unitcount = Unit::whereIn('subject_id',$subjectids)->count();
-            $featurecount = Feature::whereIn('subject_id',$subjectids)->count();
+            //$featurecount = Feature::whereIn('subject_id',$subjectids)->count();
+           
 	    	if(count($getdata) > 0){
 	    		$data=[];
 	    		foreach ($getdata as $value) {
                     $url = env('APP_URL')."/upload/subject/url/".$value->url;
-	    			$thumbnail = env('APP_URL')."/upload/subject/thumbnail/".$value->thumbnail;
-	    			$data[] = ['id' => $value->id,'name' => $value->subject_name,'sub_title' => $value->sub_title,'url' => $url,'thumbnail' => $thumbnail,"count"=>$featurecount,'count_label'=>"Total ".$chkfeatures->title];
+	    			$thumbnail = env('APP_URL')."/upload/subject/thumbnail/".$value->thumbnail;                   
+	    			$data[] = ['id' => $value->id,'name' => $value->subject_name,'sub_title' => $value->sub_title,'url' => $url,'thumbnail' => $thumbnail,"count"=>0,'count_label'=>"Total "];
 	    		}
 
 	    		return response()->json([
