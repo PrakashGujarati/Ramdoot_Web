@@ -66,7 +66,7 @@
                     <li class="nk-menu-item has-sub">
                         <a href="#" class="nk-menu-link nk-menu-toggle">
                             <span class="nk-menu-icon"><em class="icon ni ni-view-group-fill"></em></span>
-                            <span class="nk-menu-text">Modules</span>
+                            <span class="nk-menu-text">Sources</span>
                         </a>
                         <ul class="nk-menu-sub">
                             <li class="nk-menu-item @if(\Request::route()->getName() == 'subject.index' || \Request::route()->getName() == 'subject.create' || \Request::route()->getName() == 'subject.edit') active @endif">
@@ -89,7 +89,7 @@
                     <li class="nk-menu-item @if(\Request::route()->getName() == 'feature.index' || \Request::route()->getName() == 'feature.create' || \Request::route()->getName() == 'feature.edit') active @endif">
                         <a href="{{ route('feature.index') }}" class="nk-menu-link">
                             <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
-                            <span class="nk-menu-text">Feature</span>
+                            <span class="nk-menu-text">Menu Name</span>
                         </a>
                     </li><!-- .nk-menu-item -->
 
@@ -151,24 +151,23 @@
                                 </a>
                             </li><!-- .nk-menu-item -->
 
-
-                        </ul><!-- .nk-menu-sub -->
-                    </li>
-                    
-                    <li class="nk-menu-item has-sub">
-                        <a href="#" class="nk-menu-link nk-menu-toggle">
-                            <span class="nk-menu-icon"><em class="icon ni ni-view-group-fill"></em></span>
-                            <span class="nk-menu-text">Question Bank</span>
-                        </a>
-                        <ul class="nk-menu-sub">
                             <li class="nk-menu-item @if(\Request::route()->getName() == 'question.index' || \Request::route()->getName() == 'question.create' || \Request::route()->getName() == 'question.edit') active @endif">
                                 <a href="{{ route('question.index') }}" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
                                     <span class="nk-menu-text">MCQ Question</span>
                                 </a>
                             </li><!-- .nk-menu-item -->
+
+
                         </ul><!-- .nk-menu-sub -->
                     </li>
+                    
+                    <!-- <li class="nk-menu-item has-sub">
+                        <a href="#" class="nk-menu-link nk-menu-toggle">
+                            <span class="nk-menu-icon"><em class="icon ni ni-view-group-fill"></em></span>
+                            <span class="nk-menu-text">Question Bank</span>
+                        </a>
+                    </li> -->
 
                     <li class="nk-menu-item has-sub">
                         <a href="#" class="nk-menu-link nk-menu-toggle">
@@ -222,6 +221,13 @@
                                 <a href="{{ route('slider.index') }}" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
                                     <span class="nk-menu-text">Slider</span>
+                                </a>
+                            </li><!-- .nk-menu-item -->
+
+                            <li class="nk-menu-item @if(\Request::route()->getName() == 'slider.index' || \Request::route()->getName() == 'slider.create' || \Request::route()->getName() == 'slider.edit') active @endif">
+                                <a href="{{ route('question_type.index') }}" class="nk-menu-link">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
+                                    <span class="nk-menu-text">Question Type</span>
                                 </a>
                             </li><!-- .nk-menu-item -->
 

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Unit;
 use Auth;
 use App\Models\Board;
+use App\Models\QuestionType;
 
 class SolutionController extends Controller
 {
@@ -31,7 +32,8 @@ class SolutionController extends Controller
         $units = Unit::where('status','Active')->get();
         $boards = Board::where('status','Active')->get();
         $solution_details = Solution::where('status','Active')->get();
-        return view('solution.add',compact('units','boards','solution_details'));
+        $question_type_details = QuestionType::where('status','Active')->get();
+        return view('solution.add',compact('units','boards','solution_details','question_type_details'));
     }
 
     /**
@@ -53,7 +55,7 @@ class SolutionController extends Controller
             'answer' => 'required',
             'marks' => 'required',
             'image'  => 'required',
-            'label' => 'required',    
+            'label' => 'required'
         ]);
 
         $new_name='';
@@ -90,6 +92,8 @@ class SolutionController extends Controller
         $add->image = $new_name;
         $add->marks = $request->marks;
         $add->label = $request->label;
+        $add->question_type = $request->question_type;
+        $add->level = $request->level;
         $add->save();
 
 
@@ -120,7 +124,8 @@ class SolutionController extends Controller
         $units = Unit::where('status','Active')->get();
         $solutiondata = Solution::where('id',$id)->first();
         $boards = Board::where('status','Active')->get();
-        return view('solution.edit',compact('solutiondata','units','boards'));
+        $question_type_details = QuestionType::where('status','Active')->get();
+        return view('solution.edit',compact('solutiondata','units','boards','question_type_details'));
     }
 
     /**
@@ -182,6 +187,8 @@ class SolutionController extends Controller
         $update->image = $new_name;
         $update->marks = $request->marks;
         $update->label = $request->label;
+        $update->question_type = $request->question_type;
+        $update->level = $request->level;
         $update->save();
 
         return redirect()->route('solution.index')->with('success', 'Solution Updated Successfully.');

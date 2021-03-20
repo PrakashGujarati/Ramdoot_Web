@@ -18,7 +18,7 @@ class BookController extends Controller
      */
     public function index()
     {
-        $book_details = Book::where('status','Active')->get();
+        $book_details = Book::where('status','Active')->groupBy('subject_id')->get();
         return view('book.index',compact('book_details'));
     }
 

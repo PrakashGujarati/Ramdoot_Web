@@ -31,12 +31,6 @@
             <table class="datatable-init table">
                 <thead>
                     <tr>
-                        <th>Board</th>
-                        <th>Medium</th>
-                        <th>Standard</th>
-                        <th>Semester</th>
-                        <th>Subject</th>
-                        <th>Unit</th>
                         <th>Title</th>
                         <th>Order</th>
                         <th>Image</th>
@@ -47,14 +41,8 @@
                 	@if(count($feature_details) > 0)
                 	@foreach($feature_details as $data)
                     <tr>
-                        <td>{{ isset($data->board->name) ? $data->board->name:'' }}</td>
-                        <td>{{ isset($data->medium->medium_name) ? $data->medium->medium_name:'' }}</td>
-                        <td>{{ isset($data->standard->standard) ? $data->standard->standard:'' }}</td>
-                        <td>{{ isset($data->semester->semester) ? $data->semester->semester:'' }}</td>
-                        <td>{{ isset($data->subject->subject_name) ? $data->subject->subject_name:'' }}</td>
-                        <td>{{ isset($data->unit->title) ? $data->unit->title:'' }}</td>
                         <td>{{ $data->title }}</td>
-                        <td>{{ $data->flag }}</td>
+                        <td>{{ $data->feature_order }}</td>
                         <td>
                             @if($data->image)
                             <img src="{{ asset('upload/feature/'.$data->image) }}" class="thumbnail" height="50" width="50">

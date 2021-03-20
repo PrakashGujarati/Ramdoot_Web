@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Unit;
 use Auth;
 use App\Models\Board;
+use App\Models\QuestionType;
 
 class MaterialController extends Controller
 {
@@ -31,7 +32,8 @@ class MaterialController extends Controller
         $units = Unit::where('status','Active')->get();
         $boards = Board::where('status','Active')->get();
         $material_details = Material::where('status','Active')->get();
-        return view('material.add',compact('units','boards','material_details'));
+        $question_type_details = QuestionType::where('status','Active')->get();
+        return view('material.add',compact('units','boards','material_details','question_type_details'));
     }
 
     /**
@@ -91,6 +93,8 @@ class MaterialController extends Controller
         $add->image = $new_name;
         $add->marks = $request->marks;
         $add->label = $request->label;
+        $add->question_type = $request->question_type;
+        $add->level = $request->level;
         $add->save();
 
         $material_details = Material::where('status','Active')->get();
@@ -120,7 +124,8 @@ class MaterialController extends Controller
         $units = Unit::where('status','Active')->get();
         $materialdata = Material::where('id',$id)->first();
         $boards = Board::where('status','Active')->get();
-        return view('material.edit',compact('materialdata','units','boards'));
+        $question_type_details = QuestionType::where('status','Active')->get();
+        return view('material.edit',compact('materialdata','units','boards','question_type_details'));
     }
 
     /**
@@ -182,6 +187,8 @@ class MaterialController extends Controller
         $update->image = $new_name;
         $update->marks = $request->marks;
         $update->label = $request->label;
+        $update->question_type = $request->question_type;
+        $update->level = $request->level;
         $update->save();
 
         return redirect()->route('material.index')->with('success', 'Material Updated Successfully.');

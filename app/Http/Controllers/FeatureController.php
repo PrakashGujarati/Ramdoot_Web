@@ -15,7 +15,7 @@ class FeatureController extends Controller
      */
     public function index()
     {
-        $feature_details = Feature::where('status','Active')->orderBy('flag','ASC')->get();
+        $feature_details = Feature::where('status','Active')->get();
         return view('feature.index',compact('feature_details'));
     }
 
@@ -40,12 +40,6 @@ class FeatureController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'board_id' => 'required',
-            'medium_id'  => 'required',
-            'standard_id' => 'required',
-            'semester_id'  => 'required',
-            'subject_id' => 'required',
-            'unit_id' => 'required',
             'title' => 'required',
             // 'image' => 'required'
         ]);
@@ -72,15 +66,9 @@ class FeatureController extends Controller
         }
 
         $add = new Feature;
-        $add->board_id = $request->board_id;
-        $add->medium_id = $request->medium_id;
-        $add->standard_id = $request->standard_id;
-        $add->semester_id = $request->semester_id;
-        $add->subject_id = $request->subject_id;
-        $add->unit_id = $request->unit_id;
         $add->title = $request->title;
         $add->image = $new_name;
-        $add->flag = $request->order;
+        $add->feature_order = $request->order;
         $add->save();
 
         return redirect()->route('feature.index')->with('success', 'Feature Added Successfully.');
@@ -120,12 +108,6 @@ class FeatureController extends Controller
     public function update(Request $request, Feature $feature,$id)
     {
         $this->validate($request, [
-            'board_id' => 'required',
-            'medium_id'  => 'required',
-            'standard_id' => 'required',
-            'semester_id'  => 'required',
-            'subject_id' => 'required',
-            'unit_id' => 'required',
             'title' => 'required'
         ]);
 
@@ -154,15 +136,9 @@ class FeatureController extends Controller
         }
 
         $update = Feature::find($id);
-        $update->board_id = $request->board_id;
-        $update->medium_id = $request->medium_id;
-        $update->standard_id = $request->standard_id;
-        $update->semester_id = $request->semester_id;
-        $update->subject_id = $request->subject_id;
-        $update->unit_id = $request->unit_id;
         $update->title = $request->title;
         $update->image = $new_name;
-        $update->flag = $request->order;
+        $update->feature_order = $request->order;
         $update->save();
 
         return redirect()->route('feature.index')->with('success', 'Feature Updated Successfully.');

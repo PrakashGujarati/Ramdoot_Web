@@ -135,7 +135,7 @@
 
 
                         <div class="row">
-                            <div class="form-group col-lg-6">
+                            <div class="form-group col-lg-3">
                                 <label class="form-label">Marks</label>
                                 <div class="form-control-wrap">
                                     <input type="text" class="form-control" id="marks" name="marks" value="{{ $solutiondata->marks }}">
@@ -147,7 +147,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group col-lg-6">
+                            <div class="form-group col-lg-3">
                                 <label class="form-label">Label</label>
                                 <div class="form-control-wrap">
                                     <input type="text" class="form-control" id="label" name="label" value="{{ $solutiondata->label }}">
@@ -156,6 +156,43 @@
                                             <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group col-lg-3">
+                                <label class="form-label">Question Type</label>
+                                <div class="form-control-wrap">
+                                    <select class="form-control" id="question_type" name="question_type">
+                                        <option value="">--Select Question Type--</option>
+                                        @foreach($question_type_details as $question_type)
+                                            <option value="{{ $question_type->id }}" @if($solutiondata->question_type == $question_type->id) selected @endif>{{ $question_type->question_type }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('question_type')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group col-lg-3">
+                                <label class="form-label">Level</label>
+                                <div class="form-control-wrap">
+                                    <select class="form-control" id="level" name="level">
+                                        <option value='' selected="" disabled="">-Select Level-</option>
+                                        <option value="Easy" @if($solutiondata->level == "Easy") selected @endif>Easy</option>
+                                        <option value="Normal" @if($solutiondata->level == "Normal") selected @endif>Normal</option>
+                                        <option value="Moderate" @if($solutiondata->level == "Moderate") selected @endif>Moderate</option>
+                                        <option value="Hard" @if($solutiondata->level == "Hard") selected @endif>Hard</option>
+                                        <option value="Expert" @if($solutiondata->level == "Expert") selected @endif>Expert</option>
+                                    </select>
+                                    @error('level')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                    
                                 </div>
                             </div>    
 

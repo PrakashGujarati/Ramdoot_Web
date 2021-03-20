@@ -1,4 +1,34 @@
 
+----------------------- 19-03-2020-------------------
+
+CREATE TABLE `question_types` (
+  `id` int(11) NOT NULL,
+  `question_type` varchar(255) DEFAULT NULL,
+  `status` enum('Active','Inactive','Deleted') NOT NULL DEFAULT 'Active',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT NULL
+);
+
+ALTER TABLE `question_types`
+  ADD PRIMARY KEY (`id`);
+
+
+ALTER TABLE `question_types`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+
+ALTER TABLE `features` DROP `board_id`, DROP `medium_id`, DROP `standard_id`, DROP `semester_id`, DROP `subject_id`, DROP `unit_id`;
+
+ALTER TABLE `features` ADD `feature_order` INT(11) NULL DEFAULT '0' AFTER `flag`;
+
+
+ALTER TABLE `solutions` ADD `question_type` INT(11) NOT NULL DEFAULT '0' AFTER `label`;
+
+
+ALTER TABLE `solutions` ADD `level` VARCHAR(50) NULL AFTER `question_type`;
+
+ALTER TABLE `materials` ADD `question_type` INT(11) NOT NULL DEFAULT '0' AFTER `label`, ADD `level` VARCHAR(50) NULL AFTER `question_type`;
+
 ----------------------- 17-03-2020-------------------
 
 ALTER TABLE `features` ADD `medium_id` INT(11) NOT NULL DEFAULT '0' AFTER `board_id`;
