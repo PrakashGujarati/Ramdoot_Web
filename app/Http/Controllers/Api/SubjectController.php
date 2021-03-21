@@ -22,13 +22,13 @@ class SubjectController extends Controller
             'board_id' => 'required',
             'standard_id' => 'required',
             'semester_id' => 'required',
-            'feature_id' => 'required'
+           // 'feature_id' => 'required'
         );
         $messages = array(
             'board_id.required' => 'Please enter board id.',
             'standard_id.required' => 'Please enter standard id.',
             'semester_id.required' => 'Please enter semester id.',
-            'feature_id.required' => 'Please enter feature id.'
+            //'feature_id.required' => 'Please enter feature id.'
         );
 
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -41,7 +41,7 @@ class SubjectController extends Controller
         $chkbaord = Board::where(['id' => $request->board_id,'status' => 'Active'])->first();
         $chkstandard = Standard::where(['id' => $request->standard_id,'status' => 'Active'])->first();
         $chksemester = Semester::where(['id' => $request->semester_id,'status' => 'Active'])->first();
-        $chkfeatures = Feature::where(['id' => $request->feature_id,'status' => 'Active'])->first();
+        //$chkfeatures = Feature::where(['id' => $request->feature_id,'status' => 'Active'])->first();
         if(empty($chkbaord)){
         	return response()->json([
     			"code" => 400,
@@ -63,13 +63,13 @@ class SubjectController extends Controller
 			  	"data" => [],
 	        ]);
         }
-        elseif (empty($chkfeatures)) {
+        /*elseif (empty($chkfeatures)) {
             return response()->json([
                 "code" => 400,
                 "message" => "Feature not found.",
                 "data" => [],
             ]);
-        }
+        }*/
         else{
 			$getdata = Subject::where(['board_id' => $request->board_id,'standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'status' => 'Active'])->get();
 			$subjectids = Subject::where(['board_id' => $request->board_id,'standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'status' => 'Active'])->pluck('id');
