@@ -100,7 +100,7 @@ class FeatureController extends Controller
             if(count($getunit) > 0){
                 $data=[];$getdata=[];
                 foreach ($getunit as $value) {
-                    $getdata = Feature::where(['unit_id' => $value->id,'status' => 'Active'])->get();
+                    $getdata = Feature::where(['status' => 'Active'])->get();
                     $featuredata = [];
                     foreach ($getdata as $value1) {
                         $image = env('APP_URL')."/upload/feature/".$value1->image;
