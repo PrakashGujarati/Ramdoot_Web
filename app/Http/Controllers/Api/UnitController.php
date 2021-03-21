@@ -11,6 +11,7 @@ use App\Models\Standard;
 use App\Models\Subject;
 use DB;
 use Validator;
+use App\Models\Question;
 
 class UnitController extends Controller
 {
@@ -66,7 +67,8 @@ class UnitController extends Controller
                     foreach ($getdata as $value) {
                         $url = env('APP_URL')."/upload/subject/url/".$value->url;
                         $thumbnail = env('APP_URL')."/upload/subject/thumbnail/".$value->thumbnail;
-                        $data[] = ['id' => $value->id,'title' => $value->title,'sub_title' => $value->description,'url' => $url,'thumbnail' => $thumbnail,"pages"=> $value->pages];
+                        $unitcount = Question::where('unit_id',$value->id)->count();
+                        $data[] = ['id' => $value->id,'title' => $value->title,'sub_title' => $value->description,'url' => $url,'thumbnail' => $thumbnail,"pages"=> $value->pages,"total_questions"=>$unitcount];
                     }
 
                     return response()->json([
