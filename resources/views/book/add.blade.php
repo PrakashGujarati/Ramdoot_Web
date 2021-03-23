@@ -166,6 +166,7 @@
                                 </div>
                                 <div class="form-control-wrap">
                                     <input type="file" class="form-control" id="url" name="url" value="">
+                                    <img id="url_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" width="100" />
                                     @error('url')
                                         <span class="text-danger" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -177,6 +178,7 @@
                                 <label class="form-label">Thumbnail</label>
                                 <div class="form-control-wrap">
                                     <input type="file" class="form-control" id="thumbnail" name="thumbnail" value="">
+                                    <img id="thumbnail_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" width="100" />
                                     @error('thumbnail')
                                         <span class="text-danger" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -188,7 +190,12 @@
                             <div class="form-group col-lg-4">
                                 <label class="form-label">Label</label>
                                 <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="label" name="label" value="{{ old('label') }}">
+                                    <select class="form-control" id="label" name="label">
+                                        <option value="" selected="" disabled="">--Select Label--</option>
+                                        <option value="new">New</option>
+                                        <option value="commingsoon">CommingSoon</option>
+                                        <option value="leatest">Leatest</option>
+                                    </select>
                                     @error('label')
                                         <span class="text-danger" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -200,11 +207,27 @@
 
                         
                         <div class="row">
-                            <div class="form-group col-lg-8">
+                            <div class="form-group col-lg-4">
                                 <label class="form-label">Description</label>
                                 <div class="form-control-wrap">
                                     <input class="form-control" id="description" name="description" value="{{ old('description') }}">
                                     @error('description')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group col-lg-4">
+                                <label class="form-label">Edition</label>
+                                <div class="form-control-wrap">
+                                    <select class="form-control edition" name="edition" id="edition">
+                                        <option value="" selected="" disabled="">--Select Edition--</option>
+                                        <option value="old">Old</option>
+                                        <option value="new">New</option>
+                                    </select>
+                                    @error('edition')
                                         <span class="text-danger" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
@@ -247,6 +270,45 @@
 @section('scripts')
 
 <script type="text/javascript">
+
+$(document).ready(function(){
+    $('#thumbnail_preview').css('display','none');
+    $('#url_preview').css('display','none');
+});    
+
+function readThumbnail(input) {
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+    
+    reader.onload = function(e) {
+      $('#thumbnail_preview').attr('src', e.target.result);
+    }
+    
+    reader.readAsDataURL(input.files[0]); // convert to base64 string
+  }
+}
+
+$("#thumbnail").change(function() {
+    $('#thumbnail_preview').css('display','block');
+  readThumbnail(this);
+});
+
+function readURL(input) {
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+    
+    reader.onload = function(e) {
+      $('#url_preview').attr('src', e.target.result);
+    }
+    
+    reader.readAsDataURL(input.files[0]); // convert to base64 string
+  }
+}
+
+$("#url").change(function() {
+    $('#url_preview').css('display','block');
+  readURL(this);
+});
 
 $(document).on('change','.board_id',function(){
     var board_id = $('.board_id').val();
@@ -375,10 +437,13 @@ $(document).on('change','.urlchk',function(){
     if($(this).prop("checked") == true){
         $("#url").attr('type', 'text');
         $('#url_type').val('text');
+        $('#url').val('');
+        $('#url_preview').css('display','none');
     }
     else if($(this).prop("checked") == false){
         $("#url").attr('type', 'file');
         $('#url_type').val('file');
+        $('#url').val('');
     }
 });
 
@@ -394,6 +459,9 @@ $(document).ready(function () {
                 unit_id:"required",
                 title:"required",
                 sub_title:"required",
+                url:"required",
+                thumbnail:"required",
+                edition:"required"
             },
         //For custom messages
         messages: {
@@ -405,7 +473,10 @@ $(document).ready(function () {
             subject_id:"Please select subject.",
             unit_id:"Please select unit.",
             title:"Please enter title.",
-            sub_title:"Please enter sub title"
+            sub_title:"Please enter sub title",
+            url:"Please enter url.",
+            thumbnail:"Please select thumbnail.",
+            edition:"Please select edition."
         },
         submitHandler: function(form) {
             var formData = new FormData($("#book_form")[0]);
@@ -431,6 +502,7 @@ $(document).ready(function () {
                     $('#description').val('');
                     $('#label').val('');
                     $('#release_date').val('');
+                    $('#edition').val('');
                     
                     
                     $('.dyamictable').empty();

@@ -50,9 +50,18 @@ class PaperController extends Controller
             'semester_id'  => 'required',
             'subject_id' => 'required',
             'title' => 'required',
-            'url' => 'required',
-            'label' => 'required', 
+
         ]);
+
+        $new_name='';
+        if($request->has('thumbnail'))
+        {
+        
+            $image = $request->file('thumbnail');
+            $new_name = rand() . '.' . $image->getClientOriginalExtension();
+            $destinationPath = public_path('upload/paper/thumbnail/');
+            $image->move($destinationPath, $new_name);
+        }
 
         $url_file='';
 
@@ -74,9 +83,15 @@ class PaperController extends Controller
         $add->semester_id = $request->semester_id;
         $add->subject_id = $request->subject_id;
         $add->title = $request->title;
+        $add->sub_title = $request->sub_title;
+        $add->url_type = $request->url_type;
         $add->url = $url_file;
+        $add->thumbnail = $new_name;
+        $add->pages = isset($request->pages) ? $request->pages:'';
         $add->label = $request->label;
         $add->description = isset($request->description) ? $request->description:'';
+        $add->release_date = $request->release_date;
+        $add->edition = $request->edition;
         $add->save();
 
         $paper_details = Paper::where('status','Active')->get();
@@ -151,6 +166,8 @@ class PaperController extends Controller
         $update->semester_id = $request->semester_id;
         $update->subject_id = $request->subject_id;
         $update->title = $request->title;
+        $update->sub_title = $request->sub_title;
+        $update->url_type = $request->url_type;
         $update->url = $url_file;
         $update->label = $request->label;
         $update->description = isset($request->description) ? $request->description:'';

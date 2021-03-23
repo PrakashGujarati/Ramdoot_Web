@@ -50,10 +50,17 @@ class WorksheetController extends Controller
             'semester_id'  => 'required',
             'subject_id' => 'required',
             'title' => 'required',
-            'url' => 'required',
-            'type' => 'required',
-            'label' => 'required', 
         ]);
+
+        $new_name='';
+        if($request->has('thumbnail'))
+        {
+        
+            $image = $request->file('thumbnail');
+            $new_name = rand() . '.' . $image->getClientOriginalExtension();
+            $destinationPath = public_path('upload/paper/thumbnail/');
+            $image->move($destinationPath, $new_name);
+        }
 
         $url_file='';
         if($request->has('url'))
@@ -73,10 +80,15 @@ class WorksheetController extends Controller
         $add->semester_id = $request->semester_id;
         $add->subject_id = $request->subject_id;
         $add->title = $request->title;
+        $add->sub_title = $request->sub_title;
+        $add->url_type = $request->url_type;
         $add->url = $url_file;
-        $add->type = $request->type;
         $add->label = $request->label;
+        $add->thumbnail = $new_name;
         $add->description = isset($request->description) ? $request->description:'';
+        $add->release_date = $request->release_date;
+        $add->edition = $request->edition;
+        $add->pages = isset($request->pages) ? $request->pages:'';
         $add->save();
 
 
@@ -126,9 +138,7 @@ class WorksheetController extends Controller
             'standard_id' => 'required',
             'semester_id'  => 'required',
             'subject_id' => 'required',
-            'title' => 'required',
-            'type' => 'required',
-            'label' => 'required',
+            'title' => 'required'
         ]);
 
         $url_file='';
@@ -152,8 +162,8 @@ class WorksheetController extends Controller
         $update->semester_id = $request->semester_id;
         $update->subject_id = $request->subject_id;
         $update->title = $request->title;
+        $update->sub_title = $request->sub_title;
         $update->url = $url_file;
-        $update->type = $request->type;
         $update->label = $request->label;
         $update->description = isset($request->description) ? $request->description:'';
         $update->save();

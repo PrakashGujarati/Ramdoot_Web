@@ -73,7 +73,7 @@ class PaperController extends Controller
 	    				$paperdata[] = ['id' => $value1->id,'title' => $value1->title,'url' => $url,'description' => $value1->description,'label' => $value1->label];
 	    			}
 
-	    			$data[] = ['id' => $value->id,'unit_title' =>$value->title,'paper' => $paperdata,'sub_titles'=>$value->description];
+	    			$data[] = ['id' => $value->id,'unit_title' =>$value->title,'paper' => $paperdata,'sub_title'=>$value->description];
 	    		}
 	    		
 	    		return response()->json([

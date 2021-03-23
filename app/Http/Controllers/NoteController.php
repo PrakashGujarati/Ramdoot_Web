@@ -35,13 +35,7 @@ class NoteController extends Controller
             'subject_id' => 'required',
             'unit_id' => 'required',
             'title' => 'required',
-            'sub_title' => 'required',
-            'url' => 'required',
-            // 'url' => 'required',
-            // 'thumbnail'  => 'required',
-            // 'pages' => 'required',
-            // 'label' => 'required',
-            // 'release_date' => 'required',    
+            'sub_title' => 'required'
         ]);
 
         $new_name='';
@@ -92,6 +86,7 @@ class NoteController extends Controller
         $add->description = isset($request->description) ? $request->description:'';
         $add->label = $request->label;
         $add->release_date = $request->release_date;
+        $add->edition = $request->edition;
         $add->save();
 
         $note_details = Note::where('status','Active')->get();

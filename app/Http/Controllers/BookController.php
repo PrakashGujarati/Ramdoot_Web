@@ -54,10 +54,7 @@ class BookController extends Controller
             'title' => 'required',
             'sub_title' => 'required',
             'url' => 'required',
-            'thumbnail'  => 'required',
-            'pages' => 'required',
-            'label' => 'required',
-            'release_date' => 'required',    
+            'thumbnail'  => 'required'  
         ]);
 
         $new_name='';
@@ -111,6 +108,7 @@ class BookController extends Controller
         $add->description = isset($request->description) ? $request->description:'';
         $add->label = $request->label;
         $add->release_date = $request->release_date;
+        $add->edition = $request->edition;
         $add->save();
 
         $book_details = Book::where('status','Active')->get();
@@ -161,10 +159,7 @@ class BookController extends Controller
             'subject_id' => 'required',
             'unit_id' => 'required',
             'title' => 'required',
-            'sub_title' => 'required',
-            'pages' => 'required',
-            'label' => 'required',
-            'release_date' => 'required',
+            'sub_title' => 'required'
         ]);
 
         $new_name='';
@@ -224,6 +219,7 @@ class BookController extends Controller
         $update->description = isset($request->description) ? $request->description:'';
         $update->label = $request->label;
         $update->release_date = $request->release_date;
+        $update->edition = $request->edition;
         $update->save();
 
         return redirect()->route('book.index')->with('success', 'Book Updated Successfully.');

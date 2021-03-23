@@ -113,7 +113,7 @@
                         
 
                         <div class="row">
-                            <div class="form-group col-lg-6">
+                            <div class="form-group col-lg-4">
                                 <label class="form-label">Title</label>
                                 <div class="form-control-wrap">
                                     <input type="text" class="form-control" id="title" name="title" value="{{ $bookdata->title }}">
@@ -125,7 +125,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group col-lg-6">
+                            <div class="form-group col-lg-4">
                                 <label class="form-label">Sub Title</label>
                                 <div class="form-control-wrap">
                                     <input type="text" class="form-control" id="sub_title" name="sub_title" value="{{ $bookdata->sub_title }}">
@@ -136,10 +136,22 @@
                                     @enderror
                                 </div>
                             </div>
+
+                            <div class="form-group col-lg-4">
+                                <label class="form-label">Pages</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" id="pages" name="pages" value="{{ $bookdata->pages }}">
+                                    @error('pages')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
                         </div>
 
                         <div class="row">
-                        <div class="form-group col-lg-6">
+                        <div class="form-group col-lg-4">
                             <div class="row">
                                 <input type="hidden" name="url_type" class="url_type" id="url_type" value="file">
                                 <div class="col-lg-6"><label class="form-label">Url</label></div>
@@ -167,7 +179,7 @@
                                 @endif
                             </div>
                         </div>
-                        <div class="form-group col-lg-6">
+                        <div class="form-group col-lg-4">
                             <label class="form-label">Thumbnail</label>
                             <div class="form-control-wrap">
                                 <input type="file" class="form-control" id="thumbnail" name="thumbnail" value="">
@@ -183,38 +195,27 @@
                                 @enderror
                             </div>
                         </div>
+
+                        <div class="form-group col-lg-4">
+                            <label class="form-label">Label</label>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control" id="label" name="label" value="{{ $bookdata->label }}">
+                                @error('label')
+                                    <span class="text-danger" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
                         </div>
 
-                        <div class="form-group">
-                            <label class="form-label">Pages</label>
-                            <div class="form-control-wrap">
-                                <input type="text" class="form-control" id="pages" name="pages" value="{{ $bookdata->pages }}">
-                                @error('pages')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">Description</label>
-                            <div class="form-control-wrap">
-                                <textarea class="form-control" id="description" name="description" value="{{ $bookdata->description }}">{{ $bookdata->description }}</textarea>
-                                @error('description')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
                         </div>
 
                         <div class="row">
-                            <div class="form-group col-lg-6">
-                                <label class="form-label">Label</label>
+                            <div class="form-group col-lg-4">
+                                <label class="form-label">Description</label>
                                 <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="label" name="label" value="{{ $bookdata->label }}">
-                                    @error('label')
+                                    <input class="form-control" id="description" name="description" value="{{ $bookdata->description }}">
+                                    @error('description')
                                         <span class="text-danger" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
@@ -222,7 +223,23 @@
                                 </div>
                             </div>
 
-                            <div class="form-group col-lg-6">
+                            <div class="form-group col-lg-4">
+                                <label class="form-label">Edition</label>
+                                <div class="form-control-wrap">
+                                    <select class="form-control edition" name="edition" id="edition">
+                                        <option value="" selected="" disabled="">--Select Edition--</option>
+                                        <option value="old" @if($bookdata->description == 'old') selected @endif>Old</option>
+                                        <option value="new" @if($bookdata->description == 'new') selected @endif>New</option>
+                                    </select>
+                                    @error('edition')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group col-lg-4">
                                 <label class="form-label">Release Date</label>
                                 <div class="form-control-wrap">
                                     <input type="date" class="form-control" id="release_date" name="release_date" value="{{ $bookdata->release_date }}">

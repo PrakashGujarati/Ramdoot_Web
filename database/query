@@ -1,4 +1,37 @@
 
+----------------------- 22-03-2020-------------------
+
+ALTER TABLE `books` ADD `edition` ENUM('new','old') NULL AFTER `description`;
+
+ALTER TABLE `notes` ADD `edition` ENUM('new','old') NULL AFTER `description`;
+
+ALTER TABLE `papers` ADD `edition` ENUM('new','old') NULL AFTER `description`;
+
+ALTER TABLE `worksheets` ADD `edition` ENUM('new','old') NULL AFTER `description`;
+
+
+ALTER TABLE `papers` ADD `sub_title` VARCHAR(255) NULL AFTER `title`;
+
+ALTER TABLE `papers` ADD `url_type` VARCHAR(50) NULL AFTER `edition`;
+
+ALTER TABLE `papers` ADD `thumbnail` VARCHAR(255) NULL AFTER `url`;
+
+ALTER TABLE `papers` ADD `pages` VARCHAR(255) NULL AFTER `label`;
+
+ALTER TABLE `papers` ADD `release_date` DATE NULL AFTER `pages`;
+
+
+ALTER TABLE `worksheets` ADD `sub_title` VARCHAR(255) NULL AFTER `title`;
+
+ALTER TABLE `worksheets` ADD `url_type` VARCHAR(50) NULL AFTER `edition`;
+
+ALTER TABLE `worksheets` ADD `thumbnail` VARCHAR(255) NULL AFTER `url`;
+
+ALTER TABLE `worksheets` ADD `pages` VARCHAR(255) NULL AFTER `label`;
+
+ALTER TABLE `worksheets` ADD `release_date` DATE NULL AFTER `pages`;
+
+
 ----------------------- 19-03-2020-------------------
 
 CREATE TABLE `question_types` (
