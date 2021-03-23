@@ -307,6 +307,7 @@ class TextbookController extends Controller
             if(count($getunit) > 0){
                 $data=[];$getdata=[];
                 foreach ($getunit as $value) {
+
                     $getdata = Note::where(['unit_id' => $value->id,'status' => 'Active'])->get();
                     $bookdata=[];
                     foreach ($getdata as $value1) {
@@ -317,7 +318,7 @@ class TextbookController extends Controller
                         'pages' => $value1->pages,'description' => $value1->description,'label' => $value1->label,'release_date' => $value1->release_date];
                     }
 
-                    $data[] = ['id' => $value->id,'unit_title' =>$value->title,'book' => $bookdata];
+                    $data[] = ['id' => $value->id,'unit_title' =>$value->title,'sub_title' => $value->description,'book' => $bookdata];
                 }
                 
                 return response()->json([

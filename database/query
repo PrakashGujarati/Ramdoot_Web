@@ -1,4 +1,13 @@
 
+
+----------------------- 23-03-2020-------------------
+
+ALTER TABLE `videos` ADD `sub_title` VARCHAR(500) NULL AFTER `title`;
+
+ALTER TABLE `videos` ADD `edition` ENUM('new','old') NULL AFTER `description`;
+
+ALTER TABLE `videos` CHANGE `type` `url_type` VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;
+
 ----------------------- 22-03-2020-------------------
 
 ALTER TABLE `books` ADD `edition` ENUM('new','old') NULL AFTER `description`;

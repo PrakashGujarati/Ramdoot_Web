@@ -125,35 +125,16 @@
                             </div>
 
                             <div class="form-group col-lg-4">
-                                <label class="form-label">Type</label>
+                                <label class="form-label">Sub Title</label>
                                 <div class="form-control-wrap">
-                                    <select class="form-control" id="type" name="type">
-                                        <option selected="" value="URL">URL</option>
-                                        <option value="File">File</option>
-                                    </select>
-                                    @error('type')
+                                    <input type="text" class="form-control" id="sub_title" name="sub_title" value="{{ old('sub_title') }}">
+                                    @error('sub_title')
                                         <span class="text-danger" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
                                 </div>
                             </div>
-
-                            <div class="form-group col-lg-4">
-                                <label class="form-label">Url</label>
-                                <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="url" name="url" value="{{ old('url') }}">
-                                    <input type="file" class="form-control url_file" id="url_file" name="url_file" value="">
-                                    @error('url')
-                                        <span class="text-danger" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
 
                             <div class="form-group col-lg-4">
                                 <label class="form-label">Duration</label>
@@ -167,11 +148,117 @@
                                 </div>
                             </div>
 
+                            <!-- <div class="form-group col-lg-4">
+                                <label class="form-label">Type</label>
+                                <div class="form-control-wrap">
+                                    <select class="form-control" id="type" name="type">
+                                        <option selected="" value="URL">URL</option>
+                                        <option value="File">File</option>
+                                    </select>
+                                    @error('type')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div> -->
+
+                            
+
+                            <!-- <div class="form-group col-lg-4">
+                                <label class="form-label">Url</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" id="url" name="url" value="{{ old('url') }}">
+                                    <input type="file" class="form-control url_file" id="url_file" name="url_file" value="">
+                                    @error('url')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div> -->
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-lg-4">
+                                <div class="row">
+                                    <input type="hidden" name="url_type" class="url_type" id="url_type" value="file">
+                                    <div class="col-lg-6"><label class="form-label">Url</label></div>
+                                    <div class="col-lg-6 text-right"><div class="g">
+                                        <div class="custom-control custom-control-sm custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input urlchk" name="instant_result" value="1" id="instant_result">
+                                            <label class="custom-control-label" for="instant_result"></label>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                                <div class="form-control-wrap">
+                                    <input type="file" class="form-control" id="url" name="url" value="">
+                                    <img id="url_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" width="100" />
+                                    @error('url')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group col-lg-4">
+                                <label class="form-label">Thumbnail</label>
+                                <div class="form-control-wrap">
+                                    <input type="file" class="form-control" id="thumbnail" name="thumbnail" value="">
+                                    <img id="thumbnail_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" width="100" />
+                                    @error('thumbnail')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            
+
                             <div class="form-group col-lg-4">
                                 <label class="form-label">Label</label>
                                 <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="label" name="label" value="{{ old('label') }}">
+                                    <select class="form-control" id="label" name="label">
+                                        <option value="" selected="" disabled="">--Select Label--</option>
+                                        <option value="new">New</option>
+                                        <option value="commingsoon">CommingSoon</option>
+                                        <option value="leatest">Leatest</option>
+                                    </select>
                                     @error('label')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+
+                        
+                            <div class="form-group col-lg-4">
+                                <label class="form-label">Description</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" id="description" name="description" value="{{ old('description') }}">
+                                    @error('description')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group col-lg-4">
+                                <label class="form-label">Edition</label>
+                                <div class="form-control-wrap">
+                                    <select class="form-control edition" name="edition" id="edition">
+                                        <option value="" selected="" disabled="">--Select Edition--</option>
+                                        <option value="old">Old</option>
+                                        <option value="new">New</option>
+                                    </select>
+                                    @error('edition')
                                         <span class="text-danger" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
@@ -190,32 +277,7 @@
                                     @enderror
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Thumbnail</label>
-                            <div class="form-control-wrap">
-                                <input type="file" class="form-control" id="thumbnail" name="thumbnail" value="">
-                                @error('thumbnail')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        
-                        <div class="form-group">
-                            <label class="form-label">Description</label>
-                            <div class="form-control-wrap">
-                                <textarea class="form-control" id="description" name="description" value="{{ old('description') }}"></textarea>
-                                @error('description')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
+                        </div>                        
 
                         <div class="form-group">
                             <button type="submit" class="btn btn-lg btn-primary">Submit</button>
@@ -238,6 +300,46 @@
 @section('scripts')
 
 <script type="text/javascript">
+
+    $(document).ready(function(){
+        $('#thumbnail_preview').css('display','none');
+        $('#url_preview').css('display','none');
+    });    
+
+    function readThumbnail(input) {
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        
+        reader.onload = function(e) {
+          $('#thumbnail_preview').attr('src', e.target.result);
+        }
+        
+        reader.readAsDataURL(input.files[0]); // convert to base64 string
+      }
+    }
+
+    $("#thumbnail").change(function() {
+        $('#thumbnail_preview').css('display','block');
+      readThumbnail(this);
+    });
+
+    function readURL(input) {
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        
+        reader.onload = function(e) {
+          $('#url_preview').attr('src', e.target.result);
+        }
+        
+        reader.readAsDataURL(input.files[0]); // convert to base64 string
+      }
+    }
+
+    $("#url").change(function() {
+        $('#url_preview').css('display','block');
+      readURL(this);
+    });
+
 
     $( document ).ready(function() {
         var type = $('#type').val();
@@ -431,7 +533,13 @@ $(document).ready(function () {
                     $('#duration').val('');
                     $('#label').val('');
                     $('#release_date').val('');
-                    
+                    $('#edition').val('');
+
+                    $('#thumbnail').val('');
+                    $('#thumbnail_preview').css('display','none');
+
+                    $('#url').val('');
+                    $('#url_preview').css('display','none');
                     
                     $('.dyamictable').empty();
                     $('.dyamictable').html(data);
@@ -442,6 +550,19 @@ $(document).ready(function () {
     
 });
 
+$(document).on('change','.urlchk',function(){
+    if($(this).prop("checked") == true){
+        $("#url").attr('type', 'text');
+        $('#url_type').val('text');
+        $('#url').val('');
+        $('#url_preview').css('display','none');
+    }
+    else if($(this).prop("checked") == false){
+        $("#url").attr('type', 'file');
+        $('#url_type').val('file');
+        $('#url').val('');
+    }
+});
 
 
 </script>

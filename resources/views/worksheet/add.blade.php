@@ -506,6 +506,12 @@ $(document).ready(function () {
                     $('#release_date').val('');
                     $('#pages').val('');
 
+                    $('#thumbnail').val('');
+                    $('#thumbnail_preview').css('display','none');
+
+                    $('#url').val('');
+                    $('#url_preview').css('display','none');
+
                     $('.dyamictable').empty();
                     $('.dyamictable').html(data);
                 }            

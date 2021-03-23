@@ -159,7 +159,12 @@
                             <div class="form-group col-lg-3">
                                 <label class="form-label">Label</label>
                                 <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="label" name="label" value="{{ old('label') }}">
+                                    <select class="form-control" id="label" name="label">
+                                        <option value="" selected="" disabled="">--Select Label--</option>
+                                        <option value="new">New</option>
+                                        <option value="commingsoon">CommingSoon</option>
+                                        <option value="leatest">Leatest</option>
+                                    </select>
                                     @error('label')
                                         <span class="text-danger" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -207,16 +212,19 @@
 
                         </div>
 
-                        <div class="form-group">
+                        <div class="row mb-4">
+                        <div class="form-group col-lg-3">
                             <label class="form-label">Image</label>
                             <div class="form-control-wrap">
                                 <input type="file" class="form-control" id="image" name="image" value="">
+                                <img id="image_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" width="100" />
                                 @error('image')
                                     <span class="text-danger" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
                             </div>
+                        </div>
                         </div>
 
                         <div class="form-group">
@@ -240,6 +248,29 @@
 @section('scripts')
 
 <script type="text/javascript">
+
+$(document).ready(function(){
+    $('#image_preview').css('display','none');
+});    
+
+function readThumbnail(input) {
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+    
+    reader.onload = function(e) {
+      $('#image_preview').attr('src', e.target.result);
+    }
+    
+    reader.readAsDataURL(input.files[0]); // convert to base64 string
+  }
+}
+
+$("#image").change(function() {
+    $('#image_preview').css('display','block');
+  readThumbnail(this);
+});
+
+    
     
 $(document).on('change','.board_id',function(){
     var board_id = $('.board_id').val();
@@ -414,7 +445,9 @@ $(document).ready(function () {
                     $('#label').val('');
                     $('#question_type').val('');
                     $('#level').val('');
-                    
+
+                    $('#image').val('');
+                    $('#image_preview').css('display','none');
                     
                     $('.dyamictable').empty();
                     $('.dyamictable').html(data);

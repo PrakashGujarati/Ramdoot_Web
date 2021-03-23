@@ -503,7 +503,12 @@ $(document).ready(function () {
                     $('#label').val('');
                     $('#release_date').val('');
                     $('#edition').val('');
-                    
+
+                    $('#thumbnail').val('');
+                    $('#thumbnail_preview').css('display','none');
+
+                    $('#url').val('');
+                    $('#url_preview').css('display','none');
                     
                     $('.dyamictable').empty();
                     $('.dyamictable').html(data);

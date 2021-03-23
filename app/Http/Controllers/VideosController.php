@@ -103,13 +103,15 @@ class VideosController extends Controller
         $add->semester_id = $request->semester_id;
         $add->subject_id = $request->subject_id;
         $add->title = $request->title;
-        $add->type = $request->type;
+        $add->sub_title = $request->sub_title;
+        $add->url_type = $request->url_type;
         $add->url = $url_file;
         $add->thumbnail = $new_name;
         $add->duration = $request->duration;
         $add->description = isset($request->description) ? $request->description:'';
         $add->label = $request->label;
         $add->release_date = $request->release_date;
+        $add->edition = $request->edition;
         $add->save();
 
 
@@ -216,13 +218,14 @@ class VideosController extends Controller
         $update->semester_id = $request->semester_id;
         $update->subject_id = $request->subject_id;
         $update->title = $request->title;
-        $update->type = $request->type;
-        $update->url = $url_file;
+        $update->sub_title = $require->sub_title;
+        $update->url_type = $request->url_type;
         $update->thumbnail = $new_name;
         $update->duration = $request->duration;
         $update->description = isset($request->description) ? $request->description:'';
         $update->label = $request->label;
         $update->release_date = $request->release_date;
+        $update->edition = $request->edition;
         $update->save();
 
         return redirect()->route('videos.index')->with('success', 'Videos Updated Successfully.');
