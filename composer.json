@@ -14,12 +14,14 @@
         "guzzlehttp/guzzle": "^7.0.1",
         "huddledigital/zendesk-laravel": "^3.5",
         "laravel/framework": "^8.12",
+        "laravel/helpers": "^1.4",
         "laravel/jetstream": "^2.1",
         "laravel/passport": "^10.1",
         "laravel/sanctum": "^2.6",
         "laravel/tinker": "^2.5",
         "livewire/livewire": "^2.0",
-        "maatwebsite/excel": "^3.1"
+        "maatwebsite/excel": "^3.1",
+        "spatie/laravel-permission": "^3.13"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

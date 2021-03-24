@@ -14,6 +14,13 @@ class ExamController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('permission:view-exam', ['only' => ['index']]);
+        $this->middleware('permission:add-exam', ['only' => ['create','store']]);
+        $this->middleware('permission:edit-exam', ['only' => ['edit','update']]);
+        $this->middleware('permission:delete-exam', ['only' => ['distroy']]);
+    }
     public function index()
     {
         $exam_details = Exam::where('status','Active')->get();

@@ -13,6 +13,14 @@ class StandardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('permission:view-standard', ['only' => ['index']]);
+        $this->middleware('permission:add-standard', ['only' => ['create','store']]);
+        $this->middleware('permission:edit-standard', ['only' => ['edit','update']]);
+        $this->middleware('permission:delete-standard', ['only' => ['distroy']]);
+    }
+    
     public function index()
     {
         $standard_details = Standard::where('status','Active')->get();
