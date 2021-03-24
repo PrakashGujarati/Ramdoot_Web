@@ -15,6 +15,13 @@ class PaperController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('permission:view-paper', ['only' => ['index']]);
+        $this->middleware('permission:add-paper', ['only' => ['create','store']]);
+        $this->middleware('permission:edit-paper', ['only' => ['edit','update']]);
+        $this->middleware('permission:delete-paper', ['only' => ['distroy']]);
+    }
     public function index()
     {
         $paper_details = paper::where('status','Active')->get();

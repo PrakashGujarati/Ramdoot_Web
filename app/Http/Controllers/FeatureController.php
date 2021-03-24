@@ -13,6 +13,13 @@ class FeatureController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('permission:view-feature', ['only' => ['index']]);
+        $this->middleware('permission:add-feature', ['only' => ['create','store']]);
+        $this->middleware('permission:edit-feature', ['only' => ['edit','update']]);
+        $this->middleware('permission:delete-feature', ['only' => ['distroy']]);
+    }
     public function index()
     {
         $feature_details = feature::where('status','Active')->get();

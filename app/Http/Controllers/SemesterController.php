@@ -14,6 +14,13 @@ class SemesterController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('permission:view-semester', ['only' => ['index']]);
+        $this->middleware('permission:add-semester', ['only' => ['create','store']]);
+        $this->middleware('permission:edit-semester', ['only' => ['edit','update']]);
+        $this->middleware('permission:delete-semester', ['only' => ['distroy']]);
+    }
     public function index()
     {
         $semester_details = semester::where('status','Active')->get();

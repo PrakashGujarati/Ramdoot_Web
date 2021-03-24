@@ -15,6 +15,13 @@ class ExamQuestionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('permission:view-exam-question', ['only' => ['index']]);
+        $this->middleware('permission:add-exam-question', ['only' => ['create','store']]);
+        $this->middleware('permission:edit-exam-question', ['only' => ['edit','update']]);
+        $this->middleware('permission:delete-exam-question', ['only' => ['distroy']]);
+    }
     public function index()
     {
         $examquestion_details = exam_question::where('status','Active')->groupBy('exam_id')->get();

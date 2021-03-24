@@ -16,6 +16,13 @@ class BookController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('permission:view-book', ['only' => ['index']]);
+        $this->middleware('permission:add-book', ['only' => ['create','store']]);
+        $this->middleware('permission:edit-book', ['only' => ['edit','update']]);
+        $this->middleware('permission:delete-book', ['only' => ['distroy']]);
+    }
     public function index()
     {
         $book_details = Book::where('status','Active')->get();

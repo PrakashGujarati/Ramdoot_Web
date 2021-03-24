@@ -15,6 +15,13 @@ class VideosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('permission:view-video', ['only' => ['index']]);
+        $this->middleware('permission:add-video', ['only' => ['create','store']]);
+        $this->middleware('permission:edit-video', ['only' => ['edit','update']]);
+        $this->middleware('permission:delete-video', ['only' => ['distroy']]);
+    }
     public function index()
     {
         $videos_details = videos::where('status','Active')->get();

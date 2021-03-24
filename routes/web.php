@@ -26,8 +26,7 @@ use App\Http\Controllers\NoteController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\SpatieRolePermissionController;
-
-
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -248,6 +247,14 @@ Route::group(['middleware' => 'auth'], function(){
 
 	Route::get('role_permission', [SpatieRolePermissionController::class, 'index_roles'])->name('role_permission.index');
 	Route::get('/roles', [SpatieRolePermissionController::class, 'index_roles'])->name('role.get');	
-	Route::post('/role/{role_id}/assign-permissions',[SpatieRolePermissionController::class, 'assign_permissions'])->name('role.assign_permission');
+	Route::post('/role/{role_id}/assign-permissions',[SpatieRolePermissionController::class, 'assign_permissions'])->name('	role.assign_permission');
+		
+	Route::get('user/index',[UserController::class,'index'])->name('user.index');
+	Route::get('user/create',[UserController::class,'create'])->name('user.create');
+	Route::post('user/store',[UserController::class,'store'])->name('user.store');
+	Route::get('user/edit/{id}',[UserController::class,'edit'])->name('user.edit');
+	Route::post('user/update',[UserController::class,'update'])->name('user.update');
+	Route::get('user/distroy/{id}',[UserController::class,'distroy'])->name('user.distroy');
+
 	
 });

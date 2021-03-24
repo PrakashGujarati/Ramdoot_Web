@@ -19,6 +19,13 @@ class QuestionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('permission:view-question', ['only' => ['index']]);
+        $this->middleware('permission:add-question', ['only' => ['create','store']]);
+        $this->middleware('permission:edit-question', ['only' => ['edit','update']]);
+        $this->middleware('permission:delete-question', ['only' => ['distroy']]);
+    }
     public function index()
     {
         $question_details = question::where('status','Active')->get();

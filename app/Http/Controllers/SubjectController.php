@@ -15,6 +15,13 @@ class SubjectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('permission:view-subject', ['only' => ['index']]);
+        $this->middleware('permission:add-subject', ['only' => ['create','store']]);
+        $this->middleware('permission:edit-subject', ['only' => ['edit','update']]);
+        $this->middleware('permission:delete-subject', ['only' => ['distroy']]);
+    }
     public function index()
     {
         $subject_details = Subject::where('status','Active')->get();

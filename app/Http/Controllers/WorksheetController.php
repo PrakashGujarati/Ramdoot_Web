@@ -15,6 +15,13 @@ class WorksheetController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('permission:view-worksheet', ['only' => ['index']]);
+        $this->middleware('permission:add-worksheet', ['only' => ['create','store']]);
+        $this->middleware('permission:edit-worksheet', ['only' => ['edit','update']]);
+        $this->middleware('permission:delete-worksheet', ['only' => ['distroy']]);
+    }
     public function index()
     {
         $worksheet_details = worksheet::where('status','Active')->get();

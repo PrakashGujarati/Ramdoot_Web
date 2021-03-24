@@ -15,6 +15,13 @@ class SolutionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('permission:view-solution', ['only' => ['index']]);
+        $this->middleware('permission:add-solution', ['only' => ['create','store']]);
+        $this->middleware('permission:edit-solution', ['only' => ['edit','update']]);
+        $this->middleware('permission:delete-solution', ['only' => ['distroy']]);
+    }
     public function index()
     {
         $solution_details = solution::where('status','Active')->get();

@@ -9,6 +9,13 @@ use Auth;
 
 class NoteController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:view-note', ['only' => ['index']]);
+        $this->middleware('permission:add-note', ['only' => ['create','store']]);
+        $this->middleware('permission:edit-note', ['only' => ['edit','update']]);
+        $this->middleware('permission:delete-note', ['only' => ['distroy']]);
+    }
     public function index()
     {
         $note_details = note::where('status','Active')->get();

@@ -7,6 +7,15 @@ use Illuminate\Http\Request;
 
 class BoardController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('permission:view-board', ['only' => ['index']]);
+        $this->middleware('permission:add-board', ['only' => ['create','store']]);
+        $this->middleware('permission:edit-board', ['only' => ['edit','update']]);
+        $this->middleware('permission:delete-board', ['only' => ['distroy']]);
+    }
+
     /**
      * Display a listing of the resource.
      *
