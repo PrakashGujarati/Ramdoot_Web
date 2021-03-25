@@ -23,8 +23,11 @@ use App\Http\Controllers\StudentQuestionAnswerController;
 use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\MediumController;
 use App\Http\Controllers\NoteController;
+use App\Http\Controllers\SettingController;
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\SpatieRolePermissionController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\QuestionTypeController;
-
 
 /*
 |--------------------------------------------------------------------------
@@ -242,6 +245,27 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::post('question_type/{id}/update', [QuestionTypeController::class, 'update'])->name('question_type.update');
 	Route::get('question_type/delete', [QuestionTypeController::class, 'distroy'])->name('question_type.distroy');
 
-	
 
+
+	Route::get('settings',[SettingController::class,'setting'])->name('settings');
+
+	Route::get('permission', [PermissionController::class, 'index'])->name('permission.index');
+	Route::get('permission/create', [PermissionController::class, 'create'])->name('permission.create');
+	Route::post('permission/store', [PermissionController::class, 'store'])->name('permission.store');
+	Route::get('permission/{id}/edit', [PermissionController::class, 'edit'])->name('permission.edit');
+	Route::post('permission/{id}/update', [PermissionController::class, 'update'])->name('permission.update');
+	Route::get('permission/{id}/delete', [PermissionController::class, 'distroy'])->name('permission.distroy');	
+
+	Route::get('role_permission', [SpatieRolePermissionController::class, 'index_roles'])->name('role_permission.index');
+	Route::get('/roles', [SpatieRolePermissionController::class, 'index_roles'])->name('role.get');	
+	Route::post('/role/{role_id}/assign-permissions',[SpatieRolePermissionController::class, 'assign_permissions'])->name('role.assign_permission');
+		
+	Route::get('user/index',[UserController::class,'index'])->name('user.index');
+	Route::get('user/create',[UserController::class,'create'])->name('user.create');
+	Route::post('user/store',[UserController::class,'store'])->name('user.store');
+	Route::get('user/edit/{id}',[UserController::class,'edit'])->name('user.edit');
+	Route::post('user/update',[UserController::class,'update'])->name('user.update');
+	Route::get('user/distroy/{id}',[UserController::class,'distroy'])->name('user.distroy');
+
+	
 });

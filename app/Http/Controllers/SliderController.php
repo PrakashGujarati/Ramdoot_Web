@@ -12,6 +12,13 @@ class SliderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('permission:view-slider', ['only' => ['index']]);
+        $this->middleware('permission:add-slider', ['only' => ['create','store']]);
+        $this->middleware('permission:edit-slider', ['only' => ['edit','update']]);
+        $this->middleware('permission:delete-slider', ['only' => ['distroy']]);
+    }
     public function index()
     {
         $slider_details = Slider::where('status','Active')->get();

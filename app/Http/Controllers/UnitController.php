@@ -16,6 +16,13 @@ class UnitController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('permission:view-unit', ['only' => ['index']]);
+        $this->middleware('permission:add-unit', ['only' => ['create','store']]);
+        $this->middleware('permission:edit-unit', ['only' => ['edit','update']]);
+        $this->middleware('permission:delete-unit', ['only' => ['distroy']]);
+    }
     public function index()
     {
         $unit_details = Unit::where('status','Active')->get();

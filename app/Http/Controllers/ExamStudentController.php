@@ -15,6 +15,10 @@ class ExamStudentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('permission:view-exam-result', ['only' => ['index']]);
+    }
     public function index(Request $request)
     {
         $exams = Exam::where('status','Active')->get();

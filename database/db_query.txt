@@ -1,1 +1,34 @@
+
+
+-------------------------24-03-2021--------------------------------------------
+CREATE TABLE `user_data_logs` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `type` varchar(200) NOT NULL,
+  `type_id` int(11) NOT NULL,
+  `upload_time` datetime NOT NULL,
+  `operation` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+ALTER TABLE `user_data_logs` ADD PRIMARY KEY(`id`);
+
+ALTER TABLE `user_data_logs` CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT;
+
+
+CREATE TABLE `user_data_reviews` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `type` varchar(200) NOT NULL,
+  `type_id` int(11) NOT NULL,
+  `review_time` datetime NOT NULL,
+  `status` enum('Accept','Reject','Remark','Pending') NOT NULL DEFAULT 'Pending',
+  `remarks` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+ALTER TABLE `user_data_reviews` ADD PRIMARY KEY(`id`);
+
+ALTER TABLE `user_data_reviews` CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT;
+
+--------------------------------------------------------------------------
+
 ALTER TABLE `units` ADD `sub_title` TEXT NULL AFTER `title`;

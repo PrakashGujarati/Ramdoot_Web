@@ -8,6 +8,13 @@ use App\Models\Board;
 
 class MediumController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:view-medium', ['only' => ['index']]);
+        $this->middleware('permission:add-medium', ['only' => ['create','store']]);
+        $this->middleware('permission:edit-medium', ['only' => ['edit','update']]);
+        $this->middleware('permission:delete-medium', ['only' => ['distroy']]);
+    }
 	public function index()
     {
         $mediums_details = Medium::where('status','Active')->get();
