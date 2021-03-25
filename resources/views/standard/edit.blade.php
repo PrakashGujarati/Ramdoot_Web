@@ -120,6 +120,27 @@ $( document ).ready(function() {
     var board_id = $('.board_id').val();
     var medium_id = "{{ $standarddata->medium_id }}";
     getMediumEdit(board_id,medium_id);
+
+    $('#standard').autocomplete({
+        serviceUrl: '{{route("load_autocomplete.standard")}}',
+        onSelect: function (suggestion) {
+
+                $(this).val(suggestion.data);
+
+              //loadCustData(suggestion.data);
+        }
+    });
+    $('#section').autocomplete({
+        serviceUrl: '{{route("load_autocomplete.section")}}',
+        onSelect: function (suggestion) {
+
+                $(this).val(suggestion.data);
+
+              //loadCustData(suggestion.data);
+        }
+    });
+
+
 });   
 
 

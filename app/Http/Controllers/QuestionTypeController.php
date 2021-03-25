@@ -33,6 +33,8 @@ class QuestionTypeController extends Controller
         	$add = new QuestionType;
 	        $add->question_type = $request->question_type;
 	        $add->save();
+            storeLog('question_type',$add->id,date('Y-m-d H:i:s'),'create');
+            storeReview('question_type',$add->id,date('Y-m-d H:i:s'));
         }
         else{
 

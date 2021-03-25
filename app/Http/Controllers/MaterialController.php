@@ -103,7 +103,8 @@ class MaterialController extends Controller
         $add->question_type = $request->question_type;
         $add->level = $request->level;
         $add->save();
-
+        storeLog('material',$add->id,date('Y-m-d H:i:s'),'create');
+        storeReview('material',$add->id,date('Y-m-d H:i:s'));
         $material_details = Material::where('status','Active')->get();
         return view('material.dynamic_table',compact('material_details'));
         //return redirect()->route('material.index')->with('success', 'Material Added Successfully.');

@@ -226,6 +226,14 @@
 
 
     $( document ).ready(function() {
+
+        $('#sub_title').autocomplete({
+            serviceUrl: '{{route("load_autocomplete.note")}}',
+            onSelect: function (suggestion) {
+                $(this).val(suggestion.data);
+            }
+        });
+
         var board_id = $('.board_id').val();
         var standard_id = "{{ $bookdata->standard_id }}";
         var semester_id = "{{ $bookdata->semester_id }}";

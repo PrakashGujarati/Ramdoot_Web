@@ -216,6 +216,14 @@
 
 
     $( document ).ready(function() {
+
+        $('#sub_title').autocomplete({
+            serviceUrl: '{{route("load_autocomplete.worksheet")}}',
+            onSelect: function (suggestion) {
+                $(this).val(suggestion.data);
+            }
+        });
+
         var board_id = $('.board_id').val();
         var medium_id = "{{ $worksheetdata->medium_id }}";
         var standard_id = "{{ $worksheetdata->standard_id }}";

@@ -118,6 +118,9 @@ class BookController extends Controller
         $add->edition = $request->edition;
         $add->save();
 
+        storeLog('book',$add->id,date('Y-m-d H:i:s'),'create');
+        storeReview('book',$add->id,date('Y-m-d H:i:s'));
+
         $book_details = Book::where('status','Active')->get();
         return view('book.dynamic_table',compact('book_details'));
         //return redirect()->route('book.index')->with('success', 'Book Added Successfully.');
@@ -261,5 +264,22 @@ class BookController extends Controller
 
       imagejpeg($image, $destination, $quality);
 
+    }
+    public function load_autocomplete(request $request)
+    {
+        $response=[];
+        
+        // $lead_detail=Medicine::where('instruction_english', 'like', '%' . $request['query'] . '%')->where('instruction_english','!=',' ')->where('instruction_english','!=',null)->get();
+
+        $lead_detail=Book::where('sub_title', 'like', '%' . $request['query'] . '%')->get();
+        
+
+        if(count($lead_detail) > 0)
+        {
+            foreach ($lead_detail as $value) {
+                $response[] = array("value"=>$value->sub_title,"data"=>$value->sub_title);
+            }   
+        }
+        return json_encode(array("suggestions" => $response));
     }
 }

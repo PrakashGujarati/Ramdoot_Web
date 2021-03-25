@@ -64,6 +64,8 @@ class ExamQuestionController extends Controller
                 $add->exam_id = $request->exam_id;
                 $add->question_id = $value;
                 $add->save();
+                storeLog('exam_question',$add->id,date('Y-m-d H:i:s'),'create');
+                storeReview('exam_question',$add->id,date('Y-m-d H:i:s'));
             }    
         }
 

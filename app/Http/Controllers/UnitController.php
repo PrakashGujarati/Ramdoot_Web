@@ -115,7 +115,9 @@ class UnitController extends Controller
             $add->pages = isset($request->pages) ? $request->pages:'';
             $add->description = isset($request->description) ? $request->description:'';
             $add->save();
-                
+            
+            storeLog('unit',$add->id,date('Y-m-d H:i:s'),'create');
+            storeReview('unit',$add->id,date('Y-m-d H:i:s'));
 
            $unit_details = Unit::where('status','Active')->get();
            return view('unit.dynamic_table',compact('unit_details'));

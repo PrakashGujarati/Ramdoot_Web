@@ -24,6 +24,10 @@ class RoleController extends Controller
     	$add->name=$name;
     	$add->guard_name="web";
     	$add->save();
+
+        storeLog('role',$add->id,date('Y-m-d H:i:s'),'create');
+        storeReview('role',$add->id,date('Y-m-d H:i:s'));
+
         Session::flash('success','Role added successfully..');
     	return redirect()->route('role.index');
     }

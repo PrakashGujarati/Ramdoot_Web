@@ -79,7 +79,8 @@ class SliderController extends Controller
         $add->order = $request->order;
         $add->image = $new_name;
         $add->save();
-
+        storeLog('slider',$add->id,date('Y-m-d H:i:s'),'create');
+        storeReview('slider',$add->id,date('Y-m-d H:i:s'));
         return redirect()->route('slider.index')->with('success', 'Slide Added Successfully.');
     }
 

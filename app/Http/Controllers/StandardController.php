@@ -86,6 +86,9 @@ class StandardController extends Controller
         $add->thumbnail = $new_name;
         $add->save();
 
+        storeLog('standard',$add->id,date('Y-m-d H:i:s'),'create');
+        storeReview('standard',$add->id,date('Y-m-d H:i:s'));
+
         $standard_details = Standard::where('status','Active')->get();
         return view('standard.dynamic_table',compact('standard_details'));
         //return redirect()->route('standard.index')->with('success', 'Standard Added Successfully.');
@@ -220,6 +223,40 @@ class StandardController extends Controller
             }
         }
         return response()->json(['html'=>$result]);   
+    }
+    public function load_autocomplete(request $request)
+    {
+        $response=[];
+        
+        // $lead_detail=Medicine::where('instruction_english', 'like', '%' . $request['query'] . '%')->where('instruction_english','!=',' ')->where('instruction_english','!=',null)->get();
+
+        $lead_detail=Standard::where('standard', 'like', '%' . $request['query'] . '%')->get();
+        
+
+        if(count($lead_detail) > 0)
+        {
+            foreach ($lead_detail as $value) {
+                $response[] = array("value"=>$value->standard,"data"=>$value->standard);
+            }   
+        }
+        return json_encode(array("suggestions" => $response));
+    }
+    public function load_autocomplete_section(request $request)
+    {
+        $response=[];
+        
+        // $lead_detail=Medicine::where('instruction_english', 'like', '%' . $request['query'] . '%')->where('instruction_english','!=',' ')->where('instruction_english','!=',null)->get();
+
+        $lead_detail=Standard::where('section', 'like', '%' . $request['query'] . '%')->get();
+        
+
+        if(count($lead_detail) > 0)
+        {
+            foreach ($lead_detail as $value) {
+                $response[] = array("value"=>$value->section,"data"=>$value->section);
+            }   
+        }
+        return json_encode(array("suggestions" => $response));
     }
 }
 

@@ -91,6 +91,9 @@ class BoardController extends Controller
         //$add->url = $url_file;
         $add->thumbnail = $new_name;
         $add->save();
+        storeLog('board',$add->id,date('Y-m-d H:i:s'),'create');
+
+        storeReview('board',$add->id,date('Y-m-d H:i:s'));
 
         $boards_details = Board::where('status','Active')->get();
         return view('board.dynamic_table',compact('boards_details'));

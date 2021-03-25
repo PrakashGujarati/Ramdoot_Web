@@ -193,6 +193,14 @@
 <script type="text/javascript">
     
     $( document ).ready(function() {
+
+        $('#sub_title').autocomplete({
+            serviceUrl: '{{route("load_autocomplete.paper")}}',
+            onSelect: function (suggestion) {
+                $(this).val(suggestion.data);
+            }
+        });
+
         var board_id = $('.board_id').val();
         var medium_id = "{{ $paperdata->medium_id }}";
         var standard_id = "{{ $paperdata->standard_id }}";

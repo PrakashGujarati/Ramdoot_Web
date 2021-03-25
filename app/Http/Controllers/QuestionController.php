@@ -90,6 +90,9 @@ class QuestionController extends Controller
         $add->level = $request->level;
         $add->save();
 
+        storeLog('question',$add->id,date('Y-m-d H:i:s'),'create');
+        storeReview('question',$add->id,date('Y-m-d H:i:s'));
+
         $question_details = Question::where('status','Active')->get();
         return view('question.dynamic_table',compact('question_details'));
         // }
@@ -106,7 +109,7 @@ class QuestionController extends Controller
      */
     public function show(Question $question)
     {
-        //
+        //s
     }
 
     /**

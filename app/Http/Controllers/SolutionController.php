@@ -103,6 +103,8 @@ class SolutionController extends Controller
         $add->level = $request->level;
         $add->save();
 
+        storeLog('solution',$add->id,date('Y-m-d H:i:s'),'create');
+        storeReview('solution',$add->id,date('Y-m-d H:i:s'));
 
         $solution_details = Solution::where('status','Active')->get();
         return view('solution.dynamic_table',compact('solution_details'));
