@@ -17,6 +17,7 @@
                     <th>URL</th>
                     <th>Thumbnail</th>
                     <th>Pages</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -46,6 +47,7 @@
                             @endif
                         </td>
                         <td>{{ isset($data->pages) ? $data->pages:'' }}</td>
+                        <td><a href="javascript:;" data-id="{{ $data->id }}" class="mr-1 edit-btn"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a></td>
                     </tr>
                     @endforeach
                 @else

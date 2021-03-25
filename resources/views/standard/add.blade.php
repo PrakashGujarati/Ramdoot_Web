@@ -83,6 +83,7 @@
                             <label class="form-label">Thumbnail</label>
                             <div class="form-control-wrap">
                                 <input type="file" class="form-control" id="thumbnail" name="thumbnail" value="">
+                                <img id="thumbnail_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" width="100" />
                                 @error('thumbnail')
                                     <span class="text-danger" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -112,6 +113,27 @@
 @section('scripts')
 
 <script type="text/javascript">
+
+$(document).ready(function(){
+    $('#thumbnail_preview').css('display','none');
+});    
+
+function readThumbnail(input) {
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+    
+    reader.onload = function(e) {
+      $('#thumbnail_preview').attr('src', e.target.result);
+    }
+    
+    reader.readAsDataURL(input.files[0]); // convert to base64 string
+  }
+}
+
+$("#thumbnail").change(function() {
+    $('#thumbnail_preview').css('display','block');
+  readThumbnail(this);
+});    
 
 $(document).on('change','.board_id',function(){
     var board_id = $('.board_id').val();

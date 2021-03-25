@@ -2,7 +2,6 @@
 @section('title','Add Board')
 @section('css')
 @endsection
-
 @section('content')
 
 <div class="nk-block nk-block-lg">
@@ -38,7 +37,7 @@
                             </div>
                         </div>--}}
                         <div class="form-group">
-                            <label class="form-label">Abbreviation</label>
+                            <label class="form-label">Full form of Board/Organisation</label>
                             <div class="form-control-wrap">
                                 <input type="text" class="form-control" id="abbreviation" name="abbreviation" value="{{ old('abbreviation') }}">
                                 @error('abbreviation')
@@ -63,6 +62,7 @@
                             <label class="form-label">Thumbnail</label>
                             <div class="form-control-wrap">
                                 <input type="file" class="form-control" id="thumbnail" name="thumbnail" value="">
+                                <img id="thumbnail_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" width="100" />
                                 @error('thumbnail')
                                     <span class="text-danger" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -92,6 +92,28 @@
 @section('scripts')
 
 <script type="text/javascript">
+
+    $(document).ready(function(){
+        $('#thumbnail_preview').css('display','none');
+    });    
+
+    function readThumbnail(input) {
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        
+        reader.onload = function(e) {
+          $('#thumbnail_preview').attr('src', e.target.result);
+        }
+        
+        reader.readAsDataURL(input.files[0]); // convert to base64 string
+      }
+    }
+
+    $("#thumbnail").change(function() {
+        $('#thumbnail_preview').css('display','block');
+      readThumbnail(this);
+    });
+
     $(document).ready(function () {
     
     $('#board_form').validate({
@@ -128,12 +150,39 @@
                     
                     $('.dyamictable').empty();
                     $('.dyamictable').html(data);
+                    $(".datatable-init").DataTable();
                 }            
             });
         }
     });
-    
 });
+
+
+$(document).on('click','.edit-btn',function(){
+    $.ajax({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="token"]').attr('content')
+        },
+        url: "{{ route('board.edit') }}",
+        type: GET,
+        data: {
+        },
+        mimeType: "multipart/form-data",
+        contentType: false,
+        processData: false,
+        dataType: 'html',
+        success: function(data) {
+            $('#name').val(data);
+            $('#abbreviation').val('');
+            $('#thumbnail').val('');
+            
+            
+            // $('.dyamictable').empty();
+            // $('.dyamictable').html(data);
+        }            
+    });
+});
+    
 </script>
 
 @endsection

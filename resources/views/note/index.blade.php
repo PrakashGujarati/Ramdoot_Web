@@ -36,15 +36,15 @@
                         <th>Standard</th>
                         <th>Semester</th>
                         <th>Subject</th>
-                        <th>Unit</th>
+                        <!-- <th>Unit</th>
                         <th>Title</th>
                         <th>Sub Title</th>
                         <th>URL</th>
                         <th>Thumbnail</th>
                         <th>Pages</th>
                         <th>Label</th>
-                        <th>Release Date</th>
-                        <!-- <th>Action</th> -->
+                        <th>Release Date</th> -->
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -56,7 +56,7 @@
                         <td>{{ isset($data->standard->standard) ? $data->standard->standard:'' }}</td>
                         <td>{{ isset($data->semester->semester) ? $data->semester->semester:'' }}</td>
                         <td>{{ isset($data->subject->subject_name) ? $data->subject->subject_name:'' }}</td>
-                        <td>{{ isset($data->unit->title) ? $data->unit->title:'' }}</td>
+                        {{--<td>{{ isset($data->unit->title) ? $data->unit->title:'' }}</td>
                         <td>{{ $data->title }}</td>
                         <td>{{ $data->sub_title }}</td>
                         <td>
@@ -75,11 +75,12 @@
                         </td>
                         <td>{{ $data->pages }}</td>
                         <td>{{ $data->label }}</td>
-                        <td>{{ $data->release_date }}</td>
+                        <td>{{ $data->release_date }}</td>--}}
                         {{--<td>
                         	<a href="{{ route('note.edit',$data->id) }}"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
                         	<a href="javascript:;" data-url="{{ route('note.distroy',$data->id) }}" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a> 
                         </td>--}}
+                        <td><a href="javascript:;" data-url="" class=""><span class="nk-menu-icon text-primary"><em class="fa fa-plus pr-1"></em>Add</span></a></td>
                     </tr>
                     @endforeach
                     @else

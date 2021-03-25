@@ -36,11 +36,11 @@
                         <th>Standard</th>
                         <th>Semester</th>
                         <th>Subject</th>
-                        <th>Title</th>
+                        <!-- <th>Title</th>
                         <th>Sub Title</th>
                         <th>URL</th>
                         <th>Thumbnail</th>
-                        <th>Pages</th>
+                        <th>Pages</th> -->
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -53,7 +53,7 @@
                         <td>{{ isset($data->standard->standard) ? $data->standard->standard:'' }}</td>
                         <td>{{ isset($data->semester->semester) ? $data->semester->semester:'' }}</td>
                         <td>{{ isset($data->subject->subject_name) ? $data->subject->subject_name:'' }}</td>
-                        <td>{{ isset($data->title) ? $data->title:'' }}</td>
+                        {{--<td>{{ isset($data->title) ? $data->title:'' }}</td>
                         <td>{{ isset($data->description) ? $data->description:'' }}</td>
                         <td>
                             @if($data->url_type == 'file')
@@ -73,7 +73,8 @@
                         <td>
                         	<a href="{{ route('unit.edit',$data->id) }}" class="mr-1"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
                         	<a href="javascript:;" data-url="{{ route('unit.distroy',$data->id) }}" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a>
-                        </td>
+                        </td>--}}
+                        <td><a href="javascript:;" data-url="" class=""><span class="nk-menu-icon text-primary"><em class="fa fa-plus pr-1"></em>Add</span></a></td>
                     </tr>
                     @endforeach
                     @else

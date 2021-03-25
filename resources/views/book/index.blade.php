@@ -75,11 +75,12 @@
                         </td>
                         <td>{{ $data->pages }}</td>
                         <td>{{ $data->label }}</td>
-                        <td>{{ $data->release_date }}</td>--}}
+                        <td>{{ $data->release_date }}</td>
                         <td>
                         	<a href="{{ route('book.edit',$data->id) }}" class="mr-1"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
                         	<a href="javascript:;" data-url="{{ route('book.distroy',$data->id) }}" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a>
-                        </td>
+                        </td>--}}
+                        <td><a href="javascript:;" data-url="" class=""><span class="nk-menu-icon text-primary"><em class="fa fa-plus pr-1"></em>Add</span></a></td>
                     </tr>
                     @endforeach
                     @else

@@ -35,7 +35,7 @@
                             @canany(['view-board'])
 
                             <li class="nk-menu-item @if(\Request::route()->getName() == 'board.index' || \Request::route()->getName() == 'board.create' || \Request::route()->getName() == 'board.edit') active @endif">
-                                <a href="{{ route('board.index') }}" class="nk-menu-link">
+                                <a href="{{ route('board.create') }}" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
                                     <span class="nk-menu-text">Board / Organisation</span>
                                 </a>
@@ -44,7 +44,7 @@
 
                             @canany(['view-medium'])
                             <li class="nk-menu-item @if(\Request::route()->getName() == 'medium.index' || \Request::route()->getName() == 'medium.create' || \Request::route()->getName() == 'medium.edit') active @endif">
-                                <a href="{{ route('medium.index') }}" class="nk-menu-link">
+                                <a href="{{ route('medium.create') }}" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
                                     <span class="nk-menu-text">Medium</span>
                                 </a>
@@ -52,7 +52,7 @@
                             @endcanany
                             @canany(['view-standard'])
                             <li class="nk-menu-item @if(\Request::route()->getName() == 'standard.index' || \Request::route()->getName() == 'standard.create' || \Request::route()->getName() == 'standard.edit') active @endif">
-                                <a href="{{ route('standard.index') }}" class="nk-menu-link">
+                                <a href="{{ route('standard.create') }}" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
                                     <span class="nk-menu-text">Standard / Class</span>
                                 </a>
@@ -60,7 +60,7 @@
                             @endcanany
                             @canany(['view-semester'])
                             <li class="nk-menu-item @if(\Request::route()->getName() == 'semester.index' || \Request::route()->getName() == 'semester.create' || \Request::route()->getName() == 'semester.edit') active @endif">
-                                <a href="{{ route('semester.index') }}" class="nk-menu-link">
+                                <a href="{{ route('semester.create') }}" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
                                     <span class="nk-menu-text">Semester</span>
                                 </a>
@@ -81,7 +81,7 @@
                         <ul class="nk-menu-sub">
                         @canany(['view-subject'])
                             <li class="nk-menu-item @if(\Request::route()->getName() == 'subject.index' || \Request::route()->getName() == 'subject.create' || \Request::route()->getName() == 'subject.edit') active @endif">
-                            <a href="{{ route('subject.index') }}" class="nk-menu-link">
+                            <a href="{{ route('subject.create') }}" class="nk-menu-link">
                                 <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
                                 <span class="nk-menu-text">Subject</span>
                             </a>
