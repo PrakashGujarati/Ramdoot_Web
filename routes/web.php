@@ -46,7 +46,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('/board', [BoardController::class, 'index'])->name('board.index');
 	Route::get('board/create', [BoardController::class, 'create'])->name('board.create');
 	Route::post('board/store', [BoardController::class, 'store'])->name('board.store');
-	Route::get('board/{id}/edit', [BoardController::class, 'edit'])->name('board.edit');
+	Route::get('board/edit', [BoardController::class, 'edit'])->name('board.edit');
 	Route::post('board/{id}/update', [BoardController::class, 'update'])->name('board.update');
 	Route::get('board/{id}/delete', [BoardController::class, 'distroy'])->name('board.distroy');
 

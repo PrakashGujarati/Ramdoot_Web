@@ -132,6 +132,7 @@
                                 </div>
                                 <div class="form-control-wrap">
                                     <input type="file" class="form-control" id="url" name="url" value="">
+                                    <img id="url_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" width="100" />
                                     @error('url')
                                         <span class="text-danger" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -143,6 +144,7 @@
                                 <label class="form-label">Thumbnail</label>
                                 <div class="form-control-wrap">
                                     <input type="file" class="form-control" id="thumbnail" name="thumbnail" value="">
+                                    <img id="thumbnail_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" width="100" />
                                     @error('thumbnail')
                                         <span class="text-danger" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -198,6 +200,46 @@
 @section('scripts')
 
 <script type="text/javascript">
+
+$(document).ready(function(){
+    $('#thumbnail_preview').css('display','none');
+    $('#url_preview').css('display','none');
+});    
+
+function readThumbnail(input) {
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+    
+    reader.onload = function(e) {
+      $('#thumbnail_preview').attr('src', e.target.result);
+    }
+    
+    reader.readAsDataURL(input.files[0]); // convert to base64 string
+  }
+}
+
+$("#thumbnail").change(function() {
+    $('#thumbnail_preview').css('display','block');
+  readThumbnail(this);
+});
+
+
+function readURL(input) {
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+    
+    reader.onload = function(e) {
+      $('#url_preview').attr('src', e.target.result);
+    }
+    
+    reader.readAsDataURL(input.files[0]); // convert to base64 string
+  }
+}
+
+$("#url").change(function() {
+    $('#url_preview').css('display','block');
+  readURL(this);
+});
 
 $(document).on('change','.board_id',function(){
     var board_id = $('.board_id').val();
@@ -294,10 +336,13 @@ $(document).on('change','.urlchk',function(){
     if($(this).prop("checked") == true){
         $("#url").attr('type', 'text');
         $('#url_type').val('text');
+        $('#url').val('');
+        $('#url_preview').css('display','none');
     }
     else if($(this).prop("checked") == false){
         $("#url").attr('type', 'file');
         $('#url_type').val('file');
+        $('#url').val('');
     }
 });
 

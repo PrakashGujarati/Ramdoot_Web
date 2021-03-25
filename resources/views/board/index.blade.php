@@ -70,7 +70,7 @@
 @section('scripts')
 
 <script type="text/javascript">
-	$('.distroy').on('click', function() {
+	$(document).on('click','.distroy', function() {
 	    let del_url = $(this).attr('data-url');
 	    bootbox.confirm({
 	        message: "Are you sure to delete this board ?",
