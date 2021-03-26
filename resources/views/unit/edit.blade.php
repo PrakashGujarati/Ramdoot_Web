@@ -200,6 +200,21 @@
 <script type="text/javascript">
 
 $( document ).ready(function() {
+
+    $('#title').autocomplete({
+        serviceUrl: '{{route("load_autocomplete.unit")}}',
+        onSelect: function (suggestion) {
+
+                $(this).val(suggestion.data);
+        }
+    });
+    $('#description').autocomplete({
+        serviceUrl: '{{route("load_autocomplete.unit_sub_title")}}',
+        onSelect: function (suggestion) {
+            $(this).val(suggestion.data);
+        }
+    });
+
     var board_id = $('.board_id').val();
     var medium_id = "{{ $unitdata->medium_id }}";
     var standard_id = "{{ $unitdata->standard_id }}";

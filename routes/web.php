@@ -273,8 +273,36 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('load_autocomplete/medium',[MediumController::class,'load_autocomplete'])->name('load_autocomplete.medium');
 	Route::get('load_autocomplete/standard',[StandardController::class,'load_autocomplete'])->name('load_autocomplete.standard');
 	Route::get('load_autocomplete/section',[StandardController::class,'load_autocomplete_section'])->name('load_autocomplete.section');
+
 	Route::get('load_autocomplete/book',[BookController::class,'load_autocomplete'])->name('load_autocomplete.book');
+	Route::get('load_autocomplete/book_title',[BookController::class,'load_autocomplete_title'])->name('load_autocomplete.book_title');
+
+
+
 	Route::get('load_autocomplete/worksheet',[WorksheetController::class,'load_autocomplete'])->name('load_autocomplete.worksheet');
+	Route::get('load_autocomplete/worksheet_title',[WorksheetController::class,'load_autocomplete_title'])->name('load_autocomplete.worksheet_title');
+
+
 	Route::get('load_autocomplete/paper',[PaperController::class,'load_autocomplete'])->name('load_autocomplete.paper');
+	Route::get('load_autocomplete/paper_title',[PaperController::class,'load_autocomplete_title'])->name('load_autocomplete.paper_title');
+
+
 	Route::get('load_autocomplete/note',[NoteController::class,'load_autocomplete'])->name('load_autocomplete.note');
+	Route::get('load_autocomplete/note_title',[NoteController::class,'load_autocomplete_title'])->name('load_autocomplete.note_title');
+	
+
+	Route::get('load_autocomplete/subject',[SubjectController::class,'load_autocomplete'])->name('load_autocomplete.subject');
+
+	Route::get('load_autocomplete/subject_sub_title',[SubjectController::class,'load_autocomplete_sub_title'])->name('load_autocomplete.subject_sub_title');
+
+	Route::get('load_autocomplete/unit',[UnitController::class,'load_autocomplete'])->name('load_autocomplete.unit');
+
+	Route::get('load_autocomplete/unit_sub_title',[UnitController::class,'load_autocomplete_sub_title'])->name('load_autocomplete.unit_sub_title');
+
+	
+	Route::get('load_autocomplete/video',[VideosController::class,'load_autocomplete'])->name('load_autocomplete.video');
+
+	Route::get('load_autocomplete/video_sub_title',[VideosController::class,'load_autocomplete_sub_title'])->name('load_autocomplete.video_sub_title');	
+
+	
 });	

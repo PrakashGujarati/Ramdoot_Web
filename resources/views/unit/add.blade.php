@@ -202,6 +202,22 @@
 <script type="text/javascript">
 
 $(document).ready(function(){
+
+    $('#title').autocomplete({
+        serviceUrl: '{{route("load_autocomplete.unit")}}',
+        onSelect: function (suggestion) {
+
+                $(this).val(suggestion.data);
+        }
+    });
+    $('#description').autocomplete({
+        serviceUrl: '{{route("load_autocomplete.unit_sub_title")}}',
+        onSelect: function (suggestion) {
+            $(this).val(suggestion.data);
+        }
+    });
+
+
     $('#thumbnail_preview').css('display','none');
     $('#url_preview').css('display','none');
 });    

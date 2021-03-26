@@ -281,6 +281,12 @@ $(document).ready(function(){
             $(this).val(suggestion.data);
         }
     });
+    $('#title').autocomplete({
+        serviceUrl: '{{route("load_autocomplete.worksheet_title")}}',
+        onSelect: function (suggestion) {
+            $(this).val(suggestion.data);
+        }
+    });
 
     $('#thumbnail_preview').css('display','none');
     $('#url_preview').css('display','none');

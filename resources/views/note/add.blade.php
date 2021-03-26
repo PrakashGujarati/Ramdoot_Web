@@ -283,6 +283,13 @@
 
 $(document).ready(function(){
 
+    $('#title').autocomplete({
+            serviceUrl: '{{route("load_autocomplete.note_title")}}',
+            onSelect: function (suggestion) {
+                $(this).val(suggestion.data);
+            }
+        });
+
     $('#sub_title').autocomplete({
         serviceUrl: '{{route("load_autocomplete.note")}}',
         onSelect: function (suggestion) {

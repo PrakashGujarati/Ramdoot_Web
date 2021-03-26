@@ -158,6 +158,22 @@
 <script type="text/javascript">
 
 $( document ).ready(function() {
+
+    $('#subject_name').autocomplete({
+        serviceUrl: '{{route("load_autocomplete.subject")}}',
+        onSelect: function (suggestion) {
+
+                $(this).val(suggestion.data);
+        }
+    });
+    $('#sub_title').autocomplete({
+        serviceUrl: '{{route("load_autocomplete.subject_sub_title")}}',
+        onSelect: function (suggestion) {
+            $(this).val(suggestion.data);
+        }
+    });
+    
+
     var board_id = $('.board_id').val();
     var medium_id = "{{ $subjectdata->medium_id }}";
     var standard_id = "{{ $subjectdata->standard_id }}";

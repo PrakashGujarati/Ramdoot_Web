@@ -200,6 +200,12 @@
                 $(this).val(suggestion.data);
             }
         });
+        $('#title').autocomplete({
+            serviceUrl: '{{route("load_autocomplete.paper_title")}}',
+            onSelect: function (suggestion) {
+                $(this).val(suggestion.data);
+            }
+        });
 
         var board_id = $('.board_id').val();
         var medium_id = "{{ $paperdata->medium_id }}";
