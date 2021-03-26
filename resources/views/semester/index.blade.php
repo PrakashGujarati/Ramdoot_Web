@@ -47,8 +47,8 @@
                         <td>{{ isset($data->standard->standard) ? $data->standard->standard:'' }}</td>
                         <td>{{ $data->semester }}</td>
                         <td>
-                        	<a href="{{ route('semester.edit',$data->id) }}" class="mr-1"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
-                        	<a href="javascript:;" data-url="{{ route('semester.distroy',$data->id) }}" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a>
+                        	<a href="" class="mr-1"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
+                        	<a href="javascript:;" data-url="" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a>
                         </td>
                     </tr>
                     @endforeach

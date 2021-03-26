@@ -25,7 +25,7 @@ class MaterialController extends Controller
     }
     public function index()
     {
-        $material_details = Material::where('status','Active')->get();
+        $material_details = Material::where('status','Active')->groupBy('subject_id')->get();
         return view('material.index',compact('material_details'));
     }
 

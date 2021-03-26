@@ -15,13 +15,13 @@
                     </div>
                     <form action="{{ route('medium.store') }}" method="POST" enctype='multipart/form-data' id="medium_form">
                     @csrf
-
+                        <input type="hidden" name="hidden_id" class="hidden_id" id="hidden_id" value="0">
                         <div class="row">
                             <div class="form-group col-lg-6">
                                 <label class="form-label">Board</label>
                                 <div class="form-control-wrap">
                                     <select name="board_id" class="form-control board_id" id="board_id">
-                                        <option>--Select Board--</option>
+                                        <option value="">--Select Board--</option>
                                         @foreach($boards as $boards_data)
                                         <option value="{{ $boards_data->id }}" @if(old('board_id') == $boards_data->id) selected="" @endif>{{ $boards_data->name }}</option>
                                         @endforeach
@@ -51,7 +51,7 @@
 
                         <div class="form-group">
                             <button type="submit" class="btn btn-lg btn-primary">Submit</button>
-                            <a type="button" href="{{ route('medium.index') }}" class="btn btn-lg btn-danger text-light">Cancel</a>
+                            <a type="button" href="{{ route('medium.create') }}" class="btn btn-lg btn-danger text-light">Cancel</a>
                         </div>
                     </form>
                 </div>
@@ -93,17 +93,18 @@
                 url: form.action,
                 type: form.method,
                 data: formData,//$(form).serialize(),
-                mimeType: "multipart/form-data",
                 contentType: false,
                 processData: false,
-                dataType: 'html',
                 success: function(data) {
-                    confirm("Medium Added Successfully.");
+                    confirm(data.message);
                     $('#medium_name').val('');
-                    
+                    $('#board_id').val('');
+                    $('#hidden_id').val('0');
+                        
                     
                     $('.dyamictable').empty();
-                    $('.dyamictable').html(data);
+                    $('.dyamictable').html(data.html);
+                    $(".datatable-init").DataTable();
                 }            
             });
         }
@@ -111,6 +112,66 @@
     
 });
 
+$(document).on('click','.edit-btn',function(){
+    var id = $(this).attr('data-id');
+    $.ajax({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="token"]').attr('content')
+        },
+        url: "{{ route('medium.edit') }}",
+        type: 'GET',
+        data: {
+              'id':id
+        },
+        success: function(result) {
+            $('#medium_name').val(result.medium_name);
+            $('#board_id').val(result.board_id);
+            $('#hidden_id').val(result.id);
+            
+            
+            // $('.dyamictable').empty();
+            // $('.dyamictable').html(data);
+        }            
+    });
+});
+
+$(document).on('click','.distroy', function() {
+        var id = $(this).attr('data-id');
+        bootbox.confirm({
+            message: "Are you sure to delete this medium ?",
+            buttons: {
+                confirm: {
+                    label: 'Yes',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn-danger'
+                }
+            },
+            callback: function(result) {
+                if(result){
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="token"]').attr('content')
+                        },
+                        url: "{{ route('medium.distroy') }}",
+                        type: "GET",
+                        data: {
+                            'id':id,
+                        },
+                        success: function(data) {
+                            confirm("Medium Deleted Successfully.");
+                            
+                            $('.dyamictable').empty();
+                            $('.dyamictable').html(data);
+                            $(".datatable-init").DataTable();
+                        }            
+                    });
+                }
+            }
+        });
+    })
 
 </script>
 

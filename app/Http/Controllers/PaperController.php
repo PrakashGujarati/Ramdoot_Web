@@ -24,7 +24,7 @@ class PaperController extends Controller
     }
     public function index()
     {
-        $paper_details = Paper::where('status','Active')->get();
+        $paper_details = Paper::where('status','Active')->groupBy('subject_id')->get();
         return view('paper.index',compact('paper_details'));
     }
 

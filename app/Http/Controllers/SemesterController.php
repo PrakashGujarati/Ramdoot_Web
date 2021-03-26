@@ -124,13 +124,15 @@ class SemesterController extends Controller
      * @param  \App\Models\semester  $semester
      * @return \Illuminate\Http\Response
      */
-    public function distroy(Semester $semester,$id)
+    public function distroy(Request $request)
     {
-        $delete = Semester::find($id);
+        $delete = Semester::find($request->id);
         $delete->status = "Deleted";
         $delete->save();
 
-        return redirect()->route('semester.index')->with('success', 'Semester Deleted Successfully.');
+        $semester_details = Semester::where('status','Active')->get();
+        return view('semester.dynamic_table',compact('semester_details'));
+        //return redirect()->route('semester.index')->with('success', 'Semester Deleted Successfully.');
     }
 
     function compressImage($source, $destination, $quality) {

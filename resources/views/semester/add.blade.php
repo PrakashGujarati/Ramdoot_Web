@@ -15,6 +15,7 @@
                     </div>
                     <form action="{{ route('semester.store') }}" method="POST" enctype='multipart/form-data' id="semester_form">
                     @csrf
+                        <input type="hidden" name="hidden_id" class="hidden_id" id="hidden_id" value="0">
                         <div class="row">
                             <div class="form-group col-lg-6">
                                 <label class="form-label">Board</label>
@@ -182,6 +183,63 @@ $(document).ready(function () {
     });
     
 });
+
+$(document).on('click','.edit-btn',function(){
+    var id = $(this).attr('data-id');
+    $.ajax({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="token"]').attr('content')
+        },
+        url: "{{ route('medium.edit') }}",
+        type: 'GET',
+        data: {
+              'id':id
+        },
+        success: function(result) {
+            $('#medium_name').val(result.medium_name);
+            $('#board_id').val(result.board_id);
+            $('#hidden_id').val(result.id);
+        }            
+    });
+});
+
+$('.distroy').on('click', function() {
+    var id = $(this).attr('data-id');
+    bootbox.confirm({
+        message: "Are you sure to delete this semester ?",
+        buttons: {
+            confirm: {
+                label: 'Yes',
+                className: 'btn-success'
+            },
+            cancel: {
+                label: 'No',
+                className: 'btn-danger'
+            }
+        },
+        callback: function(result) {
+            if(result){
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="token"]').attr('content')
+                    },
+                    url: "{{ route('semester.distroy') }}",
+                    type: "GET",
+                    data: {
+                        'id':id,
+                    },
+                    success: function(data) {
+                        confirm("Semester Deleted Successfully.");
+                        
+                        $('.dyamictable').empty();
+                        $('.dyamictable').html(data);
+                        $(".datatable-init").DataTable();
+                    }            
+                });
+            }
+        }
+    });
+})
 
 </script>
 

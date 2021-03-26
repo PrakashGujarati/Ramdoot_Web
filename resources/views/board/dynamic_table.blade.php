@@ -4,7 +4,7 @@
             <h5 class="card-title">Board List</h5>
         </div>
         <div class="" style="width: 100%;overflow-x: auto;">
-        <table class="datatable-init table">
+        <table class="table datatable-init">
             <thead>
                 <tr>
                     <th>Name</th>
@@ -29,7 +29,7 @@
                         <td>
                             <a href="javascript:;" data-url="" class=""><span class="nk-menu-icon info"><em class="icon ni ni-eye"></em></span></a>
                             <a href="javascript:;" data-id="{{ $data->id }}" class="mr-1 edit-btn"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
-                            <a href="javascript:;" data-url="{{ route('unit.distroy',$data->id) }}" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a>
+                            <a href="javascript:;" data-id="{{ $data->id }}" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a>
                         </td>
                         <td>
                             <a href="javascript:;" data-url="" class=""><span class="nk-menu-icon info"><em class="icon ni ni-arrow-up"></em></span></a>

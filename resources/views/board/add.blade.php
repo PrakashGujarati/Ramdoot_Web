@@ -1,6 +1,10 @@
 @extends('layouts.app')
 @section('title','Add Board')
 @section('css')
+
+
+
+
 @endsection
 @section('content')
 
@@ -14,6 +18,7 @@
                     </div>
                     <form action="{{ route('board.store') }}" method="POST" enctype='multipart/form-data' id="board_form">
                     @csrf
+                        <input type="hidden" name="hidden_id" class="hidden_id" id="hidden_id" value="0">
                         <div class="form-group">
                             <label class="form-label">Name</label>
                             <div class="form-control-wrap">
@@ -62,6 +67,7 @@
                             <label class="form-label">Thumbnail</label>
                             <div class="form-control-wrap">
                                 <input type="file" class="form-control" id="thumbnail" name="thumbnail" value="">
+                                <input type="hidden" id="hidden_thumbnail" name="hidden_thumbnail" value="">
                                 <img id="thumbnail_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" width="100" />
                                 @error('thumbnail')
                                     <span class="text-danger" role="alert">
@@ -73,7 +79,7 @@
                         
                         <div class="form-group">
                             <button type="submit" class="btn btn-lg btn-primary">Submit</button>
-                            <a type="button" href="{{ route('board.index') }}" class="btn btn-lg btn-danger text-light">Cancel</a>
+                            <a type="button" href="{{ route('board.create') }}" class="btn btn-lg btn-danger text-light">Cancel</a>
                         </div>
                     </form>
                 </div>
@@ -91,9 +97,12 @@
 
 @section('scripts')
 
+
 <script type="text/javascript">
 
     $(document).ready(function(){
+        //$('#example').DataTable();
+
         $('#thumbnail_preview').css('display','none');
     });    
 
@@ -137,19 +146,23 @@
                 url: form.action,
                 type: form.method,
                 data: formData,//$(form).serialize(),
-                mimeType: "multipart/form-data",
                 contentType: false,
                 processData: false,
-                dataType: 'html',
                 success: function(data) {
-                    confirm("Board Added Successfully.");
+                    
+                    confirm(data.message);
+                    
+                    
                     $('#name').val('');
                     $('#abbreviation').val('');
                     $('#thumbnail').val('');
+                    $('#hidden_thumbnail').val('');
+                    $('#hidden_id').val('0');
+                    $('#thumbnail_preview').css('display','none');
                     
                     
                     $('.dyamictable').empty();
-                    $('.dyamictable').html(data);
+                    $('.dyamictable').html(data.html);
                     $(".datatable-init").DataTable();
                 }            
             });
@@ -159,27 +172,69 @@
 
 
 $(document).on('click','.edit-btn',function(){
+    var id = $(this).attr('data-id');
     $.ajax({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="token"]').attr('content')
         },
         url: "{{ route('board.edit') }}",
-        type: GET,
+        type: 'GET',
         data: {
+              'id':id
         },
-        mimeType: "multipart/form-data",
-        contentType: false,
-        processData: false,
-        dataType: 'html',
-        success: function(data) {
-            $('#name').val(data);
-            $('#abbreviation').val('');
-            $('#thumbnail').val('');
+        success: function(result) {
+            $('#name').val(result.name);
+            $('#abbreviation').val(result.abbreviation);
+            $('#hidden_thumbnail').val(result.thumbnail);
+            $('#thumbnail_preview').css('display','block');
+            var url_path = "{{ env('APP_URL') }}"+"/upload/board/thumbnail/"+result.thumbnail;
+            $('#thumbnail_preview').attr('src', url_path);
+            $('#hidden_id').val(result.id);
+            //$('#thumbnail').val('');
             
             
             // $('.dyamictable').empty();
             // $('.dyamictable').html(data);
         }            
+    });
+});
+
+$(document).on('click','.distroy', function() {
+    var id = $(this).attr('data-id');
+    bootbox.confirm({
+        message: "Are you sure to delete this board ?",
+        buttons: {
+            confirm: {
+                label: 'Yes',
+                className: 'btn-success'
+            },
+            cancel: {
+                label: 'No',
+                className: 'btn-danger'
+            }
+        },
+        callback: function(result) {
+            if(result){
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="token"]').attr('content')
+                    },
+                    url: "{{ route('board.distroy') }}",
+                    type: "GET",
+                    data: {
+                        'id':id,
+                    },
+                    success: function(data) {
+                        confirm("Board Deleted Successfully.");
+                        
+                        $('.dyamictable').empty();
+                        $('.dyamictable').html(data);
+                        $(".datatable-init").DataTable();
+                    }            
+                });
+                //location.replace(del_url);
+            }
+        }
     });
 });
     

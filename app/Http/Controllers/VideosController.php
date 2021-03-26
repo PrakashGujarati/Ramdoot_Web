@@ -24,7 +24,7 @@ class VideosController extends Controller
     }
     public function index()
     {
-        $videos_details = Videos::where('status','Active')->get();
+        $videos_details = Videos::where('status','Active')->groupBy('subject_id')->get();
         return view('videos.index',compact('videos_details'));
     }
 

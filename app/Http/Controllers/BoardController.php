@@ -51,49 +51,86 @@ class BoardController extends Controller
             //'medium'  => 'required',
             'abbreviation' => 'required',
            // 'url'  => 'required',
-            'thumbnail'  => 'required',
+            //'thumbnail'  => 'required',
         ]);
 
-        $new_name='';
-        if($request->has('thumbnail'))
-        {
-        
-            $image = $request->file('thumbnail');
+        if($request->hidden_id != "0"){
 
-            $new_name = rand() . '.' . $image->getClientOriginalExtension();
+            $new_name='';
+            if($request->has('thumbnail'))
+            {
+            
+                $image = $request->file('thumbnail');
 
-            $valid_ext = array('png','jpeg','jpg');
+                $new_name = rand() . '.' . $image->getClientOriginalExtension();
 
-            // Location
-            $location = public_path('upload/board/thumbnail/').$new_name;
+                $valid_ext = array('png','jpeg','jpg');
 
-            $file_extension = pathinfo($location, PATHINFO_EXTENSION);
-            $file_extension = strtolower($file_extension);
+                // Location
+                $location = public_path('upload/board/thumbnail/').$new_name;
 
-            if(in_array($file_extension,$valid_ext)){
-                $this->compressImage($image->getPathName(),$location,60);
+                $file_extension = pathinfo($location, PATHINFO_EXTENSION);
+                $file_extension = strtolower($file_extension);
+
+                if(in_array($file_extension,$valid_ext)){
+                    $this->compressImage($image->getPathName(),$location,60);
+                }
             }
+            else{
+                $new_name = $request->hidden_thumbnail;
+            }
+
+            $update = Board::find($request->hidden_id);
+            $update->name = $request->name;
+            $update->abbreviation = $request->abbreviation;
+            $update->thumbnail = $new_name;
+            $update->save();
+
+            $msg = "Board Updated Successfully.";
+
+        }else{
+
+            $new_name='';
+            if($request->has('thumbnail'))
+            {
+            
+                $image = $request->file('thumbnail');
+
+                $new_name = rand() . '.' . $image->getClientOriginalExtension();
+
+                $valid_ext = array('png','jpeg','jpg');
+
+                // Location
+                $location = public_path('upload/board/thumbnail/').$new_name;
+
+                $file_extension = pathinfo($location, PATHINFO_EXTENSION);
+                $file_extension = strtolower($file_extension);
+
+                if(in_array($file_extension,$valid_ext)){
+                    $this->compressImage($image->getPathName(),$location,60);
+                }
+            }
+
+            $add = new Board;
+            $add->name = $request->name;
+            $add->abbreviation = $request->abbreviation;
+            $add->thumbnail = $new_name;
+            $add->save();
+
+            $msg = "Board Added Successfully.";
+
+
         }
 
-        // $url_file='';
-        // if($request->has('url'))
-        // {
-        //     $image = $request->file('url');
-        //     $url_file = time().'.'.$image->getClientOriginalExtension();
-        //     $destinationPath = public_path('upload/board/url/');
-        //     $image->move($destinationPath, $url_file);
-        // }
-
-        $add = new Board;
-        $add->name = $request->name;
-        //$add->medium = $request->medium;
-        $add->abbreviation = $request->abbreviation;
-        //$add->url = $url_file;
-        $add->thumbnail = $new_name;
-        $add->save();
+        
+        //$mediums_details = Medium::where('status','Active')->get();
+        //$html = view('medium.dynamic_table',compact('mediums_details'))->render();
+                
 
         $boards_details = Board::where('status','Active')->get();
-        return view('board.dynamic_table',compact('boards_details'));
+        $html = view('board.dynamic_table',compact('boards_details'))->render();//return view('board.dynamic_table',compact('boards_details'));
+        $data = ['html' => $html,'message' => $msg];
+        return response()->json($data);
         //return redirect()->route('board.index')->with('success', 'Board Added Successfully.');
     }
 
@@ -114,10 +151,12 @@ class BoardController extends Controller
      * @param  \App\Models\Board  $board
      * @return \Illuminate\Http\Response
      */
-    public function edit(Board $board,$id)
+    public function edit(Request $request)
     {
-        $boarddata = Board::where('id',$id)->first();
-        return view('board.edit',compact('boarddata'));
+        $boarddata = Board::where('id',$request->id)->first();
+        return $boarddata;
+     //   return response()->json(['data'=> $boarddata]);
+        //return view('board.edit',compact('boarddata'));
     }
 
     /**
@@ -191,13 +230,16 @@ class BoardController extends Controller
      * @param  \App\Models\Board  $board
      * @return \Illuminate\Http\Response
      */
-    public function distroy(Board $board,$id)
+    public function distroy(Request $request)
     {
-        $delete = Board::find($id);
+        $delete = Board::find($request->id);
         $delete->status = "Deleted";
         $delete->save();
 
-        return redirect()->route('board.index')->with('success', 'Board Deleted Successfully.');
+        $boards_details = Board::where('status','Active')->get();
+        return view('board.dynamic_table',compact('boards_details'));
+
+        //return redirect()->route('board.index')->with('success', 'Board Deleted Successfully.');
     }
 
     function compressImage($source, $destination, $quality) {

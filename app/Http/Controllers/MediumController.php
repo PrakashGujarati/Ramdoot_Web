@@ -47,14 +47,29 @@ class MediumController extends Controller
         ]);
 //        Medium
 
-        $add = new Medium;
-        $add->board_id = $request->board_id;
-        $add->medium_name = $request->medium_name;
-        $add->save();
-        
+        if($request->hidden_id != "0"){
+            $add = Medium::find($request->hidden_id);
+            $add->board_id = $request->board_id;
+            $add->medium_name = $request->medium_name;
+            $add->save();
 
-        $mediums_details = Medium::where('status','Active')->get();
-        return view('medium.dynamic_table',compact('mediums_details'));
+            $mediums_details = Medium::where('status','Active')->get();
+            $html = view('medium.dynamic_table',compact('mediums_details'))->render();
+            $data = ['html' => $html,'message' => 'Medium Update Successfully.'];
+
+        }else{
+            $add = new Medium;
+            $add->board_id = $request->board_id;
+            $add->medium_name = $request->medium_name;
+            $add->save();
+
+            $mediums_details = Medium::where('status','Active')->get();
+            $html = view('medium.dynamic_table',compact('mediums_details'))->render();
+            $data = ['html' => $html,'message' => 'Medium Added Successfully.'];
+        }
+  
+        return response()->json($data);  
+        //return view('medium.dynamic_table',compact('mediums_details'));
         //return redirect()->route('medium.index')->with('success', 'Medium Added Successfully.');
     }
 
@@ -75,12 +90,13 @@ class MediumController extends Controller
      * @param  \App\Models\exam_question  $exam_question
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        $boards = Board::where('status','Active')->get();
-        $mediumdata = Medium::where('id',$id)->first();
-
-        return view('medium.edit',compact('boards','mediumdata'));
+        //$boards = Board::where('status','Active')->get();
+        $mediumdata = Medium::where('id',$request->id)->first();
+        //$data = ['boards' => $boards,'mediumdata' => $mediumdata];
+        return $mediumdata;
+        //return view('medium.edit',compact('boards','mediumdata'));
     }
 
     /**
@@ -112,13 +128,15 @@ class MediumController extends Controller
      * @param  \App\Models\exam_question  $exam_question
      * @return \Illuminate\Http\Response
      */
-    public function distroy($id)
+    public function distroy(Request $request)
     {
-        $delete = Medium::find($id);
+        $delete = Medium::find($request->id);
         $delete->status = "Deleted";
         $delete->save();
 
-        return redirect()->route('medium.index')->with('success', 'Medium Deleted Successfully.');
+        $mediums_details = Medium::where('status','Active')->get();
+        return view('medium.dynamic_table',compact('mediums_details'));
+        //return redirect()->route('medium.index')->with('success', 'Medium Deleted Successfully.');
     }    
 
 

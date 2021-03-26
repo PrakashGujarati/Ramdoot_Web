@@ -25,7 +25,7 @@ class UnitController extends Controller
     }
     public function index()
     {
-        $unit_details = Unit::where('status','Active')->get();
+        $unit_details = Unit::where('status','Active')->groupBy('subject_id')->get();
         return view('unit.index',compact('unit_details'));
     }
 

@@ -24,7 +24,7 @@ class WorksheetController extends Controller
     }
     public function index()
     {
-        $worksheet_details = Worksheet::where('status','Active')->get();
+        $worksheet_details = Worksheet::where('status','Active')->groupBy('subject_id')->get();
         return view('worksheet.index',compact('worksheet_details'));
     }
 

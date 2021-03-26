@@ -25,7 +25,7 @@ class SolutionController extends Controller
     }
     public function index()
     {
-        $solution_details = Solution::where('status','Active')->get();
+        $solution_details = Solution::where('status','Active')->groupBy('subject_id')->get();
         return view('solution.index',compact('solution_details'));
     }
 

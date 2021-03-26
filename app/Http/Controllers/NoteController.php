@@ -18,7 +18,7 @@ class NoteController extends Controller
     }
     public function index()
     {
-        $note_details = Note::where('status','Active')->get();
+        $note_details = Note::where('status','Active')->groupBy('subject_id')->get();
         return view('note.index',compact('note_details'));
     }
 

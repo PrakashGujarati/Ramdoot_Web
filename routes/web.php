@@ -51,7 +51,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::post('board/store', [BoardController::class, 'store'])->name('board.store');
 	Route::get('board/edit', [BoardController::class, 'edit'])->name('board.edit');
 	Route::post('board/{id}/update', [BoardController::class, 'update'])->name('board.update');
-	Route::get('board/{id}/delete', [BoardController::class, 'distroy'])->name('board.distroy');
+	Route::get('board/delete', [BoardController::class, 'distroy'])->name('board.distroy');
 
 	/*Standard*/
 	Route::get('standard', [StandardController::class, 'index'])->name('standard.index');
@@ -85,9 +85,9 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('medium', [MediumController::class, 'index'])->name('medium.index');
 	Route::get('medium/create', [MediumController::class, 'create'])->name('medium.create');
 	Route::post('medium/store', [MediumController::class, 'store'])->name('medium.store');
-	Route::get('medium/{id}/edit', [MediumController::class, 'edit'])->name('medium.edit');
+	Route::get('medium/edit', [MediumController::class, 'edit'])->name('medium.edit');
 	Route::post('medium/{id}/update', [MediumController::class, 'update'])->name('medium.update');
-	Route::get('medium/{id}/delete', [MediumController::class, 'distroy'])->name('medium.distroy');
+	Route::get('medium/delete', [MediumController::class, 'distroy'])->name('medium.distroy');
 
 	Route::get('get_medium', [MediumController::class, 'getMedium'])->name('get.medium');
 	/* */
@@ -103,9 +103,9 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('semester', [SemesterController::class, 'index'])->name('semester.index');
 	Route::get('semester/create', [SemesterController::class, 'create'])->name('semester.create');
 	Route::post('semester/store', [SemesterController::class, 'store'])->name('semester.store');
-	Route::get('semester/{id}/edit', [SemesterController::class, 'edit'])->name('semester.edit');
+	Route::get('semester/edit', [SemesterController::class, 'edit'])->name('semester.edit');
 	Route::post('semester/{id}/update', [SemesterController::class, 'update'])->name('semester.update');
-	Route::get('semester/{id}/delete', [SemesterController::class, 'distroy'])->name('semester.distroy');
+	Route::get('semester/delete', [SemesterController::class, 'distroy'])->name('semester.distroy');
 
 	Route::get('get_semester', [SemesterController::class, 'getSemester'])->name('get.semester');
 	Route::get('get_semester_unit', [SemesterController::class, 'getSemesterUnit'])->name('get.semester.unit');
