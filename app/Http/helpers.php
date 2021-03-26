@@ -15,7 +15,7 @@ function storeLog($type,$type_id,$upload_time,$operation)
     $add->operation=$operation;
     $add->save();
 }
-function storeReview($type,$type_id,$review_time,$status,$remarks)
+function storeReview($type,$type_id,$review_time,$status="Pending")
 {
     $add=new UserDataReview;
     $add->user_id=Auth::user()->id;
@@ -23,6 +23,5 @@ function storeReview($type,$type_id,$review_time,$status,$remarks)
     $add->type_id=$type_id;
     $add->review_time=$review_time;
     $add->status=$status;
-    $add->remarks=$remarks;
     $add->save();   
 }

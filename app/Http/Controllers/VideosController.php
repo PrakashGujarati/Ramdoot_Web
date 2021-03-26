@@ -121,6 +121,8 @@ class VideosController extends Controller
         $add->edition = $request->edition;
         $add->save();
 
+        storeLog('video',$add->id,date('Y-m-d H:i:s'),'create');
+        storeReview('video',$add->id,date('Y-m-d H:i:s'));
 
         $videos_details = Videos::where('status','Active')->get();
         return view('videos.dynamic_table',compact('videos_details'));

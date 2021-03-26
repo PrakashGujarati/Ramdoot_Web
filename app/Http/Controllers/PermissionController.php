@@ -26,6 +26,10 @@ class PermissionController extends Controller
     	$add=new Permission;
     	$add->name=$name;
     	$add->save();
+
+        storeLog('permission',$add->id,date('Y-m-d H:i:s'),'create');
+        storeReview('permission',$add->id,date('Y-m-d H:i:s'));
+
         Session::flash('success','Permission added successfully..');
     	return redirect()->route('permission.index');
     }

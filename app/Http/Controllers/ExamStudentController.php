@@ -78,6 +78,8 @@ class ExamStudentController extends Controller
         $add->node_number = isset($request->node_number) ? $request->node_number:null;
         $add->is_attend = isset($request->is_attend) ? $request->is_attend:0;
         $add->save();
+        storeLog('exam_student',$add->id,date('Y-m-d H:i:s'),'create');
+        storeReview('exam_student',$add->id,date('Y-m-d H:i:s'));
 
         return redirect()->route('exam_student.index')->with('success', 'Student Added Successfully.');
     }

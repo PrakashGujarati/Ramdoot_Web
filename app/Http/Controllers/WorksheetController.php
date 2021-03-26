@@ -98,6 +98,8 @@ class WorksheetController extends Controller
         $add->pages = isset($request->pages) ? $request->pages:'';
         $add->save();
 
+        storeLog('worksheet',$add->id,date('Y-m-d H:i:s'),'create');
+        storeReview('worksheet',$add->id,date('Y-m-d H:i:s'));
 
         $worksheet_details = Worksheet::where('status','Active')->get();
         return view('worksheet.dynamic_table',compact('worksheet_details'));
@@ -206,5 +208,22 @@ class WorksheetController extends Controller
         $image = imagecreatefrompng($source);
 
       imagejpeg($image, $destination, $quality);
+    }
+    public function load_autocomplete(request $request)
+    {
+        $response=[];
+        
+        // $lead_detail=Medicine::where('instruction_english', 'like', '%' . $request['query'] . '%')->where('instruction_english','!=',' ')->where('instruction_english','!=',null)->get();
+
+        $lead_detail=Worksheet::where('sub_title', 'like', '%' . $request['query'] . '%')->get();
+        
+
+        if(count($lead_detail) > 0)
+        {
+            foreach ($lead_detail as $value) {
+                $response[] = array("value"=>$value->sub_title,"data"=>$value->sub_title);
+            }   
+        }
+        return json_encode(array("suggestions" => $response));
     }
 }

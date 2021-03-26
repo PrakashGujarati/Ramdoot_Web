@@ -86,7 +86,8 @@ class ExamController extends Controller
         $add->instant_result = isset($request->instant_result) ? $request->instant_result:0;
         $add->is_minus_system = isset($request->is_minus_system) ? $request->is_minus_system:0;
         $add->save();
-
+        storeLog('exam',$add->id,date('Y-m-d H:i:s'),'create');
+        storeReview('exam',$add->id,date('Y-m-d H:i:s'));
         return redirect()->route('exam.index')->with('success', 'Exam Added Successfully.');
     }
 

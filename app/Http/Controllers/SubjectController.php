@@ -102,6 +102,9 @@ class SubjectController extends Controller
         $add->thumbnail = $new_name;
         $add->save();
 
+        storeLog('subject',$add->id,date('Y-m-d H:i:s'),'create');
+        storeReview('subject',$add->id,date('Y-m-d H:i:s'));
+
         $subject_details = Subject::where('status','Active')->get();
         return view('subject.dynamic_table',compact('subject_details'));
         //return redirect()->route('subject.index')->with('success', 'Subject Added Successfully.');

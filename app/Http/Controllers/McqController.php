@@ -61,7 +61,8 @@ class McqController extends Controller
         $add->answer = $request->answer;
         $add->level = $request->level;
         $add->save();
-
+        storeLog('mcq',$add->id,date('Y-m-d H:i:s'),'create');
+        storeReview('mcq',$add->id,date('Y-m-d H:i:s'));
         return redirect()->route('mcq.index')->with('success', 'MCQ Added Successfully.');
     }
 

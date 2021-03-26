@@ -116,16 +116,15 @@ class BoardController extends Controller
             $add->abbreviation = $request->abbreviation;
             $add->thumbnail = $new_name;
             $add->save();
+            
+            storeLog('board',$add->id,date('Y-m-d H:i:s'),'create');
+
+            storeReview('board',$add->id,date('Y-m-d H:i:s'));
 
             $msg = "Board Added Successfully.";
 
 
         }
-
-        
-        //$mediums_details = Medium::where('status','Active')->get();
-        //$html = view('medium.dynamic_table',compact('mediums_details'))->render();
-                
 
         $boards_details = Board::where('status','Active')->get();
         $html = view('board.dynamic_table',compact('boards_details'))->render();//return view('board.dynamic_table',compact('boards_details'));

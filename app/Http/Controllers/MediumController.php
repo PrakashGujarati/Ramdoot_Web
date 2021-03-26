@@ -62,6 +62,9 @@ class MediumController extends Controller
             $add->board_id = $request->board_id;
             $add->medium_name = $request->medium_name;
             $add->save();
+            
+            storeLog('medium',$add->id,date('Y-m-d H:i:s'),'create');
+            storeReview('medium',$add->id,date('Y-m-d H:i:s'));
 
             $mediums_details = Medium::where('status','Active')->get();
             $html = view('medium.dynamic_table',compact('mediums_details'))->render();
@@ -69,7 +72,9 @@ class MediumController extends Controller
         }
   
         return response()->json($data);  
-        //return view('medium.dynamic_table',compact('mediums_details'));
+        
+        $mediums_details = Medium::where('status','Active')->get();
+        return view('medium.dynamic_table',compact('mediums_details'));
         //return redirect()->route('medium.index')->with('success', 'Medium Added Successfully.');
     }
 
@@ -163,5 +168,21 @@ class MediumController extends Controller
         }
         return response()->json(['html'=>$result]);
     }
+    public function load_autocomplete(request $request)
+    {
+        $response=[];
+        
+        // $lead_detail=Medicine::where('instruction_english', 'like', '%' . $request['query'] . '%')->where('instruction_english','!=',' ')->where('instruction_english','!=',null)->get();
 
+        $lead_detail=Medium::where('medium_name', 'like', '%' . $request['query'] . '%')->get();
+        
+
+        if(count($lead_detail) > 0)
+        {
+            foreach ($lead_detail as $value) {
+                $response[] = array("value"=>$value->medium_name,"data"=>$value->medium_name);
+            }   
+        }
+        return json_encode(array("suggestions" => $response));
+    }
 }

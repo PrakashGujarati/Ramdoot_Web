@@ -77,7 +77,8 @@ class FeatureController extends Controller
         $add->image = $new_name;
         $add->feature_order = $request->order;
         $add->save();
-
+        storeLog('feature',$add->id,date('Y-m-d H:i:s'),'create');
+        storeReview('feature',$add->id,date('Y-m-d H:i:s'));
         return redirect()->route('feature.index')->with('success', 'Feature Added Successfully.');
     }
 

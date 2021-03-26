@@ -156,6 +156,27 @@ function getMedium(board_id){
 
 $(document).ready(function () {
     
+    $('#standard').autocomplete({
+        serviceUrl: '{{route("load_autocomplete.standard")}}',
+        onSelect: function (suggestion) {
+
+                $(this).val(suggestion.data);
+
+              //loadCustData(suggestion.data);
+        }
+    });
+    $('#section').autocomplete({
+        serviceUrl: '{{route("load_autocomplete.section")}}',
+        onSelect: function (suggestion) {
+
+                $(this).val(suggestion.data);
+
+              //loadCustData(suggestion.data);
+        }
+    });
+
+    
+
     $('#standard_form').validate({
          rules: {
                 board_id:"required",

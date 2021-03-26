@@ -66,9 +66,18 @@
 @section('scripts')
 
 <script type="text/javascript">
+$(document).ready(function(){
+    $('#medium_name').autocomplete({
+        serviceUrl: '{{route("load_autocomplete.medium")}}',
+        onSelect: function (suggestion) {
 
+                $(this).val(suggestion.data);
 
-
+              //loadCustData(suggestion.data);
+        }
+    });
+})
+        
 </script>
 
 @endsection

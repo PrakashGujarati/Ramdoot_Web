@@ -100,6 +100,8 @@ class PaperController extends Controller
         $add->release_date = $request->release_date;
         $add->edition = $request->edition;
         $add->save();
+        storeLog('paper',$add->id,date('Y-m-d H:i:s'),'create');
+        storeReview('paper',$add->id,date('Y-m-d H:i:s'));
 
         $paper_details = Paper::where('status','Active')->get();
         return view('paper.dynamic_table',compact('paper_details'));
@@ -211,5 +213,22 @@ class PaperController extends Controller
         $image = imagecreatefrompng($source);
 
       imagejpeg($image, $destination, $quality);
+    }
+    public function load_autocomplete(request $request)
+    {
+        $response=[];
+        
+        // $lead_detail=Medicine::where('instruction_english', 'like', '%' . $request['query'] . '%')->where('instruction_english','!=',' ')->where('instruction_english','!=',null)->get();
+
+        $lead_detail=Paper::where('sub_title', 'like', '%' . $request['query'] . '%')->get();
+        
+
+        if(count($lead_detail) > 0)
+        {
+            foreach ($lead_detail as $value) {
+                $response[] = array("value"=>$value->sub_title,"data"=>$value->sub_title);
+            }   
+        }
+        return json_encode(array("suggestions" => $response));
     }
 }

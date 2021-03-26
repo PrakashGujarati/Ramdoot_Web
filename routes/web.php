@@ -28,7 +28,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\SpatieRolePermissionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\QuestionTypeController;
-
+use App\Http\Controllers\LogController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -267,5 +267,14 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::post('user/update',[UserController::class,'update'])->name('user.update');
 	Route::get('user/distroy/{id}',[UserController::class,'distroy'])->name('user.distroy');
 
-	
-});
+	Route::get('user/log',[LogController::class,'index'])->name('user.log');
+	Route::get('ajax/user/log',[LogController::class,'getData'])->name('user_ajax.log');
+		
+	Route::get('load_autocomplete/medium',[MediumController::class,'load_autocomplete'])->name('load_autocomplete.medium');
+	Route::get('load_autocomplete/standard',[StandardController::class,'load_autocomplete'])->name('load_autocomplete.standard');
+	Route::get('load_autocomplete/section',[StandardController::class,'load_autocomplete_section'])->name('load_autocomplete.section');
+	Route::get('load_autocomplete/book',[BookController::class,'load_autocomplete'])->name('load_autocomplete.book');
+	Route::get('load_autocomplete/worksheet',[WorksheetController::class,'load_autocomplete'])->name('load_autocomplete.worksheet');
+	Route::get('load_autocomplete/paper',[PaperController::class,'load_autocomplete'])->name('load_autocomplete.paper');
+	Route::get('load_autocomplete/note',[NoteController::class,'load_autocomplete'])->name('load_autocomplete.note');
+});	

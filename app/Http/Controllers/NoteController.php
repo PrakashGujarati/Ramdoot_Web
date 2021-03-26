@@ -96,6 +96,9 @@ class NoteController extends Controller
         $add->edition = $request->edition;
         $add->save();
 
+        storeLog('note',$add->id,date('Y-m-d H:i:s'),'create');
+        storeReview('note',$add->id,date('Y-m-d H:i:s'));
+
         $note_details = Note::where('status','Active')->get();
         
         // $html=view('note.dynamic_table',compact('note_details'))->render();
@@ -137,6 +140,22 @@ class NoteController extends Controller
 
         return redirect()->route('medium.index')->with('success', 'Medium Deleted Successfully.');
     }    
+    public function load_autocomplete(request $request)
+    {
+        $response=[];
+        
+        // $lead_detail=Medicine::where('instruction_english', 'like', '%' . $request['query'] . '%')->where('instruction_english','!=',' ')->where('instruction_english','!=',null)->get();
 
+        $lead_detail=Note::where('sub_title', 'like', '%' . $request['query'] . '%')->get();
+        
+
+        if(count($lead_detail) > 0)
+        {
+            foreach ($lead_detail as $value) {
+                $response[] = array("value"=>$value->sub_title,"data"=>$value->sub_title);
+            }   
+        }
+        return json_encode(array("suggestions" => $response));
+    }
 }
 

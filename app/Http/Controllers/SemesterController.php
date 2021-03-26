@@ -62,6 +62,9 @@ class SemesterController extends Controller
         $add->semester = $request->semester;
         $add->save();
 
+        storeLog('semester',$add->id,date('Y-m-d H:i:s'),'create');
+        storeReview('semester',$add->id,date('Y-m-d H:i:s'));
+
         $semester_details = Semester::where('status','Active')->get();
         return view('semester.dynamic_table',compact('semester_details'));
         //return redirect()->route('semester.index')->with('success', 'Semester Added Successfully.');
