@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Unit;
 use Auth;
 use App\Models\Board;
+use App\Models\Subject;
 
 class PaperController extends Controller
 {
@@ -33,12 +34,13 @@ class PaperController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($id)
     {
         $units = Unit::where('status','Active')->get();
         $boards = Board::where('status','Active')->get();
         $paper_details = Paper::where('status','Active')->get();
-        return view('paper.add',compact('units','boards','paper_details'));
+        $subjects_details = Subject::where('id',$id)->first();
+        return view('paper.add',compact('units','boards','paper_details','subjects_details'));
     }
 
     /**
@@ -60,51 +62,119 @@ class PaperController extends Controller
 
         ]);
 
-        $new_name='';
-        if($request->has('thumbnail'))
-        {
+        if($request->hidden_id != "0")
+        {   
+            $new_name='';
+            if($request->has('thumbnail'))
+            {
+            
+                $image = $request->file('thumbnail');
+                $new_name = rand() . '.' . $image->getClientOriginalExtension();
+                $destinationPath = public_path('upload/paper/thumbnail/');
+                $image->move($destinationPath, $new_name);
+            }
+            else{
+                $new_name = $request->hidden_thumbnail;
+            }
+
+            $url_file='';
+            if($request->url_type == 'file'){
+                if($request->file('url'))
+                {
+                    $image = $request->file('url');
+                    $url_file = time().'.'.$image->getClientOriginalExtension();
+                    $destinationPath = public_path('upload/paper/url/');
+                    $image->move($destinationPath, $url_file);
+                }
+                else{
+                    $url_file = $request->hidden_url;
+                }    
+            }else{
+                $url_file = $request->url;
+            }
+
+
+            $add = Paper::find($request->hidden_id);
+            $add->user_id  = Auth::user()->id;
+            $add->unit_id = $request->unit_id;
+            $add->board_id = $request->board_id;
+            $add->medium_id = $request->medium_id;
+            $add->standard_id = $request->standard_id;
+            $add->semester_id = $request->semester_id;
+            $add->subject_id = $request->subject_id;
+            $add->title = $request->title;
+            $add->sub_title = $request->sub_title;
+            $add->url_type = $request->url_type;
+            $add->url = $url_file;
+            $add->thumbnail = $new_name;
+            $add->pages = isset($request->pages) ? $request->pages:'';
+            $add->label = $request->label;
+            $add->description = isset($request->description) ? $request->description:'';
+            $add->release_date = $request->release_date;
+            $add->edition = $request->edition;
+            $add->save();
+
+            $msg = "Paper Updated Successfully.";
+        }
+        else{
+            
+            $new_name='';
+            if($request->has('thumbnail'))
+            {
+            
+                $image = $request->file('thumbnail');
+                $new_name = rand() . '.' . $image->getClientOriginalExtension();
+                $destinationPath = public_path('upload/paper/thumbnail/');
+                $image->move($destinationPath, $new_name);
+            }
+
+            $url_file='';
+            if($request->url_type == 'file'){
+                if($request->file('url'))
+                {
+                    $image = $request->file('url');
+                    $url_file = time().'.'.$image->getClientOriginalExtension();
+                    $destinationPath = public_path('upload/paper/url/');
+                    $image->move($destinationPath, $url_file);
+                }
+            }else{
+                $url_file = $request->url;
+            }
+
         
-            $image = $request->file('thumbnail');
-            $new_name = rand() . '.' . $image->getClientOriginalExtension();
-            $destinationPath = public_path('upload/paper/thumbnail/');
-            $image->move($destinationPath, $new_name);
+            $add = new Paper;
+            $add->user_id  = Auth::user()->id;
+            $add->unit_id = $request->unit_id;
+            $add->board_id = $request->board_id;
+            $add->medium_id = $request->medium_id;
+            $add->standard_id = $request->standard_id;
+            $add->semester_id = $request->semester_id;
+            $add->subject_id = $request->subject_id;
+            $add->title = $request->title;
+            $add->sub_title = $request->sub_title;
+            $add->url_type = $request->url_type;
+            $add->url = $url_file;
+            $add->thumbnail = $new_name;
+            $add->pages = isset($request->pages) ? $request->pages:'';
+            $add->label = $request->label;
+            $add->description = isset($request->description) ? $request->description:'';
+            $add->release_date = $request->release_date;
+            $add->edition = $request->edition;
+            $add->save();
+
+            $msg = "Paper Added Successfully.";
+
+            storeLog('paper',$add->id,date('Y-m-d H:i:s'),'create');
+            storeReview('paper',$add->id,date('Y-m-d H:i:s'));
+
         }
-
-        $url_file='';
-
-        if($request->has('url'))
-        {
-            $image = $request->file('url');
-            $url_file = time().'.'.$image->getClientOriginalExtension();
-            $destinationPath = public_path('upload/paper/url/');
-            $image->move($destinationPath, $url_file);
-        }
-
-
-        $add = new Paper;
-        $add->user_id  = Auth::user()->id;
-        $add->unit_id = $request->unit_id;
-        $add->board_id = $request->board_id;
-        $add->medium_id = $request->medium_id;
-        $add->standard_id = $request->standard_id;
-        $add->semester_id = $request->semester_id;
-        $add->subject_id = $request->subject_id;
-        $add->title = $request->title;
-        $add->sub_title = $request->sub_title;
-        $add->url_type = $request->url_type;
-        $add->url = $url_file;
-        $add->thumbnail = $new_name;
-        $add->pages = isset($request->pages) ? $request->pages:'';
-        $add->label = $request->label;
-        $add->description = isset($request->description) ? $request->description:'';
-        $add->release_date = $request->release_date;
-        $add->edition = $request->edition;
-        $add->save();
-        storeLog('paper',$add->id,date('Y-m-d H:i:s'),'create');
-        storeReview('paper',$add->id,date('Y-m-d H:i:s'));
 
         $paper_details = Paper::where('status','Active')->get();
-        return view('paper.dynamic_table',compact('paper_details'));
+        $html = view('paper.dynamic_table',compact('paper_details'))->render();
+        $data = ['html' => $html,'message' => $msg];
+        return response()->json($data);
+        
+        //return view('paper.dynamic_table',compact('paper_details'));
         //return redirect()->route('paper.index')->with('success', 'Paper Added Successfully.');
     }
 
@@ -125,12 +195,13 @@ class PaperController extends Controller
      * @param  \App\Models\paper  $paper
      * @return \Illuminate\Http\Response
      */
-    public function edit(Paper $paper,$id)
+    public function edit(Request $request)
     {
-        $units = Unit::where('status','Active')->get();
-        $paperdata = Paper::where('id',$id)->first();
-        $boards = Board::where('status','Active')->get();
-        return view('paper.edit',compact('paperdata','units','boards'));
+        //$units = Unit::where('status','Active')->get();
+        $paperdata = Paper::where('id',$request->id)->first();
+        return $paperdata;
+        //$boards = Board::where('status','Active')->get();
+        //return view('paper.edit',compact('paperdata','units','boards'));
     }
 
     /**
@@ -191,13 +262,15 @@ class PaperController extends Controller
      * @param  \App\Models\paper  $paper
      * @return \Illuminate\Http\Response
      */
-    public function distroy(Paper $paper,$id)
+    public function distroy(Request $request)
     {
-        $delete = Paper::find($id);
+        $delete = Paper::find($request->id);
         $delete->status = "Deleted";
         $delete->save();
 
-        return redirect()->route('paper.index')->with('success', 'Paper Deleted Successfully.');
+        $paper_details = Paper::where('status','Active')->get();
+        return view('paper.dynamic_table',compact('paper_details')); 
+        //return redirect()->route('paper.index')->with('success', 'Paper Deleted Successfully.');
     }
 
     function compressImage($source, $destination, $quality) {

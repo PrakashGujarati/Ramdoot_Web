@@ -15,7 +15,7 @@
                     </div>
                     <form action="{{ route('worksheet.store') }}" method="POST" enctype='multipart/form-data' id="worksheet_form">
                     @csrf
-                        
+                        <input type="hidden" name="hidden_id" class="hidden_id" id="hidden_id" value="0">
                         <div class="row">
                             <div class="form-group col-lg-4">
                                 <label class="form-label">Board</label>
@@ -168,6 +168,7 @@
                                 </div>
                                 <div class="form-control-wrap">
                                     <input type="file" class="form-control" id="url" name="url" value="">
+                                    <input type="hidden" id="hidden_url" name="hidden_url" value="">
                                     <img id="url_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" width="100" />
                                     @error('url')
                                         <span class="text-danger" role="alert">
@@ -181,6 +182,7 @@
                                 <label class="form-label">Thumbnail</label>
                                 <div class="form-control-wrap">
                                     <input type="file" class="form-control" id="thumbnail" name="thumbnail" value="">
+                                    <input type="hidden" id="hidden_thumbnail" name="hidden_thumbnail" value="">
                                     <img id="thumbnail_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" width="100" />
                                     @error('thumbnail')
                                         <span class="text-danger" role="alert">
@@ -322,9 +324,118 @@ function readURL(input) {
 }
 
 $("#url").change(function() {
-    $('#url_preview').css('display','block');
-  readURL(this);
+    var url_type = $('#url_type').val();
+
+    if(url_type == "file"){
+        $('#url_preview').css('display','block');
+        readURL(this);
+    }
 });    
+
+
+$( document ).ready(function() {
+    $('.board_id').val('{{ $subjects_details->board_id }}');
+    var board_id = $('.board_id').val();
+    var medium_id = "{{ $subjects_details->medium_id }}";
+    var standard_id = "{{ $subjects_details->standard_id }}";
+    var semester_id = "{{ $subjects_details->semester_id }}";
+    var subject_id = "{{ $subjects_details->id }}";
+    getMediumEdit(board_id,medium_id);
+    getStandardEdit(board_id,medium_id,standard_id);
+    getSemesterEdit(board_id,medium_id,standard_id,semester_id);
+    getSubjectEdit(board_id,medium_id,standard_id,semester_id,subject_id);
+    getUnit(board_id,medium_id,standard_id,semester_id,subject_id);
+});
+
+
+function getMediumEdit(board_id,medium_id){
+    
+    $.ajax({
+        type: "GET",
+        url: "{{route('get.medium')}}",
+        data: {
+            "board_id":board_id,
+            "medium_id":medium_id,
+        },
+        success: function(result) {
+            $('.medium_id').html('');
+            $('.medium_id').html(result.html);
+        } 
+    });
+}
+
+function getStandardEdit(board_id,medium_id,standard_id){       
+    $.ajax({
+        type: "GET",
+        url: "{{route('get.standard')}}",
+        data: {
+            "board_id":board_id,
+            "medium_id":medium_id,
+            "standard_id":standard_id,
+        },
+        success: function(result) {
+            $('.standard_id').html('');
+            $('.standard_id').html(result.html);
+        } 
+    });
+}
+
+
+function getSemesterEdit(board_id,medium_id,standard_id,semester_id){
+        
+    $.ajax({
+        type: "GET",
+        url: "{{route('get.semester')}}",
+        data: {
+            "board_id":board_id,
+            "medium_id":medium_id,
+            "standard_id":standard_id,
+            "semester_id":semester_id,
+        },
+        success: function(result) {
+            $('.semester_id').html('');
+            $('.semester_id').html(result.html);
+        } 
+    });
+}
+
+function getSubjectEdit(board_id,medium_id,standard_id,semester_id,subject_id){
+    $.ajax({
+        type: "GET",
+        url: "{{route('get.subject')}}",
+        data: {
+            "board_id":board_id,
+            "medium_id":medium_id,
+            "standard_id":standard_id,
+            "semester_id":semester_id,
+            "subject_id":subject_id,
+        },
+        success: function(result) {
+            $('.subject_id').html('');
+            $('.subject_id').html(result.html);
+        } 
+    });
+}
+
+function getUnitEdit(board_id,medium_id,standard_id,semester_id,subject_id,unit_id){
+    $.ajax({
+        type: "GET",
+        url: "{{route('get.unit')}}",
+        data: {
+            "board_id":board_id,
+            "medium_id":medium_id,
+            "standard_id":standard_id,
+            "semester_id":semester_id,
+            "subject_id":subject_id,
+            "unit_id":unit_id,
+        },
+        success: function(result) {
+            $('.unit_id').html('');
+            $('.unit_id').html(result.html);
+        } 
+    });
+}
+
     
 $(document).on('change','.board_id',function(){
     var board_id = $('.board_id').val();
@@ -475,8 +586,8 @@ $(document).ready(function () {
                 unit_id:"required",
                 title:"required",
                 sub_title:"required",
-                url:"required",
-                thumbnail:"required",
+               // url:"required",
+               // thumbnail:"required",
                 edition:"required"
             },
         //For custom messages
@@ -490,8 +601,8 @@ $(document).ready(function () {
             unit_id:"Please select unit.",
             title:"Please enter title.",
             sub_title:"Please enter sub title",
-            url:"Please enter url.",
-            thumbnail:"Please select thumbnail.",
+          //  url:"Please enter url.",
+          //  thumbnail:"Please select thumbnail.",
             edition:"Please select edition."
         },
         submitHandler: function(form) {
@@ -503,13 +614,11 @@ $(document).ready(function () {
                 },
                 url: form.action,
                 type: form.method,
-                data: formData,//$(form).serialize(),
-                mimeType: "multipart/form-data",
+                data: formData,
                 contentType: false,
                 processData: false,
-                dataType: 'html',
                 success: function(data) {
-                    confirm("Worksheet Added Successfully.");
+                    confirm(data.message);
                     $('#title').val('');
                     $('#sub_title').val('');
                     $('#url').val('');
@@ -525,14 +634,131 @@ $(document).ready(function () {
 
                     $('#url').val('');
                     $('#url_preview').css('display','none');
+                    $('.urlchk').prop("checked",false);
+                    $('#hidden_id').val('0');
 
                     $('.dyamictable').empty();
-                    $('.dyamictable').html(data);
+                    $('.dyamictable').html(data.html);
+                    $(".datatable-init").DataTable();
                 }            
             });
         }
     });
     
+});
+
+$(document).on('click','.edit-btn',function(){
+    var id = $(this).attr('data-id');
+    $.ajax({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="token"]').attr('content')
+        },
+        url: "{{ route('worksheet.edit') }}",
+        type: 'GET',
+        data: {
+              'id':id
+        },
+        success: function(result) {
+            $('#board_id').val(result.board_id);
+            var board_id = $('#board_id').val();
+            var medium_id = result.medium_id;
+            var standard_id = result.standard_id;
+            var semester_id = result.semester_id;
+            var subject_id = result.subject_id;
+            var unit_id = result.unit_id;
+            getMediumEdit(board_id,medium_id);
+            getStandardEdit(board_id,medium_id,standard_id);
+            getSemesterEdit(board_id,medium_id,standard_id,semester_id);
+            getSubjectEdit(board_id,medium_id,standard_id,semester_id,subject_id);
+            getUnitEdit(board_id,medium_id,standard_id,semester_id,subject_id,unit_id);
+
+            $('#title').val(result.title);
+            $('#sub_title').val(result.sub_title);
+            $('#description').val(result.description);
+            $('#pages').val(result.pages);
+            $('#label').val(result.label);
+            $('#release_date').val(result.release_date);
+            $('#edition').val(result.edition);
+            if(result.url_type == 'file'){
+                $('#hidden_url').val(result.url);
+                $('#url_preview').css('display','block');
+                var url_path = "{{ env('APP_URL') }}"+"/upload/worksheet/url/"+result.url;
+                $('#url_preview').attr('src', url_path);    
+            }
+            else{
+                $('.urlchk').prop("checked",true);
+                $("#url").attr('type', 'text');
+                $('#url_type').val('text');
+                $('#url_preview').css('display','none');   
+                $('#url').val(result.url);
+            }
+            $('#hidden_thumbnail').val(result.thumbnail);
+            $('#thumbnail_preview').css('display','block');
+            var thumbnail_path = "{{ env('APP_URL') }}"+"/upload/worksheet/thumbnail/"+result.thumbnail;
+            $('#thumbnail_preview').attr('src', thumbnail_path);
+            
+            $('#hidden_id').val(result.id);
+            //$('#thumbnail').val('');
+        }            
+    });
+});
+
+$(document).on('click','.distroy', function() {
+    var id = $(this).attr('data-id');
+    bootbox.confirm({
+        message: "Are you sure to delete this worksheet ?",
+        buttons: {
+            confirm: {
+                label: 'Yes',
+                className: 'btn-success'
+            },
+            cancel: {
+                label: 'No',
+                className: 'btn-danger'
+            }
+        },
+        callback: function(result) {
+            if(result){
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="token"]').attr('content')
+                    },
+                    url: "{{ route('worksheet.distroy') }}",
+                    type: "GET",
+                    data: {
+                        'id':id,
+                    },
+                    success: function(data) {
+                        confirm("Worksheet Deleted Successfully.");
+                            
+                        $('#title').val('');
+                        $('#sub_title').val('');
+                        $('#url').val('');
+                        $('#thumbnail').val('');
+                        $('#pages').val('');
+                        $('#description').val('');
+                        $('#label').val('');
+                        $('#release_date').val('');
+                        $('#edition').val('');
+
+                        $('#thumbnail').val('');
+                        $('#thumbnail_preview').css('display','none');
+
+                        $('#url').val('');
+                        $('#url_preview').css('display','none');
+
+                        $('#hidden_thumbnail').val('');
+                        $('#hidden_url').val('');
+
+                        $('.dyamictable').empty();
+                        $('.dyamictable').html(data);
+                        $(".datatable-init").DataTable();
+                    }            
+                });
+                //location.replace(del_url);
+            }
+        }
+    });
 });
 
 </script>

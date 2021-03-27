@@ -21,7 +21,7 @@
             		<h4 class="nk-block-title">Note List</h4>
             	</div>
             	<div class="col-lg-2 text-right">
-            		<a href="{{ route('note.create') }}" class="btn btn-primary text-light">Add Note</a>
+            		<!-- <a href="{{ route('note.create') }}" class="btn btn-primary text-light">Add Note</a> -->
             	</div>
             </div>
         </div>
@@ -80,7 +80,7 @@
                         	<a href="{{ route('note.edit',$data->id) }}"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
                         	<a href="javascript:;" data-url="{{ route('note.distroy',$data->id) }}" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a> 
                         </td>--}}
-                        <td><a href="javascript:;" data-url="" class=""><span class="nk-menu-icon text-primary"><em class="fa fa-plus pr-1"></em>Add</span></a></td>
+                        <td><a href="{{ route('note.create',$data->subject_id) }}" data-url="" class=""><span class="nk-menu-icon text-primary"><em class="fa fa-plus pr-1"></em>Add</span></a></td>
                     </tr>
                     @endforeach
                     @else

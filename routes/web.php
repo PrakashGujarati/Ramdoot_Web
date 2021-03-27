@@ -92,11 +92,11 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('get_medium', [MediumController::class, 'getMedium'])->name('get.medium');
 	/* */
 	Route::get('note', [NoteController::class, 'index'])->name('note.index');
-	Route::get('note/create', [NoteController::class, 'create'])->name('note.create');
+	Route::get('note/create/{subject_id?}', [NoteController::class, 'create'])->name('note.create');
 	Route::post('note/store', [NoteController::class, 'store'])->name('note.store');
-	Route::get('note/{id}/edit', [NoteController::class, 'edit'])->name('note.edit');
+	Route::get('note/edit', [NoteController::class, 'edit'])->name('note.edit');
 	Route::post('note/{id}/update', [NoteController::class, 'update'])->name('note.update');
-	Route::get('note/{id}/delete', [NoteController::class, 'distroy'])->name('note.distroy');
+	Route::get('note/delete', [NoteController::class, 'distroy'])->name('note.distroy');
 	
 
 	/*Semester*/
@@ -131,43 +131,43 @@ Route::group(['middleware' => 'auth'], function(){
 
 	/*Videos*/
 	Route::get('videos', [VideosController::class, 'index'])->name('videos.index');
-	Route::get('videos/create', [VideosController::class, 'create'])->name('videos.create');
+	Route::get('videos/create/{subject_id?}', [VideosController::class, 'create'])->name('videos.create');
 	Route::post('videos/store', [VideosController::class, 'store'])->name('videos.store');
-	Route::get('videos/{id}/edit', [VideosController::class, 'edit'])->name('videos.edit');
+	Route::get('videos/edit', [VideosController::class, 'edit'])->name('videos.edit');
 	Route::post('videos/{id}/update', [VideosController::class, 'update'])->name('videos.update');
-	Route::get('videos/{id}/delete', [VideosController::class, 'distroy'])->name('videos.distroy');
+	Route::get('videos/delete', [VideosController::class, 'distroy'])->name('videos.distroy');
 
 	/*solutions*/
 	Route::get('solution', [SolutionController::class, 'index'])->name('solution.index');
-	Route::get('solution/create', [SolutionController::class, 'create'])->name('solution.create');
+	Route::get('solution/create/{subject_id?}', [SolutionController::class, 'create'])->name('solution.create');
 	Route::post('solution/store', [SolutionController::class, 'store'])->name('solution.store');
-	Route::get('solution/{id}/edit', [SolutionController::class, 'edit'])->name('solution.edit');
+	Route::get('solution/edit', [SolutionController::class, 'edit'])->name('solution.edit');
 	Route::post('solution/{id}/update', [SolutionController::class, 'update'])->name('solution.update');
-	Route::get('solution/{id}/delete', [SolutionController::class, 'distroy'])->name('solution.distroy');
+	Route::get('solution/delete', [SolutionController::class, 'distroy'])->name('solution.distroy');
 
 	/*materials*/
 	Route::get('material', [MaterialController::class, 'index'])->name('material.index');
-	Route::get('material/create', [MaterialController::class, 'create'])->name('material.create');
+	Route::get('material/create/{subject_id?}', [MaterialController::class, 'create'])->name('material.create');
 	Route::post('material/store', [MaterialController::class, 'store'])->name('material.store');
-	Route::get('material/{id}/edit', [MaterialController::class, 'edit'])->name('material.edit');
+	Route::get('material/edit', [MaterialController::class, 'edit'])->name('material.edit');
 	Route::post('material/{id}/update', [MaterialController::class, 'update'])->name('material.update');
-	Route::get('material/{id}/delete', [MaterialController::class, 'distroy'])->name('material.distroy');
+	Route::get('material/delete', [MaterialController::class, 'distroy'])->name('material.distroy');
 
 	/*papers*/
 	Route::get('paper', [PaperController::class, 'index'])->name('paper.index');
-	Route::get('paper/create', [PaperController::class, 'create'])->name('paper.create');
+	Route::get('paper/create/{subject_id?}', [PaperController::class, 'create'])->name('paper.create');
 	Route::post('paper/store', [PaperController::class, 'store'])->name('paper.store');
-	Route::get('paper/{id}/edit', [PaperController::class, 'edit'])->name('paper.edit');
+	Route::get('paper/edit', [PaperController::class, 'edit'])->name('paper.edit');
 	Route::post('paper/{id}/update', [PaperController::class, 'update'])->name('paper.update');
-	Route::get('paper/{id}/delete', [PaperController::class, 'distroy'])->name('paper.distroy');
+	Route::get('paper/delete', [PaperController::class, 'distroy'])->name('paper.distroy');
 
 	/*worksheet*/
 	Route::get('worksheet', [WorksheetController::class, 'index'])->name('worksheet.index');
-	Route::get('worksheet/create', [WorksheetController::class, 'create'])->name('worksheet.create');
+	Route::get('worksheet/create/{subject_id?}', [WorksheetController::class, 'create'])->name('worksheet.create');
 	Route::post('worksheet/store', [WorksheetController::class, 'store'])->name('worksheet.store');
-	Route::get('worksheet/{id}/edit', [WorksheetController::class, 'edit'])->name('worksheet.edit');
+	Route::get('worksheet/edit', [WorksheetController::class, 'edit'])->name('worksheet.edit');
 	Route::post('worksheet/{id}/update', [WorksheetController::class, 'update'])->name('worksheet.update');
-	Route::get('worksheet/{id}/delete', [WorksheetController::class, 'distroy'])->name('worksheet.distroy');
+	Route::get('worksheet/delete', [WorksheetController::class, 'distroy'])->name('worksheet.distroy');
 
 	/*mcqs*/
 	Route::get('mcq', [McqController::class, 'index'])->name('mcq.index');

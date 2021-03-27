@@ -635,6 +635,7 @@ $(document).ready(function () {
                     $('#url').val('');
                     $('#url_preview').css('display','none');
                     $('#hidden_id').val('0');
+                    $('.urlchk').prop("checked",false);
                     
                     $('.dyamictable').empty();
                     $('.dyamictable').html(data.html);
