@@ -157,5 +157,26 @@ class NoteController extends Controller
         }
         return json_encode(array("suggestions" => $response));
     }
+
+    public function load_autocomplete_title(request $request)
+    {
+        //dd('asd');die;
+        $response=[];
+        
+        // $lead_detail=Medicine::where('instruction_english', 'like', '%' . $request['query'] . '%')->where('instruction_english','!=',' ')->where('instruction_english','!=',null)->get();
+
+        $lead_detail=Note::where('title', 'like', '%' . $request['query'] . '%')->get();
+        
+
+        if(count($lead_detail) > 0)
+        {
+            foreach ($lead_detail as $value) {
+                $response[] = array("value"=>$value->title,"data"=>$value->title);
+            }   
+        }
+        return json_encode(array("suggestions" => $response));
+    }
+
+    
 }
 

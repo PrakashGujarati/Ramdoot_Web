@@ -233,6 +233,12 @@
                 $(this).val(suggestion.data);
             }
         });
+        $('#title').autocomplete({
+            serviceUrl: '{{route("load_autocomplete.note_title")}}',
+            onSelect: function (suggestion) {
+                $(this).val(suggestion.data);
+            }
+        });
 
         var board_id = $('.board_id').val();
         var standard_id = "{{ $bookdata->standard_id }}";

@@ -275,6 +275,13 @@
 
     $( document ).ready(function() {
 
+        $('#title').autocomplete({
+            serviceUrl: '{{route("load_autocomplete.book_title")}}',
+            onSelect: function (suggestion) {
+                $(this).val(suggestion.data);
+            }
+        });
+
         $('#sub_title').autocomplete({
             serviceUrl: '{{route("load_autocomplete.book")}}',
             onSelect: function (suggestion) {

@@ -299,5 +299,38 @@ class SubjectController extends Controller
         }
         return response()->json(['html'=>$result]);   
     }
-    
+    public function load_autocomplete(request $request)
+    {
+        $response=[];
+        
+        // $lead_detail=Medicine::where('instruction_english', 'like', '%' . $request['query'] . '%')->where('instruction_english','!=',' ')->where('instruction_english','!=',null)->get();
+
+        $lead_detail=Subject::where('subject_name', 'like', '%' . $request['query'] . '%')->get();
+        
+
+        if(count($lead_detail) > 0)
+        {
+            foreach ($lead_detail as $value) {
+                $response[] = array("value"=>$value->subject_name,"data"=>$value->subject_name);
+            }   
+        }
+        return json_encode(array("suggestions" => $response));
+    }
+    public function load_autocomplete_sub_title(request $request)
+    {
+        $response=[];
+        
+        // $lead_detail=Medicine::where('instruction_english', 'like', '%' . $request['query'] . '%')->where('instruction_english','!=',' ')->where('instruction_english','!=',null)->get();
+
+        $lead_detail=Subject::where('sub_title', 'like', '%' . $request['query'] . '%')->get();
+        
+
+        if(count($lead_detail) > 0)
+        {
+            foreach ($lead_detail as $value) {
+                $response[] = array("value"=>$value->sub_title,"data"=>$value->sub_title);
+            }   
+        }
+        return json_encode(array("suggestions" => $response));
+    }    
 }

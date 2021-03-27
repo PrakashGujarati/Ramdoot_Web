@@ -161,6 +161,21 @@
 
 $(document).ready(function(){
     $('#thumbnail_preview').css('display','none');
+
+    $('#subject_name').autocomplete({
+        serviceUrl: '{{route("load_autocomplete.subject")}}',
+        onSelect: function (suggestion) {
+
+                $(this).val(suggestion.data);
+        }
+    });
+    $('#sub_title').autocomplete({
+        serviceUrl: '{{route("load_autocomplete.subject_sub_title")}}',
+        onSelect: function (suggestion) {
+            $(this).val(suggestion.data);
+        }
+    });
+
 });    
 
 function readThumbnail(input) {
