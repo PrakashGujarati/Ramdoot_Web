@@ -15,6 +15,7 @@
                     </div>
                     <form action="{{ route('unit.store') }}" method="POST" enctype='multipart/form-data' id="unit_form">
                     @csrf
+                        <input type="hidden" name="hidden_id" class="hidden_id" id="hidden_id" value="0">
                         <div class="row">
                             <div class="form-group col-lg-6">
                                 <label class="form-label">Board</label>
@@ -132,6 +133,7 @@
                                 </div>
                                 <div class="form-control-wrap">
                                     <input type="file" class="form-control" id="url" name="url" value="">
+                                    <input type="hidden" id="hidden_url" name="hidden_url" value="">
                                     <img id="url_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" width="100" />
                                     @error('url')
                                         <span class="text-danger" role="alert">
@@ -144,6 +146,7 @@
                                 <label class="form-label">Thumbnail</label>
                                 <div class="form-control-wrap">
                                     <input type="file" class="form-control" id="thumbnail" name="thumbnail" value="">
+                                    <input type="hidden" id="hidden_thumbnail" name="hidden_thumbnail" value="">
                                     <img id="thumbnail_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" width="100" />
                                     @error('thumbnail')
                                         <span class="text-danger" role="alert">
@@ -237,9 +240,99 @@ function readURL(input) {
 }
 
 $("#url").change(function() {
-    $('#url_preview').css('display','block');
-  readURL(this);
+    var url_type = $('#url_type').val();
+
+    if(url_type == "file"){
+        $('#url_preview').css('display','block');
+        readURL(this);
+    }
 });
+
+
+
+$( document ).ready(function() {
+    $('.board_id').val("{{ $subjects_details->board_id }}");
+    var board_id = "{{ $subjects_details->board_id }}"
+    var medium_id = "{{ $subjects_details->medium_id }}";
+    var standard_id = "{{ $subjects_details->standard_id }}";
+    var semester_id = "{{ $subjects_details->semester_id }}";
+    var subject_id = "{{ $subjects_details->id }}";
+    getMediumEdit(board_id,medium_id);
+    getStandardEdit(board_id,medium_id,standard_id);
+    getSemesterEdit(board_id,medium_id,standard_id,semester_id);
+   // $('.subject_id').val(subject_id);
+    getSubjectEdit(board_id,medium_id,standard_id,semester_id,subject_id);
+
+});
+
+function getMediumEdit(board_id,medium_id){
+    
+    $.ajax({
+        type: "GET",
+        url: "{{route('get.medium')}}",
+        data: {
+            "board_id":board_id,
+            "medium_id":medium_id,
+        },
+        success: function(result) {
+            $('.medium_id').html('');
+            $('.medium_id').html(result.html);
+        } 
+    });
+}
+
+
+function getStandardEdit(board_id,medium_id,standard_id){
+    
+    $.ajax({
+        type: "GET",
+        url: "{{route('get.standard')}}",
+        data: {
+            "board_id":board_id,
+            "medium_id":medium_id,
+            "standard_id":standard_id,
+        },
+        success: function(result) {
+            $('.standard_id').html('');
+            $('.standard_id').html(result.html);
+        } 
+    });
+}
+
+function getSemesterEdit(board_id,medium_id,standard_id,semester_id){
+    $.ajax({
+        type: "GET",
+        url: "{{route('get.semester.unit')}}",
+        data: {
+            "standard_id":standard_id,
+            "semester_id":semester_id,
+        },
+        success: function(result) {
+            $('.semester_id').html('');
+            $('.semester_id').html(result.html);
+        } 
+    });
+}
+
+function getSubjectEdit(board_id,medium_id,standard_id,semester_id,subject_id){
+    $.ajax({
+        type: "GET",
+        url: "{{route('get.subject')}}",
+        data: {
+            "board_id":board_id,
+            "medium_id":medium_id,
+            "standard_id":standard_id,
+            "semester_id":semester_id,
+            "subject_id":subject_id,
+        },
+        success: function(result) {
+            $('.subject_id').html('');
+            $('.subject_id').html(result.html);
+        } 
+    });
+}
+
+/*----------------------------*/
 
 $(document).on('change','.board_id',function(){
     var board_id = $('.board_id').val();
@@ -377,23 +470,27 @@ $(document).ready(function () {
                 url: form.action,
                 type: form.method,
                 data: formData,//$(form).serialize(),
-                mimeType: "multipart/form-data",
                 contentType: false,
                 processData: false,
-                dataType: 'html',
                 success: function(data) {
-                    confirm("Unit Added Successfully.");
+                    confirm(data.message);
                     $('#title').val('');
                     $('#description').val('');
                     $('#url').val('');
                     $('#thumbnail').val();
+                    $('#hidden_thumbnail').val('');
+                    $('#thumbnail_preview').css('display','none');
 
                     $(".urlchk").prop("checked",false);
                     $("#url").attr('type', 'file');
                     $('#url_type').val('file');
+                    $('#hidden_url').val('');
+                    $('#url_preview').css('display','none');
+                    $('#hidden_id').val('0');
                     
                     $('.dyamictable').empty();
-                    $('.dyamictable').html(data);
+                    $('.dyamictable').html(data.html);
+                    $(".datatable-init").DataTable();
                 }            
             });
         }
@@ -402,43 +499,105 @@ $(document).ready(function () {
 });
 
 
-// var max_fields      = 50;
-// var wrapper         = $(".newPlus");
-// var add_button      = $(".add_row");
+$(document).on('click','.edit-btn',function(){
+    var id = $(this).attr('data-id');
+    $.ajax({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="token"]').attr('content')
+        },
+        url: "{{ route('unit.edit') }}",
+        type: 'GET',
+        data: {
+              'id':id
+        },
+        success: function(result) {
+            $('#board_id').val(result.board_id);
+            var board_id = $('#board_id').val();
+            var medium_id = result.medium_id;
+            var standard_id = result.standard_id;
+            var semester_id = result.semester_id;
+            var subject_id = result.subject_id;
+            getMediumEdit(board_id,medium_id);
+            getStandardEdit(board_id,medium_id,standard_id);
+            getSemesterEdit(board_id,medium_id,standard_id,semester_id);
+            getSubjectEdit(board_id,medium_id,standard_id,semester_id,subject_id);
 
-// var x = 1;
-// $(add_button).click(function(e){
-//     e.preventDefault();
-//     if(x < max_fields){
-//         x++;
-//         $(wrapper).append('<div class="row newMinus"><div class="form-group col-lg-3"><label class="form-label">Title</label><div class="form-control-wrap"><input type="text" class="form-control" id="title" name="title[]" value=""></div></div><div class="form-group col-lg-2"><label class="form-label">Url</label><div class="form-control-wrap"><input type="file" class="form-control" id="url" name="url[]" value=""></div></div><div class="form-group col-lg-2"><label class="form-label">Thumbnail</label><div class="form-control-wrap"><input type="file" class="form-control" id="thumbnail" name="thumbnail[]" value=""></div></div><div class="form-group col-lg-1"><label class="form-label">Pages</label><div class="form-control-wrap"><input type="text" class="form-control" id="pages" name="pages[]" value=""></div></div><div class="form-group col-lg-3"><label class="form-label">Description</label><div class="form-control-wrap"><input type="text" class="form-control" id="description" name="description[]" value=""></div></div><div class="form-group col-lg-1"><div class="form-control-wrap mt-4"><button type="button" class="btn btn-danger mt-1 remove_field"><i class="icon ni ni-minus"></i></button></div></div></div>');     
-//     }
-// });
+            $('#title').val(result.title);
+            $('#description').val(result.description);
+            $('#pages').val(result.pages);
+            if(result.url_type == 'file'){
+                $('#hidden_url').val(result.url);
+                $('#url_preview').css('display','block');
+                var url_path = "{{ env('APP_URL') }}"+"/upload/unit/url/"+result.url;
+                $('#url_preview').attr('src', url_path);    
+            }
+            else{
+                $('.urlchk').prop("checked",true);
+                $("#url").attr('type', 'text');
+                $('#url_type').val('text');
+                $('#url_preview').css('display','none');   
+                $('#url').val(result.url);
+            }
+            $('#hidden_thumbnail').val(result.thumbnail);
+            $('#thumbnail_preview').css('display','block');
+            var thumbnail_path = "{{ env('APP_URL') }}"+"/upload/unit/thumbnail/"+result.thumbnail;
+            $('#thumbnail_preview').attr('src', thumbnail_path);
+            
+            $('#hidden_id').val(result.id);
+            //$('#thumbnail').val('');
+        }            
+    });
+});
 
+$(document).on('click','.distroy', function() {
+    var id = $(this).attr('data-id');
+    bootbox.confirm({
+        message: "Are you sure to delete this unit ?",
+        buttons: {
+            confirm: {
+                label: 'Yes',
+                className: 'btn-success'
+            },
+            cancel: {
+                label: 'No',
+                className: 'btn-danger'
+            }
+        },
+        callback: function(result) {
+            if(result){
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="token"]').attr('content')
+                    },
+                    url: "{{ route('unit.distroy') }}",
+                    type: "GET",
+                    data: {
+                        'id':id,
+                    },
+                    success: function(data) {
+                        confirm("Unit Deleted Successfully.");
+                            
+                        $('#title').val('');
+                        $('#description').val('');
+                        $('#pages').val('');
+                        $('#url').val('');
+                        $('#thumbnail').val('');
+                        $('#hidden_thumbnail').val('');
+                        $('#thumbnail_preview').css('display','none');
+                        $('#hidden_url').val('');
+                        $('#url_preview').css('display','none');
 
-// $(wrapper).on("click",".remove_field", function(e){
-//     e.preventDefault();
-//     $(this).closest(".newMinus").remove();
-//     x--;
-// })
+                        $('.dyamictable').empty();
+                        $('.dyamictable').html(data);
+                        $(".datatable-init").DataTable();
+                    }            
+                });
+                //location.replace(del_url);
+            }
+        }
+    });
+});
 
-// $(wrapper).on("click",".remove_field", function(e){
-//     e.preventDefault(); 
-//     $(this).closest(".show").remove();
-//     x--;
-// })
-
-// $(document).on("click",".remove_fields", function(e){
-//     //alert('fdf');
-//     e.preventDefault();
-//     $(this).closest(".slab").remove();
-// })
-
-// $(document).on("click",".remove_fieldedit", function(e){
-//     //alert('fdf');
-//     e.preventDefault();
-//     $(this).closest(".editslab").remove();
-// })
 
 
 </script>

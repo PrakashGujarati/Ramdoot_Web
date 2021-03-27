@@ -63,18 +63,23 @@
                                 @enderror
                             </div>
                         </div>--}}
-                        <div class="form-group">
+                        <div class="row">
+                        <div class="form-group col-lg-6">
                             <label class="form-label">Thumbnail</label>
                             <div class="form-control-wrap">
                                 <input type="file" class="form-control" id="thumbnail" name="thumbnail" value="">
                                 <input type="hidden" id="hidden_thumbnail" name="hidden_thumbnail" value="">
-                                <img id="thumbnail_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" width="100" />
+                                
                                 @error('thumbnail')
                                     <span class="text-danger" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
                             </div>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <img id="thumbnail_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" width="100" />
+                        </div>
                         </div>
                         
                         <div class="form-group">

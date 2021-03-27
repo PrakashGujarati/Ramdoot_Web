@@ -15,7 +15,7 @@
                     </div>
                     <form action="{{ route('subject.store') }}" method="POST" enctype='multipart/form-data' id="subject_form">
                     @csrf
-
+                        <input type="hidden" name="hidden_id" class="hidden_id" id="hidden_id" value="0">
                         <div class="row">
 
                             <div class="form-group col-lg-6">
@@ -51,7 +51,8 @@
 
                         </div>
 
-                        <div class="form-group">
+                        <div class="row">
+                        <div class="form-group col-lg-6">
                             <label class="form-label">Standard</label>
                             <div class="form-control-wrap">
                                 <select name="standard_id" class="form-control standard_id" id="standard_id">
@@ -65,7 +66,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group col-lg-6">
                             <label class="form-label">Semester</label>
                             <div class="form-control-wrap">
                                 <select name="semester_id" class="form-control semester_id" id="semester_id">
@@ -77,6 +78,7 @@
                                     </span>
                                 @enderror
                             </div>
+                        </div>
                         </div>
 
                         <div class="row">
@@ -116,17 +118,24 @@
                                 @enderror
                             </div>
                         </div>--}}
-                        <div class="form-group">
+
+                        <div class="row">
+                        <div class="form-group col-lg-6">
                             <label class="form-label">Thumbnail</label>
                             <div class="form-control-wrap">
                                 <input type="file" class="form-control" id="thumbnail" name="thumbnail" value="">
-                                <img id="thumbnail_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" width="100" />
+                                <input type="hidden" id="hidden_thumbnail" name="hidden_thumbnail" value="">
                                 @error('thumbnail')
                                     <span class="text-danger" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
                             </div>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <img id="thumbnail_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" width="100" />
+                        </div>
+
                         </div>
                         
                         <div class="form-group">
@@ -268,23 +277,158 @@ $(document).ready(function () {
                 url: form.action,
                 type: form.method,
                 data: formData,//$(form).serialize(),
-                mimeType: "multipart/form-data",
                 contentType: false,
                 processData: false,
-                dataType: 'html',
                 success: function(data) {
-                    confirm("Subject Added Successfully.");
+                    confirm(data.message);
                     $('#subject_name').val('');
                     $('#sub_title').val('');
                     $('#thumbnail').val();
+                    $('#hidden_thumbnail').val('');
+                    $('#thumbnail_preview').css('display','none');
+                    $('#hidden_id').val('0');
                     
                     $('.dyamictable').empty();
-                    $('.dyamictable').html(data);
+                    $('.dyamictable').html(data.html);
+                    $(".datatable-init").DataTable();
                 }            
             });
         }
     });
     
+});
+
+$(document).on('click','.edit-btn',function(){
+    var id = $(this).attr('data-id');
+    $.ajax({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="token"]').attr('content')
+        },
+        url: "{{ route('subject.edit') }}",
+        type: 'GET',
+        data: {
+              'id':id
+        },
+        success: function(result) {
+            $('#board_id').val(result.board_id);
+            var board_id = $('#board_id').val();
+            var medium_id = result.medium_id;
+            var standard_id = result.standard_id;
+            var semester_id = result.semester_id;
+            getMediumEdit(board_id,medium_id);
+            getStandardEdit(board_id,medium_id,standard_id);
+            getSemesterEdit(board_id,medium_id,standard_id,semester_id);
+
+            $('#subject_name').val(result.subject_name);
+            $('#sub_title').val(result.sub_title);
+            $('#hidden_thumbnail').val(result.thumbnail);
+            $('#thumbnail_preview').css('display','block');
+            var url_path = "{{ env('APP_URL') }}"+"/upload/subject/thumbnail/"+result.thumbnail;
+            $('#thumbnail_preview').attr('src', url_path);
+            $('#hidden_id').val(result.id);
+            //$('#thumbnail').val('');
+            
+            
+            // $('.dyamictable').empty();
+            // $('.dyamictable').html(data);
+        }            
+    });
+});
+
+function getMediumEdit(board_id,medium_id){
+    
+    $.ajax({
+        type: "GET",
+        url: "{{route('get.medium')}}",
+        data: {
+            "board_id":board_id,
+            "medium_id":medium_id,
+        },
+        success: function(result) {
+            $('.medium_id').html('');
+            $('.medium_id').html(result.html);
+        } 
+    });
+}
+
+function getStandardEdit(board_id,medium_id,standard_id){
+    
+    $.ajax({
+        type: "GET",
+        url: "{{route('get.standard')}}",
+        data: {
+            "board_id":board_id,
+            "medium_id":medium_id,
+            "standard_id":standard_id,
+        },
+        success: function(result) {
+            $('.standard_id').html('');
+            $('.standard_id').html(result.html);
+        } 
+    });
+}
+
+function getSemesterEdit(board_id,medium_id,standard_id,semester_id){
+    
+    $.ajax({
+        type: "GET",
+        url: "{{route('get.semester')}}",
+        data: {
+            "board_id":board_id,
+            "medium_id":medium_id,
+            "standard_id":standard_id,
+            "semester_id":semester_id,
+        },
+        success: function(result) {
+            $('.semester_id').html('');
+            $('.semester_id').html(result.html);
+        } 
+    });
+}
+
+$(document).on('click','.distroy', function() {
+    var id = $(this).attr('data-id');
+    bootbox.confirm({
+        message: "Are you sure to delete this subject ?",
+        buttons: {
+            confirm: {
+                label: 'Yes',
+                className: 'btn-success'
+            },
+            cancel: {
+                label: 'No',
+                className: 'btn-danger'
+            }
+        },
+        callback: function(result) {
+            if(result){
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="token"]').attr('content')
+                    },
+                    url: "{{ route('subject.distroy') }}",
+                    type: "GET",
+                    data: {
+                        'id':id,
+                    },
+                    success: function(data) {
+                        confirm("Subject Deleted Successfully.");
+                            
+                        $('#subject_name').val('');
+                        $('#sub_title').val('');
+                        $('#thumbnail').val('');
+                        $('#hidden_thumbnail').val('');
+                        $('#thumbnail_preview').css('display','none');
+
+                        $('.dyamictable').empty();
+                        $('.dyamictable').html(data);
+                        $(".datatable-init").DataTable();
+                    }            
+                });
+                //location.replace(del_url);
+            }
+        }
+    });
 });
 
 </script>

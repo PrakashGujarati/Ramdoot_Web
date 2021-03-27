@@ -48,7 +48,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="row">
+                        <div class="form-group col-lg-6">
                             <label class="form-label">Standard</label>
                             <div class="form-control-wrap">
                                 <select name="standard_id" class="form-control standard_id" id="standard_id">
@@ -64,7 +65,7 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group col-lg-6">
                             <label class="form-label">Semester</label>
                             <div class="form-control-wrap">
                                 <input type="text" class="form-control" id="semester" name="semester" value="{{ old('semester') }}">
@@ -75,7 +76,7 @@
                                 @enderror
                             </div>
                         </div>
-                        
+                        </div>
                         
                         <div class="form-group">
                             <button type="submit" class="btn btn-lg btn-primary">Submit</button>
@@ -165,18 +166,17 @@ $(document).ready(function () {
                 },
                 url: form.action,
                 type: form.method,
-                data: formData,//$(form).serialize(),
-                mimeType: "multipart/form-data",
+                data: formData,
                 contentType: false,
                 processData: false,
-                dataType: 'html',
                 success: function(data) {
-                    confirm("Semester Added Successfully.");
+                    confirm(data.message);
                     $('#semester').val('');
-                    
+                    $('#hidden_id').val('0');
                     
                     $('.dyamictable').empty();
-                    $('.dyamictable').html(data);
+                    $('.dyamictable').html(data.html);
+                    $(".datatable-init").DataTable();
                 }            
             });
         }
@@ -190,20 +190,60 @@ $(document).on('click','.edit-btn',function(){
         headers: {
             'X-CSRF-TOKEN': $('meta[name="token"]').attr('content')
         },
-        url: "{{ route('medium.edit') }}",
+        url: "{{ route('semester.edit') }}",
         type: 'GET',
         data: {
               'id':id
         },
         success: function(result) {
-            $('#medium_name').val(result.medium_name);
             $('#board_id').val(result.board_id);
+            $('#medium_id').val(result.medium_id);
+            $('#standard_id').val(result.standard_id);
+            var board_id = $('#board_id').val();
+            var medium_id = result.medium_id;
+            var standard_id = result.standard_id;
+            getMediumEdit(board_id,medium_id);
+            getStandardEdit(board_id,medium_id,standard_id);
+            $('#semester').val(result.semester);
             $('#hidden_id').val(result.id);
         }            
     });
 });
 
-$('.distroy').on('click', function() {
+function getMediumEdit(board_id,medium_id){
+    
+    $.ajax({
+        type: "GET",
+        url: "{{route('get.medium')}}",
+        data: {
+            "board_id":board_id,
+            "medium_id":medium_id,
+        },
+        success: function(result) {
+            $('.medium_id').html('');
+            $('.medium_id').html(result.html);
+        } 
+    });
+}
+
+function getStandardEdit(board_id,medium_id,standard_id){
+    
+    $.ajax({
+        type: "GET",
+        url: "{{route('get.standard')}}",
+        data: {
+            "board_id":board_id,
+            "medium_id":medium_id,
+            "standard_id":standard_id,
+        },
+        success: function(result) {
+            $('.standard_id').html('');
+            $('.standard_id').html(result.html);
+        } 
+    });
+}
+
+$(document).on('click','.distroy', function() {
     var id = $(this).attr('data-id');
     bootbox.confirm({
         message: "Are you sure to delete this semester ?",

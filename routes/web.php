@@ -57,9 +57,9 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('standard', [StandardController::class, 'index'])->name('standard.index');
 	Route::get('standard/create', [StandardController::class, 'create'])->name('standard.create');
 	Route::post('standard/store', [StandardController::class, 'store'])->name('standard.store');
-	Route::get('standard/{id}/edit', [StandardController::class, 'edit'])->name('standard.edit');
+	Route::get('standard/edit', [StandardController::class, 'edit'])->name('standard.edit');
 	Route::post('standard/{id}/update', [StandardController::class, 'update'])->name('standard.update');
-	Route::get('standard/{id}/delete', [StandardController::class, 'distroy'])->name('standard.distroy');
+	Route::get('standard/delete', [StandardController::class, 'distroy'])->name('standard.distroy');
 
 	Route::get('get_standard', [StandardController::class, 'getStandard'])->name('get.standard');
 
@@ -67,19 +67,19 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('subject', [SubjectController::class, 'index'])->name('subject.index');
 	Route::get('subject/create', [SubjectController::class, 'create'])->name('subject.create');
 	Route::post('subject/store', [SubjectController::class, 'store'])->name('subject.store');
-	Route::get('subject/{id}/edit', [SubjectController::class, 'edit'])->name('subject.edit');
+	Route::get('subject/edit', [SubjectController::class, 'edit'])->name('subject.edit');
 	Route::post('subject/{id}/update', [SubjectController::class, 'update'])->name('subject.update');
-	Route::get('subject/{id}/delete', [SubjectController::class, 'distroy'])->name('subject.distroy');
+	Route::get('subject/delete', [SubjectController::class, 'distroy'])->name('subject.distroy');
 
 	Route::get('get_subject', [SubjectController::class, 'getSubject'])->name('get.subject');
 
 	/*Book*/
 	Route::get('book', [BookController::class, 'index'])->name('book.index');
-	Route::get('book/create', [BookController::class, 'create'])->name('book.create');
+	Route::get('book/create/{subject_id?}', [BookController::class, 'create'])->name('book.create');
 	Route::post('book/store', [BookController::class, 'store'])->name('book.store');
-	Route::get('book/{id}/edit', [BookController::class, 'edit'])->name('book.edit');
+	Route::get('book/edit', [BookController::class, 'edit'])->name('book.edit');
 	Route::post('book/{id}/update', [BookController::class, 'update'])->name('book.update');
-	Route::get('book/{id}/delete', [BookController::class, 'distroy'])->name('book.distroy');
+	Route::get('book/delete', [BookController::class, 'distroy'])->name('book.distroy');
 
 	/*Book*/
 	Route::get('medium', [MediumController::class, 'index'])->name('medium.index');
@@ -112,11 +112,11 @@ Route::group(['middleware' => 'auth'], function(){
 
 	/*unit*/
 	Route::get('unit', [UnitController::class, 'index'])->name('unit.index');
-	Route::get('unit/create', [UnitController::class, 'create'])->name('unit.create');
+	Route::get('unit/create/{subject_id?}', [UnitController::class, 'create'])->name('unit.create');
 	Route::post('unit/store', [UnitController::class, 'store'])->name('unit.store');
-	Route::get('unit/{id}/edit', [UnitController::class, 'edit'])->name('unit.edit');
+	Route::get('unit/edit', [UnitController::class, 'edit'])->name('unit.edit');
 	Route::post('unit/{id}/update', [UnitController::class, 'update'])->name('unit.update');
-	Route::get('unit/{id}/delete', [UnitController::class, 'distroy'])->name('unit.distroy');
+	Route::get('unit/delete', [UnitController::class, 'distroy'])->name('unit.distroy');
 
 	Route::get('get_unit', [UnitController::class, 'getUnit'])->name('get.unit');
 

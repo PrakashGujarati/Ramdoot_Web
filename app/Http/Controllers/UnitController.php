@@ -34,14 +34,15 @@ class UnitController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($id)
     {
         $boards = Board::where('status','Active')->get();
         $semesters = Semester::where('status','Active')->get();
         $standards = Standard::where('status','Active')->get();
         $subjects = Subject::where('status','Active')->get();
         $unit_details = Unit::where('status','Active')->get();
-        return view('unit.add',compact('subjects','standards','semesters','boards','unit_details'));
+        $subjects_details = Subject::where('id',$id)->first();
+        return view('unit.add',compact('subjects','standards','semesters','boards','unit_details','subjects_details'));
     }
 
     /**
@@ -67,6 +68,66 @@ class UnitController extends Controller
         ]);
 
         // for ($i = 0; $i < count($request->title); $i++) {
+
+        if($request->hidden_id != "0")
+        {
+            $new_name='';
+            if($request->thumbnail)
+            {
+            
+                $image = $request->thumbnail;
+
+                $new_name = rand() . '.' . $image->getClientOriginalExtension();
+
+                $valid_ext = array('png','jpeg','jpg');
+
+                // Location
+                $location = public_path('upload/unit/thumbnail/').$new_name;
+
+                $file_extension = pathinfo($location, PATHINFO_EXTENSION);
+                $file_extension = strtolower($file_extension);
+
+                if(in_array($file_extension,$valid_ext)){
+                    $this->compressImage($image->getPathName(),$location,60);
+                }
+            }
+            else{
+                $new_name = $request->hidden_thumbnail;
+            }
+
+            $url_file='';
+            if($request->url_type == 'file'){
+                if($request->url)
+                {
+                    $image = $request->url;
+                    $url_file = time().'.'.$image->getClientOriginalExtension();
+                    $destinationPath = public_path('upload/unit/url/');
+                    $image->move($destinationPath, $url_file);
+                }
+                else{
+                    $url_file = $request->hidden_url;
+                }
+            }else{
+                $url_file = $request->url;
+            }
+
+            $add = Unit::find($request->hidden_id);
+            $add->board_id = $request->board_id;
+            $add->medium_id = $request->medium_id;
+            $add->standard_id = $request->standard_id;
+            $add->semester_id = $request->semester_id;
+            $add->subject_id = $request->subject_id;
+            $add->title = $request->title;
+            $add->url_type = $request->url_type;
+            $add->url = $url_file;
+            $add->thumbnail = $new_name;
+            $add->pages = isset($request->pages) ? $request->pages:'';
+            $add->description = isset($request->description) ? $request->description:'';
+            $add->save();
+
+            $msg = "Unit Updated Successfully.";
+        }
+        else{
 
             $new_name='';
             if($request->thumbnail)
@@ -115,12 +176,20 @@ class UnitController extends Controller
             $add->pages = isset($request->pages) ? $request->pages:'';
             $add->description = isset($request->description) ? $request->description:'';
             $add->save();
+
+            $msg = "Unit Added Successfully.";
             
             storeLog('unit',$add->id,date('Y-m-d H:i:s'),'create');
             storeReview('unit',$add->id,date('Y-m-d H:i:s'));
 
-           $unit_details = Unit::where('status','Active')->get();
-           return view('unit.dynamic_table',compact('unit_details'));
+        }
+            
+        $unit_details = Unit::where('status','Active')->get();
+        $html = view('unit.dynamic_table',compact('unit_details'))->render();
+        $data = ['html' => $html,'message' => $msg];
+        return response()->json($data);
+        
+        //return view('unit.dynamic_table',compact('unit_details'));
            //return redirect()->route('unit.index')->with('success', 'Unit Added Successfully.');     
         // }
 
@@ -144,14 +213,15 @@ class UnitController extends Controller
      * @param  \App\Models\unit  $unit
      * @return \Illuminate\Http\Response
      */
-    public function edit(Unit $unit,$id)
+    public function edit(Request $request)
     {
-        $unitdata = Unit::where('id',$id)->first();
-        $boards = Board::where('status','Active')->get();
-        $subjects = Subject::where('status','Active')->get();
-        $semesters = Semester::where('status','Active')->get();
-        $standards = Standard::where('status','Active')->get();
-        return view('unit.edit',compact('unitdata','subjects','semesters','standards','boards'));
+        $unitdata = Unit::where('id',$request->id)->first();
+        return $unitdata;
+        // $boards = Board::where('status','Active')->get();
+        // $subjects = Subject::where('status','Active')->get();
+        // $semesters = Semester::where('status','Active')->get();
+        // $standards = Standard::where('status','Active')->get();
+        //return view('unit.edit',compact('unitdata','subjects','semesters','standards','boards'));
     }
 
     /**
@@ -237,13 +307,15 @@ class UnitController extends Controller
      * @param  \App\Models\unit  $unit
      * @return \Illuminate\Http\Response
      */
-    public function distroy(Unit $unit,$id)
+    public function distroy(Request $request)
     {
-        $delete = Unit::find($id);
+        $delete = Unit::find($request->id);
         $delete->status = "Deleted";
         $delete->save();
 
-        return redirect()->route('unit.index')->with('success', 'Unit Deleted Successfully.');
+        $unit_details = Unit::where('status','Active')->get();
+        return view('unit.dynamic_table',compact('unit_details'));
+        //return redirect()->route('unit.index')->with('success', 'Unit Deleted Successfully.');
     }
 
     function compressImage($source, $destination, $quality) {

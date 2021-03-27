@@ -56,57 +56,91 @@ class SubjectController extends Controller
             'semester_id' => 'required',
             'standard_id'  => 'required',
             'subject_name' => 'required',
-            'sub_title' => 'required',
-            //'url' => 'required',
-            'thumbnail'  => 'required',
+            'sub_title' => 'required'
         ]);
 
-        $new_name='';
-        if($request->has('thumbnail'))
+        if($request->hidden_id != "0")
         {
-        
-            $image = $request->file('thumbnail');
+            $new_name='';
+            if($request->has('thumbnail'))
+            {
+            
+                $image = $request->file('thumbnail');
 
-            $new_name = rand() . '.' . $image->getClientOriginalExtension();
+                $new_name = rand() . '.' . $image->getClientOriginalExtension();
 
-            $valid_ext = array('png','jpeg','jpg');
+                $valid_ext = array('png','jpeg','jpg');
 
-            // Location
-            $location = public_path('upload/subject/thumbnail/').$new_name;
+                // Location
+                $location = public_path('upload/subject/thumbnail/').$new_name;
 
-            $file_extension = pathinfo($location, PATHINFO_EXTENSION);
-            $file_extension = strtolower($file_extension);
+                $file_extension = pathinfo($location, PATHINFO_EXTENSION);
+                $file_extension = strtolower($file_extension);
 
-            if(in_array($file_extension,$valid_ext)){
-                $this->compressImage($image->getPathName(),$location,60);
+                if(in_array($file_extension,$valid_ext)){
+                    $this->compressImage($image->getPathName(),$location,60);
+                }
             }
+            else{
+                $new_name = $request->hidden_thumbnail;
+            }
+
+            $add = Subject::find($request->hidden_id);
+            $add->board_id = $request->board_id;
+            $add->medium_id = $request->medium_id;
+            $add->standard_id = $request->standard_id;
+            $add->semester_id = $request->semester_id;
+            $add->subject_name = $request->subject_name;
+            $add->sub_title = $request->sub_title;
+            //$add->url = $url_file;
+            $add->thumbnail = $new_name;
+            $add->save();
+
+            $msg = "Subject Updated Successfully.";
+        }
+        else{
+            $new_name='';
+            if($request->has('thumbnail'))
+            {
+            
+                $image = $request->file('thumbnail');
+
+                $new_name = rand() . '.' . $image->getClientOriginalExtension();
+
+                $valid_ext = array('png','jpeg','jpg');
+
+                // Location
+                $location = public_path('upload/subject/thumbnail/').$new_name;
+
+                $file_extension = pathinfo($location, PATHINFO_EXTENSION);
+                $file_extension = strtolower($file_extension);
+
+                if(in_array($file_extension,$valid_ext)){
+                    $this->compressImage($image->getPathName(),$location,60);
+                }
+            }
+
+            $add = new Subject;
+            $add->board_id = $request->board_id;
+            $add->medium_id = $request->medium_id;
+            $add->standard_id = $request->standard_id;
+            $add->semester_id = $request->semester_id;
+            $add->subject_name = $request->subject_name;
+            $add->sub_title = $request->sub_title;
+            //$add->url = $url_file;
+            $add->thumbnail = $new_name;
+            $add->save();
+
+            $msg = "Subject Added Successfully.";
+
+            storeLog('subject',$add->id,date('Y-m-d H:i:s'),'create');
+            storeReview('subject',$add->id,date('Y-m-d H:i:s'));
         }
 
-        //$url_file='';
-        // if($request->has('url'))
-        // {
-        //     $image = $request->file('url');
-        //     $url_file = time().'.'.$image->getClientOriginalExtension();
-        //     $destinationPath = public_path('upload/subject/url/');
-        //     $image->move($destinationPath, $url_file);
-        // }
-
-        $add = new Subject;
-        $add->board_id = $request->board_id;
-        $add->medium_id = $request->medium_id;
-        $add->standard_id = $request->standard_id;
-        $add->semester_id = $request->semester_id;
-        $add->subject_name = $request->subject_name;
-        $add->sub_title = $request->sub_title;
-        //$add->url = $url_file;
-        $add->thumbnail = $new_name;
-        $add->save();
-
-        storeLog('subject',$add->id,date('Y-m-d H:i:s'),'create');
-        storeReview('subject',$add->id,date('Y-m-d H:i:s'));
-
         $subject_details = Subject::where('status','Active')->get();
-        return view('subject.dynamic_table',compact('subject_details'));
+        $html = view('subject.dynamic_table',compact('subject_details'))->render();
+        $data = ['html' => $html,'message' => $msg];
+        return response()->json($data);
         //return redirect()->route('subject.index')->with('success', 'Subject Added Successfully.');
 
     }
@@ -128,13 +162,14 @@ class SubjectController extends Controller
      * @param  \App\Models\Subject  $subject
      * @return \Illuminate\Http\Response
      */
-    public function edit(Subject $subject,$id)
+    public function edit(Request $request)
     {
-        $subjectdata = Subject::where('id',$id)->first();
-        $boards = Board::where('status','Active')->get();
-        $standards = Standard::where('status','Active')->get();
-        $semesters = Semester::where('status','Active')->get();
-        return view('subject.edit',compact('subjectdata','boards','standards','semesters'));
+        $subjectdata = Subject::where('id',$request->id)->first();
+        return $subjectdata;
+        // $boards = Board::where('status','Active')->get();
+        // $standards = Standard::where('status','Active')->get();
+        // $semesters = Semester::where('status','Active')->get();
+        //return view('subject.edit',compact('subjectdata','boards','standards','semesters'));
 
     }
 
@@ -212,13 +247,16 @@ class SubjectController extends Controller
      * @param  \App\Models\Subject  $subject
      * @return \Illuminate\Http\Response
      */
-    public function distroy(Subject $subject,$id)
+    public function distroy(Request $request)
     {
-        $delete = Subject::find($id);
+        $delete = Subject::find($request->id);
         $delete->status = "Deleted";
         $delete->save();
 
-        return redirect()->route('subject.index')->with('success', 'Subject Deleted Successfully.');
+        $subject_details = Subject::where('status','Active')->get();
+        return view('subject.dynamic_table',compact('subject_details'));
+
+        //return redirect()->route('subject.index')->with('success', 'Subject Deleted Successfully.');
     }
 
     function compressImage($source, $destination, $quality) {
@@ -238,6 +276,7 @@ class SubjectController extends Controller
     }
 
     public function getSubject(Request $request){
+
 
         $getsubject = Subject::where(['board_id' => $request->board_id,'standard_id' => $request->standard_id,'medium_id' => $request->medium_id,'semester_id' => $request->semester_id,'status' => 'Active'])->get();
 

@@ -52,45 +52,91 @@ class StandardController extends Controller
             'board_id'     => 'required',
             'medium_id'  => 'required',
             'standard'  => 'required',
-            //'semester' => 'required',
-            'section' => 'required',
-            'thumbnail'  => 'required',
+            'section' => 'required'
         ]);
 
-        $new_name='';
-        if($request->has('thumbnail'))
-        {
-        
-            $image = $request->file('thumbnail');
 
-            $new_name = rand() . '.' . $image->getClientOriginalExtension();
+        if($request->hidden_id != "0"){
 
-            $valid_ext = array('png','jpeg','jpg');
+            $new_name='';
+            if($request->has('thumbnail'))
+            {
+            
+                $image = $request->file('thumbnail');
 
-            // Location
-            $location = public_path('upload/standard/thumbnail/').$new_name;
+                $new_name = rand() . '.' . $image->getClientOriginalExtension();
 
-            $file_extension = pathinfo($location, PATHINFO_EXTENSION);
-            $file_extension = strtolower($file_extension);
+                $valid_ext = array('png','jpeg','jpg');
 
-            if(in_array($file_extension,$valid_ext)){
-                $this->compressImage($image->getPathName(),$location,60);
+                // Location
+                $location = public_path('upload/standard/thumbnail/').$new_name;
+
+                $file_extension = pathinfo($location, PATHINFO_EXTENSION);
+                $file_extension = strtolower($file_extension);
+
+                if(in_array($file_extension,$valid_ext)){
+                    $this->compressImage($image->getPathName(),$location,60);
+                }
             }
+            else{
+                $new_name = $request->hidden_thumbnail;
+            }
+
+            $add = Standard::find($request->hidden_id);
+            $add->medium_id = $request->medium_id;
+            $add->board_id = $request->board_id;
+            $add->standard = $request->standard;
+            $add->section = $request->section;
+            $add->thumbnail = $new_name;
+            $add->save();
+
+            $msg = "Standard Updated Successfully.";
+        }
+        else{
+
+            $new_name='';
+            if($request->has('thumbnail'))
+            {
+            
+                $image = $request->file('thumbnail');
+
+                $new_name = rand() . '.' . $image->getClientOriginalExtension();
+
+                $valid_ext = array('png','jpeg','jpg');
+
+                // Location
+                $location = public_path('upload/standard/thumbnail/').$new_name;
+
+                $file_extension = pathinfo($location, PATHINFO_EXTENSION);
+                $file_extension = strtolower($file_extension);
+
+                if(in_array($file_extension,$valid_ext)){
+                    $this->compressImage($image->getPathName(),$location,60);
+                }
+            }
+
+            $add = new Standard;
+            $add->medium_id = $request->medium_id;
+            $add->board_id = $request->board_id;
+            $add->standard = $request->standard;
+            $add->section = $request->section;
+            $add->thumbnail = $new_name;
+            $add->save();
+
+            storeLog('standard',$add->id,date('Y-m-d H:i:s'),'create');
+            storeReview('standard',$add->id,date('Y-m-d H:i:s'));
+
+            $msg = "Standard Added Successfully.";
+
         }
 
-        $add = new Standard;
-        $add->medium_id = $request->medium_id;
-        $add->board_id = $request->board_id;
-        $add->standard = $request->standard;
-        $add->section = $request->section;
-        $add->thumbnail = $new_name;
-        $add->save();
-
-        storeLog('standard',$add->id,date('Y-m-d H:i:s'),'create');
-        storeReview('standard',$add->id,date('Y-m-d H:i:s'));
-
         $standard_details = Standard::where('status','Active')->get();
-        return view('standard.dynamic_table',compact('standard_details'));
+        $html = view('standard.dynamic_table',compact('standard_details'))->render();
+        $data = ['html' => $html,'message' => $msg];
+        return response()->json($data);
+
+        
+        //return view('standard.dynamic_table',compact('standard_details'));
         //return redirect()->route('standard.index')->with('success', 'Standard Added Successfully.');
     }
 
@@ -111,11 +157,12 @@ class StandardController extends Controller
      * @param  \App\Models\Standard  $standard
      * @return \Illuminate\Http\Response
      */
-    public function edit(Standard $standard,$id)
+    public function edit(Request $request)
     {
-        $standarddata = Standard::where('id',$id)->first();
-        $boards = Board::where('status','Active')->get();
-        return view('standard.edit',compact('standarddata','boards'));
+        $standarddata = Standard::where('id',$request->id)->first();
+        return $standarddata;
+        //$boards = Board::where('status','Active')->get();
+        //return view('standard.edit',compact('standarddata','boards'));
     }
 
     /**
@@ -176,13 +223,15 @@ class StandardController extends Controller
      * @param  \App\Models\Standard  $standard
      * @return \Illuminate\Http\Response
      */
-    public function distroy(Standard $standard,$id)
+    public function distroy(Request $request)
     {
-        $delete = Standard::find($id);
+        $delete = Standard::find($request->id);
         $delete->status = "Deleted";
         $delete->save();
 
-        return redirect()->route('standard.index')->with('success', 'Standard Deleted Successfully.');
+        $standard_details = Standard::where('status','Active')->get();
+        return view('standard.dynamic_table',compact('standard_details'));
+        //return redirect()->route('standard.index')->with('success', 'Standard Deleted Successfully.');
     }
 
     function compressImage($source, $destination, $quality) {

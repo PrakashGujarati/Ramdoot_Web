@@ -15,6 +15,7 @@
                     </div>
                     <form action="{{ route('standard.store') }}" method="POST" enctype='multipart/form-data' id="standard_form">
                     @csrf
+                        <input type="hidden" name="hidden_id" class="hidden_id" id="hidden_id" value="0">
                         <div class="row">
                             <div class="form-group col-lg-6">
                                 <label class="form-label">Board</label>
@@ -46,7 +47,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="row">
+                        <div class="form-group col-lg-6">
                             <label class="form-label">Standard</label>
                             <div class="form-control-wrap">
                                 <input type="text" class="form-control" id="standard" name="standard" value="{{ old('standard') }}">
@@ -57,7 +59,7 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group col-lg-6">
                             <label class="form-label">Section</label>
                             <div class="form-control-wrap">
                                 <input type="text" class="form-control" id="section" name="section" value="{{ old('section') }}">
@@ -67,6 +69,7 @@
                                     </span>
                                 @enderror
                             </div>
+                        </div>
                         </div>
                         <!-- <div class="form-group">
                             <label class="form-label">Semester</label>
@@ -79,17 +82,22 @@
                                 @enderror
                             </div>
                         </div> -->
-                        <div class="form-group">
+                        <div class="row">
+                        <div class="form-group col-lg-6">
                             <label class="form-label">Thumbnail</label>
                             <div class="form-control-wrap">
                                 <input type="file" class="form-control" id="thumbnail" name="thumbnail" value="">
-                                <img id="thumbnail_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" width="100" />
+                                <input type="hidden" id="hidden_thumbnail" name="hidden_thumbnail" value="">
                                 @error('thumbnail')
                                     <span class="text-danger" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
                             </div>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <img id="thumbnail_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" width="100" />
+                        </div>
                         </div>
                         
                         <div class="form-group">
@@ -201,26 +209,123 @@ $(document).ready(function () {
                 url: form.action,
                 type: form.method,
                 data: formData,//$(form).serialize(),
-                mimeType: "multipart/form-data",
                 contentType: false,
                 processData: false,
-                dataType: 'html',
                 success: function(data) {
-                    confirm("Standard Added Successfully.");
+                    confirm(data.message);
                     $('#standard').val('');
                     $('#section').val('');
                     $('#thumbnail').val('');
+                    $('#hidden_thumbnail').val('');
+                    $('#thumbnail_preview').css('display','none');
+                    $('#hidden_id').val('0');
                     
                     
                     $('.dyamictable').empty();
-                    $('.dyamictable').html(data);
+                    $('.dyamictable').html(data.html);
+                    $(".datatable-init").DataTable();
                 }            
             });
         }
     });
     
 });
+
+$(document).on('click','.edit-btn',function(){
+    var id = $(this).attr('data-id');
+    $.ajax({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="token"]').attr('content')
+        },
+        url: "{{ route('standard.edit') }}",
+        type: 'GET',
+        data: {
+              'id':id
+        },
+        success: function(result) {
+            $('#board_id').val(result.board_id);
+            var board_id = $('#board_id').val();
+            var medium_id = result.medium_id;
+            getMediumEdit(board_id,medium_id);
+            $('#standard').val(result.standard);
+            $('#section').val(result.section);
+            $('#hidden_thumbnail').val(result.thumbnail);
+            $('#thumbnail_preview').css('display','block');
+            var url_path = "{{ env('APP_URL') }}"+"/upload/standard/thumbnail/"+result.thumbnail;
+            $('#thumbnail_preview').attr('src', url_path);
+            $('#hidden_id').val(result.id);
+            //$('#thumbnail').val('');
+            
+            
+            // $('.dyamictable').empty();
+            // $('.dyamictable').html(data);
+        }            
+    });
+});
+
+function getMediumEdit(board_id,medium_id){
     
+    $.ajax({
+        type: "GET",
+        url: "{{route('get.medium')}}",
+        data: {
+            "board_id":board_id,
+            "medium_id":medium_id,
+        },
+        success: function(result) {
+            $('.medium_id').html('');
+            $('.medium_id').html(result.html);
+        } 
+    });
+}
+    
+
+
+$(document).on('click','.distroy', function() {
+    var id = $(this).attr('data-id');
+    bootbox.confirm({
+        message: "Are you sure to delete this standard ?",
+        buttons: {
+            confirm: {
+                label: 'Yes',
+                className: 'btn-success'
+            },
+            cancel: {
+                label: 'No',
+                className: 'btn-danger'
+            }
+        },
+        callback: function(result) {
+            if(result){
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="token"]').attr('content')
+                    },
+                    url: "{{ route('standard.distroy') }}",
+                    type: "GET",
+                    data: {
+                        'id':id,
+                    },
+                    success: function(data) {
+                        confirm("Standard Deleted Successfully.");
+                            
+                        $('#standard').val('');
+                        $('#section').val('');
+                        $('#thumbnail').val('');
+                        $('#hidden_thumbnail').val('');
+                        $('#thumbnail_preview').css('display','none');
+
+                        $('.dyamictable').empty();
+                        $('.dyamictable').html(data);
+                        $(".datatable-init").DataTable();
+                    }            
+                });
+                //location.replace(del_url);
+            }
+        }
+    });
+});
+
 
 </script>
 

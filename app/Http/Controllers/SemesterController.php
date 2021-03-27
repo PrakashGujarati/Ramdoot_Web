@@ -55,18 +55,39 @@ class SemesterController extends Controller
             'semester' => 'required',
         ]);
 
-        $add = new Semester;
-        $add->board_id = $request->board_id;
-        $add->medium_id = $request->medium_id;
-        $add->standard_id = $request->standard_id;
-        $add->semester = $request->semester;
-        $add->save();
+        if($request->hidden_id != "0"){
+            $add = Semester::find($request->hidden_id);
+            $add->board_id = $request->board_id;
+            $add->medium_id = $request->medium_id;
+            $add->standard_id = $request->standard_id;
+            $add->semester = $request->semester;
+            $add->save();
 
-        storeLog('semester',$add->id,date('Y-m-d H:i:s'),'create');
-        storeReview('semester',$add->id,date('Y-m-d H:i:s'));
+            $msg = "Semester Updated Successfully.";
+        }
+        else{
+            $add = new Semester;
+            $add->board_id = $request->board_id;
+            $add->medium_id = $request->medium_id;
+            $add->standard_id = $request->standard_id;
+            $add->semester = $request->semester;
+            $add->save();
+
+            storeLog('semester',$add->id,date('Y-m-d H:i:s'),'create');
+            storeReview('semester',$add->id,date('Y-m-d H:i:s'));
+
+            $msg = "Semester Added Successfully.";
+        }
+                
 
         $semester_details = Semester::where('status','Active')->get();
-        return view('semester.dynamic_table',compact('semester_details'));
+        $html = view('semester.dynamic_table',compact('semester_details'))->render();
+        $data = ['html' => $html,'message' => $msg];
+        return response()->json($data);
+
+
+        
+        //return view('semester.dynamic_table',compact('semester_details'));
         //return redirect()->route('semester.index')->with('success', 'Semester Added Successfully.');
     }
 
@@ -87,12 +108,13 @@ class SemesterController extends Controller
      * @param  \App\Models\semester  $semester
      * @return \Illuminate\Http\Response
      */
-    public function edit(Semester $semester,$id)
+    public function edit(Request $request)
     {
-        $semesterdata = Semester::where('id',$id)->first();
-        $boards = Board::where('status','Active')->get();
-        $standards = Standard::where('status','Active')->get();
-        return view('semester.edit',compact('semesterdata','boards','standards'));
+        $semesterdata = Semester::where('id',$request->id)->first();
+        return $semesterdata;
+        //$boards = Board::where('status','Active')->get();
+        //$standards = Standard::where('status','Active')->get();
+       // return view('semester.edit',compact('semesterdata','boards','standards'));
     }
 
     /**

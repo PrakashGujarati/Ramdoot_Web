@@ -47,6 +47,7 @@
                 <tbody>
                 	@if(count($unit_details) > 0)
                 	@foreach($unit_details as $data)
+
                     <tr>
                         <td>{{ isset($data->board->name) ? $data->board->name:'' }}</td>
                         <td>{{ isset($data->medium->medium_name) ? $data->medium->medium_name:'' }}</td>
@@ -74,7 +75,7 @@
                         	<a href="{{ route('unit.edit',$data->id) }}" class="mr-1"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
                         	<a href="javascript:;" data-url="{{ route('unit.distroy',$data->id) }}" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a>
                         </td>--}}
-                        <td><a href="javascript:;" data-url="" class=""><span class="nk-menu-icon text-primary"><em class="fa fa-plus pr-1"></em>Add</span></a></td>
+                        <td><a href="{{ route('unit.create',$data->subject_id) }}" data-url="" class=""><span class="nk-menu-icon text-primary"><em class="fa fa-plus pr-1"></em>Add</span></a></td>
                     </tr>
                     @endforeach
                     @else

@@ -127,7 +127,7 @@ class BoardController extends Controller
         }
 
         $boards_details = Board::where('status','Active')->get();
-        $html = view('board.dynamic_table',compact('boards_details'))->render();//return view('board.dynamic_table',compact('boards_details'));
+        $html = view('board.dynamic_table',compact('boards_details'))->render();
         $data = ['html' => $html,'message' => $msg];
         return response()->json($data);
         //return redirect()->route('board.index')->with('success', 'Board Added Successfully.');

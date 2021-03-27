@@ -4,7 +4,7 @@
             <h5 class="card-title">Unit List</h5>
         </div>
         <div class="" style="width: 100%;overflow-x: auto;">
-        <table class="table">
+        <table class="datatable-init table">
             <thead>
                 <tr>
                     <th>Board</th>
@@ -18,6 +18,7 @@
                     <th>Thumbnail</th>
                     <th>Pages</th>
                     <th>Action</th>
+                    <th>Position</th>
                 </tr>
             </thead>
             <tbody>
@@ -47,7 +48,15 @@
                             @endif
                         </td>
                         <td>{{ isset($data->pages) ? $data->pages:'' }}</td>
-                        <td><a href="javascript:;" data-id="{{ $data->id }}" class="mr-1 edit-btn"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a></td>
+                        <td>
+                            <a href="javascript:;" data-id="" class=""><span class="nk-menu-icon info"><em class="icon ni ni-eye"></em></span></a>
+                            <a href="javascript:;" data-id="{{ $data->id }}" class="mr-1 edit-btn"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
+                            <a href="javascript:;" data-id="{{ $data->id }}" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a>
+                        </td>
+                        <td>
+                            <a href="javascript:;" data-url="" class=""><span class="nk-menu-icon info"><em class="icon ni ni-arrow-up"></em></span></a>
+                            <a href="javascript:;" data-url="" class=""><span class="nk-menu-icon info"><em class="icon ni ni-arrow-down"></em></span></a>
+                        </td>
                     </tr>
                     @endforeach
                 @else

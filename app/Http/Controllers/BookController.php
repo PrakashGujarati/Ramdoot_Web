@@ -34,12 +34,13 @@ class BookController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($id)
     {
         $units = Unit::where('status','Active')->get();
         $boards = Board::where('status','Active')->get();
         $book_details = Book::where('status','Active')->get();
-        return view('book.add',compact('units','boards','book_details'));
+        $subjects_details = Subject::where('id',$id)->first();
+        return view('book.add',compact('units','boards','book_details','subjects_details'));
     }
 
     /**
@@ -59,70 +60,144 @@ class BookController extends Controller
             'subject_id' => 'required',
             'unit_id' => 'required',
             'title' => 'required',
-            'sub_title' => 'required',
-            'url' => 'required',
-            'thumbnail'  => 'required'  
+            'sub_title' => 'required' 
         ]);
 
-        $new_name='';
-        if($request->has('thumbnail'))
+        if($request->hidden_id != "0")
         {
-        
-            $image = $request->file('thumbnail');
-
-            $new_name = rand() . '.' . $image->getClientOriginalExtension();
-
-            $valid_ext = array('png','jpeg','jpg');
-
-            // Location
-            $location = public_path('upload/book/thumbnail/').$new_name;
-
-            $file_extension = pathinfo($location, PATHINFO_EXTENSION);
-            $file_extension = strtolower($file_extension);
-
-            if(in_array($file_extension,$valid_ext)){
-                $this->compressImage($image->getPathName(),$location,60);
-            }
-        }
-
-        $url_file='';
-        if($request->url_type == 'file'){
-            if($request->file('url'))
+            $new_name='';
+            if($request->has('thumbnail'))
             {
-                $image = $request->file('url');
-                $url_file = time().'.'.$image->getClientOriginalExtension();
-                $destinationPath = public_path('upload/book/url/');
-                $image->move($destinationPath, $url_file);
+            
+                $image = $request->file('thumbnail');
+
+                $new_name = rand() . '.' . $image->getClientOriginalExtension();
+
+                $valid_ext = array('png','jpeg','jpg');
+
+                // Location
+                $location = public_path('upload/book/thumbnail/').$new_name;
+
+                $file_extension = pathinfo($location, PATHINFO_EXTENSION);
+                $file_extension = strtolower($file_extension);
+
+                if(in_array($file_extension,$valid_ext)){
+                    $this->compressImage($image->getPathName(),$location,60);
+                }
             }
-        }else{
-            $url_file = $request->url;
+            else{
+                $new_name = $request->hidden_thumbnail;
+            }
+
+            $url_file='';
+            if($request->url_type == 'file'){
+                if($request->file('url'))
+                {
+                    $image = $request->file('url');
+                    $url_file = time().'.'.$image->getClientOriginalExtension();
+                    $destinationPath = public_path('upload/book/url/');
+                    $image->move($destinationPath, $url_file);
+                }
+                else{
+                    $url_file = $request->hidden_url;
+                }
+            }else{
+                $url_file = $request->url;
+            }
+
+            $add = Book::find($request->hidden_id);
+            $add->user_id  = Auth::user()->id;
+            $add->board_id = $request->board_id;
+            $add->medium_id = $request->medium_id;
+            $add->standard_id = $request->standard_id;
+            $add->semester_id = $request->semester_id;
+            $add->subject_id = $request->subject_id;
+            $add->unit_id = $request->unit_id;
+            $add->title = $request->title;
+            $add->sub_title = $request->sub_title;
+            $add->url_type = $request->url_type;
+            $add->url = $url_file;
+            $add->thumbnail = $new_name;
+            $add->pages = isset($request->pages) ? $request->pages:'';
+            $add->description = isset($request->description) ? $request->description:'';
+            $add->label = $request->label;
+            $add->release_date = $request->release_date;
+            $add->edition = $request->edition;
+            $add->save();
+
+            $msg = "Book Updated Successfully.";
+        }
+        else{
+
+            $new_name='';
+            if($request->has('thumbnail'))
+            {
+            
+                $image = $request->file('thumbnail');
+
+                $new_name = rand() . '.' . $image->getClientOriginalExtension();
+
+                $valid_ext = array('png','jpeg','jpg');
+
+                // Location
+                $location = public_path('upload/book/thumbnail/').$new_name;
+
+                $file_extension = pathinfo($location, PATHINFO_EXTENSION);
+                $file_extension = strtolower($file_extension);
+
+                if(in_array($file_extension,$valid_ext)){
+                    $this->compressImage($image->getPathName(),$location,60);
+                }
+            }
+
+            $url_file='';
+            if($request->url_type == 'file'){
+                if($request->file('url'))
+                {
+                    $image = $request->file('url');
+                    $url_file = time().'.'.$image->getClientOriginalExtension();
+                    $destinationPath = public_path('upload/book/url/');
+                    $image->move($destinationPath, $url_file);
+                }
+            }else{
+                $url_file = $request->url;
+            }
+
+            $add = new Book;
+            $add->user_id  = Auth::user()->id;
+            $add->board_id = $request->board_id;
+            $add->medium_id = $request->medium_id;
+            $add->standard_id = $request->standard_id;
+            $add->semester_id = $request->semester_id;
+            $add->subject_id = $request->subject_id;
+            $add->unit_id = $request->unit_id;
+            $add->title = $request->title;
+            $add->sub_title = $request->sub_title;
+            $add->url_type = $request->url_type;
+            $add->url = $url_file;
+            $add->thumbnail = $new_name;
+            $add->pages = isset($request->pages) ? $request->pages:'';
+            $add->description = isset($request->description) ? $request->description:'';
+            $add->label = $request->label;
+            $add->release_date = $request->release_date;
+            $add->edition = $request->edition;
+            $add->save();
+
+            $msg = "Book Added Successfully.";
+
+            storeLog('book',$add->id,date('Y-m-d H:i:s'),'create');
+            storeReview('book',$add->id,date('Y-m-d H:i:s'));
+
         }
 
-        $add = new Book;
-        $add->user_id  = Auth::user()->id;
-        $add->board_id = $request->board_id;
-        $add->medium_id = $request->medium_id;
-        $add->standard_id = $request->standard_id;
-        $add->semester_id = $request->semester_id;
-        $add->subject_id = $request->subject_id;
-        $add->unit_id = $request->unit_id;
-        $add->title = $request->title;
-        $add->sub_title = $request->sub_title;
-        $add->url_type = $request->url_type;
-        $add->url = $url_file;
-        $add->thumbnail = $new_name;
-        $add->pages = isset($request->pages) ? $request->pages:'';
-        $add->description = isset($request->description) ? $request->description:'';
-        $add->label = $request->label;
-        $add->release_date = $request->release_date;
-        $add->edition = $request->edition;
-        $add->save();
-
-        storeLog('book',$add->id,date('Y-m-d H:i:s'),'create');
-        storeReview('book',$add->id,date('Y-m-d H:i:s'));
 
         $book_details = Book::where('status','Active')->get();
-        return view('book.dynamic_table',compact('book_details'));
+        $html = view('book.dynamic_table',compact('book_details'))->render();
+        $data = ['html' => $html,'message' => $msg];
+        return response()->json($data);        
+
+        
+        //return view('book.dynamic_table',compact('book_details'));
         //return redirect()->route('book.index')->with('success', 'Book Added Successfully.');
 
     }
@@ -144,12 +219,13 @@ class BookController extends Controller
      * @param  \App\Models\Book  $book
      * @return \Illuminate\Http\Response
      */
-    public function edit(Book $book,$id)
+    public function edit(Request $request)
     {
-        $units = Unit::where('status','Active')->get();
-        $boards = Board::where('status','Active')->get();
-        $bookdata = Book::where('id',$id)->first();
-        return view('book.edit',compact('bookdata','units','boards'));
+        //$units = Unit::where('status','Active')->get();
+        //$boards = Board::where('status','Active')->get();
+        $bookdata = Book::where('id',$request->id)->first();
+        return $bookdata;
+        //return view('book.edit',compact('bookdata','units','boards'));
     }
 
     /**
@@ -241,13 +317,15 @@ class BookController extends Controller
      * @param  \App\Models\Book  $book
      * @return \Illuminate\Http\Response
      */
-    public function distroy(Book $book,$id)
+    public function distroy(Request $request)
     {
-        $delete = Book::find($id);
+        $delete = Book::find($request->id);
         $delete->status = "Deleted";
         $delete->save();
 
-        return redirect()->route('book.index')->with('success', 'Book Deleted Successfully.');
+        $book_details = Book::where('status','Active')->get();
+        return view('book.dynamic_table',compact('book_details'));
+        //return redirect()->route('book.index')->with('success', 'Book Deleted Successfully.');
     }
 
     function compressImage($source, $destination, $quality) {
