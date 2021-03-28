@@ -24,7 +24,7 @@ class SubjectController extends Controller
     }
     public function index()
     {
-        $subject_details = Subject::where('status','Active')->get();
+        $subject_details = Subject::where('status','!=','Deleted')->get();
         return view('subject.index',compact('subject_details'));
     }
 
@@ -38,7 +38,7 @@ class SubjectController extends Controller
         $boards = Board::where('status','Active')->get();
         $standards = Standard::where('status','Active')->get();
         $semesters = Semester::where('status','Active')->get();
-        $subject_details = Subject::where('status','Active')->get();
+        $subject_details = Subject::where('status','!=','Deleted')->get();
         return view('subject.add',compact('boards','standards','semesters','subject_details'));
     }
 
@@ -249,11 +249,25 @@ class SubjectController extends Controller
      */
     public function distroy(Request $request)
     {
-        $delete = Subject::find($request->id);
-        $delete->status = "Deleted";
-        $delete->save();
 
-        $subject_details = Subject::where('status','Active')->get();
+        if($request->has('status')){
+          if($request->status == "Active"){
+            $delete = Subject::find($request->id);
+            $delete->status = "Inactive";
+            $delete->save();
+          }
+          else{
+            $delete = Subject::find($request->id);
+            $delete->status = "Active";
+            $delete->save();  
+          }
+        }else{
+            $delete = Subject::find($request->id);
+            $delete->status = "Deleted";
+            $delete->save();
+        }
+
+        $subject_details = Subject::where('status','!=','Deleted')->get();
         return view('subject.dynamic_table',compact('subject_details'));
 
         //return redirect()->route('subject.index')->with('success', 'Subject Deleted Successfully.');

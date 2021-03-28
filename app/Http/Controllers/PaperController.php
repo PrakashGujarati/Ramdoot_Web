@@ -25,7 +25,7 @@ class PaperController extends Controller
     }
     public function index()
     {
-        $paper_details = Paper::where('status','Active')->groupBy('subject_id')->get();
+        $paper_details = Paper::where('status','!=','Deleted')->groupBy('subject_id')->get();
         return view('paper.index',compact('paper_details'));
     }
 
@@ -36,9 +36,9 @@ class PaperController extends Controller
      */
     public function create($id)
     {
-        $units = Unit::where('status','Active')->get();
-        $boards = Board::where('status','Active')->get();
-        $paper_details = Paper::where('status','Active')->get();
+        $units = Unit::where('status','!=','Deleted')->get();
+        $boards = Board::where('status','!=','Deleted')->get();
+        $paper_details = Paper::where('status','!=','Deleted')->get();
         $subjects_details = Subject::where('id',$id)->first();
         return view('paper.add',compact('units','boards','paper_details','subjects_details'));
     }
@@ -169,7 +169,7 @@ class PaperController extends Controller
 
         }
 
-        $paper_details = Paper::where('status','Active')->get();
+        $paper_details = Paper::where('status','!=','Deleted')->get();
         $html = view('paper.dynamic_table',compact('paper_details'))->render();
         $data = ['html' => $html,'message' => $msg];
         return response()->json($data);
@@ -264,11 +264,24 @@ class PaperController extends Controller
      */
     public function distroy(Request $request)
     {
-        $delete = Paper::find($request->id);
-        $delete->status = "Deleted";
-        $delete->save();
+        if($request->has('status')){
+          if($request->status == "Active"){
+            $delete = Paper::find($request->id);
+            $delete->status = "Inactive";
+            $delete->save();
+          }
+          else{
+            $delete = Paper::find($request->id);
+            $delete->status = "Active";
+            $delete->save();  
+          }
+        }else{
+            $delete = Paper::find($request->id);
+            $delete->status = "Deleted";
+            $delete->save();
+        }
 
-        $paper_details = Paper::where('status','Active')->get();
+        $paper_details = Paper::where('status','!=','Deleted')->get();
         return view('paper.dynamic_table',compact('paper_details')); 
         //return redirect()->route('paper.index')->with('success', 'Paper Deleted Successfully.');
     }

@@ -25,7 +25,7 @@ class WorksheetController extends Controller
     }
     public function index()
     {
-        $worksheet_details = Worksheet::where('status','Active')->groupBy('subject_id')->get();
+        $worksheet_details = Worksheet::where('status','!=','Deleted')->groupBy('subject_id')->get();
         return view('worksheet.index',compact('worksheet_details'));
     }
 
@@ -36,9 +36,9 @@ class WorksheetController extends Controller
      */
     public function create($id)
     {
-        $units = Unit::where('status','Active')->get();
-        $boards = Board::where('status','Active')->get();
-        $worksheet_details = Worksheet::where('status','Active')->get();
+        $units = Unit::where('status','!=','Deleted')->get();
+        $boards = Board::where('status','!=','Deleted')->get();
+        $worksheet_details = Worksheet::where('status','!=','Deleted')->get();
         $subjects_details = Subject::where('id',$id)->first();
         return view('worksheet.add',compact('units','boards','worksheet_details','subjects_details'));
     }
@@ -168,7 +168,7 @@ class WorksheetController extends Controller
 
         }
 
-        $worksheet_details = Worksheet::where('status','Active')->get();
+        $worksheet_details = Worksheet::where('status','!=','Deleted')->get();
         $html = view('worksheet.dynamic_table',compact('worksheet_details'))->render();
         $data = ['html' => $html,'message' => $msg];
         return response()->json($data);
@@ -260,11 +260,24 @@ class WorksheetController extends Controller
      */
     public function distroy(Request $request)
     {
-        $delete = Worksheet::find($request->id);
-        $delete->status = "Deleted";
-        $delete->save();
+        if($request->has('status')){
+          if($request->status == "Active"){
+            $delete = Worksheet::find($request->id);
+            $delete->status = "Inactive";
+            $delete->save();
+          }
+          else{
+            $delete = Worksheet::find($request->id);
+            $delete->status = "Active";
+            $delete->save();  
+          }
+        }else{
+            $delete = Worksheet::find($request->id);
+            $delete->status = "Deleted";
+            $delete->save();
+        }
 
-        $worksheet_details = Worksheet::where('status','Active')->get();
+        $worksheet_details = Worksheet::where('status','!=','Deleted')->get();
         return view('worksheet.dynamic_table',compact('worksheet_details'));
         //return redirect()->route('worksheet.index')->with('success', 'Worksheet Deleted Successfully.');
     }

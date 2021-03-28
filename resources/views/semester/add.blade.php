@@ -279,7 +279,32 @@ $(document).on('click','.distroy', function() {
             }
         }
     });
-})
+});
+
+$(document).on('click','.status_change', function() {
+    var id = $(this).attr('data-id');
+    var status = $(this).attr('data-status');
+
+    $.ajax({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="token"]').attr('content')
+        },
+        url: "{{ route('semester.distroy') }}",
+        type: "GET",
+        data: {
+            'id':id,
+            'status':status,
+        },
+        success: function(data) {
+            confirm("Semester Status Change Successfully.");
+            
+            $('.dyamictable').empty();
+            $('.dyamictable').html(data);
+            $(".datatable-init").DataTable();
+        }            
+    });
+
+});
 
 </script>
 

@@ -19,14 +19,14 @@ class NoteController extends Controller
     }
     public function index()
     {
-        $note_details = Note::where('status','Active')->groupBy('subject_id')->get();
+        $note_details = Note::where('status','!=','Deleted')->groupBy('subject_id')->get();
         return view('note.index',compact('note_details'));
     }
 
     public function create($id=null)
     {
-    	$note_details = Note::where('status','Active')->get();
-        $boards = Board::where('status','Active')->get();
+    	$note_details = Note::where('status','!=','Deleted')->get();
+        $boards = Board::where('status','!=','Deleted')->get();
         $subjects_details = Subject::where('id',$id)->first();
         return view('note.add',compact('boards','note_details','subjects_details'));
     }
@@ -162,7 +162,7 @@ class NoteController extends Controller
             $msg = "Note Added Successfully.";
         }
 
-        $note_details = Note::where('status','Active')->get();
+        $note_details = Note::where('status','!=','Deleted')->get();
         $html = view('note.dynamic_table',compact('note_details'))->render();
         $data = ['html' => $html,'message' => $msg];
         return response()->json($data);
@@ -199,11 +199,24 @@ class NoteController extends Controller
 
     public function distroy(Request $request)
     {
-        $delete = Note::find($request->id);
-        $delete->status = "Deleted";
-        $delete->save();
+        if($request->has('status')){
+          if($request->status == "Active"){
+            $delete = Note::find($request->id);
+            $delete->status = "Inactive";
+            $delete->save();
+          }
+          else{
+            $delete = Note::find($request->id);
+            $delete->status = "Active";
+            $delete->save();  
+          }
+        }else{
+            $delete = Note::find($request->id);
+            $delete->status = "Deleted";
+            $delete->save();
+        }
 
-        $note_details = Note::where('status','Active')->get();
+        $note_details = Note::where('status','!=','Deleted')->get();
         return view('note.dynamic_table',compact('note_details'));  
         //return redirect()->route('medium.index')->with('success', 'Medium Deleted Successfully.');
     }    

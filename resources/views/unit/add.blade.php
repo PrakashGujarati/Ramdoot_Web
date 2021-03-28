@@ -615,7 +615,30 @@ $(document).on('click','.distroy', function() {
 });
 
 
+$(document).on('click','.status_change', function() {
+    var id = $(this).attr('data-id');
+    var status = $(this).attr('data-status');
 
+    $.ajax({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="token"]').attr('content')
+        },
+        url: "{{ route('unit.distroy') }}",
+        type: "GET",
+        data: {
+            'id':id,
+            'status':status,
+        },
+        success: function(data) {
+            confirm("Unit Status Change Successfully.");
+            
+            $('.dyamictable').empty();
+            $('.dyamictable').html(data);
+            $(".datatable-init").DataTable();
+        }            
+    });
+
+});
 </script>
 
 @endsection

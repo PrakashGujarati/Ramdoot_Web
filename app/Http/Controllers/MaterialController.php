@@ -26,7 +26,7 @@ class MaterialController extends Controller
     }
     public function index()
     {
-        $material_details = Material::where('status','Active')->groupBy('subject_id')->get();
+        $material_details = Material::where('status','!=','Deleted')->groupBy('subject_id')->get();
         return view('material.index',compact('material_details'));
     }
 
@@ -37,10 +37,10 @@ class MaterialController extends Controller
      */
     public function create($id)
     {
-        $units = Unit::where('status','Active')->get();
-        $boards = Board::where('status','Active')->get();
-        $material_details = Material::where('status','Active')->get();
-        $question_type_details = QuestionType::where('status','Active')->get();
+        $units = Unit::where('status','!=','Deleted')->get();
+        $boards = Board::where('status','!=','Deleted')->get();
+        $material_details = Material::where('status','!=','Deleted')->get();
+        $question_type_details = QuestionType::where('status','!=','Deleted')->get();
         $subjects_details = Subject::where('id',$id)->first();
         return view('material.add',compact('units','boards','material_details','question_type_details','subjects_details'));
     }
@@ -163,7 +163,7 @@ class MaterialController extends Controller
           
         }
 
-        $material_details = Material::where('status','Active')->get();
+        $material_details = Material::where('status','!=','Deleted')->get();
         $html = view('material.dynamic_table',compact('material_details'))->render();
         $data = ['html' => $html,'message' => $msg];
         return response()->json($data);
@@ -274,11 +274,24 @@ class MaterialController extends Controller
      */
     public function distroy(Request $request)
     {
-        $delete = Material::find($request->id);
-        $delete->status = "Deleted";
-        $delete->save();
+        if($request->has('status')){
+          if($request->status == "Active"){
+            $delete = Material::find($request->id);
+            $delete->status = "Inactive";
+            $delete->save();
+          }
+          else{
+            $delete = Material::find($request->id);
+            $delete->status = "Active";
+            $delete->save();  
+          }
+        }else{
+            $delete = Material::find($request->id);
+            $delete->status = "Deleted";
+            $delete->save();
+        }
 
-        $material_details = Material::where('status','Active')->get();
+        $material_details = Material::where('status','!=','Deleted')->get();
         return view('material.dynamic_table',compact('material_details'));  
         //return redirect()->route('material.index')->with('success', 'Material Deleted Successfully.');
     }

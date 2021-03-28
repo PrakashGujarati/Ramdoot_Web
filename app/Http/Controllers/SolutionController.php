@@ -26,7 +26,7 @@ class SolutionController extends Controller
     }
     public function index()
     {
-        $solution_details = Solution::where('status','Active')->groupBy('subject_id')->get();
+        $solution_details = Solution::where('status','!=','Deleted')->groupBy('subject_id')->get();
         return view('solution.index',compact('solution_details'));
     }
 
@@ -37,10 +37,10 @@ class SolutionController extends Controller
      */
     public function create($id=null)
     {
-        $units = Unit::where('status','Active')->get();
-        $boards = Board::where('status','Active')->get();
-        $solution_details = Solution::where('status','Active')->get();
-        $question_type_details = QuestionType::where('status','Active')->get();
+        $units = Unit::where('status','!=','Deleted')->get();
+        $boards = Board::where('status','!=','Deleted')->get();
+        $solution_details = Solution::where('status','!=','Deleted')->get();
+        $question_type_details = QuestionType::where('status','!=','Deleted')->get();
 
         $subjects_details=null;
         if($id != null){
@@ -164,7 +164,7 @@ class SolutionController extends Controller
 
         }
 
-        $solution_details = Solution::where('status','Active')->get();
+        $solution_details = Solution::where('status','!=','Deleted')->get();
         $html = view('solution.dynamic_table',compact('solution_details'))->render();
         $data = ['html' => $html,'message' => $msg];
         return response()->json($data);
@@ -275,11 +275,25 @@ class SolutionController extends Controller
      */
     public function distroy(Request $request)
     {
-        $delete = Solution::find($request->id);
-        $delete->status = "Deleted";
-        $delete->save();
 
-        $solution_details = Solution::where('status','Active')->get();
+        if($request->has('status')){
+          if($request->status == "Active"){
+            $delete = Solution::find($request->id);
+            $delete->status = "Inactive";
+            $delete->save();
+          }
+          else{
+            $delete = Solution::find($request->id);
+            $delete->status = "Active";
+            $delete->save();  
+          }
+        }else{
+            $delete = Solution::find($request->id);
+            $delete->status = "Deleted";
+            $delete->save();
+        }
+
+        $solution_details = Solution::where('status','!=','Deleted')->get();
         return view('solution.dynamic_table',compact('solution_details'));
         //return redirect()->route('solution.index')->with('success', 'Solution Deleted Successfully.');
     }

@@ -25,7 +25,7 @@ class VideosController extends Controller
     }
     public function index()
     {
-        $videos_details = Videos::where('status','Active')->groupBy('subject_id')->get();
+        $videos_details = Videos::where('status','!=','Deleted')->groupBy('subject_id')->get();
         return view('videos.index',compact('videos_details'));
     }
 
@@ -36,9 +36,9 @@ class VideosController extends Controller
      */
     public function create($id)
     {
-        $units = Unit::where('status','Active')->get();
-        $boards = Board::where('status','Active')->get();
-        $videos_details = Videos::where('status','Active')->get();
+        $units = Unit::where('status','!=','Deleted')->get();
+        $boards = Board::where('status','!=','Deleted')->get();
+        $videos_details = Videos::where('status','!=','Deleted')->get();
         $subjects_details = Subject::where('id',$id)->first();
         return view('videos.add',compact('units','boards','videos_details','subjects_details'));
     }
@@ -201,7 +201,7 @@ class VideosController extends Controller
 
         }
 
-        $videos_details = Videos::where('status','Active')->get();
+        $videos_details = Videos::where('status','!=','Deleted')->get();
         $html = view('videos.dynamic_table',compact('videos_details'))->render();
         $data = ['html' => $html,'message' => $msg];
         return response()->json($data);
@@ -330,11 +330,24 @@ class VideosController extends Controller
      */
     public function distroy(Request $request)
     {
-        $delete = Videos::find($request->id);
-        $delete->status = "Deleted";
-        $delete->save();
+        if($request->has('status')){
+          if($request->status == "Active"){
+            $delete = Videos::find($request->id);
+            $delete->status = "Inactive";
+            $delete->save();
+          }
+          else{
+            $delete = Videos::find($request->id);
+            $delete->status = "Active";
+            $delete->save();  
+          }
+        }else{
+            $delete = Videos::find($request->id);
+            $delete->status = "Deleted";
+            $delete->save();
+        }
 
-        $videos_details = Videos::where('status','Active')->get();
+        $videos_details = Videos::where('status','!=','Deleted')->get();
         return view('videos.dynamic_table',compact('videos_details'));
         //return redirect()->route('videos.index')->with('success', 'Videos Deleted Successfully.');
     }
