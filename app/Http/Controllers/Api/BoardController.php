@@ -29,7 +29,7 @@ class BoardController extends Controller
                     $last = substr(isset($mediumSortName[1]) ? $mediumSortName[1]:'', 0,1);
                     $mediumArray[] = ['id' => $sub_value->id,'medium_name' => $sub_value->medium_name,'sort_name' => $first.$last]; 
                 }
-    			$data[] = ['id' => $value->id,'board_name' => $value->name,'sort_name' => trim($sortname[0]),'medium' => $mediumArray];
+    			$data[] = ['id' => $value->id,'board_name' => $value->name,'sort_name' => trim($sortname[0]),'abbreviation' => $value->abbreviation,'url' => $value->url,'thumbnail' => $value->thumbnail,'medium' => $mediumArray];
     		}
 
     		return response()->json([
