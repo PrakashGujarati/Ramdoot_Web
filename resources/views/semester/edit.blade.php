@@ -95,6 +95,18 @@
 <script type="text/javascript">
 
 $( document ).ready(function() {
+
+    $('#semester').autocomplete({
+            serviceUrl: '{{route("load_autocomplete.semester")}}',
+            onSelect: function (suggestion) {
+
+                    $(this).val(suggestion.data);
+
+                  //loadCustData(suggestion.data);
+            }
+        });
+
+
     var board_id = $('.board_id').val();
     var medium_id = "{{ $semesterdata->medium_id }}";
     var standard_id = "{{ $semesterdata->standard_id }}";

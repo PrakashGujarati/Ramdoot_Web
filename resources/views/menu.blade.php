@@ -30,7 +30,7 @@
 		        <div class="card-inner">
 		        	<ul style="list-style-type:circle">
 		        		<li><strong><a href="{{route('user.log')}}">Log</a></strong></li>
-		        		<li><strong><a href="{{route('permission.index')}}">Review</a></strong></li>	
+		        		<li><strong><a href="{{route('user.reviews')}}">Review</a></strong></li>	
 		        	</ul>
 		        </div>
 		    </div>	

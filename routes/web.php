@@ -29,6 +29,7 @@ use App\Http\Controllers\SpatieRolePermissionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\QuestionTypeController;
 use App\Http\Controllers\LogController;
+use App\Http\Controllers\UserDataReviewController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -304,5 +305,10 @@ Route::group(['middleware' => 'auth'], function(){
 
 	Route::get('load_autocomplete/video_sub_title',[VideosController::class,'load_autocomplete_sub_title'])->name('load_autocomplete.video_sub_title');	
 
-	
+	Route::get('user/reviews',[UserDataReviewController::class,'index'])->name('user.reviews');
+	Route::get('user_ajax/review',[UserDataReviewController::class,'user_ajax_review'])->name('user_ajax.review');
+	Route::get('accept/review/{id}',[UserDataReviewController::class,'accept_review'])->name('accept.review');
+	Route::get('reject/review/{id}',[UserDataReviewController::class,'reject_review'])->name('reject.review');
+
+	Route::get('load_autocomplete/semester',[SemesterController::class,'load_autocomplete'])->name('load_autocomplete.semester');
 });	

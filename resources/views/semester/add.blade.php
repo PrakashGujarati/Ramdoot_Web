@@ -142,6 +142,16 @@ function getStandard(board_id,medium_id){
 }
 
 $(document).ready(function () {
+
+    $('#semester').autocomplete({
+            serviceUrl: '{{route("load_autocomplete.semester")}}',
+            onSelect: function (suggestion) {
+
+                    $(this).val(suggestion.data);
+
+                  //loadCustData(suggestion.data);
+            }
+        });
     
     $('#semester_form').validate({
          rules: {

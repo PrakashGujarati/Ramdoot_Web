@@ -223,5 +223,21 @@ class SemesterController extends Controller
         }
         return response()->json(['html'=>$result]);   
     }
+    public function load_autocomplete(request $request)
+    {
+        $response=[];
+        
+        // $lead_detail=Medicine::where('instruction_english', 'like', '%' . $request['query'] . '%')->where('instruction_english','!=',' ')->where('instruction_english','!=',null)->get();
 
+        $lead_detail=Semester::where('semester', 'like', '%' . $request['query'] . '%')->get();
+        
+
+        if(count($lead_detail) > 0)
+        {
+            foreach ($lead_detail as $value) {
+                $response[] = array("value"=>$value->semester,"data"=>$value->semester);
+            }   
+        }
+        return json_encode(array("suggestions" => $response));
+    }
 }
