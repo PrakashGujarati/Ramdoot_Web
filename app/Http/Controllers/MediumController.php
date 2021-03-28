@@ -17,7 +17,7 @@ class MediumController extends Controller
     }
 	public function index()
     {
-        $mediums_details = Medium::where('status','Active')->get();
+        $mediums_details = Medium::where('status','!=','Deleted')->get();
         return view('medium.index',compact('mediums_details'));
     }
 
@@ -28,7 +28,7 @@ class MediumController extends Controller
      */
     public function create()
     {
-        $mediums_details = Medium::where('status','Active')->get();
+        $mediums_details = Medium::where('status','!=','Deleted')->get();
         $boards = Board::where('status','Active')->get();
         return view('medium.add',compact('boards','mediums_details'));
     }
@@ -73,7 +73,7 @@ class MediumController extends Controller
   
         return response()->json($data);  
         
-        $mediums_details = Medium::where('status','Active')->get();
+        $mediums_details = Medium::where('status','!=','Deleted')->get();
         return view('medium.dynamic_table',compact('mediums_details'));
         //return redirect()->route('medium.index')->with('success', 'Medium Added Successfully.');
     }
@@ -135,11 +135,24 @@ class MediumController extends Controller
      */
     public function distroy(Request $request)
     {
-        $delete = Medium::find($request->id);
-        $delete->status = "Deleted";
-        $delete->save();
+        if($request->has('status')){
+          if($request->status == "Active"){
+            $delete = Medium::find($request->id);
+            $delete->status = "Inactive";
+            $delete->save();
+          }
+          else{
+            $delete = Medium::find($request->id);
+            $delete->status = "Active";
+            $delete->save();  
+          }
+        }else{
+            $delete = Medium::find($request->id);
+            $delete->status = "Deleted";
+            $delete->save();
+        }
 
-        $mediums_details = Medium::where('status','Active')->get();
+        $mediums_details = Medium::where('status','!=','Deleted')->get();
         return view('medium.dynamic_table',compact('mediums_details'));
         //return redirect()->route('medium.index')->with('success', 'Medium Deleted Successfully.');
     }    

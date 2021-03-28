@@ -23,7 +23,7 @@ class BoardController extends Controller
      */
     public function index()
     {
-        $boards_details = Board::where('status','Active')->get();
+        $boards_details = Board::where('status','!=','Deleted')->get();
         return view('board.index',compact('boards_details'));
     }
 
@@ -34,7 +34,7 @@ class BoardController extends Controller
      */
     public function create()
     {
-        $boards_details = Board::where('status','Active')->get();
+        $boards_details = Board::where('status','!=','Deleted')->get();
         return view('board.add',compact('boards_details'));
     }
 
@@ -126,7 +126,7 @@ class BoardController extends Controller
 
         }
 
-        $boards_details = Board::where('status','Active')->get();
+        $boards_details = Board::where('status','!=','Deleted')->get();
         $html = view('board.dynamic_table',compact('boards_details'))->render();
         $data = ['html' => $html,'message' => $msg];
         return response()->json($data);
@@ -231,11 +231,24 @@ class BoardController extends Controller
      */
     public function distroy(Request $request)
     {
-        $delete = Board::find($request->id);
-        $delete->status = "Deleted";
-        $delete->save();
+        if($request->has('status')){
+          if($request->status == "Active"){
+            $delete = Board::find($request->id);
+            $delete->status = "Inactive";
+            $delete->save();
+          }
+          else{
+            $delete = Board::find($request->id);
+            $delete->status = "Active";
+            $delete->save();  
+          }
+        }else{
+            $delete = Board::find($request->id);
+            $delete->status = "Deleted";
+            $delete->save();
+        }
 
-        $boards_details = Board::where('status','Active')->get();
+        $boards_details = Board::where('status','!=','Deleted')->get();
         return view('board.dynamic_table',compact('boards_details'));
 
         //return redirect()->route('board.index')->with('success', 'Board Deleted Successfully.');

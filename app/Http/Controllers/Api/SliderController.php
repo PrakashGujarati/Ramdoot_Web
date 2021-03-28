@@ -9,13 +9,13 @@ use App\Models\Slider;
 class SliderController extends Controller
 {
     public function slider(){
-    	$getdata = Slider::where(['status' => 'Active'])->get();
+    	$getdata = Slider::where(['status' => 'Active'])->orderBy('order', 'ASC')->get();
 
     	if(count($getdata) > 0){
     		$data=[];
     		foreach ($getdata as $value) {
     			$image = env('APP_URL')."/upload/slider/".$value->image;
-    			$data[] = ['id' => $value->id,'title' => $value->area,'short_desc' => $value->text,'image' => $image];
+    			$data[] = ['id' => $value->id,'title' => $value->area,'short_desc' => $value->text,'image' => $image,'url' => $value->url];
     		}
 
     		return response()->json([

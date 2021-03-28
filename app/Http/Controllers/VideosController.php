@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Unit;
 use Auth;
 use App\Models\Board;
+use App\Models\Subject;
 
 class VideosController extends Controller
 {
@@ -24,7 +25,7 @@ class VideosController extends Controller
     }
     public function index()
     {
-        $videos_details = Videos::where('status','Active')->groupBy('subject_id')->get();
+        $videos_details = Videos::where('status','!=','Deleted')->groupBy('subject_id')->get();
         return view('videos.index',compact('videos_details'));
     }
 
@@ -33,12 +34,13 @@ class VideosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($id)
     {
-        $units = Unit::where('status','Active')->get();
-        $boards = Board::where('status','Active')->get();
-        $videos_details = Videos::where('status','Active')->get();
-        return view('videos.add',compact('units','boards','videos_details'));
+        $units = Unit::where('status','!=','Deleted')->get();
+        $boards = Board::where('status','!=','Deleted')->get();
+        $videos_details = Videos::where('status','!=','Deleted')->get();
+        $subjects_details = Subject::where('id',$id)->first();
+        return view('videos.add',compact('units','boards','videos_details','subjects_details'));
     }
 
     /**
@@ -57,75 +59,154 @@ class VideosController extends Controller
             'semester_id'  => 'required',
             'subject_id' => 'required',
             'title' => 'required',
-            'thumbnail'  => 'required',
+            // 'thumbnail'  => 'required',
             'duration' => 'required',
             'label' => 'required',
             'release_date' => 'required',    
         ]);
 
-        $new_name='';
-        if($request->has('thumbnail'))
+        //       dd($request->all());
+
+        if($request->hidden_id != "0")
         {
-        
-            $image = $request->file('thumbnail');
 
-            $new_name = rand() . '.' . $image->getClientOriginalExtension();
-
-            $valid_ext = array('png','jpeg','jpg');
-
-            // Location
-            $location = public_path('upload/videos/thumbnail/').$new_name;
-
-            $file_extension = pathinfo($location, PATHINFO_EXTENSION);
-            $file_extension = strtolower($file_extension);
-
-            if(in_array($file_extension,$valid_ext)){
-                $this->compressImage($image->getPathName(),$location,60);
-            }
-        }
-
-
-        if($request->type == "File"){
-            $url_file='';
-            if($request->has('url_file'))
+            $new_name='';
+            if($request->has('thumbnail'))
             {
-                $image = $request->file('url_file');
-                $url_file = time().'.'.$image->getClientOriginalExtension();
-                $destinationPath = public_path('upload/videos/url/');
-                $image->move($destinationPath, $url_file);
-            }    
+            
+                $image = $request->file('thumbnail');
+
+                $new_name = rand() . '.' . $image->getClientOriginalExtension();
+
+                $valid_ext = array('png','jpeg','jpg');
+
+                // Location
+                $location = public_path('upload/videos/thumbnail/').$new_name;
+
+                $file_extension = pathinfo($location, PATHINFO_EXTENSION);
+                $file_extension = strtolower($file_extension);
+
+                if(in_array($file_extension,$valid_ext)){
+                    $this->compressImage($image->getPathName(),$location,60);
+                }
+            }
+            else{
+                $new_name = $request->hidden_thumbnail;
+            }
+
+
+            if($request->url_type == "file"){
+                $url_file='';
+                if($request->has('url'))
+                {
+                    $image = $request->file('url');
+                    $url_file = time().'.'.$image->getClientOriginalExtension();
+                    $destinationPath = public_path('upload/videos/url/');
+                    $image->move($destinationPath, $url_file);
+                }    
+                else{
+                    $url_file = $request->hidden_url;
+                }
+            }
+            else{
+                $url_file = $request->url;
+            }
+
+
+            $add = Videos::find($request->hidden_id);
+            $add->user_id  = Auth::user()->id;
+            $add->unit_id = $request->unit_id;
+            $add->board_id = $request->board_id;
+            $add->medium_id = $request->medium_id;
+            $add->standard_id = $request->standard_id;
+            $add->semester_id = $request->semester_id;
+            $add->subject_id = $request->subject_id;
+            $add->title = $request->title;
+            $add->sub_title = $request->sub_title;
+            $add->url_type = $request->url_type;
+            $add->url = $url_file;
+            $add->thumbnail = $new_name;
+            $add->duration = $request->duration;
+            $add->description = isset($request->description) ? $request->description:'';
+            $add->label = $request->label;
+            $add->release_date = $request->release_date;
+            $add->edition = $request->edition;
+            $add->save();
+            
+            $msg = "Video Updated Successfully.";
         }
         else{
-            $url_file = $request->url;
+
+            $new_name='';
+            if($request->has('thumbnail'))
+            {
+            
+                $image = $request->file('thumbnail');
+
+                $new_name = rand() . '.' . $image->getClientOriginalExtension();
+
+                $valid_ext = array('png','jpeg','jpg');
+
+                // Location
+                $location = public_path('upload/videos/thumbnail/').$new_name;
+
+                $file_extension = pathinfo($location, PATHINFO_EXTENSION);
+                $file_extension = strtolower($file_extension);
+
+                if(in_array($file_extension,$valid_ext)){
+                    $this->compressImage($image->getPathName(),$location,60);
+                }
+            }
+
+
+            if($request->url_type == "file"){
+                $url_file='';
+                if($request->has('url'))
+                {
+                    $image = $request->file('url');
+                    $url_file = time().'.'.$image->getClientOriginalExtension();
+                    $destinationPath = public_path('upload/videos/url/');
+                    $image->move($destinationPath, $url_file);
+                }    
+            }
+            else{
+                $url_file = $request->url;
+            }
+
+
+            $add = new Videos;
+            $add->user_id  = Auth::user()->id;
+            $add->unit_id = $request->unit_id;
+            $add->board_id = $request->board_id;
+            $add->medium_id = $request->medium_id;
+            $add->standard_id = $request->standard_id;
+            $add->semester_id = $request->semester_id;
+            $add->subject_id = $request->subject_id;
+            $add->title = $request->title;
+            $add->sub_title = $request->sub_title;
+            $add->url_type = $request->url_type;
+            $add->url = $url_file;
+            $add->thumbnail = $new_name;
+            $add->duration = $request->duration;
+            $add->description = isset($request->description) ? $request->description:'';
+            $add->label = $request->label;
+            $add->release_date = $request->release_date;
+            $add->edition = $request->edition;
+            $add->save();
+
+            $msg = "Video Added Successfully.";
+
+            storeLog('video',$add->id,date('Y-m-d H:i:s'),'create');
+            storeReview('video',$add->id,date('Y-m-d H:i:s'));
+
         }
 
+        $videos_details = Videos::where('status','!=','Deleted')->get();
+        $html = view('videos.dynamic_table',compact('videos_details'))->render();
+        $data = ['html' => $html,'message' => $msg];
+        return response()->json($data);
         
-
-        $add = new Videos;
-        $add->user_id  = Auth::user()->id;
-        $add->unit_id = $request->unit_id;
-        $add->board_id = $request->board_id;
-        $add->medium_id = $request->medium_id;
-        $add->standard_id = $request->standard_id;
-        $add->semester_id = $request->semester_id;
-        $add->subject_id = $request->subject_id;
-        $add->title = $request->title;
-        $add->sub_title = $request->sub_title;
-        $add->url_type = $request->url_type;
-        $add->url = $url_file;
-        $add->thumbnail = $new_name;
-        $add->duration = $request->duration;
-        $add->description = isset($request->description) ? $request->description:'';
-        $add->label = $request->label;
-        $add->release_date = $request->release_date;
-        $add->edition = $request->edition;
-        $add->save();
-
-        storeLog('video',$add->id,date('Y-m-d H:i:s'),'create');
-        storeReview('video',$add->id,date('Y-m-d H:i:s'));
-
-        $videos_details = Videos::where('status','Active')->get();
-        return view('videos.dynamic_table',compact('videos_details'));
+        //return view('videos.dynamic_table',compact('videos_details'));
         //return redirect()->route('videos.index')->with('success', 'Videos Added Successfully.');
     }
 
@@ -146,12 +227,13 @@ class VideosController extends Controller
      * @param  \App\Models\videos  $videos
      * @return \Illuminate\Http\Response
      */
-    public function edit(Videos $videos,$id)
+    public function edit(Request $request)
     {
-        $units = Unit::where('status','Active')->get();
-        $videodata = videos::where('id',$id)->first();
-        $boards = Board::where('status','Active')->get();
-        return view('videos.edit',compact('videodata','units','boards'));
+       // $units = Unit::where('status','Active')->get();
+        $videodata = videos::where('id',$request->id)->first();
+        return $videodata;
+      //  $boards = Board::where('status','Active')->get();
+        //return view('videos.edit',compact('videodata','units','boards'));
     }
 
     /**
@@ -246,13 +328,28 @@ class VideosController extends Controller
      * @param  \App\Models\videos  $videos
      * @return \Illuminate\Http\Response
      */
-    public function distroy(Videos $videos,$id)
+    public function distroy(Request $request)
     {
-        $delete = Videos::find($id);
-        $delete->status = "Deleted";
-        $delete->save();
+        if($request->has('status')){
+          if($request->status == "Active"){
+            $delete = Videos::find($request->id);
+            $delete->status = "Inactive";
+            $delete->save();
+          }
+          else{
+            $delete = Videos::find($request->id);
+            $delete->status = "Active";
+            $delete->save();  
+          }
+        }else{
+            $delete = Videos::find($request->id);
+            $delete->status = "Deleted";
+            $delete->save();
+        }
 
-        return redirect()->route('videos.index')->with('success', 'Videos Deleted Successfully.');
+        $videos_details = Videos::where('status','!=','Deleted')->get();
+        return view('videos.dynamic_table',compact('videos_details'));
+        //return redirect()->route('videos.index')->with('success', 'Videos Deleted Successfully.');
     }
 
     function compressImage($source, $destination, $quality) {

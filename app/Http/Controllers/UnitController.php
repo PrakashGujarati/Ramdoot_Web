@@ -25,7 +25,7 @@ class UnitController extends Controller
     }
     public function index()
     {
-        $unit_details = Unit::where('status','Active')->groupBy('subject_id')->get();
+        $unit_details = Unit::where('status','!=','Deleted')->groupBy('subject_id')->get();
         return view('unit.index',compact('unit_details'));
     }
 
@@ -36,11 +36,11 @@ class UnitController extends Controller
      */
     public function create($id)
     {
-        $boards = Board::where('status','Active')->get();
-        $semesters = Semester::where('status','Active')->get();
-        $standards = Standard::where('status','Active')->get();
-        $subjects = Subject::where('status','Active')->get();
-        $unit_details = Unit::where('status','Active')->get();
+        $boards = Board::where('status','!=','Deleted')->get();
+        $semesters = Semester::where('status','!=','Deleted')->get();
+        $standards = Standard::where('status','!=','Deleted')->get();
+        $subjects = Subject::where('status','!=','Deleted')->get();
+        $unit_details = Unit::where('status','!=','Deleted')->get();
         $subjects_details = Subject::where('id',$id)->first();
         return view('unit.add',compact('subjects','standards','semesters','boards','unit_details','subjects_details'));
     }
@@ -184,7 +184,7 @@ class UnitController extends Controller
 
         }
             
-        $unit_details = Unit::where('status','Active')->get();
+        $unit_details = Unit::where('status','!=','Deleted')->get();
         $html = view('unit.dynamic_table',compact('unit_details'))->render();
         $data = ['html' => $html,'message' => $msg];
         return response()->json($data);
@@ -309,11 +309,25 @@ class UnitController extends Controller
      */
     public function distroy(Request $request)
     {
-        $delete = Unit::find($request->id);
-        $delete->status = "Deleted";
-        $delete->save();
 
-        $unit_details = Unit::where('status','Active')->get();
+        if($request->has('status')){
+          if($request->status == "Active"){
+            $delete = Unit::find($request->id);
+            $delete->status = "Inactive";
+            $delete->save();
+          }
+          else{
+            $delete = Unit::find($request->id);
+            $delete->status = "Active";
+            $delete->save();  
+          }
+        }else{
+            $delete = Unit::find($request->id);
+            $delete->status = "Deleted";
+            $delete->save();
+        }
+
+        $unit_details = Unit::where('status','!=','Deleted')->get();
         return view('unit.dynamic_table',compact('unit_details'));
         //return redirect()->route('unit.index')->with('success', 'Unit Deleted Successfully.');
     }

@@ -15,7 +15,7 @@
                     </div>
                     <form action="{{ route('solution.store') }}" method="POST" enctype='multipart/form-data' id="solution_form">
                     @csrf
-
+                        <input type="hidden" name="hidden_id" class="hidden_id" id="hidden_id" value="0">
                         <div class="row">
                             <div class="form-group col-lg-4">
                                 <label class="form-label">Board</label>
@@ -217,13 +217,17 @@
                             <label class="form-label">Image</label>
                             <div class="form-control-wrap">
                                 <input type="file" class="form-control" id="image" name="image" value="">
-                                <img id="image_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" width="100" />
+                                <input type="hidden" id="hidden_image" name="hidden_image" value="">
+                                
                                 @error('image')
                                     <span class="text-danger" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
                             </div>
+                        </div>
+                        <div class="form-group col-lg-9">
+                            <img id="image_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" width="100" />
                         </div>
                         </div>
 
@@ -270,6 +274,107 @@ $("#image").change(function() {
   readThumbnail(this);
 });
 
+$( document ).ready(function() {
+    $('.board_id').val('{{ $subjects_details->board_id }}');
+    var board_id = $('.board_id').val();
+    var medium_id = "{{ $subjects_details->medium_id }}";
+    var standard_id = "{{ $subjects_details->standard_id }}";
+    var semester_id = "{{ $subjects_details->semester_id }}";
+    var subject_id = "{{ $subjects_details->id }}";
+    getMediumEdit(board_id,medium_id);
+    getStandardEdit(board_id,medium_id,standard_id);
+    getSemesterEdit(board_id,medium_id,standard_id,semester_id);
+    getSubjectEdit(board_id,medium_id,standard_id,semester_id,subject_id);
+    getUnit(board_id,medium_id,standard_id,semester_id,subject_id);
+});
+
+function getMediumEdit(board_id,medium_id){
+    
+    $.ajax({
+        type: "GET",
+        url: "{{route('get.medium')}}",
+        data: {
+            "board_id":board_id,
+            "medium_id":medium_id,
+        },
+        success: function(result) {
+            $('.medium_id').html('');
+            $('.medium_id').html(result.html);
+        } 
+    });
+}
+
+function getStandardEdit(board_id,medium_id,standard_id){       
+    $.ajax({
+        type: "GET",
+        url: "{{route('get.standard')}}",
+        data: {
+            "board_id":board_id,
+            "medium_id":medium_id,
+            "standard_id":standard_id,
+        },
+        success: function(result) {
+            $('.standard_id').html('');
+            $('.standard_id').html(result.html);
+        } 
+    });
+}
+
+
+function getSemesterEdit(board_id,medium_id,standard_id,semester_id){
+        
+    $.ajax({
+        type: "GET",
+        url: "{{route('get.semester')}}",
+        data: {
+            "board_id":board_id,
+            "medium_id":medium_id,
+            "standard_id":standard_id,
+            "semester_id":semester_id,
+        },
+        success: function(result) {
+            $('.semester_id').html('');
+            $('.semester_id').html(result.html);
+        } 
+    });
+}
+
+function getSubjectEdit(board_id,medium_id,standard_id,semester_id,subject_id){
+    $.ajax({
+        type: "GET",
+        url: "{{route('get.subject')}}",
+        data: {
+            "board_id":board_id,
+            "medium_id":medium_id,
+            "standard_id":standard_id,
+            "semester_id":semester_id,
+            "subject_id":subject_id,
+        },
+        success: function(result) {
+            $('.subject_id').html('');
+            $('.subject_id').html(result.html);
+        } 
+    });
+}
+
+function getUnitEdit(board_id,medium_id,standard_id,semester_id,subject_id,unit_id){
+    $.ajax({
+        type: "GET",
+        url: "{{route('get.unit')}}",
+        data: {
+            "board_id":board_id,
+            "medium_id":medium_id,
+            "standard_id":standard_id,
+            "semester_id":semester_id,
+            "subject_id":subject_id,
+            "unit_id":unit_id,
+        },
+        success: function(result) {
+            $('.unit_id').html('');
+            $('.unit_id').html(result.html);
+        } 
+    });
+}
     
     
 $(document).on('change','.board_id',function(){
@@ -432,12 +537,10 @@ $(document).ready(function () {
                 url: form.action,
                 type: form.method,
                 data: formData,//$(form).serialize(),
-                mimeType: "multipart/form-data",
                 contentType: false,
                 processData: false,
-                dataType: 'html',
                 success: function(data) {
-                    confirm("Solution Added Successfully.");
+                    confirm(data.message);
                     $('#image').val('');
                     $('#question').val('');
                     $('#marks').val('');
@@ -450,12 +553,132 @@ $(document).ready(function () {
                     $('#image_preview').css('display','none');
                     
                     $('.dyamictable').empty();
-                    $('.dyamictable').html(data);
+                    $('.dyamictable').html(data.html);
+                    $(".datatable-init").DataTable();
+
                 }            
             });
         }
     });
     
+});
+
+
+$(document).on('click','.edit-btn',function(){
+    var id = $(this).attr('data-id');
+    $.ajax({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="token"]').attr('content')
+        },
+        url: "{{ route('solution.edit') }}",
+        type: 'GET',
+        data: {
+              'id':id
+        },
+        success: function(result) {
+            $('#board_id').val(result.board_id);
+            var board_id = $('#board_id').val();
+            var medium_id = result.medium_id;
+            var standard_id = result.standard_id;
+            var semester_id = result.semester_id;
+            var subject_id = result.subject_id;
+            var unit_id = result.unit_id;
+            getMediumEdit(board_id,medium_id);
+            getStandardEdit(board_id,medium_id,standard_id);
+            getSemesterEdit(board_id,medium_id,standard_id,semester_id);
+            getSubjectEdit(board_id,medium_id,standard_id,semester_id,subject_id);
+            getUnitEdit(board_id,medium_id,standard_id,semester_id,subject_id,unit_id);
+
+            $('#question').val(result.question);
+            $('#marks').val(result.marks);
+            $('#answer').val(result.answer);
+            $('#label').val(result.label);
+            $('#question_type').val(result.question_type);
+            $('#level').val(result.level);
+
+            $('#hidden_image').val(result.image);
+            $('#image_preview').css('display','block');
+            var image_path = "{{ env('APP_URL') }}"+"/upload/solution/thumbnail/"+result.image;
+            $('#image_preview').attr('src', image_path);
+            
+            $('#hidden_id').val(result.id);
+            //$('#thumbnail').val('');
+        }            
+    });
+});
+
+$(document).on('click','.distroy', function() {
+    var id = $(this).attr('data-id');
+    bootbox.confirm({
+        message: "Are you sure to delete this solution ?",
+        buttons: {
+            confirm: {
+                label: 'Yes',
+                className: 'btn-success'
+            },
+            cancel: {
+                label: 'No',
+                className: 'btn-danger'
+            }
+        },
+        callback: function(result) {
+            if(result){
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="token"]').attr('content')
+                    },
+                    url: "{{ route('solution.distroy') }}",
+                    type: "GET",
+                    data: {
+                        'id':id,
+                    },
+                    success: function(data) {
+                        confirm("Solution Deleted Successfully.");
+                            
+                        $('#image').val('');
+                        $('#question').val('');
+                        $('#marks').val('');
+                        $('#answer').val('');
+                        $('#label').val('');
+                        $('#question_type').val('');
+                        $('#level').val('');
+
+                        $('#image').val('');
+                        $('#image_preview').css('display','none');
+
+                        $('.dyamictable').empty();
+                        $('.dyamictable').html(data);
+                        $(".datatable-init").DataTable();
+                    }            
+                });
+                //location.replace(del_url);
+            }
+        }
+    });
+});
+
+$(document).on('click','.status_change', function() {
+    var id = $(this).attr('data-id');
+    var status = $(this).attr('data-status');
+
+    $.ajax({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="token"]').attr('content')
+        },
+        url: "{{ route('solution.distroy') }}",
+        type: "GET",
+        data: {
+            'id':id,
+            'status':status,
+        },
+        success: function(data) {
+            confirm("Solution Status Change Successfully.");
+            
+            $('.dyamictable').empty();
+            $('.dyamictable').html(data);
+            $(".datatable-init").DataTable();
+        }            
+    });
 });
 
 </script>

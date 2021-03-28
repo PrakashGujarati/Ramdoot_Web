@@ -23,7 +23,7 @@ class SemesterController extends Controller
     }
     public function index()
     {
-        $semester_details = Semester::where('status','Active')->get();
+        $semester_details = Semester::where('status','!=','Deleted')->get();
         return view('semester.index',compact('semester_details'));
     }
 
@@ -36,7 +36,7 @@ class SemesterController extends Controller
     {
         $boards = Board::where('status','Active')->get();
         $standards = Standard::where('status','Active')->get();
-        $semester_details = Semester::where('status','Active')->get();
+        $semester_details = Semester::where('status','!=','Deleted')->get();
         return view('semester.add',compact('boards','standards','semester_details'));
     }
 
@@ -80,7 +80,7 @@ class SemesterController extends Controller
         }
                 
 
-        $semester_details = Semester::where('status','Active')->get();
+        $semester_details = Semester::where('status','!=','Deleted')->get();
         $html = view('semester.dynamic_table',compact('semester_details'))->render();
         $data = ['html' => $html,'message' => $msg];
         return response()->json($data);
@@ -151,11 +151,25 @@ class SemesterController extends Controller
      */
     public function distroy(Request $request)
     {
-        $delete = Semester::find($request->id);
-        $delete->status = "Deleted";
-        $delete->save();
 
-        $semester_details = Semester::where('status','Active')->get();
+        if($request->has('status')){
+          if($request->status == "Active"){
+            $delete = Semester::find($request->id);
+            $delete->status = "Inactive";
+            $delete->save();
+          }
+          else{
+            $delete = Semester::find($request->id);
+            $delete->status = "Active";
+            $delete->save();  
+          }
+        }else{
+            $delete = Semester::find($request->id);
+            $delete->status = "Deleted";
+            $delete->save();
+        }
+
+        $semester_details = Semester::where('status','!=','Deleted')->get();
         return view('semester.dynamic_table',compact('semester_details'));
         //return redirect()->route('semester.index')->with('success', 'Semester Deleted Successfully.');
     }

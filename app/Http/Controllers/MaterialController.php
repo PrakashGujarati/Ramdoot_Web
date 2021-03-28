@@ -8,6 +8,7 @@ use App\Models\Unit;
 use Auth;
 use App\Models\Board;
 use App\Models\QuestionType;
+use App\Models\Subject;
 
 class MaterialController extends Controller
 {
@@ -25,7 +26,7 @@ class MaterialController extends Controller
     }
     public function index()
     {
-        $material_details = Material::where('status','Active')->groupBy('subject_id')->get();
+        $material_details = Material::where('status','!=','Deleted')->groupBy('subject_id')->get();
         return view('material.index',compact('material_details'));
     }
 
@@ -34,13 +35,14 @@ class MaterialController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($id)
     {
-        $units = Unit::where('status','Active')->get();
-        $boards = Board::where('status','Active')->get();
-        $material_details = Material::where('status','Active')->get();
-        $question_type_details = QuestionType::where('status','Active')->get();
-        return view('material.add',compact('units','boards','material_details','question_type_details'));
+        $units = Unit::where('status','!=','Deleted')->get();
+        $boards = Board::where('status','!=','Deleted')->get();
+        $material_details = Material::where('status','!=','Deleted')->get();
+        $question_type_details = QuestionType::where('status','!=','Deleted')->get();
+        $subjects_details = Subject::where('id',$id)->first();
+        return view('material.add',compact('units','boards','material_details','question_type_details','subjects_details'));
     }
 
     /**
@@ -61,52 +63,113 @@ class MaterialController extends Controller
             'question' => 'required',
             'answer' => 'required',
             'marks' => 'required',
-            'image'  => 'required',
+            // 'image'  => 'required',
             'label' => 'required', 
         ]);
 
-        $new_name='';
-        if($request->has('image'))
+
+        if($request->hidden_id != "0")
         {
-        
-            $image = $request->file('image');
 
-            $new_name = rand() . '.' . $image->getClientOriginalExtension();
+            $new_name='';
+            if($request->has('image'))
+            {
+            
+                $image = $request->file('image');
 
-            $valid_ext = array('png','jpeg','jpg');
+                $new_name = rand() . '.' . $image->getClientOriginalExtension();
 
-            // Location
-            $location = public_path('upload/material/thumbnail/').$new_name;
+                $valid_ext = array('png','jpeg','jpg');
 
-            $file_extension = pathinfo($location, PATHINFO_EXTENSION);
-            $file_extension = strtolower($file_extension);
+                // Location
+                $location = public_path('upload/material/thumbnail/').$new_name;
 
-            if(in_array($file_extension,$valid_ext)){
-                $this->compressImage($image->getPathName(),$location,60);
+                $file_extension = pathinfo($location, PATHINFO_EXTENSION);
+                $file_extension = strtolower($file_extension);
+
+                if(in_array($file_extension,$valid_ext)){
+                    $this->compressImage($image->getPathName(),$location,60);
+                }
             }
+            else{
+                $new_name = $request->hidden_image;
+            }
+
+
+            $add = Material::find($request->hidden_id);
+            $add->user_id  = Auth::user()->id;
+            $add->unit_id = $request->unit_id;
+            $add->board_id = $request->board_id;
+            $add->medium_id = $request->medium_id;
+            $add->standard_id = $request->standard_id;
+            $add->semester_id = $request->semester_id;
+            $add->subject_id = $request->subject_id;
+            $add->question = $request->question;
+            $add->answer = $request->answer;
+            $add->image = $new_name;
+            $add->marks = $request->marks;
+            $add->label = $request->label;
+            $add->question_type = $request->question_type;
+            $add->level = $request->level;
+            $add->save();
+
+            $msg = "Material Updated Successfully.";
+        }
+        else{
+
+          $new_name='';
+          if($request->has('image'))
+          {
+          
+              $image = $request->file('image');
+
+              $new_name = rand() . '.' . $image->getClientOriginalExtension();
+
+              $valid_ext = array('png','jpeg','jpg');
+
+              // Location
+              $location = public_path('upload/material/thumbnail/').$new_name;
+
+              $file_extension = pathinfo($location, PATHINFO_EXTENSION);
+              $file_extension = strtolower($file_extension);
+
+              if(in_array($file_extension,$valid_ext)){
+                  $this->compressImage($image->getPathName(),$location,60);
+              }
+          }
+
+
+          $add = new Material;
+          $add->user_id  = Auth::user()->id;
+          $add->unit_id = $request->unit_id;
+          $add->board_id = $request->board_id;
+          $add->medium_id = $request->medium_id;
+          $add->standard_id = $request->standard_id;
+          $add->semester_id = $request->semester_id;
+          $add->subject_id = $request->subject_id;
+          $add->question = $request->question;
+          $add->answer = $request->answer;
+          $add->image = $new_name;
+          $add->marks = $request->marks;
+          $add->label = $request->label;
+          $add->question_type = $request->question_type;
+          $add->level = $request->level;
+          $add->save();
+
+          $msg = "Material Added Successfully.";
+
+          storeLog('material',$add->id,date('Y-m-d H:i:s'),'create');
+          storeReview('material',$add->id,date('Y-m-d H:i:s'));
+          
         }
 
-
-        $add = new Material;
-        $add->user_id  = Auth::user()->id;
-        $add->unit_id = $request->unit_id;
-        $add->board_id = $request->board_id;
-        $add->medium_id = $request->medium_id;
-        $add->standard_id = $request->standard_id;
-        $add->semester_id = $request->semester_id;
-        $add->subject_id = $request->subject_id;
-        $add->question = $request->question;
-        $add->answer = $request->answer;
-        $add->image = $new_name;
-        $add->marks = $request->marks;
-        $add->label = $request->label;
-        $add->question_type = $request->question_type;
-        $add->level = $request->level;
-        $add->save();
-        storeLog('material',$add->id,date('Y-m-d H:i:s'),'create');
-        storeReview('material',$add->id,date('Y-m-d H:i:s'));
-        $material_details = Material::where('status','Active')->get();
-        return view('material.dynamic_table',compact('material_details'));
+        $material_details = Material::where('status','!=','Deleted')->get();
+        $html = view('material.dynamic_table',compact('material_details'))->render();
+        $data = ['html' => $html,'message' => $msg];
+        return response()->json($data);
+        
+        
+        //return view('.dynamic_table',compact('material_details'));
         //return redirect()->route('material.index')->with('success', 'Material Added Successfully.');
     }
 
@@ -127,13 +190,14 @@ class MaterialController extends Controller
      * @param  \App\Models\material  $material
      * @return \Illuminate\Http\Response
      */
-    public function edit(Material $material,$id)
+    public function edit(Request $request)
     {
-        $units = Unit::where('status','Active')->get();
-        $materialdata = Material::where('id',$id)->first();
-        $boards = Board::where('status','Active')->get();
-        $question_type_details = QuestionType::where('status','Active')->get();
-        return view('material.edit',compact('materialdata','units','boards','question_type_details'));
+        //$units = Unit::where('status','Active')->get();
+        $materialdata = Material::where('id',$request->id)->first();
+        return $materialdata;
+        //$boards = Board::where('status','Active')->get();
+        //$question_type_details = QuestionType::where('status','Active')->get();
+        //return view('material.edit',compact('materialdata','units','boards','question_type_details'));
     }
 
     /**
@@ -208,13 +272,28 @@ class MaterialController extends Controller
      * @param  \App\Models\material  $material
      * @return \Illuminate\Http\Response
      */
-    public function distroy(Material $material,$id)
+    public function distroy(Request $request)
     {
-        $delete = Material::find($id);
-        $delete->status = "Deleted";
-        $delete->save();
+        if($request->has('status')){
+          if($request->status == "Active"){
+            $delete = Material::find($request->id);
+            $delete->status = "Inactive";
+            $delete->save();
+          }
+          else{
+            $delete = Material::find($request->id);
+            $delete->status = "Active";
+            $delete->save();  
+          }
+        }else{
+            $delete = Material::find($request->id);
+            $delete->status = "Deleted";
+            $delete->save();
+        }
 
-        return redirect()->route('material.index')->with('success', 'Material Deleted Successfully.');
+        $material_details = Material::where('status','!=','Deleted')->get();
+        return view('material.dynamic_table',compact('material_details'));  
+        //return redirect()->route('material.index')->with('success', 'Material Deleted Successfully.');
     }
 
     function compressImage($source, $destination, $quality) {

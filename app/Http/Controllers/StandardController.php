@@ -23,7 +23,7 @@ class StandardController extends Controller
     
     public function index()
     {
-        $standard_details = Standard::where('status','Active')->get();
+        $standard_details = Standard::where('status','!=','Deleted')->get();
         return view('standard.index',compact('standard_details'));
     }
 
@@ -34,7 +34,7 @@ class StandardController extends Controller
      */
     public function create()
     {
-        $standard_details = Standard::where('status','Active')->get();
+        $standard_details = Standard::where('status','!=','Deleted')->get();
         $boards = Board::where('status','Active')->get();
         return view('standard.add',compact('boards','standard_details'));
     }
@@ -130,7 +130,7 @@ class StandardController extends Controller
 
         }
 
-        $standard_details = Standard::where('status','Active')->get();
+        $standard_details = Standard::where('status','!=','Deleted')->get();
         $html = view('standard.dynamic_table',compact('standard_details'))->render();
         $data = ['html' => $html,'message' => $msg];
         return response()->json($data);
@@ -225,11 +225,26 @@ class StandardController extends Controller
      */
     public function distroy(Request $request)
     {
-        $delete = Standard::find($request->id);
-        $delete->status = "Deleted";
-        $delete->save();
+        if($request->has('status')){
+            if($request->status == "Active"){
+            $delete = Standard::find($request->id);
+            $delete->status = "Inactive";
+            $delete->save();
+          }
+          else{
+            $delete = Standard::find($request->id);
+            $delete->status = "Active";
+            $delete->save();  
+          }
 
-        $standard_details = Standard::where('status','Active')->get();
+        }else{
+            $delete = Standard::find($request->id);
+            $delete->status = "Deleted";
+            $delete->save();    
+        }
+        
+
+        $standard_details = Standard::where('status','!=','Deleted')->get();
         return view('standard.dynamic_table',compact('standard_details'));
         //return redirect()->route('standard.index')->with('success', 'Standard Deleted Successfully.');
     }

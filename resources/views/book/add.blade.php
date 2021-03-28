@@ -635,6 +635,7 @@ $(document).ready(function () {
                     $('#url').val('');
                     $('#url_preview').css('display','none');
                     $('#hidden_id').val('0');
+                    $('.urlchk').prop("checked",false);
                     
                     $('.dyamictable').empty();
                     $('.dyamictable').html(data.html);
@@ -757,6 +758,30 @@ $(document).on('click','.distroy', function() {
                 //location.replace(del_url);
             }
         }
+    });
+});
+
+$(document).on('click','.status_change', function() {
+    var id = $(this).attr('data-id');
+    var status = $(this).attr('data-status');
+
+    $.ajax({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="token"]').attr('content')
+        },
+        url: "{{ route('book.distroy') }}",
+        type: "GET",
+        data: {
+            'id':id,
+            'status':status,
+        },
+        success: function(data) {
+            confirm("Book Status Change Successfully.");
+            
+            $('.dyamictable').empty();
+            $('.dyamictable').html(data);
+            $(".datatable-init").DataTable();
+        }            
     });
 });
 

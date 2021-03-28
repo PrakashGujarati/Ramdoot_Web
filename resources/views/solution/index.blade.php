@@ -21,7 +21,7 @@
             		<h4 class="nk-block-title">Solution List</h4>
             	</div>
             	<div class="col-lg-2 text-right">
-            		<a href="{{ route('solution.create') }}" class="btn btn-primary text-light">Add Solution</a>
+            		<!-- <a href="{{ route('solution.create') }}" class="btn btn-primary text-light">Add Solution</a> -->
             	</div>
             </div>
         </div>
@@ -68,7 +68,7 @@
                         	<a href="{{ route('solution.edit',$data->id) }}" class="mr-1"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
                         	<a href="javascript:;" data-url="{{ route('solution.distroy',$data->id) }}" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a>
                         </td>--}}
-                        <td><a href="javascript:;" data-url="" class=""><span class="nk-menu-icon text-primary"><em class="fa fa-plus pr-1"></em>Add</span></a></td>
+                        <td><a href="{{ route('solution.create',$data->subject_id) }}" data-url="" class=""><span class="nk-menu-icon text-primary"><em class="fa fa-plus pr-1"></em>Add</span></a></td>
                     </tr>
                     @endforeach
                     @else

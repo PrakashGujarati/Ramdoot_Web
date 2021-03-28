@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Note;
 use App\Models\Board;
 use Auth;
+use App\Models\Subject;
 
 class NoteController extends Controller
 {
@@ -18,15 +19,16 @@ class NoteController extends Controller
     }
     public function index()
     {
-        $note_details = Note::where('status','Active')->groupBy('subject_id')->get();
+        $note_details = Note::where('status','!=','Deleted')->groupBy('subject_id')->get();
         return view('note.index',compact('note_details'));
     }
 
-    public function create()
+    public function create($id=null)
     {
-    	$note_details = Note::where('status','Active')->get();
-        $boards = Board::where('status','Active')->get();
-        return view('note.add',compact('boards','note_details'));
+    	$note_details = Note::where('status','!=','Deleted')->get();
+        $boards = Board::where('status','!=','Deleted')->get();
+        $subjects_details = Subject::where('id',$id)->first();
+        return view('note.add',compact('boards','note_details','subjects_details'));
     }
 
 
@@ -45,73 +47,136 @@ class NoteController extends Controller
             'sub_title' => 'required'
         ]);
 
-        $new_name='';
-        if($request->has('thumbnail'))
-        {
-        
-            $image = $request->file('thumbnail');
-            $new_name = rand() . '.' . $image->getClientOriginalExtension();
-            $destinationPath = public_path('upload/note/thumbnail/');
-            $image->move($destinationPath, $new_name);
+        if($request->hidden_id != "0")
+        {   
 
-            // $file_extension = pathinfo($location, PATHINFO_EXTENSION);
-            // $file_extension = strtolower($file_extension);
-
-            // if(in_array($file_extension,$valid_ext)){
-            //     $this->compressImage($image->getPathName(),$location,60);
-            // }
-        }
-
-        $url_file='';
-        if($request->url_type == 'file'){
-            if($request->file('url'))
+            $new_name='';
+            if($request->has('thumbnail'))
             {
-                $image = $request->file('url');
-                $url_file = time().'.'.$image->getClientOriginalExtension();
-                $destinationPath = public_path('upload/note/url/');
-                $image->move($destinationPath, $url_file);
-            }    
-        }else{
-            $url_file = $request->url;
+            
+                $image = $request->file('thumbnail');
+                $new_name = rand() . '.' . $image->getClientOriginalExtension();
+                $destinationPath = public_path('upload/note/thumbnail/');
+                $image->move($destinationPath, $new_name);
+            }
+            else{
+                $new_name = $request->hidden_thumbnail;
+            }
+
+            $url_file='';
+            if($request->url_type == 'file'){
+                if($request->file('url'))
+                {
+                    $image = $request->file('url');
+                    $url_file = time().'.'.$image->getClientOriginalExtension();
+                    $destinationPath = public_path('upload/note/url/');
+                    $image->move($destinationPath, $url_file);
+                }
+                else{
+                    $url_file = $request->hidden_url;
+                }    
+            }else{
+                $url_file = $request->url;
+            }
+            
+
+            $add = Note::find($request->hidden_id);
+            $add->user_id  = Auth::user()->id;
+            $add->board_id = $request->board_id;
+            $add->medium_id = $request->medium_id;
+            $add->standard_id = $request->standard_id;
+            $add->semester_id = $request->semester_id;
+            $add->subject_id = $request->subject_id;
+            $add->unit_id = $request->unit_id;
+            $add->title = $request->title;
+            $add->sub_title = $request->sub_title;
+            $add->url_type = $request->url_type;
+            $add->url = $url_file;
+            $add->thumbnail = $new_name;
+            $add->pages = isset($request->pages) ? $request->pages:'';
+            $add->description = isset($request->description) ? $request->description:'';
+            $add->label = $request->label;
+            $add->release_date = $request->release_date;
+            $add->edition = $request->edition;
+            $add->save();
+
+            $msg = "Note Updated Successfully.";
+
         }
-        
+        else{
 
-        $add = new Note;
-        $add->user_id  = Auth::user()->id;
-        $add->board_id = $request->board_id;
-        $add->medium_id = $request->medium_id;
-        $add->standard_id = $request->standard_id;
-        $add->semester_id = $request->semester_id;
-        $add->subject_id = $request->subject_id;
-        $add->unit_id = $request->unit_id;
-        $add->title = $request->title;
-        $add->sub_title = $request->sub_title;
-        $add->url_type = $request->url_type;
-        $add->url = $url_file;
-        $add->thumbnail = $new_name;
-        $add->pages = isset($request->pages) ? $request->pages:'';
-        $add->description = isset($request->description) ? $request->description:'';
-        $add->label = $request->label;
-        $add->release_date = $request->release_date;
-        $add->edition = $request->edition;
-        $add->save();
+            $new_name='';
+            if($request->has('thumbnail'))
+            {
+            
+                $image = $request->file('thumbnail');
+                $new_name = rand() . '.' . $image->getClientOriginalExtension();
+                $destinationPath = public_path('upload/note/thumbnail/');
+                $image->move($destinationPath, $new_name);
 
-        storeLog('note',$add->id,date('Y-m-d H:i:s'),'create');
-        storeReview('note',$add->id,date('Y-m-d H:i:s'));
+                // $file_extension = pathinfo($location, PATHINFO_EXTENSION);
+                // $file_extension = strtolower($file_extension);
 
-        $note_details = Note::where('status','Active')->get();
-        
+                // if(in_array($file_extension,$valid_ext)){
+                //     $this->compressImage($image->getPathName(),$location,60);
+                // }
+            }
+
+            $url_file='';
+            if($request->url_type == 'file'){
+                if($request->file('url'))
+                {
+                    $image = $request->file('url');
+                    $url_file = time().'.'.$image->getClientOriginalExtension();
+                    $destinationPath = public_path('upload/note/url/');
+                    $image->move($destinationPath, $url_file);
+                }    
+            }else{
+                $url_file = $request->url;
+            }
+            
+
+            $add = new Note;
+            $add->user_id  = Auth::user()->id;
+            $add->board_id = $request->board_id;
+            $add->medium_id = $request->medium_id;
+            $add->standard_id = $request->standard_id;
+            $add->semester_id = $request->semester_id;
+            $add->subject_id = $request->subject_id;
+            $add->unit_id = $request->unit_id;
+            $add->title = $request->title;
+            $add->sub_title = $request->sub_title;
+            $add->url_type = $request->url_type;
+            $add->url = $url_file;
+            $add->thumbnail = $new_name;
+            $add->pages = isset($request->pages) ? $request->pages:'';
+            $add->description = isset($request->description) ? $request->description:'';
+            $add->label = $request->label;
+            $add->release_date = $request->release_date;
+            $add->edition = $request->edition;
+            $add->save();
+
+            storeLog('note',$add->id,date('Y-m-d H:i:s'),'create');
+            storeReview('note',$add->id,date('Y-m-d H:i:s'));
+
+            $msg = "Note Added Successfully.";
+        }
+
+        $note_details = Note::where('status','!=','Deleted')->get();
+        $html = view('note.dynamic_table',compact('note_details'))->render();
+        $data = ['html' => $html,'message' => $msg];
+        return response()->json($data);
         // $html=view('note.dynamic_table',compact('note_details'))->render();
-        return view('note.dynamic_table',compact('note_details'));
+        //return view('note.dynamic_table',compact('note_details'));
         // return response()->json(['success'=>true,'html'=>$html]);
     }
 
-    public function edit($id)
+    public function edit(Request $request)
     {
-        $boards = Board::where('status','Active')->get();
-        $mediumdata = Medium::where('id',$id)->first();
-
-        return view('medium.edit',compact('boards','mediumdata'));
+        //$boards = Board::where('status','Active')->get();
+        $notedata = Note::where('id',$request->id)->first();
+        return $notedata;
+        //return view('medium.edit',compact('boards','mediumdata'));
     }
 
 
@@ -132,13 +197,28 @@ class NoteController extends Controller
     }
 
 
-    public function distroy($id)
+    public function distroy(Request $request)
     {
-        $delete = Medium::find($id);
-        $delete->status = "Deleted";
-        $delete->save();
+        if($request->has('status')){
+          if($request->status == "Active"){
+            $delete = Note::find($request->id);
+            $delete->status = "Inactive";
+            $delete->save();
+          }
+          else{
+            $delete = Note::find($request->id);
+            $delete->status = "Active";
+            $delete->save();  
+          }
+        }else{
+            $delete = Note::find($request->id);
+            $delete->status = "Deleted";
+            $delete->save();
+        }
 
-        return redirect()->route('medium.index')->with('success', 'Medium Deleted Successfully.');
+        $note_details = Note::where('status','!=','Deleted')->get();
+        return view('note.dynamic_table',compact('note_details'));  
+        //return redirect()->route('medium.index')->with('success', 'Medium Deleted Successfully.');
     }    
     public function load_autocomplete(request $request)
     {

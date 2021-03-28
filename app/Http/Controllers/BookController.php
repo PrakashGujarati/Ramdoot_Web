@@ -25,7 +25,7 @@ class BookController extends Controller
     }
     public function index()
     {
-        $book_details = Book::where('status','Active')->groupBy('subject_id')->get();
+        $book_details = Book::where('status','!=','Deleted')->groupBy('subject_id')->get();
         return view('book.index',compact('book_details'));
     }
 
@@ -36,9 +36,9 @@ class BookController extends Controller
      */
     public function create($id)
     {
-        $units = Unit::where('status','Active')->get();
-        $boards = Board::where('status','Active')->get();
-        $book_details = Book::where('status','Active')->get();
+        $units = Unit::where('status','!=','Deleted')->get();
+        $boards = Board::where('status','!=','Deleted')->get();
+        $book_details = Book::where('status','!=','Deleted')->get();
         $subjects_details = Subject::where('id',$id)->first();
         return view('book.add',compact('units','boards','book_details','subjects_details'));
     }
@@ -191,7 +191,7 @@ class BookController extends Controller
         }
 
 
-        $book_details = Book::where('status','Active')->get();
+        $book_details = Book::where('status','!=','Deleted')->get();
         $html = view('book.dynamic_table',compact('book_details'))->render();
         $data = ['html' => $html,'message' => $msg];
         return response()->json($data);        
@@ -319,11 +319,24 @@ class BookController extends Controller
      */
     public function distroy(Request $request)
     {
-        $delete = Book::find($request->id);
-        $delete->status = "Deleted";
-        $delete->save();
+        if($request->has('status')){
+          if($request->status == "Active"){
+            $delete = Book::find($request->id);
+            $delete->status = "Inactive";
+            $delete->save();
+          }
+          else{
+            $delete = Book::find($request->id);
+            $delete->status = "Active";
+            $delete->save();  
+          }
+        }else{
+            $delete = Book::find($request->id);
+            $delete->status = "Deleted";
+            $delete->save();
+        }
 
-        $book_details = Book::where('status','Active')->get();
+        $book_details = Book::where('status','!=','Deleted')->get();
         return view('book.dynamic_table',compact('book_details'));
         //return redirect()->route('book.index')->with('success', 'Book Deleted Successfully.');
     }

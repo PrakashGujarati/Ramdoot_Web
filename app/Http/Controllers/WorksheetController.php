@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Unit;
 use Auth;
 use App\Models\Board;
+use App\Models\Subject;
 
 class WorksheetController extends Controller
 {
@@ -24,7 +25,7 @@ class WorksheetController extends Controller
     }
     public function index()
     {
-        $worksheet_details = Worksheet::where('status','Active')->groupBy('subject_id')->get();
+        $worksheet_details = Worksheet::where('status','!=','Deleted')->groupBy('subject_id')->get();
         return view('worksheet.index',compact('worksheet_details'));
     }
 
@@ -33,12 +34,13 @@ class WorksheetController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($id)
     {
-        $units = Unit::where('status','Active')->get();
-        $boards = Board::where('status','Active')->get();
-        $worksheet_details = Worksheet::where('status','Active')->get();
-        return view('worksheet.add',compact('units','boards','worksheet_details'));
+        $units = Unit::where('status','!=','Deleted')->get();
+        $boards = Board::where('status','!=','Deleted')->get();
+        $worksheet_details = Worksheet::where('status','!=','Deleted')->get();
+        $subjects_details = Subject::where('id',$id)->first();
+        return view('worksheet.add',compact('units','boards','worksheet_details','subjects_details'));
     }
 
     /**
@@ -59,50 +61,118 @@ class WorksheetController extends Controller
             'title' => 'required',
         ]);
 
-        $new_name='';
-        if($request->has('thumbnail'))
+        if($request->hidden_id != "0")
         {
-        
-            $image = $request->file('thumbnail');
-            $new_name = rand() . '.' . $image->getClientOriginalExtension();
-            $destinationPath = public_path('upload/paper/thumbnail/');
-            $image->move($destinationPath, $new_name);
+            $new_name='';
+            if($request->has('thumbnail'))
+            {
+            
+                $image = $request->file('thumbnail');
+                $new_name = rand() . '.' . $image->getClientOriginalExtension();
+                $destinationPath = public_path('upload/worksheet/thumbnail/');
+                $image->move($destinationPath, $new_name);
+            }
+            else{
+                $new_name = $request->hidden_thumbnail;
+            }
+
+            $url_file='';
+            if($request->url_type == 'file'){
+                if($request->file('url'))
+                {
+                    $image = $request->file('url');
+                    $url_file = time().'.'.$image->getClientOriginalExtension();
+                    $destinationPath = public_path('upload/worksheet/url/');
+                    $image->move($destinationPath, $url_file);
+                }
+                else{
+                    $url_file = $request->hidden_url;
+                }    
+            }else{
+                $url_file = $request->url;
+            }
+            
+
+            $add = Worksheet::find($request->hidden_id);
+            $add->user_id  = Auth::user()->id;
+            $add->unit_id = $request->unit_id;
+            $add->board_id = $request->board_id;
+            $add->medium_id = $request->medium_id;
+            $add->standard_id = $request->standard_id;
+            $add->semester_id = $request->semester_id;
+            $add->subject_id = $request->subject_id;
+            $add->title = $request->title;
+            $add->sub_title = $request->sub_title;
+            $add->url_type = $request->url_type;
+            $add->url = $url_file;
+            $add->label = $request->label;
+            $add->thumbnail = $new_name;
+            $add->description = isset($request->description) ? $request->description:'';
+            $add->release_date = $request->release_date;
+            $add->edition = $request->edition;
+            $add->pages = isset($request->pages) ? $request->pages:'';
+            $add->save();
+
+            $msg = "Worksheet Updated Successfully.";
+        }
+        else{
+
+            $new_name='';
+            if($request->has('thumbnail'))
+            {
+            
+                $image = $request->file('thumbnail');
+                $new_name = rand() . '.' . $image->getClientOriginalExtension();
+                $destinationPath = public_path('upload/worksheet/thumbnail/');
+                $image->move($destinationPath, $new_name);
+            }
+            
+
+            $url_file='';
+            if($request->url_type == 'file'){
+                if($request->file('url'))
+                {
+                    $image = $request->file('url');
+                    $url_file = time().'.'.$image->getClientOriginalExtension();
+                    $destinationPath = public_path('upload/worksheet/url/');
+                    $image->move($destinationPath, $url_file);
+                }    
+            }else{
+                $url_file = $request->url;
+            }
+
+            $add = new Worksheet;
+            $add->user_id  = Auth::user()->id;
+            $add->unit_id = $request->unit_id;
+            $add->board_id = $request->board_id;
+            $add->medium_id = $request->medium_id;
+            $add->standard_id = $request->standard_id;
+            $add->semester_id = $request->semester_id;
+            $add->subject_id = $request->subject_id;
+            $add->title = $request->title;
+            $add->sub_title = $request->sub_title;
+            $add->url_type = $request->url_type;
+            $add->url = $url_file;
+            $add->label = $request->label;
+            $add->thumbnail = $new_name;
+            $add->description = isset($request->description) ? $request->description:'';
+            $add->release_date = $request->release_date;
+            $add->edition = $request->edition;
+            $add->pages = isset($request->pages) ? $request->pages:'';
+            $add->save();
+
+            $msg = "Worksheet Added Successfully.";
+
+            storeLog('worksheet',$add->id,date('Y-m-d H:i:s'),'create');
+            storeReview('worksheet',$add->id,date('Y-m-d H:i:s'));
+
         }
 
-        $url_file='';
-        if($request->has('url'))
-        {
-            $image = $request->file('url');
-            $url_file = time().'.'.$image->getClientOriginalExtension();
-            $destinationPath = public_path('upload/worksheet/url/');
-            $image->move($destinationPath, $url_file);
-        }
-
-        $add = new Worksheet;
-        $add->user_id  = Auth::user()->id;
-        $add->unit_id = $request->unit_id;
-        $add->board_id = $request->board_id;
-        $add->medium_id = $request->medium_id;
-        $add->standard_id = $request->standard_id;
-        $add->semester_id = $request->semester_id;
-        $add->subject_id = $request->subject_id;
-        $add->title = $request->title;
-        $add->sub_title = $request->sub_title;
-        $add->url_type = $request->url_type;
-        $add->url = $url_file;
-        $add->label = $request->label;
-        $add->thumbnail = $new_name;
-        $add->description = isset($request->description) ? $request->description:'';
-        $add->release_date = $request->release_date;
-        $add->edition = $request->edition;
-        $add->pages = isset($request->pages) ? $request->pages:'';
-        $add->save();
-
-        storeLog('worksheet',$add->id,date('Y-m-d H:i:s'),'create');
-        storeReview('worksheet',$add->id,date('Y-m-d H:i:s'));
-
-        $worksheet_details = Worksheet::where('status','Active')->get();
-        return view('worksheet.dynamic_table',compact('worksheet_details'));
+        $worksheet_details = Worksheet::where('status','!=','Deleted')->get();
+        $html = view('worksheet.dynamic_table',compact('worksheet_details'))->render();
+        $data = ['html' => $html,'message' => $msg];
+        return response()->json($data);
+        //return view('worksheet.dynamic_table',compact('worksheet_details'));
         //return redirect()->route('worksheet.index')->with('success', 'Worksheet Added Successfully.');
     }
 
@@ -123,12 +193,14 @@ class WorksheetController extends Controller
      * @param  \App\Models\worksheet  $worksheet
      * @return \Illuminate\Http\Response
      */
-    public function edit(worksheet $worksheet,$id)
+    public function edit(Request $request)
     {
-        $units = Unit::where('status','Active')->get();
-        $worksheetdata = Worksheet::where('id',$id)->first();
-        $boards = Board::where('status','Active')->get();
-        return view('worksheet.edit',compact('worksheetdata','units','boards'));
+        //$units = Unit::where('status','Active')->get();
+        $worksheetdata = Worksheet::where('id',$request->id)->first();
+        return $worksheetdata;
+
+        //$boards = Board::where('status','Active')->get();
+        //return view('worksheet.edit',compact('worksheetdata','units','boards'));
     }
 
     /**
@@ -186,13 +258,28 @@ class WorksheetController extends Controller
      * @param  \App\Models\worksheet  $worksheet
      * @return \Illuminate\Http\Response
      */
-    public function distroy(Worksheet $worksheet,$id)
+    public function distroy(Request $request)
     {
-        $delete = Worksheet::find($id);
-        $delete->status = "Deleted";
-        $delete->save();
+        if($request->has('status')){
+          if($request->status == "Active"){
+            $delete = Worksheet::find($request->id);
+            $delete->status = "Inactive";
+            $delete->save();
+          }
+          else{
+            $delete = Worksheet::find($request->id);
+            $delete->status = "Active";
+            $delete->save();  
+          }
+        }else{
+            $delete = Worksheet::find($request->id);
+            $delete->status = "Deleted";
+            $delete->save();
+        }
 
-        return redirect()->route('worksheet.index')->with('success', 'Worksheet Deleted Successfully.');
+        $worksheet_details = Worksheet::where('status','!=','Deleted')->get();
+        return view('worksheet.dynamic_table',compact('worksheet_details'));
+        //return redirect()->route('worksheet.index')->with('success', 'Worksheet Deleted Successfully.');
     }
 
     function compressImage($source, $destination, $quality) {
