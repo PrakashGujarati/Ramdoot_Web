@@ -1,4 +1,8 @@
 
+----------------------- 30-03-2021 -------------------
+
+ALTER TABLE `pdf_views` ADD `type` VARCHAR(50) NULL AFTER `id`;
+
 ----------------------- 27-03-2020-------------------
 
 ALTER TABLE `notes` CHANGE `release_date` `release_date` DATE NULL DEFAULT NULL;

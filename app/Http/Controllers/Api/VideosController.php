@@ -75,7 +75,7 @@ class VideosController extends Controller
 	    			$videodata=[];
 	    			foreach ($getdata as $value1) {
 
-                        $url='';
+                        $url='';$video_type='';
                         if($value1->url_type == "file"){
                             $url = env('APP_URL')."/upload/videos/url/".$value1->url;
                             $video_type = "Server";
