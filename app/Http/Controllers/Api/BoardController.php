@@ -13,7 +13,7 @@ class BoardController extends Controller
     public function boardMedium(Request $request){
 
 
-    	$getboard_details = Board::where(['status' => 'Active'])->select('id','name')->groupBy('name')->get();
+    	$getboard_details = Board::where(['status' => 'Active'])->select('id','name','thumbnail')->groupBy('name')->get();
 
     	if(count($getboard_details) > 0){
     		$data=[];$getdata=[];
@@ -29,7 +29,8 @@ class BoardController extends Controller
                     $last = substr(isset($mediumSortName[1]) ? $mediumSortName[1]:'', 0,1);
                     $mediumArray[] = ['id' => $sub_value->id,'medium_name' => $sub_value->medium_name,'sort_name' => $first.$last]; 
                 }
-    			$data[] = ['id' => $value->id,'board_name' => $value->name,'sort_name' => trim($sortname[0]),'abbreviation' => $value->abbreviation,'url' => $value->url,'thumbnail' => $value->thumbnail,'medium' => $mediumArray];
+                $thumbnail = env('APP_URL')."/upload/board/thumbnail/".$value->thumbnail;
+    			$data[] = ['id' => $value->id,'board_name' => $value->name,'sort_name' => trim($sortname[0]),'abbreviation' => $value->abbreviation,'url' => $value->url,'thumbnail' => $thumbnail,'medium' => $mediumArray];
     		}
 
     		return response()->json([
