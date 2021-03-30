@@ -1,6 +1,16 @@
 @extends('layouts.app')
 @section('title','Boards')
 @section('css')
+<style>
+table {
+    table-layout:fixed;
+}
+td{
+    overflow:hidden;    
+    text-overflow: ellipsis;
+    white-space: normal !important;
+}
+</style>
 @endsection
 
 @section('content')

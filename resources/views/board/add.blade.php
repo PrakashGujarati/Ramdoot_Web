@@ -1,9 +1,16 @@
 @extends('layouts.app')
 @section('title','Add Board')
 @section('css')
-
-
-
+<style>
+table {
+    table-layout:fixed;
+}
+td{
+    overflow:hidden;    
+    text-overflow: ellipsis;
+    white-space: normal !important;
+}
+</style>
 
 @endsection
 @section('content')
@@ -107,7 +114,7 @@
 
     $(document).ready(function(){
         //$('#example').DataTable();
-
+        $(".datatable-init").DataTable();
         $('#thumbnail_preview').css('display','none');
     });    
 
@@ -196,8 +203,6 @@ $(document).on('click','.edit-btn',function(){
             $('#thumbnail_preview').attr('src', url_path);
             $('#hidden_id').val(result.id);
             //$('#thumbnail').val('');
-            
-            
             // $('.dyamictable').empty();
             // $('.dyamictable').html(data);
         }            

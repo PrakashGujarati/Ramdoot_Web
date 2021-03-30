@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Semester;
 use App\Models\Board;
+use App\Models\Book;
 use App\Models\Unit;
 use App\Models\Standard;
 use App\Models\Subject;
+use App\Models\pdf_view;
 use DB;
 use Validator;
 use App\Models\Feature;
@@ -79,10 +81,24 @@ class SubjectController extends Controller
            
 	    	if(count($getdata) > 0){
 	    		$data=[];
+                $readcount=0;
+                $totalcount=0;
 	    		foreach ($getdata as $value) {
                     $url = env('APP_URL')."/upload/subject/url/".$value->url;
-	    			$thumbnail = env('APP_URL')."/upload/subject/thumbnail/".$value->thumbnail;                   
-	    			$data[] = ['id' => $value->id,'name' => $value->subject_name,'sub_title' => $value->sub_title,'url' => $url,'thumbnail' => $thumbnail,"count"=>0,'count_label'=>"Total "];
+	    			$thumbnail = env('APP_URL')."/upload/subject/thumbnail/".$value->thumbnail;
+                    if($request->feature_id == 3){
+                        $totalcount = Book::where('subject_id',$value->id)->count();
+                        $books = Book::where('subject_id',$value->id)->get();
+                        foreach($books as $book)
+                        {
+                            $c = pdf_view::where(['type' => 'Book','type_id' => $book->id])->count();
+                            if($c)
+                            {
+                                $readcount++;
+                            }
+                        }
+                    }
+	    			$data[] = ['id' => $value->id,'name' => $value->subject_name,'sub_title' => $value->sub_title,'url' => $url,'thumbnail' => $thumbnail,"total_count"=>$totalcount,"readcount"=>$readcount,'count_label'=>"Total "];
 	    		}
                 //remove unit counter and add counter of feature whether it is video or image and send message of that for ex total video,etc 
 

@@ -94,7 +94,7 @@ class ExamController extends Controller
 
         				//$chk_student = User::where(['id' => $request->student_id])->first();
 
-        				$examdata[] = ['id' => $value->id,'standard_idrd' => isset($chkstandard->standard) ? $chkstandard->standard:'','semester' => isset($chksemester->semester) ? $chksemester->semester:'','suject' => $chksuject->subject_name,'name' => $value->name,'note' => $value->note,'time_duration' => $value->time_duration,'exam_date' =>  $value->exam_date,'total_marks' => $value->total_marks,'total_question' => $value->total_question,'start_time' => $value->start_time,'end_time' => $value->end_time,'negative_marks' => $value->negative_marks];	
+        				$examdata[] = ['id' => $value->id,'standard_id' => isset($chkstandard->standard) ? $chkstandard->standard:'','semester' => isset($chksemester->semester) ? $chksemester->semester:'','subject' => $chksuject->subject_name,'name' => $value->name,'note' => $value->note,'time_duration' => $value->time_duration,'exam_date' =>  $value->exam_date,'total_marks' => $value->total_marks,'total_question' => $value->total_question,'start_time' => $value->start_time,'end_time' => $value->end_time,'negative_marks' => $value->negative_marks];	
         			}
         		}
         		return response()->json([
