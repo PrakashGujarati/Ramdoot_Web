@@ -68,6 +68,7 @@ class TextbookController extends Controller
         else{
 
         	$getunit = Unit::where(['standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'subject_id' => $request->subject_id,'status' => 'Active'])->get();
+            
         	//$getdata = Books::where(['unit_id' => $request->unit_id,'status' => 'Active'])->get();
 	    	if(count($getunit) > 0){
 	    		$data=[];$getdata=[];
@@ -232,6 +233,7 @@ class TextbookController extends Controller
                 $count=$chkview->count+1;
             }else{
                 $add =  new pdf_view;
+                $add->type = $request->type;
                 $add->type_id = $request->type_id;
                 $add->user_id = $request->user_id;
                 $add->count = 1;

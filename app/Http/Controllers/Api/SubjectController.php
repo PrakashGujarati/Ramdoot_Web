@@ -11,6 +11,9 @@ use App\Models\Unit;
 use App\Models\Standard;
 use App\Models\Subject;
 use App\Models\pdf_view;
+use App\Models\Note;
+use App\Models\Paper;
+use App\Models\Worksheet;
 use DB;
 use Validator;
 use App\Models\Feature;
@@ -81,9 +84,11 @@ class SubjectController extends Controller
            
 	    	if(count($getdata) > 0){
 	    		$data=[];
-                $readcount=0;
+                
                 $totalcount=0;
+                
 	    		foreach ($getdata as $value) {
+                    $readcount=0;
                     $url = env('APP_URL')."/upload/subject/url/".$value->url;
 	    			$thumbnail = env('APP_URL')."/upload/subject/thumbnail/".$value->thumbnail;
                     if($request->feature_id == 3){
@@ -91,13 +96,50 @@ class SubjectController extends Controller
                         $books = Book::where('subject_id',$value->id)->get();
                         foreach($books as $book)
                         {
-                            $c = pdf_view::where(['type' => 'Book','type_id' => $book->id])->count();
+                            $c = pdf_view::where(['type' => 'Textbook','type_id' => $book->id])->count();
                             if($c)
                             {
                                 $readcount++;
                             }
                         }
                     }
+                    elseif ($request->feature_id == 9) {
+                        $totalcount = Note::where('subject_id',$value->id)->count();
+                        $notes = Note::where('subject_id',$value->id)->get();
+                        foreach($notes as $note)
+                        {
+                            $c = pdf_view::where(['type' => 'Note','type_id' => $note->id])->count();
+                            if($c)
+                            {
+                                $readcount++;
+                            }
+                        }
+                    }
+                    elseif ($request->feature_id == 7) {
+                        $totalcount = Worksheet::where('subject_id',$value->id)->count();
+                        $worksheets = Worksheet::where('subject_id',$value->id)->get();
+                        foreach($worksheets as $worksheet)
+                        {
+                            $c = pdf_view::where(['type' => 'Worksheet','type_id' => $worksheet->id])->count();
+                            if($c)
+                            {
+                                $readcount++;
+                            }
+                        }
+                    }
+                    elseif ($request->feature_id == 6) {
+                        $totalcount = Paper::where('subject_id',$value->id)->count();
+                        $papers = Paper::where('subject_id',$value->id)->get();
+                        foreach($papers as $paper)
+                        {
+                            $c = pdf_view::where(['type' => 'Paper','type_id' => $paper->id])->count();
+                            if($c)
+                            {
+                                $readcount++;
+                            }
+                        }
+                    }
+
 	    			$data[] = ['id' => $value->id,'name' => $value->subject_name,'sub_title' => $value->sub_title,'url' => $url,'thumbnail' => $thumbnail,"total_count"=>$totalcount,"readcount"=>$readcount,'count_label'=>"Total "];
 	    		}
                 //remove unit counter and add counter of feature whether it is video or image and send message of that for ex total video,etc 
