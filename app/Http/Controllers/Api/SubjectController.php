@@ -17,7 +17,10 @@ use App\Models\Worksheet;
 use DB;
 use Validator;
 use App\Models\Feature;
-
+use App\Models\Videos;
+use App\Models\Material;
+use App\Models\Question;
+use App\Models\Solution;
 
 class SubjectController extends Controller
 {
@@ -139,6 +142,56 @@ class SubjectController extends Controller
                             }
                         }
                     }
+                    elseif ($request->feature_id == 2){
+                        $totalcount = Videos::where('subject_id',$value->id)->count();
+                        $videos = Videos::where('subject_id',$value->id)->get();
+                        foreach($videos as $video)
+                        {
+                            $c = pdf_view::where(['type' => 'Video','type_id' => $video->id])->count();
+                            if($c)
+                            {
+                                $readcount++;
+                            }
+                        }   
+                    }
+                    elseif ($request->feature_id == 5){
+                        
+                        $totalcount = Material::where('subject_id',$value->id)->count();
+                        $materials = Material::where('subject_id',$value->id)->get();
+                        foreach($materials as $material)
+                        {
+                            $c = pdf_view::where(['type' => 'Material','type_id' => $material->id])->count();
+                            if($c)
+                            {
+                                $readcount++;
+                            }
+                        }   
+                    }
+                    elseif($request->feature_id == 8){
+                        $totalcount = Question::where('subject_id',$value->id)->count();
+                        $Questions = Question::where('subject_id',$value->id)->get();
+                        foreach($Questions as $Question)
+                        {
+                            $c = pdf_view::where(['type' => 'MCQ','type_id' => $Question->id])->count();
+                            if($c)
+                            {
+                                $readcount++;
+                            }
+                        }
+                    }
+                    elseif($request->feature_id == 4){
+                        $totalcount = Solution::where('subject_id',$value->id)->count();
+                        $solutions = Solution::where('subject_id',$value->id)->get();
+                        foreach($solutions as $solution)
+                        {
+                            $c = pdf_view::where(['type' => 'Exercise','type_id' => $solution->id])->count();
+                            if($c)
+                            {
+                                $readcount++;
+                            }
+                        }
+                    }
+                    
 
 	    			$data[] = ['id' => $value->id,'name' => $value->subject_name,'sub_title' => $value->sub_title,'url' => $url,'thumbnail' => $thumbnail,"total_count"=>$totalcount,"readcount"=>$readcount,'count_label'=>"Total "];
 	    		}

@@ -50,6 +50,7 @@ class MaterialController extends Controller
                 $data=[];$materialdata=[];
                 foreach ($getdata as $value1) {
                     $title = $value1->label;
+
                     //$url = env('APP_URL')."/upload/material/url/".$value1->url;
                     $image = env('APP_URL')."/upload/material/thumbnail/".$value1->image;
                     $materialdata[] = ['id' => $value1->id,'question' => $value1->question,'answer' => $value1->answer,'marks' => $value1->marks,'image' => $image,'label' => $value1->label];

@@ -12,7 +12,6 @@ class BoardController extends Controller
 {
     public function boardMedium(Request $request){
 
-
     	$getboard_details = Board::where(['status' => 'Active'])->select('id','name','thumbnail')->groupBy('name')->get();
 
     	if(count($getboard_details) > 0){

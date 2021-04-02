@@ -29,7 +29,8 @@ class McqController extends Controller
 
         $unit_arr = explode(',',$request->unit_id);
 
-        $get_question = Question::whereIn('unit_id',$unit_arr)->inRandomOrder()->limit($request->no_of_question)->get();//->limit($request->no_of_question)
+        $get_question = Question::whereIn('unit_id',$unit_arr)->inRandomOrder()->limit($request->no_of_question)->get();
+        //->limit($request->no_of_question)
 
         $data=[];
         if(count($get_question) > 0){

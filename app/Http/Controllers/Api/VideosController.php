@@ -68,6 +68,7 @@ class VideosController extends Controller
 
         	$getunit = Unit::where(['standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'subject_id' => $request->subject_id,'status' => 'Active'])->get();
         	//$getdata = videos::where(['unit_id' => $request->unit_id,'status' => 'Active'])->get();
+            
 	    	if(count($getunit) > 0){
 	    		$data=[];$getdata=[];
 	    		foreach ($getunit as $value) {
