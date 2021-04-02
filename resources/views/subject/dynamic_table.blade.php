@@ -7,6 +7,7 @@
         <table class="datatable-init table">
             <thead>
                 <tr>
+                    <td>Order No</td>
                     <th>Board</th>
                     <th>Medium</th>
                     <th>Standard</th>
@@ -23,6 +24,7 @@
                 @if(count($subject_details) > 0)
                     @foreach($subject_details as $data)
                     <tr>
+                        <td>{{$data->order_no}}</td>
                         <td>{{ isset($data->board->name) ? $data->board->name:'' }}</td>
                         <td>{{ isset($data->medium->medium_name) ? $data->medium->medium_name:'' }}</td>
                         <td>{{ isset($data->standard->standard) ? $data->standard->standard:'' }}</td>
@@ -44,8 +46,8 @@
                             <a href="javascript:;" data-id="{{ $data->id }}" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a>
                         </td>
                         <td>
-                            <a href="javascript:;" data-url="" class=""><span class="nk-menu-icon info"><em class="icon ni ni-arrow-up"></em></span></a>
-                            <a href="javascript:;" data-url="" class=""><span class="nk-menu-icon info"><em class="icon ni ni-arrow-down"></em></span></a>
+                            <a href="javascript:;" data-url="" class="above_order" data-order_no="{{$data->order_no}}"><span class="nk-menu-icon info"><em class="icon ni ni-arrow-up"></em></span></a>
+                            <a href="javascript:;" data-url="" class="below_order" data-order_no="{{$data->order_no}}"><span class="nk-menu-icon info"><em class="icon ni ni-arrow-down"></em></span></a>
                         </td>
                     </tr>
                     @endforeach

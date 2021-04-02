@@ -39,7 +39,7 @@ class MaterialController extends Controller
     {
         $units = Unit::where('status','!=','Deleted')->get();
         $boards = Board::where('status','!=','Deleted')->get();
-        $material_details = Material::where('status','!=','Deleted')->get();
+        $material_details = Material::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $question_type_details = QuestionType::where('status','!=','Deleted')->get();
         $subjects_details = Subject::where('id',$id)->first();
         return view('material.add',compact('units','boards','material_details','question_type_details','subjects_details'));
@@ -138,6 +138,15 @@ class MaterialController extends Controller
               }
           }
 
+          $last_data=Material::select('*')->orderBy('order_no','desc')->first();
+          if($last_data)
+          {
+            $last_no=intval($last_data->order_no)+1;
+          } 
+          else
+          {
+            $last_no=1;
+          }
 
           $add = new Material;
           $add->user_id  = Auth::user()->id;
@@ -154,6 +163,7 @@ class MaterialController extends Controller
           $add->label = $request->label;
           $add->question_type = $request->question_type;
           $add->level = $request->level;
+          $add->order_no=$last_no;
           $add->save();
 
           $msg = "Material Added Successfully.";
@@ -163,7 +173,7 @@ class MaterialController extends Controller
           
         }
 
-        $material_details = Material::where('status','!=','Deleted')->get();
+        $material_details = Material::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $html = view('material.dynamic_table',compact('material_details'))->render();
         $data = ['html' => $html,'message' => $msg];
         return response()->json($data);
@@ -291,7 +301,7 @@ class MaterialController extends Controller
             $delete->save();
         }
 
-        $material_details = Material::where('status','!=','Deleted')->get();
+        $material_details = Material::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         return view('material.dynamic_table',compact('material_details'));  
         //return redirect()->route('material.index')->with('success', 'Material Deleted Successfully.');
     }
@@ -309,5 +319,23 @@ class MaterialController extends Controller
         $image = imagecreatefrompng($source);
 
       imagejpeg($image, $destination, $quality);
+    }
+    public function above_order(request $request)
+    {
+        above_order('materials',$request->order_no);
+
+        $material_details = Material::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $html = view('material.dynamic_table',compact('material_details'))->render();
+        $data = ['html' => $html];
+        return response()->json($data);    
+    }
+    public function below_order(request $request)
+    {
+        below_order('materials',$request->order_no);
+
+        $material_details = Material::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $html = view('material.dynamic_table',compact('material_details'))->render();
+        $data = ['html' => $html];
+        return response()->json($data);    
     }
 }

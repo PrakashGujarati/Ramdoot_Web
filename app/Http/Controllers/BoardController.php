@@ -23,7 +23,7 @@ class BoardController extends Controller
      */
     public function index()
     {
-        $boards_details = Board::where('status','!=','Deleted')->get();
+        $boards_details = Board::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         return view('board.index',compact('boards_details'));
     }
 
@@ -34,7 +34,7 @@ class BoardController extends Controller
      */
     public function create()
     {
-        $boards_details = Board::where('status','!=','Deleted')->get();
+        $boards_details = Board::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         return view('board.add',compact('boards_details'));
     }
 
@@ -110,11 +110,20 @@ class BoardController extends Controller
                     $this->compressImage($image->getPathName(),$location,60);
                 }
             }
-
+            $last_board=Board::select('*')->orderBy('order_no','asc')->first();
+            if($last_board)
+            {
+              $last_number=intval($last_board->order_no)+1;
+            } 
+            else
+            {
+              $last_number=1;
+            }
             $add = new Board;
             $add->name = $request->name;
             $add->abbreviation = $request->abbreviation;
             $add->thumbnail = $new_name;
+            $add->order_no=$last_number;
             $add->save();
             
             storeLog('board',$add->id,date('Y-m-d H:i:s'),'create');
@@ -126,7 +135,7 @@ class BoardController extends Controller
 
         }
 
-        $boards_details = Board::where('status','!=','Deleted')->get();
+        $boards_details = Board::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $html = view('board.dynamic_table',compact('boards_details'))->render();
         $data = ['html' => $html,'message' => $msg];
         return response()->json($data);
@@ -248,7 +257,7 @@ class BoardController extends Controller
             $delete->save();
         }
 
-        $boards_details = Board::where('status','!=','Deleted')->get();
+        $boards_details = Board::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         return view('board.dynamic_table',compact('boards_details'));
 
         //return redirect()->route('board.index')->with('success', 'Board Deleted Successfully.');
@@ -268,5 +277,22 @@ class BoardController extends Controller
 
       imagejpeg($image, $destination, $quality);
 
+    }
+    public function above_order_board(request $request)
+    {
+        above_order('boards',$request->order_no);
+
+        $boards_details = Board::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $html = view('board.dynamic_table',compact('boards_details'))->render();
+        $data = ['html' => $html];
+        return response()->json($data);
+    }
+    public function below_order_board(request $request)
+    {
+        below_order('boards',$request->order_no);
+        $boards_details = Board::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $html = view('board.dynamic_table',compact('boards_details'))->render();
+        $data = ['html' => $html];
+        return response()->json($data); 
     }
 }

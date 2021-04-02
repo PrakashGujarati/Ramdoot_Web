@@ -23,7 +23,7 @@ class StandardController extends Controller
     
     public function index()
     {
-        $standard_details = Standard::where('status','!=','Deleted')->get();
+        $standard_details = Standard::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         return view('standard.index',compact('standard_details'));
     }
 
@@ -34,7 +34,7 @@ class StandardController extends Controller
      */
     public function create()
     {
-        $standard_details = Standard::where('status','!=','Deleted')->get();
+        $standard_details = Standard::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $boards = Board::where('status','Active')->get();
         return view('standard.add',compact('boards','standard_details'));
     }
@@ -114,13 +114,22 @@ class StandardController extends Controller
                     $this->compressImage($image->getPathName(),$location,60);
                 }
             }
-
+            $last_data=Standard::select('*')->orderBy('order_no','asc')->first();
+            if($last_data)
+            {
+                $last_number=intval($last_data->order_no)+1;
+            }
+            else
+            {
+                $last_number=1;
+            }
             $add = new Standard;
             $add->medium_id = $request->medium_id;
             $add->board_id = $request->board_id;
             $add->standard = $request->standard;
             $add->section = $request->section;
             $add->thumbnail = $new_name;
+            $add->order_no=$last_number;
             $add->save();
 
             storeLog('standard',$add->id,date('Y-m-d H:i:s'),'create');
@@ -130,7 +139,7 @@ class StandardController extends Controller
 
         }
 
-        $standard_details = Standard::where('status','!=','Deleted')->get();
+        $standard_details = Standard::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $html = view('standard.dynamic_table',compact('standard_details'))->render();
         $data = ['html' => $html,'message' => $msg];
         return response()->json($data);
@@ -244,7 +253,7 @@ class StandardController extends Controller
         }
         
 
-        $standard_details = Standard::where('status','!=','Deleted')->get();
+        $standard_details = Standard::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         return view('standard.dynamic_table',compact('standard_details'));
         //return redirect()->route('standard.index')->with('success', 'Standard Deleted Successfully.');
     }
@@ -267,7 +276,7 @@ class StandardController extends Controller
 
     public function getStandard(Request $request){
 
-        $getstandard = Standard::where(['board_id' => $request->board_id,'medium_id' => $request->medium_id,'status' => 'Active'])->get();
+        $getstandard = Standard::where(['board_id' => $request->board_id,'medium_id' => $request->medium_id,'status' => 'Active'])->orderBy('order_no','asc')->get();
 
         $result="<option value=''>--Select Standard--</option>";
         if(count($getstandard) > 0)
@@ -321,6 +330,23 @@ class StandardController extends Controller
             }   
         }
         return json_encode(array("suggestions" => $response));
+    }
+    public function above_order(request $request)
+    {
+        above_order('standards',$request->order_no);
+
+        $standard_details = Standard::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $html = view('standard.dynamic_table',compact('standard_details'))->render();
+        $data = ['html' => $html];
+        return response()->json($data);
+    }
+    public function below_order(request $request)
+    {
+        below_order('standards',$request->order_no);
+        $standard_details = Standard::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $html = view('standard.dynamic_table',compact('standard_details'))->render();
+        $data = ['html' => $html];
+        return response()->json($data);
     }
 }
 

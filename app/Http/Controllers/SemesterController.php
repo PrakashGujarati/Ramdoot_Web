@@ -23,7 +23,7 @@ class SemesterController extends Controller
     }
     public function index()
     {
-        $semester_details = Semester::where('status','!=','Deleted')->get();
+        $semester_details = Semester::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         return view('semester.index',compact('semester_details'));
     }
 
@@ -36,7 +36,7 @@ class SemesterController extends Controller
     {
         $boards = Board::where('status','Active')->get();
         $standards = Standard::where('status','Active')->get();
-        $semester_details = Semester::where('status','!=','Deleted')->get();
+        $semester_details = Semester::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         return view('semester.add',compact('boards','standards','semester_details'));
     }
 
@@ -66,11 +66,23 @@ class SemesterController extends Controller
             $msg = "Semester Updated Successfully.";
         }
         else{
+
+            $last_data=Semester::select('*')->orderBy('order_no','desc')->first();
+            if($last_data)
+            {
+              $last_no=intval($last_data->order_no)+1;
+            } 
+            else
+            {
+              $last_no=1;
+            }
+
             $add = new Semester;
             $add->board_id = $request->board_id;
             $add->medium_id = $request->medium_id;
             $add->standard_id = $request->standard_id;
             $add->semester = $request->semester;
+            $add->order_no=$last_no;
             $add->save();
 
             storeLog('semester',$add->id,date('Y-m-d H:i:s'),'create');
@@ -80,7 +92,7 @@ class SemesterController extends Controller
         }
                 
 
-        $semester_details = Semester::where('status','!=','Deleted')->get();
+        $semester_details = Semester::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $html = view('semester.dynamic_table',compact('semester_details'))->render();
         $data = ['html' => $html,'message' => $msg];
         return response()->json($data);
@@ -169,7 +181,7 @@ class SemesterController extends Controller
             $delete->save();
         }
 
-        $semester_details = Semester::where('status','!=','Deleted')->get();
+        $semester_details = Semester::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         return view('semester.dynamic_table',compact('semester_details'));
         //return redirect()->route('semester.index')->with('success', 'Semester Deleted Successfully.');
     }
@@ -192,7 +204,7 @@ class SemesterController extends Controller
 
     public function getSemester(Request $request){
 
-        $getsemester = Semester::where(['board_id' => $request->board_id,'medium_id' => $request->medium_id,'standard_id' => $request->standard_id,'status' => 'Active'])->get();
+        $getsemester = Semester::where(['board_id' => $request->board_id,'medium_id' => $request->medium_id,'standard_id' => $request->standard_id,'status' => 'Active'])->orderBy('order_no','asc')->get();
 
         $result="<option value=''>--Select Semester--</option>";
         if(count($getsemester) > 0)
@@ -216,7 +228,7 @@ class SemesterController extends Controller
 
     public function getSemesterUnit(Request $request){
 
-        $getsemester = Semester::where(['standard_id' => $request->standard_id,'status' => 'Active'])->get();
+        $getsemester = Semester::where(['standard_id' => $request->standard_id,'status' => 'Active'])->orderBy('order_no','asc')->get();
 
         $result="<option value=''>--Select Semester--</option>";
         if(count($getsemester) > 0)
@@ -253,5 +265,22 @@ class SemesterController extends Controller
             }   
         }
         return json_encode(array("suggestions" => $response));
+    }
+    public function above_order(request $request)
+    {
+        above_order('semesters',$request->order_no);
+
+        $semester_details = Semester::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $html = view('semester.dynamic_table',compact('semester_details'))->render();
+        $data = ['html' => $html];
+        return response()->json($data);
+    }
+    public function below_order(request $request)
+    {
+        below_order('semesters',$request->order_no);
+        $semester_details = Semester::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $html = view('semester.dynamic_table',compact('semester_details'))->render();
+        $data = ['html' => $html];
+        return response()->json($data);
     }
 }

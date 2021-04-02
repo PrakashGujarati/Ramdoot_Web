@@ -38,7 +38,7 @@ class PaperController extends Controller
     {
         $units = Unit::where('status','!=','Deleted')->get();
         $boards = Board::where('status','!=','Deleted')->get();
-        $paper_details = Paper::where('status','!=','Deleted')->get();
+        $paper_details = Paper::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $subjects_details = Subject::where('id',$id)->first();
         return view('paper.add',compact('units','boards','paper_details','subjects_details'));
     }
@@ -141,6 +141,15 @@ class PaperController extends Controller
                 $url_file = $request->url;
             }
 
+            $last_data=Paper::select('*')->orderBy('order_no','desc')->first();
+              if($last_data)
+              {
+                $last_no=intval($last_data->order_no)+1;
+              } 
+              else
+              {
+                $last_no=1;
+              }
         
             $add = new Paper;
             $add->user_id  = Auth::user()->id;
@@ -160,6 +169,7 @@ class PaperController extends Controller
             $add->description = isset($request->description) ? $request->description:'';
             $add->release_date = $request->release_date;
             $add->edition = $request->edition;
+            $add->order_no=$last_no;
             $add->save();
 
             $msg = "Paper Added Successfully.";
@@ -169,7 +179,7 @@ class PaperController extends Controller
 
         }
 
-        $paper_details = Paper::where('status','!=','Deleted')->get();
+        $paper_details = Paper::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $html = view('paper.dynamic_table',compact('paper_details'))->render();
         $data = ['html' => $html,'message' => $msg];
         return response()->json($data);
@@ -281,7 +291,7 @@ class PaperController extends Controller
             $delete->save();
         }
 
-        $paper_details = Paper::where('status','!=','Deleted')->get();
+        $paper_details = Paper::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         return view('paper.dynamic_table',compact('paper_details')); 
         //return redirect()->route('paper.index')->with('success', 'Paper Deleted Successfully.');
     }
@@ -334,5 +344,22 @@ class PaperController extends Controller
         }
         return json_encode(array("suggestions" => $response));
     }
-    
+    public function above_order(request $request)
+    {
+        above_order('papers',$request->order_no);
+
+        $paper_details = Paper::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $html = view('paper.dynamic_table',compact('paper_details'))->render();
+        $data = ['html' => $html];
+        return response()->json($data);    
+    }
+    public function below_order(request $request)
+    {
+        below_order('papers',$request->order_no);
+
+        $paper_details = Paper::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $html = view('paper.dynamic_table',compact('paper_details'))->render();
+        $data = ['html' => $html];
+        return response()->json($data);    
+    }    
 }

@@ -311,4 +311,43 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('reject/review/{id}',[UserDataReviewController::class,'reject_review'])->name('reject.review');
 
 	Route::get('load_autocomplete/semester',[SemesterController::class,'load_autocomplete'])->name('load_autocomplete.semester');
+
+	Route::get('above_order/board',[BoardController::class,'above_order_board'])->name('above_order.board');
+	Route::get('below_order/board',[BoardController::class,'below_order_board'])->name('below_order.board');
+
+	Route::get('above_order/medium',[MediumController::class,'above_order'])->name('above_order.medium');
+	Route::get('below_order/medium',[MediumController::class,'below_order'])->name('below_order.medium');
+
+	Route::get('above_order/standard',[StandardController::class,'above_order'])->name('above_order.standard');
+	Route::get('below_order/standard',[StandardController::class,'below_order'])->name('below_order.standard');
+
+	Route::get('above_order/semester',[SemesterController::class,'above_order'])->name('above_order.semester');
+	Route::get('below_order/semester',[SemesterController::class,'below_order'])->name('below_order.semester');
+
+	Route::get('above_order/subject',[SubjectController::class,'above_order'])->name('above_order.subject');
+	Route::get('below_order/subject',[SubjectController::class,'below_order'])->name('below_order.subject');	
+
+	Route::get('above_order/unit',[UnitController::class,'above_order'])->name('above_order.unit');
+	Route::get('below_order/unit',[UnitController::class,'below_order'])->name('below_order.unit');
+
+	Route::get('above_order/book',[BookController::class,'above_order'])->name('above_order.book');
+	Route::get('below_order/book',[BookController::class,'below_order'])->name('below_order.book');
+
+	Route::get('above_order/note',[NoteController::class,'above_order'])->name('above_order.note');
+	Route::get('below_order/note',[NoteController::class,'below_order'])->name('below_order.note');
+
+	Route::get('above_order/video',[VideosController::class,'above_order'])->name('above_order.video');
+	Route::get('below_order/video',[VideosController::class,'below_order'])->name('below_order.video');
+
+	Route::get('above_order/solution',[SolutionController::class,'above_order'])->name('above_order.solution');
+	Route::get('below_order/solution',[SolutionController::class,'below_order'])->name('below_order.solution');	
+
+	Route::get('above_order/material',[MaterialController::class,'above_order'])->name('above_order.material');
+	Route::get('below_order/material',[MaterialController::class,'below_order'])->name('below_order.material');
+
+	Route::get('above_order/paper',[PaperController::class,'above_order'])->name('above_order.paper');
+	Route::get('below_order/paper',[PaperController::class,'below_order'])->name('below_order.paper');
+
+	Route::get('above_order/worksheet',[WorksheetController::class,'above_order'])->name('above_order.worksheet');
+	Route::get('below_order/worksheet',[WorksheetController::class,'below_order'])->name('below_order.worksheet');
 });	

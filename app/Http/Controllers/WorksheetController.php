@@ -38,7 +38,7 @@ class WorksheetController extends Controller
     {
         $units = Unit::where('status','!=','Deleted')->get();
         $boards = Board::where('status','!=','Deleted')->get();
-        $worksheet_details = Worksheet::where('status','!=','Deleted')->get();
+        $worksheet_details = Worksheet::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $subjects_details = Subject::where('id',$id)->first();
         return view('worksheet.add',compact('units','boards','worksheet_details','subjects_details'));
     }
@@ -141,6 +141,16 @@ class WorksheetController extends Controller
                 $url_file = $request->url;
             }
 
+            $last_data=Worksheet::select('*')->orderBy('order_no','desc')->first();
+              if($last_data)
+              {
+                $last_no=intval($last_data->order_no)+1;
+              } 
+              else
+              {
+                $last_no=1;
+              }
+
             $add = new Worksheet;
             $add->user_id  = Auth::user()->id;
             $add->unit_id = $request->unit_id;
@@ -159,6 +169,7 @@ class WorksheetController extends Controller
             $add->release_date = $request->release_date;
             $add->edition = $request->edition;
             $add->pages = isset($request->pages) ? $request->pages:'';
+            $add->order_no=$last_no;
             $add->save();
 
             $msg = "Worksheet Added Successfully.";
@@ -168,7 +179,7 @@ class WorksheetController extends Controller
 
         }
 
-        $worksheet_details = Worksheet::where('status','!=','Deleted')->get();
+        $worksheet_details = Worksheet::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $html = view('worksheet.dynamic_table',compact('worksheet_details'))->render();
         $data = ['html' => $html,'message' => $msg];
         return response()->json($data);
@@ -330,5 +341,22 @@ class WorksheetController extends Controller
         }
         return json_encode(array("suggestions" => $response));
     }
-    
+    public function above_order(request $request)
+    {
+        above_order('worksheets',$request->order_no);
+
+        $worksheet_details = Worksheet::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $html = view('worksheet.dynamic_table',compact('worksheet_details'))->render();
+        $data = ['html' => $html];
+        return response()->json($data);    
+    }
+    public function below_order(request $request)
+    {
+        below_order('worksheets',$request->order_no);
+
+        $worksheet_details = Worksheet::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $html = view('worksheet.dynamic_table',compact('worksheet_details'))->render();
+        $data = ['html' => $html];
+        return response()->json($data);    
+    }    
 }

@@ -25,7 +25,7 @@ class NoteController extends Controller
 
     public function create($id=null)
     {
-    	$note_details = Note::where('status','!=','Deleted')->get();
+    	$note_details = Note::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $boards = Board::where('status','!=','Deleted')->get();
         $subjects_details = Subject::where('id',$id)->first();
         return view('note.add',compact('boards','note_details','subjects_details'));
@@ -134,7 +134,16 @@ class NoteController extends Controller
             }else{
                 $url_file = $request->url;
             }
-            
+                
+            $last_data=Semester::select('*')->orderBy('order_no','desc')->first();
+            if($last_data)
+            {
+              $last_no=intval($last_data->order_no)+1;
+            } 
+            else
+            {
+              $last_no=1;
+            }
 
             $add = new Note;
             $add->user_id  = Auth::user()->id;
@@ -154,6 +163,7 @@ class NoteController extends Controller
             $add->label = $request->label;
             $add->release_date = $request->release_date;
             $add->edition = $request->edition;
+            $add->order_no=$last_no;
             $add->save();
 
             storeLog('note',$add->id,date('Y-m-d H:i:s'),'create');
@@ -162,7 +172,7 @@ class NoteController extends Controller
             $msg = "Note Added Successfully.";
         }
 
-        $note_details = Note::where('status','!=','Deleted')->get();
+        $note_details = Note::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $html = view('note.dynamic_table',compact('note_details'))->render();
         $data = ['html' => $html,'message' => $msg];
         return response()->json($data);
@@ -216,7 +226,7 @@ class NoteController extends Controller
             $delete->save();
         }
 
-        $note_details = Note::where('status','!=','Deleted')->get();
+        $note_details = Note::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         return view('note.dynamic_table',compact('note_details'));  
         //return redirect()->route('medium.index')->with('success', 'Medium Deleted Successfully.');
     }    
@@ -256,7 +266,24 @@ class NoteController extends Controller
         }
         return json_encode(array("suggestions" => $response));
     }
+    public function above_order(request $request)
+    {
+        above_order('notes',$request->order_no);
 
+        $note_details = Note::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $html = view('note.dynamic_table',compact('note_details'))->render();
+        $data = ['html' => $html];
+        return response()->json($data);    
+    }
+    public function below_order(request $request)
+    {
+        below_order('notes',$request->order_no);
+
+        $note_details = Note::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $html = view('note.dynamic_table',compact('note_details'))->render();
+        $data = ['html' => $html];
+        return response()->json($data);    
+    }
     
 }
 
