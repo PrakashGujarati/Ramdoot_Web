@@ -11,6 +11,7 @@ use Validator;
 use App\Models\Standard;
 use App\Models\Subject;
 use App\Models\Semester;
+use App\Models\pdf_view;
 
 class PaperController extends Controller
 {
@@ -69,8 +70,15 @@ class PaperController extends Controller
 	    			$getdata = Paper::where(['unit_id' => $value->id,'status' => 'Active'])->get();
 	    			$paperdata=[];
 	    			foreach ($getdata as $value1) {
+                        $is_read=0;
+                        $c = pdf_view::where(['type' => 'Paper','type_id' => $value1->id])->count();
+                        if($c)
+                        {
+                            $is_read = 1;
+                        }
+
                         $url = env('APP_URL')."/upload/paper/url/".$value1->url;
-	    				$paperdata[] = ['id' => $value1->id,'title' => $value1->title,'url' => $url,'description' => $value1->description,'label' => $value1->label];
+	    				$paperdata[] = ['id' => $value1->id,'title' => $value1->title,'url' => $url,'description' => $value1->description,'label' => $value1->label,'is_read' => $is_read];
 	    			}
 
 	    			$data[] = ['id' => $value->id,'unit_title' =>$value->title,'paper' => $paperdata,'sub_title'=>$value->description];

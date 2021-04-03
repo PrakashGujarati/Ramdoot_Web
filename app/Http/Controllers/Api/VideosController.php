@@ -14,6 +14,8 @@ use App\Models\Semester;
 use App\Models\VideoBookmark;
 use App\Models\User;
 use App\Models\SolutionMaterialCount;
+use App\Models\pdf_view;
+
 
 class VideosController extends Controller
 {
@@ -74,9 +76,10 @@ class VideosController extends Controller
 	    		foreach ($getunit as $value) {
 	    			$getdata = Videos::where(['unit_id' => $value->id,'status' => 'Active'])->get();
 	    			$videodata=[];
+                    
 	    			foreach ($getdata as $value1) {
 
-                        $url='';$video_type='';
+                        $url='';$video_type='';$is_read=0;
                         if($value1->url_type == "file"){
                             $url = env('APP_URL')."/upload/videos/url/".$value1->url;
                             $video_type = "Server";
@@ -85,8 +88,16 @@ class VideosController extends Controller
                             $url = $value1->url;
                             $video_type = "Youtube";
                         }
+
+                        $c = pdf_view::where(['type' => 'Video','type_id' => $value1->id])->count();
+                        if($c)
+                        {
+                            $is_read = 1;
+                        }
+                        
+
 	    				$thumbnail = env('APP_URL')."/upload/videos/thumbnail/".$value1->thumbnail;
-	    				$videodata[] = ['id' => $value1->id,'title' => $value1->title,'url' => $url,'video_type' => $video_type,'thumbnail' => $thumbnail,'duration' => $value1->duration,'description' => $value1->description,'label' => $value1->label,'release_date' => $value1->release_date];
+	    				$videodata[] = ['id' => $value1->id,'title' => $value1->title,'url' => $url,'video_type' => $video_type,'thumbnail' => $thumbnail,'duration' => $value1->duration,'description' => $value1->description,'label' => $value1->label,'release_date' => $value1->release_date,'is_read' => $is_read];
 	    			}
 
 	    			$data[] = ['id' => $value->id,'unit_title' =>$value->title,'video' => $videodata,'sub_title'=>$value->description];
