@@ -246,7 +246,7 @@ class VideosController extends Controller
                     
                 }else{
 
-                    $add =  new solution_material_count;
+                    $add =  new SolutionMaterialCount;
                     $add->type_id = $request->type_id;
                     $add->user_id = $request->user_id;
 
