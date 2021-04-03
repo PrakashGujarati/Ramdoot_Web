@@ -40,7 +40,7 @@ class UnitController extends Controller
         $semesters = Semester::where('status','!=','Deleted')->get();
         $standards = Standard::where('status','!=','Deleted')->get();
         $subjects = Subject::where('status','!=','Deleted')->get();
-        $unit_details = Unit::where('status','!=','Deleted')->get();
+        $unit_details = Unit::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $subjects_details = Subject::where('id',$id)->first();
         return view('unit.add',compact('subjects','standards','semesters','boards','unit_details','subjects_details'));
     }
@@ -163,6 +163,16 @@ class UnitController extends Controller
                 $url_file = $request->url;
             }
 
+            $last_data=Unit::select('*')->orderBy('order_no','desc')->first();
+            if($last_data)
+            {
+              $last_no=intval($last_data->order_no)+1;
+            } 
+            else
+            {
+              $last_no=1;
+            }
+
             $add = new Unit;
             $add->board_id = $request->board_id;
             $add->medium_id = $request->medium_id;
@@ -175,6 +185,7 @@ class UnitController extends Controller
             $add->thumbnail = $new_name;
             $add->pages = isset($request->pages) ? $request->pages:'';
             $add->description = isset($request->description) ? $request->description:'';
+            $add->order_no=$last_no;
             $add->save();
 
             $msg = "Unit Added Successfully.";
@@ -184,7 +195,7 @@ class UnitController extends Controller
 
         }
             
-        $unit_details = Unit::where('status','!=','Deleted')->get();
+        $unit_details = Unit::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $html = view('unit.dynamic_table',compact('unit_details'))->render();
         $data = ['html' => $html,'message' => $msg];
         return response()->json($data);
@@ -327,7 +338,7 @@ class UnitController extends Controller
             $delete->save();
         }
 
-        $unit_details = Unit::where('status','!=','Deleted')->get();
+        $unit_details = Unit::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         return view('unit.dynamic_table',compact('unit_details'));
         //return redirect()->route('unit.index')->with('success', 'Unit Deleted Successfully.');
     }
@@ -406,5 +417,23 @@ class UnitController extends Controller
             }   
         }
         return json_encode(array("suggestions" => $response));
+    }
+    public function above_order(request $request)
+    {
+        above_order('units',$request->order_no);
+
+        $unit_details = Unit::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $html = view('unit.dynamic_table',compact('unit_details'))->render();
+        $data = ['html' => $html];
+        return response()->json($data);
+    }
+    public function below_order(request $request)
+    {
+        below_order('units',$request->order_no);
+
+        $unit_details = Unit::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $html = view('unit.dynamic_table',compact('unit_details'))->render();
+        $data = ['html' => $html];
+        return response()->json($data);
     }
 }

@@ -159,6 +159,37 @@
 
 <script type="text/javascript">
 
+    $(document).on('click','.above_order', function() {
+        var order_no=$(this).data('order_no');
+        $.ajax({
+                url: "{{route('above_order.subject')}}",
+                type: "GET",
+                data: {
+                    "order_no": order_no
+                },
+                success: function(html) {
+                    $('.dyamictable').empty();
+                    $('.dyamictable').html(html.html);
+                    $(".datatable-init").DataTable();                  
+                }
+            });
+    });
+    $(document).on('click','.below_order', function() {
+        var order_no=$(this).data('order_no');
+        $.ajax({
+                url: "{{route('below_order.subject')}}",
+                type: "GET",
+                data: {
+                    "order_no": order_no
+                },
+                success: function(html) {
+                    $('.dyamictable').empty();
+                    $('.dyamictable').html(html.html);
+                    $(".datatable-init").DataTable();                  
+                }
+        });    
+    });
+
 $(document).ready(function(){
     $('#thumbnail_preview').css('display','none');
 

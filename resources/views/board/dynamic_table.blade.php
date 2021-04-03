@@ -7,6 +7,7 @@
         <table class="table datatable-init">
             <thead>
                 <tr>
+                    <th>Order No</th>
                     <th>Name</th>
                     <th>Abbreviation</th>
                     <th style="width:100px;">Thumbnail</th>
@@ -19,6 +20,7 @@
                 @if(count($boards_details) > 0)
                     @foreach($boards_details as $data)
                     <tr>
+                        <td>{{ $data->order_no }}</td>
                         <td>{{ $data->name }}</td>
                         <td>{{ $data->abbreviation }}</td>
                         <td style="width:100px;">
@@ -36,8 +38,8 @@
                             <a href="javascript:;" data-id="{{ $data->id }}" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a>
                         </td>
                         <td style="width:120px;">
-                            <a href="javascript:;" data-url="" class=""><span class="nk-menu-icon info"><em class="icon ni ni-arrow-up"></em></span></a>
-                            <a href="javascript:;" data-url="" class=""><span class="nk-menu-icon info"><em class="icon ni ni-arrow-down"></em></span></a>
+                            <a href="javascript:;" data-url="" class="above_order" data-order_no="{{$data->order_no}}"><span class="nk-menu-icon info"><em class="icon ni ni-arrow-up"></em></span></a>
+                            <a href="javascript:;" data-url="" class="below_order" data-order_no="{{$data->order_no}}"><span class="nk-menu-icon info"><em class="icon ni ni-arrow-down"></em></span></a>
                         </td>
                     </tr>
                     @endforeach

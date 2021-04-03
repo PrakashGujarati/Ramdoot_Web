@@ -1,5 +1,28 @@
 
 
+
+ALTER TABLE `books` ADD `order_no` INT NOT NULL DEFAULT '0' AFTER `status`;
+ALTER TABLE `worksheets` ADD `order_no` INT NOT NULL DEFAULT '0' AFTER `status`;
+ALTER TABLE `notes` ADD `order_no` INT NOT NULL DEFAULT '0' AFTER `status`;
+ALTER TABLE `solutions` ADD `order_no` INT NOT NULL DEFAULT '0' AFTER `status`;
+ALTER TABLE `videos` ADD `order_no` INT NOT NULL DEFAULT '0' AFTER `status`;
+ALTER TABLE `materials` ADD `order_no` INT NOT NULL DEFAULT '0' AFTER `status`;
+ALTER TABLE `papers` ADD `order_no` INT NOT NULL DEFAULT '0' AFTER `status`;
+
+
+-------------------------01-04-2021--------------------------------------------
+
+ALTER TABLE `boards` ADD `order_no` INT NOT NULL DEFAULT '0' AFTER `status`;
+
+ALTER TABLE `mediums` ADD `order_no` INT NOT NULL DEFAULT '0' AFTER `status`;
+
+ALTER TABLE `standards` ADD `order_no` INT NOT NULL DEFAULT '0' AFTER `status`;
+
+ALTER TABLE `semesters` ADD `order_no` INT NOT NULL DEFAULT '0' AFTER `status`;
+
+ALTER TABLE `subjects` ADD `order_no` INT NOT NULL DEFAULT '0' AFTER `status`;
+
+ALTER TABLE `units` ADD `order_no` INT NOT NULL DEFAULT '0' AFTER `status`;
 -------------------------24-03-2021--------------------------------------------
 CREATE TABLE `user_data_logs` (
   `id` int(11) NOT NULL,

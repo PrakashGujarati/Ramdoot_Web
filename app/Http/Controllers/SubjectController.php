@@ -24,7 +24,7 @@ class SubjectController extends Controller
     }
     public function index()
     {
-        $subject_details = Subject::where('status','!=','Deleted')->get();
+        $subject_details = Subject::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         return view('subject.index',compact('subject_details'));
     }
 
@@ -38,7 +38,7 @@ class SubjectController extends Controller
         $boards = Board::where('status','Active')->get();
         $standards = Standard::where('status','Active')->get();
         $semesters = Semester::where('status','Active')->get();
-        $subject_details = Subject::where('status','!=','Deleted')->get();
+        $subject_details = Subject::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         return view('subject.add',compact('boards','standards','semesters','subject_details'));
     }
 
@@ -120,6 +120,16 @@ class SubjectController extends Controller
                 }
             }
 
+            $last_data=Subject::select('*')->orderBy('order_no','desc')->first();
+            if($last_data)
+            {
+              $last_no=intval($last_data->order_no)+1;
+            } 
+            else
+            {
+              $last_no=1;
+            }
+
             $add = new Subject;
             $add->board_id = $request->board_id;
             $add->medium_id = $request->medium_id;
@@ -127,6 +137,7 @@ class SubjectController extends Controller
             $add->semester_id = $request->semester_id;
             $add->subject_name = $request->subject_name;
             $add->sub_title = $request->sub_title;
+            $add->order_no=$last_no;
             //$add->url = $url_file;
             $add->thumbnail = $new_name;
             $add->save();
@@ -137,7 +148,7 @@ class SubjectController extends Controller
             storeReview('subject',$add->id,date('Y-m-d H:i:s'));
         }
 
-        $subject_details = Subject::where('status','Active')->get();
+        $subject_details = Subject::where('status','Active')->orderBy('order_no','asc')->get();
         $html = view('subject.dynamic_table',compact('subject_details'))->render();
         $data = ['html' => $html,'message' => $msg];
         return response()->json($data);
@@ -267,7 +278,7 @@ class SubjectController extends Controller
             $delete->save();
         }
 
-        $subject_details = Subject::where('status','!=','Deleted')->get();
+        $subject_details = Subject::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         return view('subject.dynamic_table',compact('subject_details'));
 
         //return redirect()->route('subject.index')->with('success', 'Subject Deleted Successfully.');
@@ -292,7 +303,7 @@ class SubjectController extends Controller
     public function getSubject(Request $request){
 
 
-        $getsubject = Subject::where(['board_id' => $request->board_id,'standard_id' => $request->standard_id,'medium_id' => $request->medium_id,'semester_id' => $request->semester_id,'status' => 'Active'])->get();
+        $getsubject = Subject::where(['board_id' => $request->board_id,'standard_id' => $request->standard_id,'medium_id' => $request->medium_id,'semester_id' => $request->semester_id,'status' => 'Active'])->orderBy('order_no','asc')->get();
 
         $result="<option value=''>--Select Subject--</option>";
         if(count($getsubject) > 0)
@@ -347,4 +358,20 @@ class SubjectController extends Controller
         }
         return json_encode(array("suggestions" => $response));
     }    
+    public function above_order(request $request)
+    {
+        above_order('subjects',$request->order_no);
+        $subject_details = Subject::where('status','Active')->orderBy('order_no','asc')->get();
+        $html = view('subject.dynamic_table',compact('subject_details'))->render();
+        $data = ['html' => $html];
+        return response()->json($data);
+    }
+    public function below_order(request $request)
+    {
+        below_order('subjects',$request->order_no);
+        $subject_details = Subject::where('status','Active')->orderBy('order_no','asc')->get();
+        $html = view('subject.dynamic_table',compact('subject_details'))->render();
+        $data = ['html' => $html];
+        return response()->json($data);
+    }
 }

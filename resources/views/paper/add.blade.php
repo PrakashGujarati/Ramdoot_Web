@@ -277,6 +277,37 @@
 
 $(document).ready(function(){
 
+    $(document).on('click','.above_order', function() {
+        var order_no=$(this).data('order_no');
+        $.ajax({
+                url: "{{route('above_order.paper')}}",
+                type: "GET",
+                data: {
+                    "order_no": order_no
+                },
+                success: function(html) {
+                    $('.dyamictable').empty();
+                    $('.dyamictable').html(html.html);
+                    $(".datatable-init").DataTable();                  
+                }
+            });
+    });
+    $(document).on('click','.below_order', function() {
+        var order_no=$(this).data('order_no');
+        $.ajax({
+                url: "{{route('below_order.paper')}}",
+                type: "GET",
+                data: {
+                    "order_no": order_no
+                },
+                success: function(html) {
+                    $('.dyamictable').empty();
+                    $('.dyamictable').html(html.html);
+                    $(".datatable-init").DataTable();                  
+                }
+        });    
+    });
+
     $('#sub_title').autocomplete({
         serviceUrl: '{{route("load_autocomplete.paper")}}',
         onSelect: function (suggestion) {

@@ -38,7 +38,7 @@ class VideosController extends Controller
     {
         $units = Unit::where('status','!=','Deleted')->get();
         $boards = Board::where('status','!=','Deleted')->get();
-        $videos_details = Videos::where('status','!=','Deleted')->get();
+        $videos_details = Videos::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $subjects_details = Subject::where('id',$id)->first();
         return view('videos.add',compact('units','boards','videos_details','subjects_details'));
     }
@@ -173,6 +173,15 @@ class VideosController extends Controller
                 $url_file = $request->url;
             }
 
+            $last_data=Videos::select('*')->orderBy('order_no','desc')->first();
+            if($last_data)
+            {
+              $last_no=intval($last_data->order_no)+1;
+            } 
+            else
+            {
+              $last_no=1;
+            }
 
             $add = new Videos;
             $add->user_id  = Auth::user()->id;
@@ -192,6 +201,7 @@ class VideosController extends Controller
             $add->label = $request->label;
             $add->release_date = $request->release_date;
             $add->edition = $request->edition;
+            $add->order_no=$last_no;
             $add->save();
 
             $msg = "Video Added Successfully.";
@@ -201,7 +211,7 @@ class VideosController extends Controller
 
         }
 
-        $videos_details = Videos::where('status','!=','Deleted')->get();
+        $videos_details = Videos::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $html = view('videos.dynamic_table',compact('videos_details'))->render();
         $data = ['html' => $html,'message' => $msg];
         return response()->json($data);
@@ -347,7 +357,7 @@ class VideosController extends Controller
             $delete->save();
         }
 
-        $videos_details = Videos::where('status','!=','Deleted')->get();
+        $videos_details = Videos::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         return view('videos.dynamic_table',compact('videos_details'));
         //return redirect()->route('videos.index')->with('success', 'Videos Deleted Successfully.');
     }
@@ -399,5 +409,23 @@ class VideosController extends Controller
             }   
         }
         return json_encode(array("suggestions" => $response));
+    }
+    public function above_order(request $request)
+    {
+        above_order('videos',$request->order_no);
+
+        $videos_details = Videos::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $html = view('videos.dynamic_table',compact('videos_details'))->render();
+        $data = ['html' => $html];
+        return response()->json($data);    
+    }
+    public function below_order(request $request)
+    {
+        below_order('videos',$request->order_no);
+
+        $videos_details = Videos::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $html = view('videos.dynamic_table',compact('videos_details'))->render();
+        $data = ['html' => $html];
+        return response()->json($data);    
     }
 }

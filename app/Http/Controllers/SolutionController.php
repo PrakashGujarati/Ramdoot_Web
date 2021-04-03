@@ -39,7 +39,7 @@ class SolutionController extends Controller
     {
         $units = Unit::where('status','!=','Deleted')->get();
         $boards = Board::where('status','!=','Deleted')->get();
-        $solution_details = Solution::where('status','!=','Deleted')->get();
+        $solution_details = Solution::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $question_type_details = QuestionType::where('status','!=','Deleted')->get();
 
         $subjects_details=null;
@@ -140,6 +140,16 @@ class SolutionController extends Controller
               }
           }
 
+          $last_data=Solution::select('*')->orderBy('order_no','desc')->first();
+          if($last_data)
+          {
+            $last_no=intval($last_data->order_no)+1;
+          } 
+          else
+          {
+            $last_no=1;
+          }
+
           $add = new Solution;
           $add->user_id  = Auth::user()->id;
           $add->unit_id = $request->unit_id;
@@ -155,6 +165,7 @@ class SolutionController extends Controller
           $add->label = $request->label;
           $add->question_type = $request->question_type;
           $add->level = $request->level;
+          $add->order_no=$last_no;
           $add->save();
 
           $msg = "Solution Added Successfully.";
@@ -164,7 +175,7 @@ class SolutionController extends Controller
 
         }
 
-        $solution_details = Solution::where('status','!=','Deleted')->get();
+        $solution_details = Solution::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $html = view('solution.dynamic_table',compact('solution_details'))->render();
         $data = ['html' => $html,'message' => $msg];
         return response()->json($data);
@@ -293,7 +304,7 @@ class SolutionController extends Controller
             $delete->save();
         }
 
-        $solution_details = Solution::where('status','!=','Deleted')->get();
+        $solution_details = Solution::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         return view('solution.dynamic_table',compact('solution_details'));
         //return redirect()->route('solution.index')->with('success', 'Solution Deleted Successfully.');
     }
@@ -311,5 +322,23 @@ class SolutionController extends Controller
         $image = imagecreatefrompng($source);
 
       imagejpeg($image, $destination, $quality);
+    }
+    public function above_order(request $request)
+    {
+        above_order('solutions',$request->order_no);
+
+        $solution_details = Solution::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $html = view('solution.dynamic_table',compact('solution_details'))->render();
+        $data = ['html' => $html];
+        return response()->json($data);    
+    }
+    public function below_order(request $request)
+    {
+        below_order('solutions',$request->order_no);
+
+        $solution_details = Solution::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $html = view('solution.dynamic_table',compact('solution_details'))->render();
+        $data = ['html' => $html];
+        return response()->json($data);    
     }
 }

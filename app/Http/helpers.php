@@ -4,6 +4,7 @@
 use Illuminate\Support\Facades\Auth;
 use App\Models\UserDataLog;
 use App\Models\UserDataReview;
+use Illuminate\Support\Facades\DB;
 
 function storeLog($type,$type_id,$upload_time,$operation)
 {
@@ -24,4 +25,32 @@ function storeReview($type,$type_id,$review_time,$status="Pending")
     $add->review_time=$review_time;
     $add->status=$status;
     $add->save();   
+}
+function above_order($table,$order_no)
+{
+    $data=DB::table($table)->where('order_no',$order_no)->first();
+    if($data)
+    {
+        $prev = DB::table($table)->where('order_no', '<', $order_no)->orderBy('order_no','desc')->first();
+        if($prev)
+        {
+            $prevOrder=$prev->order_no;
+            $updData=DB::table($table)->where('id',$prev->id)->update(['order_no'=>$data->order_no]);
+            $updDataNew=DB::table($table)->where('id',$data->id)->update(['order_no'=>$prevOrder]);
+        }
+    }
+}
+function below_order($table,$order_no)
+{
+    $data=DB::table($table)->where('order_no',$order_no)->first();
+    if($data)
+    {
+        $next = DB::table($table)->where('order_no', '>', $order_no)->orderBy('order_no','asc')->first();
+        if($next)
+        {
+            $nextOrder=$next->order_no;
+            $updData=DB::table($table)->where('id',$next->id)->update(['order_no'=>$data->order_no]);
+            $updDataNew=DB::table($table)->where('id',$data->id)->update(['order_no'=>$nextOrder]);
+        }
+    }
 }
