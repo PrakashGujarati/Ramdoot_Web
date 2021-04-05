@@ -13,8 +13,8 @@ class SpatieRolePermissionController extends Controller
         $data['roles'] = Role::select('id', 'name')->get();
         $data['selected_role'] = Role::whereId(request('role_id'))->first();
         $data['permissions'] = Permission::get();
-        return view('spatie-role.index')->with($data);
-       //return view('spatie-role.index_new')->with($data);
+       // return view('spatie-role.index')->with($data);
+       return view('spatie-role.index_new')->with($data);
     }
 
     public function assign_permissions(Request $request, $role_id)

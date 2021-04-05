@@ -131,6 +131,7 @@ class VideosController extends Controller
             $add->label = $request->label;
             $add->release_date = $request->release_date;
             $add->edition = $request->edition;
+            $add->start_time = $request->start_time;
             $add->save();
             
             $msg = "Video Updated Successfully.";
@@ -202,6 +203,7 @@ class VideosController extends Controller
             $add->release_date = $request->release_date;
             $add->edition = $request->edition;
             $add->order_no=$last_no;
+            $add->start_time = $request->start_time;
             $add->save();
 
             $msg = "Video Added Successfully.";

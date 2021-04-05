@@ -34,14 +34,14 @@
 @endsection
 
 @section('content')
-<div class="row mt-3">
+<!-- <div class="row mt-3">
   <div class="col-md-12">
     <div class="card">
       <div class="card-header"><h4>Roles</h4></div>
     </div>
   </div>
 </div>
-<hr/>
+<hr/> -->
 <div class="row">
     {{--  Roles Table--}}
     <div class="col-md-12">
@@ -66,7 +66,7 @@
       </div>
     </div>
 </div>
-
+<hr/>
 
 
     {{--  Permissions Table--}}
@@ -75,11 +75,11 @@
 <div class="row mt-5">
   <div class="col-md-12">
     <div class="card">
-      <div class="card-header">
+      <div class="card-header" style="background-color: #364a63;">
           <div class="row">
             <div class="col-md-10 pt-1">     
               @if(request('role_id') && $selected_role )
-                <h4>{{ $selected_role->slug ?? $selected_role->name }} has Permissions</h4>
+                <h4 style="color: #ebeef2;">{{ $selected_role->slug ?? $selected_role->name }} has Permissions</h4>
               @else
               <div class=""><h3> Permissions</h3></div>
               <p>Please select any appropriate Role</p>
@@ -110,6 +110,7 @@
                   <th><input type="checkbox" class="chk-col-blue checkboxData" id="add_col" name="permissions"><label for="add_col" class="mb-0 pl-1">Add</label></th>
                   <th><input type="checkbox" class="chk-col-blue checkboxData" id="edit_col" name="permissions"><label for="edit_col" class="mb-0 pl-1">Edit</label></th>
                   <th><input type="checkbox" class="chk-col-blue checkboxData" id="delete_col" name="permissions"><label for="delete_col" class="mb-0 pl-1">Delete</label></th>
+                  <th><input type="checkbox" class="chk-col-blue checkboxData" id="delete_col" name="permissions"><label for="delete_col" class="mb-0 pl-1">Note</label></th>
                 </tr>
             </thead>
             <tbody>
@@ -118,6 +119,7 @@
                     <input type="checkbox" class="chk-col-blue checkboxData" id="permission_checkbox" name="permissions"><label for="permission_checkbox"></label>
                   </td>
                   <td>Board</td>
+                  <td><input type="checkbox" class="chk-col-blue checkboxData" id="permission_checkbox" name="permissions"><label for="permission_checkbox"></label></td>
                   <td><input type="checkbox" class="chk-col-blue checkboxData" id="permission_checkbox" name="permissions"><label for="permission_checkbox"></label></td>
                   <td><input type="checkbox" class="chk-col-blue checkboxData" id="permission_checkbox" name="permissions"><label for="permission_checkbox"></label></td>
                   <td><input type="checkbox" class="chk-col-blue checkboxData" id="permission_checkbox" name="permissions"><label for="permission_checkbox"></label></td>
@@ -132,6 +134,7 @@
                   <td><input type="checkbox" class="chk-col-blue checkboxData" id="permission_checkbox" name="permissions"><label for="permission_checkbox"></label></td>
                   <td><input type="checkbox" class="chk-col-blue checkboxData" id="permission_checkbox" name="permissions"><label for="permission_checkbox"></label></td>
                   <td><input type="checkbox" class="chk-col-blue checkboxData" id="permission_checkbox" name="permissions"><label for="permission_checkbox"></label></td>
+                  <td><input type="checkbox" class="chk-col-blue checkboxData" id="permission_checkbox" name="permissions"><label for="permission_checkbox"></label></td>
                 </tr>
             </tbody>
           </table>
@@ -140,71 +143,9 @@
   </div>
 </div>
 
-<div class="row mt-5">
-    <div class="col-md-12">
-      <div class="card">
-        @if(request('role_id') && $selected_role )
-          <div class="row"><div class="col-md-8"> </div></div>
-          <div class="row"
-               style="cursor:pointer;margin: 10px;" >
-               <div class="col-md-10">
-                <h4>{{ $selected_role->slug ?? $selected_role->name }} has Permissions</h4>
-               </div>
-               <div class="col-md-2">
-                  <a href="javascript:;" class="btn btn-info" onclick="event.preventDefault(); document.getElementById('assign_permission_form').submit();">Save</a>
-               </div>
-          </div>
-          <hr>
-          <div class="card-body">
-            <form action="{{ route('role.assign_permission', [ 'role_id' => request('role_id') ]) }}" method="post" id="assign_permission_form">
-              @csrf
-              <div class="table-responsive">
-                <table class="table table-bordered">
-                  <thead>
-                  <tr>
-                    {{-- <th>Permission</th> --}}
-                    
-                  </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td colspan="4"><a href="javascript:;" class="btn btn-primary btn-sm checkall">Check All</a></td>
-                    </tr>
-                  @forelse ($permissions as $permission)
-                    <td>
-                      <input type="checkbox" class="chk-col-blue checkboxData"
-                             id="permission_checkbox_{{$permission->id}}"
-                             name="permissions[{{$permission->name}}]"
-                          {{ in_array($permission->name , $selected_role->getAllPermissions()->pluck('name')->toArray()) ? "checked":"" }}
-                      >
-                      <label for="permission_checkbox_{{$permission->id}}">
-                        @if($permission->slug)
-                          {{$permission->slug}}
-                        @else
-                          {{$permission->name}}
-                        @endif
-                      </label>
-                    </td>
-                    @if ( $loop->iteration % 4 == 0 )
-                      <tr> @endif
-                        @empty
-                          <p> Role does not have any permissions yet </p>
-                      @endforelse
-                  </tbody>
-                </table>
-              </div>
 
-              {{-- <button type="submit" class="btn btn-info waves-effect waves-light m-t-10"> Save</button> --}}
-            </form>
-          </div>
-        @else
-          <div class="card->header"><h3> Permissions</h3></div>
-          <hr>
-          <p>Please select any appropriate Role</p>
-        @endif
-      </div>
-    </div>
-  </div>
+
+
 @endsection
 
 @section('scripts')
