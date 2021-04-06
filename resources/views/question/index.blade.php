@@ -6,6 +6,8 @@
 @section('content')
 
 @include('question.dynamic_import_form')
+@include('question.dyanamic_blank_export')
+@include('question.dyanamic_bluck_import')
 
 <div class="nk-block nk-block-lg">
     <div class="nk-block-head">
@@ -29,15 +31,15 @@
                 </div>
             @endif
         	<div class="row">
-        		<div class="col-lg-8">
+        		<div class="col-lg-6">
             		<h4 class="nk-block-title">Question List</h4>
             	</div>
-                <div class="col-lg-4 text-right">
+                <div class="col-lg-6 text-right">
+                    <a href="javascript:;" class="btn btn-primary text-light blank_export">Blank Export</a>
                     <a href="{{ route('question.export') }}" class="btn btn-info text-light">Export</a>
-
                     <a href="javascript:;" class="btn btn-success text-light importbtn">Import</a>
-                
             		<a href="{{ route('question.create') }}" class="btn btn-primary text-light">Add Question</a>
+                    <a href="javascript:;" class="btn btn-warning text-light importbluckquestion">Import</a>
             	</div>
             </div>
         </div>
@@ -107,6 +109,24 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.js"></script>
 
 <script type="text/javascript">
+
+	$(document).on('click','.importbluckquestion', function() {
+		$('#bluck_import').modal({show:true});
+	});
+
+    $(document).on('click','.blank_export', function() {
+        var url = "{{ route('import.question.view')}}";
+
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function(result) {
+                $('#export_view').modal({show:true});
+               $('#export_model_data').html(result.html);
+            } 
+        });
+    });
+
 	$(document).on('click','.distroy', function() {
 	    let del_url = $(this).attr('data-url');
 	    bootbox.confirm({
@@ -296,6 +316,48 @@ function getUnit(board_id,medium_id,standard_id,semester_id,subject_id){
             },
         },
     });
+
+
+
+    $('#bluck_import_form').validate({
+         rules: {
+                file:{
+                    required:true,
+                    extension: "csv|xls|xlsx",
+                },
+            },
+        //For custom messages
+        messages: {
+            file:{
+                required:"Please select excel file.",
+                extension: "Please select valid excel file.",
+            },
+        },
+    });
+
+    
+
+
+    $('#blank_export_form').validate({
+         rules: {
+                board_id:"required",
+                standard_id:"required",
+                semester_id:"required",
+                subject_id:"required",
+                unit_id:"required",
+                
+            },
+        //For custom messages
+        messages: {
+            board_id:"Please select board.",
+            standard_id:"Please select standard.",
+            semester_id:"Please select semester.",
+            subject_id:"Please select subject.",
+            unit_id:"Please select unit.",
+            
+        },
+    });
+
     
 });
 

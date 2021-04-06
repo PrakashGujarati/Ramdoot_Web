@@ -43,7 +43,7 @@ use App\Http\Controllers\UserDataReviewController;
 Route::get('/', function () {
     return redirect('/login');
 });
-
+Route::get('get_order_data',[HomeController::class,'get_order_data']);
 Route::group(['middleware' => 'auth'], function(){
 	Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 	/*board*/
@@ -350,4 +350,7 @@ Route::group(['middleware' => 'auth'], function(){
 
 	Route::get('above_order/worksheet',[WorksheetController::class,'above_order'])->name('above_order.worksheet');
 	Route::get('below_order/worksheet',[WorksheetController::class,'below_order'])->name('below_order.worksheet');
+
+	Route::post('question/blank_export',[QuestionController::class,'blank_export'])->name('question.blank_export');
+	Route::post('import/bluck_question',[QuestionController::class,'import_bluck_question'])->name('import.bluck_question');
 });	

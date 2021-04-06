@@ -43,7 +43,7 @@ class MaterialController extends Controller
         }
         else{
 
-            $getdata = Material::where(['unit_id' => $request->unit_id,'status' => 'Active'])->get();
+            $getdata = Material::where(['unit_id' => $request->unit_id,'status' => 'Active'])->orderBy('order_no','asc')->get();
 
             if($getdata->count() > 0){
 

@@ -66,7 +66,7 @@ class PaperController extends Controller
 	    	if(count($getunit) > 0){
 	    		$data=[];$getdata=[];
 	    		foreach ($getunit as $value) {
-	    			$getdata = Paper::where(['unit_id' => $value->id,'status' => 'Active'])->get();
+	    			$getdata = Paper::where(['unit_id' => $value->id,'status' => 'Active'])->orderBy('order_no','asc')->get();
 	    			$paperdata=[];
 	    			foreach ($getdata as $value1) {
                         $url = env('APP_URL')."/upload/paper/url/".$value1->url;

@@ -141,7 +141,7 @@ class PaperController extends Controller
                 $url_file = $request->url;
             }
 
-            $last_data=Paper::select('*')->orderBy('order_no','desc')->first();
+            $last_data=Paper::select('*')->where('subject_id',$request->subject_id)->orderBy('order_no','desc')->first();
               if($last_data)
               {
                 $last_no=intval($last_data->order_no)+1;
@@ -346,7 +346,7 @@ class PaperController extends Controller
     }
     public function above_order(request $request)
     {
-        above_order('papers',$request->order_no);
+        above_order('papers',$request->order_no,'subject_id',$request->subject_id);
 
         $paper_details = Paper::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $html = view('paper.dynamic_table',compact('paper_details'))->render();
@@ -355,7 +355,7 @@ class PaperController extends Controller
     }
     public function below_order(request $request)
     {
-        below_order('papers',$request->order_no);
+        below_order('papers',$request->order_no,'subject_id',$request->subject_id);
 
         $paper_details = Paper::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $html = view('paper.dynamic_table',compact('paper_details'))->render();

@@ -47,7 +47,7 @@ class SolutionController extends Controller
 	    		$data=[];$getdata=[];
 				$title="";
 
-	    		$getdata = Solution::where(['unit_id' => $request->unit_id,'status' => 'Active'])->get();
+	    		$getdata = Solution::where(['unit_id' => $request->unit_id,'status' => 'Active'])->orderBy('order_no','asc')->get();
 	    			$solutiondata=[];
 	    			foreach ($getdata as $value1) {
 	    				$image = env('APP_URL')."/upload/solution/thumbnail/".$value1->image;

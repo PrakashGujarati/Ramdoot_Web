@@ -18,7 +18,7 @@ class BoardController extends Controller
     		$data=[];$getdata=[];
             $mediumArray = [];
     		foreach ($getboard_details as $value) { 
-    			$getdata = Medium::select('id','medium_name')->where('board_id',$value->id)->get();
+    			$getdata = Medium::select('id','medium_name')->where('board_id',$value->id)->orderBy('order_no','asc')->get();
                 $sortname = explode("-",$value->name);
                 $mediumArray=[];
                 foreach ($getdata as $key => $sub_value) 

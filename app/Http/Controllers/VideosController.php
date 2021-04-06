@@ -173,7 +173,7 @@ class VideosController extends Controller
                 $url_file = $request->url;
             }
 
-            $last_data=Videos::select('*')->orderBy('order_no','desc')->first();
+            $last_data=Videos::select('*')->where('subject_id',$request->subject_id)->orderBy('order_no','desc')->first();
             if($last_data)
             {
               $last_no=intval($last_data->order_no)+1;
@@ -412,7 +412,7 @@ class VideosController extends Controller
     }
     public function above_order(request $request)
     {
-        above_order('videos',$request->order_no);
+        above_order('videos',$request->order_no,'subject_id',$request->subject_id);
 
         $videos_details = Videos::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $html = view('videos.dynamic_table',compact('videos_details'))->render();
@@ -421,7 +421,7 @@ class VideosController extends Controller
     }
     public function below_order(request $request)
     {
-        below_order('videos',$request->order_no);
+        below_order('videos',$request->order_no,'subject_id',$request->subject_id);
 
         $videos_details = Videos::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $html = view('videos.dynamic_table',compact('videos_details'))->render();

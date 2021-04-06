@@ -138,7 +138,7 @@ class MaterialController extends Controller
               }
           }
 
-          $last_data=Material::select('*')->orderBy('order_no','desc')->first();
+          $last_data=Material::select('*')->where('subject_id',$request->subject_id)->orderBy('order_no','desc')->first();
           if($last_data)
           {
             $last_no=intval($last_data->order_no)+1;
@@ -322,7 +322,7 @@ class MaterialController extends Controller
     }
     public function above_order(request $request)
     {
-        above_order('materials',$request->order_no);
+        above_order('materials',$request->order_no,'subject_id',$request->subject_id);
 
         $material_details = Material::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $html = view('material.dynamic_table',compact('material_details'))->render();
@@ -331,7 +331,7 @@ class MaterialController extends Controller
     }
     public function below_order(request $request)
     {
-        below_order('materials',$request->order_no);
+        below_order('materials',$request->order_no,'subject_id',$request->subject_id);
 
         $material_details = Material::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $html = view('material.dynamic_table',compact('material_details'))->render();

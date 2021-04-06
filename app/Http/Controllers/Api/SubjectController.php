@@ -80,8 +80,8 @@ class SubjectController extends Controller
             ]);
         }*/
         else{
-			$getdata = Subject::where(['board_id' => $request->board_id,'standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'status' => 'Active'])->get();
-			$subjectids = Subject::where(['board_id' => $request->board_id,'standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'status' => 'Active'])->pluck('id');
+			$getdata = Subject::where(['board_id' => $request->board_id,'standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'status' => 'Active'])->orderBy('order_no','asc')->get();
+			$subjectids = Subject::where(['board_id' => $request->board_id,'standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'status' => 'Active'])->orderBy('order_no','asc')->pluck('id');
 			//$unitcount = Unit::whereIn('subject_id',$subjectids)->count();
             //$featurecount = Feature::whereIn('subject_id',$subjectids)->count();
            
@@ -96,7 +96,7 @@ class SubjectController extends Controller
 	    			$thumbnail = env('APP_URL')."/upload/subject/thumbnail/".$value->thumbnail;
                     if($request->feature_id == 3){
                         $totalcount = Book::where('subject_id',$value->id)->count();
-                        $books = Book::where('subject_id',$value->id)->get();
+                        $books = Book::where('subject_id',$value->id)->orderBy('order_no','asc')->get();
                         foreach($books as $book)
                         {
                             $c = pdf_view::where(['type' => 'Textbook','type_id' => $book->id])->count();
@@ -108,7 +108,7 @@ class SubjectController extends Controller
                     }
                     elseif ($request->feature_id == 9) {
                         $totalcount = Note::where('subject_id',$value->id)->count();
-                        $notes = Note::where('subject_id',$value->id)->get();
+                        $notes = Note::where('subject_id',$value->id)->orderBy('order_no','asc')->get();
                         foreach($notes as $note)
                         {
                             $c = pdf_view::where(['type' => 'Note','type_id' => $note->id])->count();
@@ -120,7 +120,7 @@ class SubjectController extends Controller
                     }
                     elseif ($request->feature_id == 7) {
                         $totalcount = Worksheet::where('subject_id',$value->id)->count();
-                        $worksheets = Worksheet::where('subject_id',$value->id)->get();
+                        $worksheets = Worksheet::where('subject_id',$value->id)->orderBy('order_no','asc')->get();
                         foreach($worksheets as $worksheet)
                         {
                             $c = pdf_view::where(['type' => 'Worksheet','type_id' => $worksheet->id])->count();
@@ -132,7 +132,7 @@ class SubjectController extends Controller
                     }
                     elseif ($request->feature_id == 6) {
                         $totalcount = Paper::where('subject_id',$value->id)->count();
-                        $papers = Paper::where('subject_id',$value->id)->get();
+                        $papers = Paper::where('subject_id',$value->id)->orderBy('order_no','asc')->get();
                         foreach($papers as $paper)
                         {
                             $c = pdf_view::where(['type' => 'Paper','type_id' => $paper->id])->count();
@@ -144,7 +144,7 @@ class SubjectController extends Controller
                     }
                     elseif ($request->feature_id == 2){
                         $totalcount = Videos::where('subject_id',$value->id)->count();
-                        $videos = Videos::where('subject_id',$value->id)->get();
+                        $videos = Videos::where('subject_id',$value->id)->orderBy('order_no','asc')->get();
                         foreach($videos as $video)
                         {
                             $c = pdf_view::where(['type' => 'Video','type_id' => $video->id])->count();
@@ -157,7 +157,7 @@ class SubjectController extends Controller
                     elseif ($request->feature_id == 5){
                         
                         $totalcount = Material::where('subject_id',$value->id)->count();
-                        $materials = Material::where('subject_id',$value->id)->get();
+                        $materials = Material::where('subject_id',$value->id)->orderBy('order_no','asc')->get();
                         foreach($materials as $material)
                         {
                             $c = pdf_view::where(['type' => 'Material','type_id' => $material->id])->count();
@@ -181,7 +181,7 @@ class SubjectController extends Controller
                     }
                     elseif($request->feature_id == 4){
                         $totalcount = Solution::where('subject_id',$value->id)->count();
-                        $solutions = Solution::where('subject_id',$value->id)->get();
+                        $solutions = Solution::where('subject_id',$value->id)->orderBy('order_no','asc')->get();
                         foreach($solutions as $solution)
                         {
                             $c = pdf_view::where(['type' => 'Exercise','type_id' => $solution->id])->count();

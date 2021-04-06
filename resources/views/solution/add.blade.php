@@ -259,7 +259,8 @@ $(document).on('click','.above_order', function() {
                 url: "{{route('above_order.solution')}}",
                 type: "GET",
                 data: {
-                    "order_no": order_no
+                    "order_no": order_no,
+                    "subject_id":"{{$id}}"
                 },
                 success: function(html) {
                     $('.dyamictable').empty();
@@ -274,7 +275,8 @@ $(document).on('click','.above_order', function() {
                 url: "{{route('below_order.solution')}}",
                 type: "GET",
                 data: {
-                    "order_no": order_no
+                    "order_no": order_no,
+                    "subject_id":"{{$id}}"
                 },
                 success: function(html) {
                     $('.dyamictable').empty();
