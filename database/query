@@ -1,4 +1,9 @@
 
+
+-----------------------05-04-2021 -------------------
+
+ALTER TABLE `videos` ADD `start_time` VARCHAR(50) NULL AFTER `release_date`;
+
 ----------------------- 30-03-2021 -------------------
 
 ALTER TABLE `pdf_views` ADD `type` VARCHAR(50) NULL AFTER `id`;

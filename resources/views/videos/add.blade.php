@@ -252,7 +252,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group col-lg-4">
+                            <div class="form-group col-lg-3">
                                 <label class="form-label">Edition</label>
                                 <div class="form-control-wrap">
                                     <select class="form-control edition" name="edition" id="edition">
@@ -268,11 +268,23 @@
                                 </div>
                             </div>
 
-                            <div class="form-group col-lg-4">
+                            <div class="form-group col-lg-3">
                                 <label class="form-label">Release Date</label>
                                 <div class="form-control-wrap">
                                     <input type="date" class="form-control" id="release_date" name="release_date" value="{{ old('release_date') }}">
                                     @error('release_date')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group col-lg-2">
+                                <label class="form-label">Start Time</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" id="start_time" name="start_time" value="{{ old('start_time') }}">
+                                    @error('start_time')
                                         <span class="text-danger" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
@@ -689,6 +701,8 @@ $(document).ready(function () {
                     $('#label').val('');
                     $('#release_date').val('');
                     $('#edition').val('');
+                    $('#start_time').val('');
+                    $('#description').val('');
 
                     $('#thumbnail').val('');
                     $('#thumbnail_preview').css('display','none');
@@ -753,6 +767,7 @@ $(document).on('click','.edit-btn',function(){
             $('#description').val(result.description);
             $('#duration').val(result.duration);
             $('#label').val(result.label);
+            $('#start_time').val(result.start_time);
             $('#release_date').val(result.release_date);
             $('#edition').val(result.edition);
             if(result.url_type == 'file'){
@@ -817,6 +832,7 @@ $(document).on('click','.distroy', function() {
                         $('#label').val('');
                         $('#release_date').val('');
                         $('#edition').val('');
+                        $('#start_time').val('');
 
                         $('#thumbnail').val('');
                         $('#thumbnail_preview').css('display','none');

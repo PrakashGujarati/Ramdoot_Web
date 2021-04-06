@@ -69,7 +69,6 @@ Route::group(['middleware'=>'auth:api'], function()
     Route::post('exam_questions', [ExamController::class, 'examQuestions']);
     Route::post('submit_exam', [ExamController::class, 'submitExam']);        
     Route::post('result_exam', [ExamController::class, 'resultExam']);
-    
     Route::post('note_list', [TextbookController::class, 'note_list']);
 });
 

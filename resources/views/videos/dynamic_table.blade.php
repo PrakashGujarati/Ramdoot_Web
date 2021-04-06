@@ -20,6 +20,7 @@
                     <th>Duration</th>
                     <th>Label</th>
                     <th>Release Date</th>
+                    <th>Start Time</th>
                     <th>Action</th>
                     <th>Position</th>
                 </tr>
@@ -38,7 +39,7 @@
                         <td>{{ isset($data->unit->title) ? $data->unit->title:'' }}</td>
                         <td>{{ $data->title }}</td>
                         <td>
-                            @if($data->type == 'File')
+                            @if($data->type == 'file')
                             @if($data->url)
                             <img src="{{ asset('upload/videos/url/'.$data->url) }}" class="thumbnail" height="50" width="50">
                             @endif
@@ -54,6 +55,7 @@
                         <td>{{ $data->duration }}</td>
                         <td>{{ $data->label }}</td>
                         <td>@if($data->release_date) {{ date('d-m-Y',strtotime($data->release_date)) }} @endif</td>
+                        <td>{{ $data->start_time ?? '' }}</td>
                         <td>
                             @if($data->status == "Active")
                             <a href="javascript:;" data-id="{{ $data->id }}" class="status_change" data-status='Active'><span class="nk-menu-icon info"><em class="icon ni ni-eye-fill"></em></span></a>

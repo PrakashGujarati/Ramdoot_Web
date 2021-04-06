@@ -75,11 +75,17 @@ class TextbookController extends Controller
 	    			$getdata = Book::where(['unit_id' => $value->id,'status' => 'Active'])->orderBy('order_no','asc')->get();
 	    			$bookdata=[];
 	    			foreach ($getdata as $value1) {
+                        $is_read=0;
+                        $c = pdf_view::where(['type' => 'Textbook','type_id' => $value1->id])->count();
+                        if($c)
+                        {
+                            $is_read = 1;
+                        }
                         $url = env('APP_URL')."/upload/book/url/".$value1->url;
 	    				$thumbnail = env('APP_URL')."/upload/book/thumbnail/".$value1->thumbnail;
 	    				$bookdata[] = ['id' => $value1->id,'title' => $value1->title,'sub_title' => $value1->sub_title,
                         'url' => $url,'thumbnail' => $thumbnail,
-                        'pages' => $value1->pages,'description' => $value1->description,'label' => $value1->label,'release_date' => $value1->release_date];
+                        'pages' => $value1->pages,'description' => $value1->description,'label' => $value1->label,'release_date' => $value1->release_date,'is_read' => $is_read];
 	    			}
 
 	    			$data[] = ['id' => $value->id,'unit_title' =>$value->title,'book' => $bookdata,'sub_title'=>$value->description];
@@ -312,11 +318,18 @@ class TextbookController extends Controller
                     $getdata = Note::where(['unit_id' => $value->id,'status' => 'Active'])->get();
                     $bookdata=[];
                     foreach ($getdata as $value1) {
+                        $is_read=0;
+                        $c = pdf_view::where(['type' => 'Note','type_id' => $value1->id])->count();
+                        if($c)
+                        {
+                            $is_read = 1;
+                        }
+
                         $url = env('APP_URL')."/upload/book/url/".$value1->url;
                         $thumbnail = env('APP_URL')."/upload/book/thumbnail/".$value1->thumbnail;
                         $bookdata[] = ['id' => $value1->id,'title' => $value1->title,'sub_title' => $value1->sub_title,
                         'url' => $url,'thumbnail' => $thumbnail,
-                        'pages' => $value1->pages,'description' => $value1->description,'label' => $value1->label,'release_date' => $value1->release_date];
+                        'pages' => $value1->pages,'description' => $value1->description,'label' => $value1->label,'release_date' => $value1->release_date,'is_read' => $is_read];
                     }
 
                     $data[] = ['id' => $value->id,'unit_title' =>$value->title,'sub_title' => $value->description,'book' => $bookdata];

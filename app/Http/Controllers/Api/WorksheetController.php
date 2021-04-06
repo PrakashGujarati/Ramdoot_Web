@@ -11,6 +11,7 @@ use Validator;
 use App\Models\Standard;
 use App\Models\Subject;
 use App\Models\Semester;
+use App\Models\pdf_view;
 
 class WorksheetController extends Controller
 {
@@ -70,8 +71,15 @@ class WorksheetController extends Controller
 	    			$getdata = Worksheet::where(['unit_id' => $value->id,'status' => 'Active'])->orderBy('order_no','asc')->get();
 	    			$worksheetdata = [];
 	    			foreach ($getdata as $value1) {
+                        $is_read=0;
+                        $c = pdf_view::where(['type' => 'Worksheet','type_id' => $value1->id])->count();
+                        if($c)
+                        {
+                            $is_read = 1;
+                        }   
+
                         $url = env('APP_URL')."/upload/worksheet/url/".$value1->url;
-	    				$worksheetdata[] = ['id' => $value1->id,'title' => $value1->title,'url' => $url,'type' => $value1->type,'description' => $value1->description,'label' => $value1->label];
+	    				$worksheetdata[] = ['id' => $value1->id,'title' => $value1->title,'url' => $url,'type' => $value1->type,'description' => $value1->description,'label' => $value1->label,'is_read' => $is_read];
 	    			}
 
 	    			$data[] = ['id' => $value->id,'unit_title' =>$value->title,'worksheet' => $worksheetdata,'sub_title'=>$value->description];

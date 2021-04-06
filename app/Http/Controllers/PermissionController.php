@@ -21,11 +21,16 @@ class PermissionController extends Controller
     }
     public function store(request $request)
     {
-    	$request->validate(['name'=>'required']);
-    	$name=Str::slug($request->name, "-");
-    	$add=new Permission;
-    	$add->name=$name;
-    	$add->save();
+        $permission = ['view','add','edit','delete','note'];
+
+        foreach ($permission as $key => $value) {
+            $request->validate(['name'=>'required']);
+            //$name=Str::slug($request->name, "-");
+            $name = $value.'-'.$request->name;
+            $add=new Permission;
+            $add->name=$name;
+            $add->save();    
+        }
 
         storeLog('permission',$add->id,date('Y-m-d H:i:s'),'create');
         storeReview('permission',$add->id,date('Y-m-d H:i:s'));
