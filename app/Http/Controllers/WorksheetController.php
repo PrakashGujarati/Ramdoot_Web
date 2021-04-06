@@ -141,7 +141,7 @@ class WorksheetController extends Controller
                 $url_file = $request->url;
             }
 
-            $last_data=Worksheet::select('*')->orderBy('order_no','desc')->first();
+            $last_data=Worksheet::select('*')->where('subject_id',$request->subject_id)->orderBy('order_no','desc')->first();
               if($last_data)
               {
                 $last_no=intval($last_data->order_no)+1;
@@ -343,7 +343,7 @@ class WorksheetController extends Controller
     }
     public function above_order(request $request)
     {
-        above_order('worksheets',$request->order_no);
+        above_order('worksheets',$request->order_no,'subject_id',$request->subject_id);
 
         $worksheet_details = Worksheet::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $html = view('worksheet.dynamic_table',compact('worksheet_details'))->render();
@@ -352,7 +352,7 @@ class WorksheetController extends Controller
     }
     public function below_order(request $request)
     {
-        below_order('worksheets',$request->order_no);
+        below_order('worksheets',$request->order_no,'subject_id',$request->subject_id);
 
         $worksheet_details = Worksheet::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $html = view('worksheet.dynamic_table',compact('worksheet_details'))->render();

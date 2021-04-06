@@ -10,7 +10,8 @@ use Excel;
 use App\Imports\QuestionImport;
 use App\Exports\QuestionExport;
 use Session;
-
+use App\Exports\QuestionBlankExport;
+use App\Imports\BluckQuestionImport;
 
 class QuestionController extends Controller
 {
@@ -199,7 +200,7 @@ class QuestionController extends Controller
     public function questionExport()
     {
         $data=[];
-         return Excel::download(new QuestionExport($data), 'Questions.xlsx');        
+        return Excel::download(new QuestionExport($data), 'Questions.xlsx');        
     }
 
     public function questionImport(Request $request){
@@ -214,11 +215,27 @@ class QuestionController extends Controller
         else{
             Excel::import(new QuestionImport($request), request()->file('file')); 
             return redirect()->route('question.index');    
+        }        
+    }
+    public function blank_export(request $request)
+    {        
+        return Excel::download(new QuestionBlankExport($request), 'Questions.xlsx');        
+    }
+    public function import_bluck_question(request $request)
+    {
+        $allowed = array('csv', 'xls', 'xlsx');
+        $filename = $_FILES['file']['name'];
+        $ext = pathinfo($filename, PATHINFO_EXTENSION);
+        if (!in_array($ext, $allowed)) {
+            Session::flash('error','Please select valid file.');
+            return redirect()->route('question.index');
         }
-
+        else{
+            Excel::import(new BluckQuestionImport($request), request()->file('file')); 
+            return redirect()->route('question.index');    
+        }
         
     }
-
 }
 
 

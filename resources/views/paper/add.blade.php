@@ -283,7 +283,8 @@ $(document).ready(function(){
                 url: "{{route('above_order.paper')}}",
                 type: "GET",
                 data: {
-                    "order_no": order_no
+                    "order_no": order_no,
+                    "subject_id":"{{$subjects_details->id}}"
                 },
                 success: function(html) {
                     $('.dyamictable').empty();
@@ -298,7 +299,8 @@ $(document).ready(function(){
                 url: "{{route('below_order.paper')}}",
                 type: "GET",
                 data: {
-                    "order_no": order_no
+                    "order_no": order_no,
+                    "subject_id":"{{$subjects_details->id}}"
                 },
                 success: function(html) {
                     $('.dyamictable').empty();

@@ -26,31 +26,68 @@ function storeReview($type,$type_id,$review_time,$status="Pending")
     $add->status=$status;
     $add->save();   
 }
-function above_order($table,$order_no)
+function above_order($table,$order_no,$key=null,$value=null)
 {
-    $data=DB::table($table)->where('order_no',$order_no)->first();
-    if($data)
+    if($key == null)
     {
-        $prev = DB::table($table)->where('order_no', '<', $order_no)->orderBy('order_no','desc')->first();
-        if($prev)
+        $data=DB::table($table)->where($key,$value)->where('order_no',$order_no)->first();
+        if($data)
         {
-            $prevOrder=$prev->order_no;
-            $updData=DB::table($table)->where('id',$prev->id)->update(['order_no'=>$data->order_no]);
-            $updDataNew=DB::table($table)->where('id',$data->id)->update(['order_no'=>$prevOrder]);
+            $prev = DB::table($table)->where($key,$value)->where('order_no', '<', $order_no)->orderBy('order_no','desc')->first();
+            if($prev)
+            {
+                $prevOrder=$prev->order_no;
+                $updData=DB::table($table)->where('id',$prev->id)->update(['order_no'=>$data->order_no]);
+                $updDataNew=DB::table($table)->where('id',$data->id)->update(['order_no'=>$prevOrder]);
+            }
         }
     }
+    else
+    {
+        $data=DB::table($table)->where('order_no',$order_no)->first();
+        if($data)
+        {
+            $prev = DB::table($table)->where('order_no', '<', $order_no)->orderBy('order_no','desc')->first();
+            if($prev)
+            {
+                $prevOrder=$prev->order_no;
+                $updData=DB::table($table)->where('id',$prev->id)->update(['order_no'=>$data->order_no]);
+                $updDataNew=DB::table($table)->where('id',$data->id)->update(['order_no'=>$prevOrder]);
+            }
+        }    
+    }
+    
 }
-function below_order($table,$order_no)
+function below_order($table,$order_no,$key=null,$value=null)
 {
-    $data=DB::table($table)->where('order_no',$order_no)->first();
-    if($data)
+
+    if($key == null)
     {
-        $next = DB::table($table)->where('order_no', '>', $order_no)->orderBy('order_no','asc')->first();
-        if($next)
+        $data=DB::table($table)->where($key,$value)->where('order_no',$order_no)->first();
+        if($data)
         {
-            $nextOrder=$next->order_no;
-            $updData=DB::table($table)->where('id',$next->id)->update(['order_no'=>$data->order_no]);
-            $updDataNew=DB::table($table)->where('id',$data->id)->update(['order_no'=>$nextOrder]);
+            $next = DB::table($table)->where($key,$value)->where('order_no', '>', $order_no)->orderBy('order_no','asc')->first();
+            if($next)
+            {
+                $nextOrder=$next->order_no;
+                $updData=DB::table($table)->where('id',$next->id)->update(['order_no'=>$data->order_no]);
+                $updDataNew=DB::table($table)->where('id',$data->id)->update(['order_no'=>$nextOrder]);
+            }
         }
     }
+    else
+    {
+        $data=DB::table($table)->where('order_no',$order_no)->first();
+        if($data)
+        {
+            $next = DB::table($table)->where('order_no', '>', $order_no)->orderBy('order_no','asc')->first();
+            if($next)
+            {
+                $nextOrder=$next->order_no;
+                $updData=DB::table($table)->where('id',$next->id)->update(['order_no'=>$data->order_no]);
+                $updDataNew=DB::table($table)->where('id',$data->id)->update(['order_no'=>$nextOrder]);
+            }
+        }       
+    }
+    
 }

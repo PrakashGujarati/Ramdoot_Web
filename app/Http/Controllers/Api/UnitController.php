@@ -71,7 +71,7 @@ class UnitController extends Controller
                 ]);
             }
             else{
-                $getdata = Unit::where(['subject_id' => $request->subject_id,'standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'status' => 'Active'])->get();
+                $getdata = Unit::where(['subject_id' => $request->subject_id,'standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'status' => 'Active'])->orderBy('order_no','asc')->get();
                 
                 if(count($getdata) > 0){
                     $data=[];$totalcount=0;
@@ -84,7 +84,7 @@ class UnitController extends Controller
 
                             if($request->feature_id == 3){
                                 $totalcount = Book::where('unit_id',$value->id)->count();
-                                $books = Book::where('unit_id',$value->id)->get();
+                                $books = Book::where('unit_id',$value->id)->orderBy('order_no','asc')->get();
                                 foreach($books as $book)
                                 {
                                     $c = pdf_view::where(['type' => 'Textbook','type_id' => $book->id])->count();
@@ -96,7 +96,7 @@ class UnitController extends Controller
                             }
                             elseif ($request->feature_id == 9) {
                                 $totalcount = Note::where('unit_id',$value->id)->count();
-                                $notes = Note::where('unit_id',$value->id)->get();
+                                $notes = Note::where('unit_id',$value->id)->orderBy('order_no','asc')->get();
                                 foreach($notes as $note)
                                 {
                                     $c = pdf_view::where(['type' => 'Note','type_id' => $note->id])->count();
@@ -108,7 +108,7 @@ class UnitController extends Controller
                             }
                             elseif ($request->feature_id == 7) {
                                 $totalcount = Worksheet::where('unit_id',$value->id)->count();
-                                $worksheets = Worksheet::where('unit_id',$value->id)->get();
+                                $worksheets = Worksheet::where('unit_id',$value->id)->orderBy('order_no','asc')->get();
                                 foreach($worksheets as $worksheet)
                                 {
                                     $c = pdf_view::where(['type' => 'Worksheet','type_id' => $worksheet->id])->count();
@@ -120,7 +120,7 @@ class UnitController extends Controller
                             }
                             elseif ($request->feature_id == 6) {
                                 $totalcount = Paper::where('unit_id',$value->id)->count();
-                                $papers = Paper::where('unit_id',$value->id)->get();
+                                $papers = Paper::where('unit_id',$value->id)->orderBy('order_no','asc')->get();
                                 foreach($papers as $paper)
                                 {
                                     $c = pdf_view::where(['type' => 'Paper','type_id' => $paper->id])->count();
@@ -132,7 +132,7 @@ class UnitController extends Controller
                             }
                             elseif ($request->feature_id == 2){
                                 $totalcount = Videos::where('unit_id',$value->id)->count();
-                                $videos = Videos::where('unit_id',$value->id)->get();
+                                $videos = Videos::where('unit_id',$value->id)->orderBy('order_no','asc')->get();
                                 foreach($videos as $video)
                                 {
                                     $c = pdf_view::where(['type' => 'Video','type_id' => $video->id])->count();
@@ -145,7 +145,7 @@ class UnitController extends Controller
                             elseif ($request->feature_id == 5){
                                 
                                 $totalcount = Material::where('unit_id',$value->id)->count();
-                                $materials = Material::where('unit_id',$value->id)->get();
+                                $materials = Material::where('unit_id',$value->id)->orderBy('order_no','asc')->get();
                                 foreach($materials as $material)
                                 {
                                     $c = pdf_view::where(['type' => 'Material','type_id' => $material->id])->count();
@@ -169,7 +169,7 @@ class UnitController extends Controller
                             }
                             elseif($request->feature_id == 4){
                                 $totalcount = Solution::where('unit_id',$value->id)->count();
-                                $solutions = Solution::where('unit_id',$value->id)->get();
+                                $solutions = Solution::where('unit_id',$value->id)->orderBy('order_no','asc')->get();
                                 foreach($solutions as $solution)
                                 {
                                     $c = pdf_view::where(['type' => 'Exercise','type_id' => $solution->id])->count();

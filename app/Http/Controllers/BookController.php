@@ -174,7 +174,7 @@ class BookController extends Controller
                 $url_file = $request->url;
             }
 
-            $last_data=Book::select('*')->orderBy('order_no','desc')->first();
+            $last_data=Book::select('*')->where('subject_id',$request->subject_id)->orderBy('order_no','desc')->first();
             if($last_data)
             {
               $last_no=intval($last_data->order_no)+1;
@@ -414,7 +414,7 @@ class BookController extends Controller
     }
     public function above_order(request $request)
     {
-        above_order('books',$request->order_no);
+        above_order('books',$request->order_no,'subject_id',$request->subject_id);
 
         $book_details = Book::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $html = view('book.dynamic_table',compact('book_details'))->render();
@@ -423,7 +423,8 @@ class BookController extends Controller
     }
     public function below_order(request $request)
     {
-        below_order('books',$request->order_no);
+        //dd($request->subject_id);
+        below_order('books',$request->order_no,'subject_id',$request->subject_id);
 
         $book_details = Book::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $html = view('book.dynamic_table',compact('book_details'))->render();

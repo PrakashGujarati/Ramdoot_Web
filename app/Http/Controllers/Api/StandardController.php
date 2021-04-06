@@ -36,7 +36,7 @@ class StandardController extends Controller
 
 	    		$data=[];$getdata=[];
 	    		foreach ($getboard_details as $value) {
-	    			$getdata = Standard::select('id','standard')->where(['medium_id' => $request->medium_id,'section' => $value->section])->get();
+	    			$getdata = Standard::select('id','standard')->where(['medium_id' => $request->medium_id,'section' => $value->section])->orderBy('order_no','asc')->get();
 	    			$data[] = ['id' => $value->id,'section' => $value->section,'standard' => $getdata];
 	    		}
 

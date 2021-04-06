@@ -289,7 +289,8 @@
                 url: "{{route('above_order.note')}}",
                 type: "GET",
                 data: {
-                    "order_no": order_no
+                    "order_no": order_no,
+                    "subject_id":"{{$subjects_details->id}}"
                 },
                 success: function(html) {
                     $('.dyamictable').empty();
@@ -304,7 +305,8 @@
                 url: "{{route('below_order.note')}}",
                 type: "GET",
                 data: {
-                    "order_no": order_no
+                    "order_no": order_no,
+                    "subject_id":"{{$subjects_details->id}}"
                 },
                 success: function(html) {
                     $('.dyamictable').empty();

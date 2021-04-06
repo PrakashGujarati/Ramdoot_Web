@@ -48,7 +48,7 @@ class SemesterController extends Controller
 			  	"data" => [],
 	        ]);
         }else{
-        	$getdata = Semester::where(['board_id' => $request->board_id,'standard_id' => $request->standard_id,'status' => 'Active'])->get();
+        	$getdata = Semester::where(['board_id' => $request->board_id,'standard_id' => $request->standard_id,'status' => 'Active'])->orderBy('order_no','asc')->get();
 
 	    	if(count($getdata) > 0){
 	    		$data=[];

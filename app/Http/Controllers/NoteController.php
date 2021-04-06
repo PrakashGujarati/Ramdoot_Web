@@ -135,7 +135,7 @@ class NoteController extends Controller
                 $url_file = $request->url;
             }
                 
-            $last_data=Semester::select('*')->orderBy('order_no','desc')->first();
+            $last_data=Semester::select('*')->where('subject_id',$request->subject_id)->orderBy('order_no','desc')->first();
             if($last_data)
             {
               $last_no=intval($last_data->order_no)+1;
@@ -268,7 +268,7 @@ class NoteController extends Controller
     }
     public function above_order(request $request)
     {
-        above_order('notes',$request->order_no);
+        above_order('notes',$request->order_no,'subject_id',$request->subject_id);
 
         $note_details = Note::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $html = view('note.dynamic_table',compact('note_details'))->render();
@@ -277,7 +277,7 @@ class NoteController extends Controller
     }
     public function below_order(request $request)
     {
-        below_order('notes',$request->order_no);
+        below_order('notes',$request->order_no,'subject_id',$request->subject_id);
 
         $note_details = Note::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $html = view('note.dynamic_table',compact('note_details'))->render();
