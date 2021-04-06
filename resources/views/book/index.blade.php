@@ -21,7 +21,7 @@
             		<h4 class="nk-block-title">Book List</h4>
             	</div>
             	<div class="col-lg-2 text-right">
-            		<!-- <a href="{{ route('book.create') }}" class="btn btn-primary text-light">Add Book</a> -->
+            		<a href="{{ route('book.create') }}" class="btn btn-primary text-light">Add Book</a>
             	</div>
             </div>
         </div>

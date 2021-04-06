@@ -34,15 +34,30 @@ class UnitController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($id)
+    public function create($id=null)
     {
-        $boards = Board::where('status','!=','Deleted')->get();
-        $semesters = Semester::where('status','!=','Deleted')->get();
-        $standards = Standard::where('status','!=','Deleted')->get();
-        $subjects = Subject::where('status','!=','Deleted')->get();
-        $unit_details = Unit::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
-        $subjects_details = Subject::where('id',$id)->first();
-        return view('unit.add',compact('subjects','standards','semesters','boards','unit_details','subjects_details'));
+
+        if($id != null){
+            $boards = Board::where('status','!=','Deleted')->get();
+            $semesters = Semester::where('status','!=','Deleted')->get();
+            $standards = Standard::where('status','!=','Deleted')->get();
+            $subjects = Subject::where('status','!=','Deleted')->get();
+            $unit_details = Unit::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+            $subjects_details = Subject::where('id',$id)->first();
+            $isset = 1;
+            return view('unit.add',compact('subjects','standards','semesters','boards','unit_details','subjects_details','isset'));    
+        }else{
+            $boards = Board::where('status','!=','Deleted')->get();
+            $semesters = [];
+            $standards = [];
+            $subjects = [];
+            $unit_details = Unit::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+            $subjects_details=[];
+            $isset = 0;
+            return view('unit.add',compact('subjects','standards','semesters','boards','unit_details','subjects_details','isset'));
+        }
+        
+        
     }
 
     /**

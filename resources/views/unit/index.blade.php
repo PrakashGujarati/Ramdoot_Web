@@ -21,7 +21,7 @@
             		<h4 class="nk-block-title">Unit List</h4>
             	</div>
             	<div class="col-lg-2 text-right">
-            		<!-- <a href="{{ route('unit.create') }}" class="btn btn-primary text-light">Add Unit</a> -->
+            		<a href="{{ route('unit.create') }}" class="btn btn-primary text-light">Add Unit</a>
             	</div>
             </div>
         </div>

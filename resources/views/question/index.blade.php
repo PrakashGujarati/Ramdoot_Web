@@ -30,7 +30,7 @@
             @endif
         	<div class="row">
         		<div class="col-lg-8">
-            		<h4 class="nk-block-title">Question List</h4>
+            		<h4 class="nk-block-title">MCQ Question List</h4>
             	</div>
                 <div class="col-lg-4 text-right">
                     <a href="{{ route('question.export') }}" class="btn btn-info text-light">Export</a>

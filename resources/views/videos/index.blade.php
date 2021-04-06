@@ -21,7 +21,7 @@
             		<h4 class="nk-block-title">Video List</h4>
             	</div>
             	<div class="col-lg-2 text-right">
-            		<!-- <a href="{{ route('videos.create') }}" class="btn btn-primary text-light">Add Video</a> -->
+            		<a href="{{ route('videos.create') }}" class="btn btn-primary text-light">Add Video</a>
             	</div>
             </div>
         </div>

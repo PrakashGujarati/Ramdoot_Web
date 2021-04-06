@@ -72,7 +72,7 @@
     {{--  Permissions Table--}}
 
     
-<div class="row mt-5">
+<div class="row mt-1">
   <div class="col-md-12">
     <div class="card">
       <div class="card-header" style="background-color: #364a63;">
@@ -86,9 +86,9 @@
               @endif
             </div>
             <div class="col-md-2 text-right">
-              @if(request('role_id') && $selected_role )
+             {{-- @if(request('role_id') && $selected_role )
               <a href="javascript:;" class="btn btn-info" onclick="event.preventDefault(); document.getElementById('assign_permission_form').submit();">Save</a>
-              @endif
+              @endif --}}
            </div>
           </div>
       </div>
@@ -98,7 +98,7 @@
 </div>
 
 <hr/>
-<div class="row mt-3">
+<div class="row">
     <div class="col-md-12">
       <div class="card">
           <table class="table table-striped permissions_table">
@@ -114,28 +114,50 @@
                 </tr>
             </thead>
             <tbody>
+              <form action="{{ route('role.assign_permission', [ 'role_id' => request('role_id') ]) }}" method="post" id="assign_permission_form">
+              @csrf
+
+                @forelse ($permissions as $permission)
+                @php $get_details = App\Models\Permission::where(['module_name' => $permission->module_name])->get(); @endphp
+
                 <tr>
                   <td>
                     <input type="checkbox" class="chk-col-blue checkboxData" id="permission_checkbox" name="permissions"><label for="permission_checkbox"></label>
                   </td>
-                  <td>Board</td>
-                  <td><input type="checkbox" class="chk-col-blue checkboxData" id="permission_checkbox" name="permissions"><label for="permission_checkbox"></label></td>
-                  <td><input type="checkbox" class="chk-col-blue checkboxData" id="permission_checkbox" name="permissions"><label for="permission_checkbox"></label></td>
-                  <td><input type="checkbox" class="chk-col-blue checkboxData" id="permission_checkbox" name="permissions"><label for="permission_checkbox"></label></td>
-                  <td><input type="checkbox" class="chk-col-blue checkboxData" id="permission_checkbox" name="permissions"><label for="permission_checkbox"></label></td>
-                  <td><input type="checkbox" class="chk-col-blue checkboxData" id="permission_checkbox" name="permissions"><label for="permission_checkbox"></label></td>
-                </tr>
-                <tr>
+                  <td>{{ $permission->module_name }}</td>
+
+                  @foreach($get_details as $get_detail)
+                  @if($get_detail->name == "view")
                   <td>
-                    <input type="checkbox" class="chk-col-blue checkboxData" id="permission_checkbox" name="permissions"><label for="permission_checkbox"></label>
+                    <input type="checkbox" class="chk-col-blue checkboxData" id="permission_checkbox_{{ $get_detail->id }}" name="permissions[{{$get_detail->name}}]"><label for="permission_checkbox_{{ $get_detail->id }}"></label>
                   </td>
-                  <td>Medium</td>
-                  <td><input type="checkbox" class="chk-col-blue checkboxData" id="permission_checkbox" name="permissions"><label for="permission_checkbox"></label></td>
-                  <td><input type="checkbox" class="chk-col-blue checkboxData" id="permission_checkbox" name="permissions"><label for="permission_checkbox"></label></td>
-                  <td><input type="checkbox" class="chk-col-blue checkboxData" id="permission_checkbox" name="permissions"><label for="permission_checkbox"></label></td>
-                  <td><input type="checkbox" class="chk-col-blue checkboxData" id="permission_checkbox" name="permissions"><label for="permission_checkbox"></label></td>
-                  <td><input type="checkbox" class="chk-col-blue checkboxData" id="permission_checkbox" name="permissions"><label for="permission_checkbox"></label></td>
+                  @endif
+                  @if($get_detail->name == "add")
+                  <td>
+                    <input type="checkbox" class="chk-col-blue checkboxData" id="permission_checkbox_{{ $get_detail->id }}" name="permissions[{{$get_detail->name}}]"><label for="permission_checkbox"></label>
+                  </td>
+                  @endif
+                  @if($get_detail->name == "edit")
+                  <td>
+                    <input type="checkbox" class="chk-col-blue checkboxData" id="permission_checkbox_{{ $get_detail->id }}" name="permissions[{{$get_detail->name}}]"><label for="permission_checkbox"></label>
+                  </td>
+                  @endif
+                  @if($get_detail->name == "delete")
+                  <td>
+                    <input type="checkbox" class="chk-col-blue checkboxData" id="permission_checkbox_{{ $get_detail->id }}" name="permissions[{{$get_detail->name}}]"><label for="permission_checkbox_{{ $get_detail->id }}"></label>
+                  </td>
+                  @endif
+                  @if($get_detail->name == "note")
+                  <td>
+                    <input type="checkbox" class="chk-col-blue checkboxData" id="permission_checkbox_{{ $get_detail->id }}" name="permissions[{{$get_detail->name}}]"><label for="permission_checkbox_{{ $get_detail->id }}"></label>
+                  </td>
+                  @endif
+                  @endforeach
                 </tr>
+                @empty
+                <p> Role does not have any permissions yet </p>
+                @endforelse
+                </form>
             </tbody>
           </table>
 

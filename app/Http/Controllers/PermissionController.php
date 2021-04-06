@@ -26,8 +26,9 @@ class PermissionController extends Controller
         foreach ($permission as $key => $value) {
             $request->validate(['name'=>'required']);
             //$name=Str::slug($request->name, "-");
-            $name = $value.'-'.$request->name;
+            $name = $value;
             $add=new Permission;
+            $add->module_name = $request->name;
             $add->name=$name;
             $add->save();    
         }

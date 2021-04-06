@@ -34,13 +34,24 @@ class BookController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($id)
+    public function create($id=null)
     {
-        $units = Unit::where('status','!=','Deleted')->get();
-        $boards = Board::where('status','!=','Deleted')->get();
-        $book_details = Book::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
-        $subjects_details = Subject::where('id',$id)->first();
-        return view('book.add',compact('units','boards','book_details','subjects_details'));
+        if($id != null){
+            $units = Unit::where('status','!=','Deleted')->get();
+            $boards = Board::where('status','!=','Deleted')->get();
+            $book_details = Book::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+            $subjects_details = Subject::where('id',$id)->first();
+            $isset = 1;
+            return view('book.add',compact('units','boards','book_details','subjects_details','isset'));
+        }
+        else{
+            $boards = Board::where('status','!=','Deleted')->get();
+            $units = [];
+            $book_details = Book::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+            $subjects_details=[];
+            $isset = 0;
+            return view('book.add',compact('units','boards','book_details','subjects_details','isset'));
+        }
     }
 
     /**
