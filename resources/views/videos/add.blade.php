@@ -322,7 +322,7 @@
                 type: "GET",
                 data: {
                     "order_no": order_no,
-                    "subject_id":"{{$subjects_details->id}}"
+                    "subject_id":"{{(!empty($subjects_details->id) ? $subjects_details->id : '""')}}"
                 },
                 success: function(html) {
                     $('.dyamictable').empty();
@@ -338,7 +338,7 @@
                 type: "GET",
                 data: {
                     "order_no": order_no,
-                    "subject_id":"{{$subjects_details->id}}"
+                    "subject_id":"{{(!empty($subjects_details->id) ? $subjects_details->id : '""')}}"
                 },
                 success: function(html) {
                     $('.dyamictable').empty();
