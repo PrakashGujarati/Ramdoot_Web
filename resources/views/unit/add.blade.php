@@ -134,7 +134,7 @@
                                 <div class="form-control-wrap">
                                     <input type="file" class="form-control" id="url" name="url" value="">
                                     <input type="hidden" id="hidden_url" name="hidden_url" value="">
-                                    <img id="url_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" width="100" />
+                                    <img id="url_preview" src="{{asset('assets/images/logo-small.png')}}" alt="your image" class="thumbnail mt-1" height="100" width="100" />
                                     @error('url')
                                         <span class="text-danger" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -147,7 +147,7 @@
                                 <div class="form-control-wrap">
                                     <input type="file" class="form-control" id="thumbnail" name="thumbnail" value="">
                                     <input type="hidden" id="hidden_thumbnail" name="hidden_thumbnail" value="">
-                                    <img id="thumbnail_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" width="100" />
+                                    <img id="thumbnail_preview" src="{{asset('assets/images/logo-small.png')}}" alt="your image" class="thumbnail mt-1" height="100" width="100" />
                                     @error('thumbnail')
                                         <span class="text-danger" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -211,7 +211,7 @@
                 type: "GET",
                 data: {
                     "order_no": order_no,
-                    "subject_id":"{{$subjects_details->id}}"
+                    "subject_id":"{{(!empty($subjects_details->id) ? $subjects_details->id : '""')}}"
                 },
                 success: function(html) {
                     $('.dyamictable').empty();
@@ -227,7 +227,7 @@
                 type: "GET",
                 data: {
                     "order_no": order_no,
-                    "subject_id":"{{$subjects_details->id}}"
+                    "subject_id":"{{(!empty($subjects_details->id) ? $subjects_details->id : '""')}}"
                 },
                 success: function(html) {
                     $('.dyamictable').empty();

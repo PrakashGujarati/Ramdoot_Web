@@ -39,7 +39,7 @@
                 	@if(count($permissions) > 0)
                 	@foreach($permissions as $permissio)
                     <tr>
-                        <td>{{ $permissio->module_name ?? '' }}  {{ isset($permissio->name) ? $permissio->name:'' }}</td>
+                        <td>{{ isset($permissio->module_name) ? $permissio->module_name:'' }} {{ isset($permissio->name) ? $permissio->name:'' }}</td>
                         <td>
                         	<a href="{{ route('permission.edit',$permissio->id) }}" class="mr-1"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
                         	<a href="javascript:;" data-url="{{ route('permission.distroy',$permissio->id) }}" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a>

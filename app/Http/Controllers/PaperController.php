@@ -34,13 +34,25 @@ class PaperController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($id)
+    public function create($id=null)
     {
-        $units = Unit::where('status','!=','Deleted')->get();
-        $boards = Board::where('status','!=','Deleted')->get();
-        $paper_details = Paper::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
-        $subjects_details = Subject::where('id',$id)->first();
-        return view('paper.add',compact('units','boards','paper_details','subjects_details'));
+        if($id != null)
+        {
+            $units = Unit::where('status','!=','Deleted')->get();
+            $boards = Board::where('status','!=','Deleted')->get();
+            $paper_details = Paper::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+            $subjects_details = Subject::where('id',$id)->first();
+            $isset = 1;
+            return view('paper.add',compact('units','boards','paper_details','subjects_details','isset'));
+        }
+        else{
+            $units = [];
+            $boards = Board::where('status','!=','Deleted')->get();
+            $paper_details = Paper::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+            $subjects_details = [];
+            $isset = 0;
+            return view('paper.add',compact('units','boards','paper_details','subjects_details','isset'));
+        }
     }
 
     /**

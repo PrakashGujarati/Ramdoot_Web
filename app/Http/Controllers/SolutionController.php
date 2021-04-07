@@ -37,17 +37,42 @@ class SolutionController extends Controller
      */
     public function create($id=null)
     {
+
+      if($id != null)
+      {
+
         $units = Unit::where('status','!=','Deleted')->get();
         $boards = Board::where('status','!=','Deleted')->get();
         $solution_details = Solution::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $question_type_details = QuestionType::where('status','!=','Deleted')->get();
+        $isset = 1;
 
         $subjects_details=null;
         if($id != null){
           $subjects_details = Subject::where('id',$id)->first();  
         }
+
+        return view('solution.add',compact('units','boards','solution_details','question_type_details','subjects_details','id','isset'));
+      }
+      else{
+        $boards = Board::where('status','!=','Deleted')->get();
+        $units = [];
+        $solution_details = Solution::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $subjects_details=[];
+        $question_type_details = QuestionType::where('status','!=','Deleted')->get();
+        $isset = 0;
+
+        $subjects_details=null;
+        if($id != null){
+          $subjects_details = Subject::where('id',$id)->first();  
+        }
+
+        return view('solution.add',compact('units','boards','solution_details','question_type_details','subjects_details','id','isset'));
+      }
+
+        
            
-        return view('solution.add',compact('units','boards','solution_details','question_type_details','subjects_details','id'));
+
     }
 
     /**

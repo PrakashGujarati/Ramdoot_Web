@@ -35,14 +35,28 @@ class MaterialController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($id)
+    public function create($id=null)
     {
-        $units = Unit::where('status','!=','Deleted')->get();
-        $boards = Board::where('status','!=','Deleted')->get();
-        $material_details = Material::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
-        $question_type_details = QuestionType::where('status','!=','Deleted')->get();
-        $subjects_details = Subject::where('id',$id)->first();
-        return view('material.add',compact('units','boards','material_details','question_type_details','subjects_details'));
+        if($id != null)
+        {
+
+          $units = Unit::where('status','!=','Deleted')->get();
+          $boards = Board::where('status','!=','Deleted')->get();
+          $material_details = Material::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+          $question_type_details = QuestionType::where('status','!=','Deleted')->get();
+          $subjects_details = Subject::where('id',$id)->first();
+          $isset = 1;
+          return view('material.add',compact('units','boards','material_details','question_type_details','subjects_details','isset'));
+        }
+        else{
+          $boards = Board::where('status','!=','Deleted')->get();
+          $units = [];
+          $material_details = Material::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+          $subjects_details=[];
+          $question_type_details = QuestionType::where('status','!=','Deleted')->get();
+          $isset = 0;
+          return view('material.add',compact('units','boards','material_details','question_type_details','subjects_details','isset'));
+        }
     }
 
     /**

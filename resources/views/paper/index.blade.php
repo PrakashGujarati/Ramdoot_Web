@@ -21,7 +21,7 @@
             		<h4 class="nk-block-title">Paper List</h4>
             	</div>
             	<div class="col-lg-2 text-right">
-            		<!-- <a href="{{ route('paper.create') }}" class="btn btn-primary text-light">Add Paper</a> -->
+            		<a href="{{ route('paper.create') }}" class="btn btn-primary text-light">Add Paper</a>
             	</div>
             </div>
         </div>
@@ -64,7 +64,7 @@
                         	<a href="{{ route('paper.edit',$data->id) }}" class="mr-1"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
                         	<a href="javascript:;" data-url="{{ route('paper.distroy',$data->id) }}" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a>
                         </td>--}}
-                        <td><a href="{{ route('paper.create',$data->subject_id) }}" data-url="" class=""><span class="nk-menu-icon text-primary"><em class="fa fa-plus pr-1"></em>Add</span></a></td>
+                        <td><a href="{{ route('paper.create',$data->subject_id) }}" data-url="" class=""><span class="nk-menu-icon text-primary">Manage</span></a></td>
                     </tr>
                     @endforeach
                     @else
