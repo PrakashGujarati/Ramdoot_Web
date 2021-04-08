@@ -35,9 +35,9 @@
                         <th>Medium</th>
                         <th>Standard</th>
                         <th>Semester</th>
-                        <th>Subject</th>
+                        <!-- <th>Subject</th>
                         <th>Sub Title</th>
-                        <th>Thumbnail</th>
+                        <th>Thumbnail</th> -->
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -49,7 +49,7 @@
                         <td>{{ isset($data->medium->medium_name) ? $data->medium->medium_name:'' }}</td>
                         <td>{{ isset($data->standard->standard) ? $data->standard->standard:'' }}</td>
                         <td>{{ isset($data->semester->semester) ? $data->semester->semester:'' }}</td>
-                        <td>{{ $data->subject_name }}</td>
+                        {{--<td>{{ $data->subject_name }}</td>
                         <td>{{ $data->sub_title }}</td>
                         <td>
                             @if($data->thumbnail)
@@ -59,7 +59,8 @@
                         <td>
                         	<a href="{{ route('subject.edit',$data->id) }}" class="mr-1"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
                         	<a href="javascript:;" data-url="{{ route('subject.distroy',$data->id) }}" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a>
-                        </td>
+                        </td>--}}
+                        <td><a href="{{ route('subject.create',$data->semester_id) }}" data-url="" class=""><span class="nk-menu-icon text-primary">Manage</span></a></td>
                     </tr>
                     @endforeach
                     @else

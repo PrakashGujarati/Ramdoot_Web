@@ -190,6 +190,26 @@
         });    
     });
 
+    $( document ).ready(function() {
+        var check_board = <?PHP echo json_encode($isset); ?>;
+        if(check_board == 1){
+            var boardid = <?PHP echo (!empty($semester_details->board_id) ? json_encode($semester_details->board_id) : '""'); ?>;
+            var mediumid = <?PHP echo (!empty($semester_details->medium_id) ? json_encode($semester_details->medium_id) : '""'); ?>;
+            var standardid = <?PHP echo (!empty($semester_details->standard_id) ? json_encode($semester_details->standard_id) : '""'); ?>;
+            var semesterid = <?PHP echo (!empty($semester_details->id) ? json_encode($semester_details->id) : '""'); ?>;
+            $('.board_id').val(boardid);
+            var board_id = boardid;
+            var medium_id = mediumid;
+            var standard_id = standardid;
+            var semester_id = semesterid;
+            getMediumEdit(board_id,medium_id);
+            getStandardEdit(board_id,medium_id,standard_id);
+            getSemesterEdit(board_id,medium_id,standard_id,semester_id);
+        }   
+
+    });
+    
+
 $(document).ready(function(){
     $('#thumbnail_preview').css('display','none');
 

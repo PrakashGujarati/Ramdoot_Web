@@ -32,7 +32,7 @@
                 <thead>
                     <tr>
                         <th>Board</th>
-                        <th>Medium</th>
+                        <!-- <th>Medium</th> -->
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -41,11 +41,12 @@
                 	@foreach($mediums_details as $data)
                     <tr>
                         <td>{{ isset($data->board->name) ? $data->board->name:'' }}</td>
-                        <td>{{ $data->medium_name }}</td>
+                        {{--<td>{{ $data->medium_name }}</td>
                         <td>
                         	<a href="" class="mr-1"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
                         	<a href="javascript:;" data-url="" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a>
-                        </td>
+                        </td>--}}
+                        <td><a href="{{ route('medium.create',$data->board_id) }}" data-url="" class=""><span class="nk-menu-icon text-primary">Manage</span></a></td>
                     </tr>
                     @endforeach
                     @else

@@ -51,7 +51,7 @@
 
                         <div class="form-group">
                             <button type="submit" class="btn btn-lg btn-primary">Submit</button>
-                            <a type="button" href="{{ route('medium.create') }}" class="btn btn-lg btn-danger text-light">Cancel</a>
+                            <a type="button" href="{{ route('medium.index') }}" class="btn btn-lg btn-danger text-light">Cancel</a>
                         </div>
                     </form>
                 </div>
@@ -102,6 +102,15 @@
         });    
     });
 
+    $( document ).ready(function() {
+        var check_board = <?PHP echo json_encode($isset); ?>;
+        if(check_board == 1){
+            var boardid = <?PHP echo (!empty($boards_details->id) ? json_encode($boards_details->id) : '""'); ?>;
+            $('.board_id').val(boardid);
+        }   
+
+    });
+
     $(document).ready(function () {
 
         $('#medium_name').autocomplete({
@@ -114,7 +123,22 @@
             }
         });
 
-        
+
+    function getMediumEdit(board_id,medium_id){
+    
+    $.ajax({
+        type: "GET",
+        url: "{{route('get.medium')}}",
+        data: {
+            "board_id":board_id,
+            "medium_id":medium_id,
+        },
+        success: function(result) {
+            $('.medium_id').html('');
+            $('.medium_id').html(result.html);
+        } 
+    });
+}    
 
     
     $('#medium_form').validate({

@@ -56,7 +56,7 @@ Route::group(['middleware' => 'auth'], function(){
 
 	/*Standard*/
 	Route::get('standard', [StandardController::class, 'index'])->name('standard.index');
-	Route::get('standard/create', [StandardController::class, 'create'])->name('standard.create');
+	Route::get('standard/create/{medium_id?}', [StandardController::class, 'create'])->name('standard.create');
 	Route::post('standard/store', [StandardController::class, 'store'])->name('standard.store');
 	Route::get('standard/edit', [StandardController::class, 'edit'])->name('standard.edit');
 	Route::post('standard/{id}/update', [StandardController::class, 'update'])->name('standard.update');
@@ -66,7 +66,7 @@ Route::group(['middleware' => 'auth'], function(){
 
 	/*Subjects*/
 	Route::get('subject', [SubjectController::class, 'index'])->name('subject.index');
-	Route::get('subject/create', [SubjectController::class, 'create'])->name('subject.create');
+	Route::get('subject/create/{semester_id?}', [SubjectController::class, 'create'])->name('subject.create');
 	Route::post('subject/store', [SubjectController::class, 'store'])->name('subject.store');
 	Route::get('subject/edit', [SubjectController::class, 'edit'])->name('subject.edit');
 	Route::post('subject/{id}/update', [SubjectController::class, 'update'])->name('subject.update');
@@ -84,7 +84,7 @@ Route::group(['middleware' => 'auth'], function(){
 
 	/*Book*/
 	Route::get('medium', [MediumController::class, 'index'])->name('medium.index');
-	Route::get('medium/create', [MediumController::class, 'create'])->name('medium.create');
+	Route::get('medium/create/{board_id?}', [MediumController::class, 'create'])->name('medium.create');
 	Route::post('medium/store', [MediumController::class, 'store'])->name('medium.store');
 	Route::get('medium/edit', [MediumController::class, 'edit'])->name('medium.edit');
 	Route::post('medium/{id}/update', [MediumController::class, 'update'])->name('medium.update');
@@ -102,7 +102,7 @@ Route::group(['middleware' => 'auth'], function(){
 
 	/*Semester*/
 	Route::get('semester', [SemesterController::class, 'index'])->name('semester.index');
-	Route::get('semester/create', [SemesterController::class, 'create'])->name('semester.create');
+	Route::get('semester/create/{standard_id?}', [SemesterController::class, 'create'])->name('semester.create');
 	Route::post('semester/store', [SemesterController::class, 'store'])->name('semester.store');
 	Route::get('semester/edit', [SemesterController::class, 'edit'])->name('semester.edit');
 	Route::post('semester/{id}/update', [SemesterController::class, 'update'])->name('semester.update');
