@@ -99,7 +99,6 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::post('note/{id}/update', [NoteController::class, 'update'])->name('note.update');
 	Route::get('note/delete', [NoteController::class, 'distroy'])->name('note.distroy');
 	
-
 	/*Semester*/
 	Route::get('semester', [SemesterController::class, 'index'])->name('semester.index');
 	Route::get('semester/create/{standard_id?}', [SemesterController::class, 'create'])->name('semester.create');
