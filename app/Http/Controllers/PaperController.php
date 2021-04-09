@@ -301,6 +301,8 @@ class PaperController extends Controller
             $delete = Paper::find($request->id);
             $delete->status = "Deleted";
             $delete->save();
+
+            delete_order('papers',$request->id,1);
         }
 
         $paper_details = Paper::where('status','!=','Deleted')->orderBy('order_no','asc')->get();

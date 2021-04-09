@@ -313,6 +313,8 @@ class MaterialController extends Controller
             $delete = Material::find($request->id);
             $delete->status = "Deleted";
             $delete->save();
+
+            delete_order('materials',$request->id,1);
         }
 
         $material_details = Material::where('status','!=','Deleted')->orderBy('order_no','asc')->get();

@@ -298,6 +298,8 @@ class WorksheetController extends Controller
             $delete = Worksheet::find($request->id);
             $delete->status = "Deleted";
             $delete->save();
+
+            delete_order('worksheets',$request->id,1);
         }
 
         $worksheet_details = Worksheet::where('status','!=','Deleted')->get();

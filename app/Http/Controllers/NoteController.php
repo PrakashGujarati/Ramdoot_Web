@@ -236,6 +236,7 @@ class NoteController extends Controller
             $delete = Note::find($request->id);
             $delete->status = "Deleted";
             $delete->save();
+            delete_order('notes',$request->id,1);
         }
 
         $note_details = Note::where('status','!=','Deleted')->orderBy('order_no','asc')->get();

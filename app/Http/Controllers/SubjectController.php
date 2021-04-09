@@ -276,6 +276,8 @@ class SubjectController extends Controller
             $delete = Subject::find($request->id);
             $delete->status = "Deleted";
             $delete->save();
+
+            delete_order('subjects',$request->id);
         }
 
         $subject_details = Subject::where('status','!=','Deleted')->orderBy('order_no','asc')->get();

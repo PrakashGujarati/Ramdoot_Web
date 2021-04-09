@@ -327,6 +327,8 @@ class SolutionController extends Controller
             $delete = Solution::find($request->id);
             $delete->status = "Deleted";
             $delete->save();
+
+            delete_order('solutions',$request->id,1);
         }
 
         $solution_details = Solution::where('status','!=','Deleted')->orderBy('order_no','asc')->get();

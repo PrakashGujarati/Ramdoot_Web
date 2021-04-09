@@ -351,6 +351,8 @@ class UnitController extends Controller
             $delete = Unit::find($request->id);
             $delete->status = "Deleted";
             $delete->save();
+
+            delete_order('units',$request->id);
         }
 
         $unit_details = Unit::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
