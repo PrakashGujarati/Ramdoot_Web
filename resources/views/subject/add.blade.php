@@ -454,6 +454,7 @@ function getSemesterEdit(board_id,medium_id,standard_id,semester_id){
 
 $(document).on('click','.distroy', function() {
     var id = $(this).attr('data-id');
+    var semester_id = $('#semester_id').val();
     bootbox.confirm({
         message: "Are you sure to delete this subject ?",
         buttons: {
@@ -476,6 +477,7 @@ $(document).on('click','.distroy', function() {
                     type: "GET",
                     data: {
                         'id':id,
+                        'semester_id':semester_id,
                     },
                     success: function(data) {
                         confirm("Subject Deleted Successfully.");

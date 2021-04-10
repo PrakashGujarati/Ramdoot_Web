@@ -43,7 +43,7 @@ class SolutionController extends Controller
 
         $units = Unit::where('status','!=','Deleted')->get();
         $boards = Board::where('status','!=','Deleted')->get();
-        $solution_details = Solution::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $solution_details = Solution::where(['subject_id' => $id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $question_type_details = QuestionType::where('status','!=','Deleted')->get();
         $isset = 1;
 
@@ -90,11 +90,11 @@ class SolutionController extends Controller
             'standard_id' => 'required',
             'semester_id'  => 'required',
             'subject_id' => 'required',
-            'question' => 'required',
-            'answer' => 'required',
-            'marks' => 'required',
-            'image'  => 'required',
-            'label' => 'required'
+            // 'question' => 'required',
+            // 'answer' => 'required',
+            // 'marks' => 'required',
+            // 'image'  => 'required',
+            // 'label' => 'required'
         ]);
 
         if($request->hidden_id != "0")
@@ -200,7 +200,7 @@ class SolutionController extends Controller
 
         }
 
-        $solution_details = Solution::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $solution_details = Solution::where(['subject_id' => $request->subject_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $html = view('solution.dynamic_table',compact('solution_details'))->render();
         $data = ['html' => $html,'message' => $msg];
         return response()->json($data);
@@ -329,7 +329,7 @@ class SolutionController extends Controller
             $delete->save();
         }
 
-        $solution_details = Solution::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $solution_details = Solution::where(['subject_id' => $request->subject_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         return view('solution.dynamic_table',compact('solution_details'));
         //return redirect()->route('solution.index')->with('success', 'Solution Deleted Successfully.');
     }

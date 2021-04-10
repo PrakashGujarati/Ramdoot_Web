@@ -555,7 +555,8 @@ $(document).ready(function () {
                 unit_id:"required",
                 question:"required",
                 answer:"required",
-                marks:"required"
+                marks:"required",
+                question_type:"required",
             },
         //For custom messages
         messages: {
@@ -568,7 +569,8 @@ $(document).ready(function () {
             unit_id:"Please select unit.",
             question:"Please enter question.",
             answer:"Please enter answer.",
-            marks:"Please enter marks."
+            marks:"Please enter marks.",
+            question_type:"Please select question type."
         },
         submitHandler: function(form) {
             var formData = new FormData($("#solution_form")[0]);
@@ -652,6 +654,7 @@ $(document).on('click','.edit-btn',function(){
 
 $(document).on('click','.distroy', function() {
     var id = $(this).attr('data-id');
+    var subject_id = $('#subject_id').val();
     bootbox.confirm({
         message: "Are you sure to delete this solution ?",
         buttons: {
@@ -674,6 +677,7 @@ $(document).on('click','.distroy', function() {
                     type: "GET",
                     data: {
                         'id':id,
+                        'subject_id':subject_id,
                     },
                     success: function(data) {
                         confirm("Solution Deleted Successfully.");

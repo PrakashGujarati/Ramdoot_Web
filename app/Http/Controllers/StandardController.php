@@ -37,7 +37,7 @@ class StandardController extends Controller
     public function create($id=null)
     {
         if($id != null){
-            $standard_details = Standard::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+            $standard_details = Standard::where(['medium_id' => $id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
             $boards = Board::where('status','Active')->get();
             $isset = 1;
             $medium_details = Medium::where(['id' => $id])->first();
@@ -153,7 +153,7 @@ class StandardController extends Controller
 
         }
 
-        $standard_details = Standard::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $standard_details = Standard::where(['medium_id' => $request->medium_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $html = view('standard.dynamic_table',compact('standard_details'))->render();
         $data = ['html' => $html,'message' => $msg];
         return response()->json($data);
@@ -267,7 +267,7 @@ class StandardController extends Controller
         }
         
 
-        $standard_details = Standard::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $standard_details = Standard::where(['medium_id' => $request->medium_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         return view('standard.dynamic_table',compact('standard_details'));
         //return redirect()->route('standard.index')->with('success', 'Standard Deleted Successfully.');
     }

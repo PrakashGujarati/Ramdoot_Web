@@ -343,6 +343,8 @@ function getMediumEdit(board_id,medium_id){
 
 $(document).on('click','.distroy', function() {
     var id = $(this).attr('data-id');
+    var board_id = $('#board_id').val();
+    var medium_id = $('#medium_id').val();
     bootbox.confirm({
         message: "Are you sure to delete this standard ?",
         buttons: {
@@ -365,6 +367,7 @@ $(document).on('click','.distroy', function() {
                     type: "GET",
                     data: {
                         'id':id,
+                        'medium_id':medium_id,
                     },
                     success: function(data) {
                         confirm("Standard Deleted Successfully.");
