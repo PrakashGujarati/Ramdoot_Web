@@ -7,7 +7,7 @@
         <table class="datatable-init table">
             <thead>
                 <tr>
-                    <td>Order No</td>
+                    <td>ON</td>
                     <th>Board</th>
                     <th>Medium</th>
                     <th>Standard</th>

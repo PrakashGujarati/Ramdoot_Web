@@ -47,8 +47,8 @@ class UserController extends Controller
         $created_user->syncRoles([$role]);
         $created_user->save();
 
-        storeLog('user',$add->id,date('Y-m-d H:i:s'),'create');
-        storeReview('user',$add->id,date('Y-m-d H:i:s'));
+        storeLog('user',$created_user->id,date('Y-m-d H:i:s'),'create');
+        storeReview('user',$created_user->id,date('Y-m-d H:i:s'));
 
         Session::flash('success',"New user '$created_user->name', created successfully.");
 
