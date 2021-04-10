@@ -44,7 +44,7 @@
 
                             @canany(['view-medium'])
                             <li class="nk-menu-item @if(\Request::route()->getName() == 'medium.index' || \Request::route()->getName() == 'medium.create' || \Request::route()->getName() == 'medium.edit') active @endif">
-                                <a href="{{ route('medium.create') }}" class="nk-menu-link">
+                                <a href="{{ route('medium.index') }}" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
                                     <span class="nk-menu-text">Medium</span>
                                 </a>
@@ -52,7 +52,7 @@
                             @endcanany
                             @canany(['view-standard'])
                             <li class="nk-menu-item @if(\Request::route()->getName() == 'standard.index' || \Request::route()->getName() == 'standard.create' || \Request::route()->getName() == 'standard.edit') active @endif">
-                                <a href="{{ route('standard.create') }}" class="nk-menu-link">
+                                <a href="{{ route('standard.index') }}" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
                                     <span class="nk-menu-text">Standard / Class</span>
                                 </a>
@@ -60,7 +60,7 @@
                             @endcanany
                             @canany(['view-semester'])
                             <li class="nk-menu-item @if(\Request::route()->getName() == 'semester.index' || \Request::route()->getName() == 'semester.create' || \Request::route()->getName() == 'semester.edit') active @endif">
-                                <a href="{{ route('semester.create') }}" class="nk-menu-link">
+                                <a href="{{ route('semester.index') }}" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
                                     <span class="nk-menu-text">Semester</span>
                                 </a>
@@ -72,7 +72,7 @@
 
                     @canany(['view-subject','view-unit'])
                     <li class="nk-menu-item has-sub">
-                    	
+                        
                         <a href="#" class="nk-menu-link nk-menu-toggle">
                             <span class="nk-menu-icon"><em class="icon ni ni-view-group-fill"></em></span>
                             <span class="nk-menu-text">Sources</span>
@@ -81,7 +81,7 @@
                         <ul class="nk-menu-sub">
                         @canany(['view-subject'])
                             <li class="nk-menu-item @if(\Request::route()->getName() == 'subject.index' || \Request::route()->getName() == 'subject.create' || \Request::route()->getName() == 'subject.edit') active @endif">
-                            <a href="{{ route('subject.create') }}" class="nk-menu-link">
+                            <a href="{{ route('subject.index') }}" class="nk-menu-link">
                                 <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
                                 <span class="nk-menu-text">Subject</span>
                             </a>
@@ -114,7 +114,7 @@
                             <span class="nk-menu-text">Data Content</span>
                         </a>
                         <ul class="nk-menu-sub">
-                        	@canany(['view-book'])
+                            @canany(['view-book'])
                             <li class="nk-menu-item @if(\Request::route()->getName() == 'book.index' || \Request::route()->getName() == 'book.create' || \Request::route()->getName() == 'book.edit') active @endif">
                                 <a href="{{ route('book.index') }}" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
@@ -181,8 +181,8 @@
 
                         </ul><!-- .nk-menu-sub -->
                     </li>
-					@endcanany
-					@canany(['view-question'])               
+                    @endcanany
+                    @canany(['view-question'])               
                     <li class="nk-menu-item has-sub">
                         <a href="#" class="nk-menu-link nk-menu-toggle">
                             <span class="nk-menu-icon"><em class="icon ni ni-view-group-fill"></em></span>
@@ -190,7 +190,7 @@
                         </a>
                          
                         <ul class="nk-menu-sub">
-                        	@canany(['view-question'])
+                            @canany(['view-question'])
                             <li class="nk-menu-item @if(\Request::route()->getName() == 'question.index' || \Request::route()->getName() == 'question.create' || \Request::route()->getName() == 'question.edit') active @endif">
                                 <a href="{{ route('question.index') }}" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
@@ -209,7 +209,7 @@
                             <span class="nk-menu-text">Exam Data</span>
                         </a>
                         <ul class="nk-menu-sub">
-                        	@canany(['view-exam'])
+                            @canany(['view-exam'])
                             <li class="nk-menu-item @if(\Request::route()->getName() == 'exam.index' || 
                                 \Request::route()->getName() == 'exam.create' || \Request::route()->getName() == 'exam.edit') active @endif">
                                 <a href="{{ route('exam.index') }}" class="nk-menu-link">
@@ -255,7 +255,7 @@
                             <span class="nk-menu-text">Others</span>
                         </a>
                         <ul class="nk-menu-sub">
-                        	@canany(['view-slider'])
+                            @canany(['view-slider'])
                             <li class="nk-menu-item @if(\Request::route()->getName() == 'slider.index' || \Request::route()->getName() == 'slider.create' || \Request::route()->getName() == 'slider.edit') active @endif">
                                 <a href="{{ route('slider.index') }}" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
@@ -273,7 +273,7 @@
                         </ul><!-- .nk-menu-sub -->
                     </li>
                     @endcanany
-    				@canany(['setting-list'])
+                    @canany(['setting-list'])
                     <li class="nk-menu-item has-sub">
                         <a href="{{route('settings')}}" class="nk-menu-link">
                             <span class="nk-menu-icon"><em class="icon ni ni-align-right"></em></span>

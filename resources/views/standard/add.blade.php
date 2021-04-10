@@ -153,6 +153,35 @@
         });    
     });
 
+    $( document ).ready(function() {
+        var check_board = <?PHP echo json_encode($isset); ?>;
+        if(check_board == 1){
+            var boardid = <?PHP echo (!empty($medium_details->board_id) ? json_encode($medium_details->board_id) : '""'); ?>;
+            var mediumid = <?PHP echo (!empty($medium_details->id) ? json_encode($medium_details->id) : '""'); ?>;
+            $('.board_id').val(boardid);
+            var board_id = boardid;
+            var medium_id = mediumid;
+            getMediumEdit(board_id,medium_id);
+        }   
+
+    });
+
+    function getMediumEdit(board_id,medium_id){
+    
+        $.ajax({
+            type: "GET",
+            url: "{{route('get.medium')}}",
+            data: {
+                "board_id":board_id,
+                "medium_id":medium_id,
+            },
+            success: function(result) {
+                $('.medium_id').html('');
+                $('.medium_id').html(result.html);
+            } 
+        });
+    }
+
 $(document).ready(function(){
     $('#thumbnail_preview').css('display','none');
 });    

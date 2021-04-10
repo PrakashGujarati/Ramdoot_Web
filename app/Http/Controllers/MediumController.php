@@ -17,7 +17,7 @@ class MediumController extends Controller
     }
 	public function index()
     {
-        $mediums_details = Medium::where('status','!=','Deleted')->get();
+        $mediums_details = Medium::where('status','!=','Deleted')->groupBy('board_id')->get();
         return view('medium.index',compact('mediums_details'));
     }
 
@@ -26,11 +26,22 @@ class MediumController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($id=null)
     {
-        $mediums_details = Medium::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
-        $boards = Board::where('status','Active')->get();
-        return view('medium.add',compact('boards','mediums_details'));
+        if($id != null){
+            $mediums_details = Medium::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+            $boards = Board::where('status','Active')->get();
+            $boards_details = Board::where('id',$id)->first();
+            $isset = 1;
+            return view('medium.add',compact('boards','mediums_details','isset','boards_details'));
+        }
+        else{
+            $mediums_details = Medium::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+            $boards = Board::where('status','Active')->get();
+            $boards_details = [];
+            $isset = 0;
+            return view('medium.add',compact('boards','mediums_details','isset','boards_details'));
+        }
     }
 
     /**
@@ -162,6 +173,8 @@ class MediumController extends Controller
             $delete = Medium::find($request->id);
             $delete->status = "Deleted";
             $delete->save();
+            
+            delete_order('mediums',$request->id);
         }
 
         $mediums_details = Medium::where('status','!=','Deleted')->orderBy('order_no','asc')->get();

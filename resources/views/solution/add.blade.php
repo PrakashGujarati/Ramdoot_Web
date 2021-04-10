@@ -260,7 +260,7 @@ $(document).on('click','.above_order', function() {
                 type: "GET",
                 data: {
                     "order_no": order_no,
-                    "subject_id":"{{$id}}"
+                    "subject_id":"{{(!empty($id) ? $id : '""')}}"
                 },
                 success: function(html) {
                     $('.dyamictable').empty();
@@ -276,7 +276,7 @@ $(document).on('click','.above_order', function() {
                 type: "GET",
                 data: {
                     "order_no": order_no,
-                    "subject_id":"{{$id}}"
+                    "subject_id":"{{(!empty($id) ? $id : '""')}}"
                 },
                 success: function(html) {
                     $('.dyamictable').empty();
@@ -308,17 +308,27 @@ $("#image").change(function() {
 });
 
 $( document ).ready(function() {
-    $('.board_id').val('{{ $subjects_details->board_id }}');
-    var board_id = $('.board_id').val();
-    var medium_id = "{{ $subjects_details->medium_id }}";
-    var standard_id = "{{ $subjects_details->standard_id }}";
-    var semester_id = "{{ $subjects_details->semester_id }}";
-    var subject_id = "{{ $subjects_details->id }}";
-    getMediumEdit(board_id,medium_id);
-    getStandardEdit(board_id,medium_id,standard_id);
-    getSemesterEdit(board_id,medium_id,standard_id,semester_id);
-    getSubjectEdit(board_id,medium_id,standard_id,semester_id,subject_id);
-    getUnit(board_id,medium_id,standard_id,semester_id,subject_id);
+    var check_board = <?PHP echo json_encode($isset); ?>;
+    if(check_board == 1){
+        var boardid = <?PHP echo (!empty($subjects_details->board_id) ? json_encode($subjects_details->board_id) : '""'); ?>;
+        var mediumid = <?PHP echo (!empty($subjects_details->medium_id) ? json_encode($subjects_details->medium_id) : '""'); ?>;
+        var standardid = <?PHP echo (!empty($subjects_details->standard_id) ? json_encode($subjects_details->standard_id) : '""'); ?>;
+        var semesterid = <?PHP echo (!empty($subjects_details->semester_id) ? json_encode($subjects_details->semester_id) : '""'); ?>;
+        var subjectid = <?PHP echo (!empty($subjects_details->id) ? json_encode($subjects_details->id) : '""'); ?>;
+            
+       $('.board_id').val(boardid);
+       var board_id = boardid;
+       var medium_id = mediumid;
+       var standard_id = standardid;
+       var semester_id = semesterid;
+       var subject_id = subjectid;
+        
+        getMediumEdit(board_id,medium_id);
+        getStandardEdit(board_id,medium_id,standard_id);
+        getSemesterEdit(board_id,medium_id,standard_id,semester_id);
+        getSubjectEdit(board_id,medium_id,standard_id,semester_id,subject_id);    
+        getUnit(board_id,medium_id,standard_id,semester_id,subject_id);
+    }
 });
 
 function getMediumEdit(board_id,medium_id){

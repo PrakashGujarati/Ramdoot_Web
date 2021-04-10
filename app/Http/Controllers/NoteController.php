@@ -7,6 +7,7 @@ use App\Models\Note;
 use App\Models\Board;
 use Auth;
 use App\Models\Subject;
+use App\Models\Semester;
 
 class NoteController extends Controller
 {
@@ -25,10 +26,21 @@ class NoteController extends Controller
 
     public function create($id=null)
     {
-    	$note_details = Note::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
-        $boards = Board::where('status','!=','Deleted')->get();
-        $subjects_details = Subject::where('id',$id)->first();
-        return view('note.add',compact('boards','note_details','subjects_details'));
+        if($id != null){
+            $note_details = Note::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+            $boards = Board::where('status','!=','Deleted')->get();
+            $subjects_details = Subject::where('id',$id)->first();
+            $isset = 1;
+            return view('note.add',compact('boards','note_details','subjects_details','isset'));
+        }
+        else{
+            $boards = Board::where('status','!=','Deleted')->get();
+            $note_details = Note::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+            $subjects_details=[];
+            $isset = 0;
+            return view('note.add',compact('boards','note_details','subjects_details','isset'));
+        }
+    	
     }
 
 
@@ -163,7 +175,7 @@ class NoteController extends Controller
             $add->label = $request->label;
             $add->release_date = $request->release_date;
             $add->edition = $request->edition;
-            $add->order_no=$last_no;
+            $add->order_no= isset($last_no) ? $last_no:0;
             $add->save();
 
             storeLog('note',$add->id,date('Y-m-d H:i:s'),'create');
@@ -224,6 +236,7 @@ class NoteController extends Controller
             $delete = Note::find($request->id);
             $delete->status = "Deleted";
             $delete->save();
+            delete_order('notes',$request->id,1);
         }
 
         $note_details = Note::where('status','!=','Deleted')->orderBy('order_no','asc')->get();

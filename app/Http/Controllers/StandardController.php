@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Standard;
 use Illuminate\Http\Request;
 use App\Models\Board;
+use App\Models\Medium;
+
 
 class StandardController extends Controller
 {
@@ -23,7 +25,7 @@ class StandardController extends Controller
     
     public function index()
     {
-        $standard_details = Standard::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $standard_details = Standard::where('status','!=','Deleted')->groupBy('medium_id')->get();
         return view('standard.index',compact('standard_details'));
     }
 
@@ -32,11 +34,23 @@ class StandardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($id=null)
     {
-        $standard_details = Standard::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
-        $boards = Board::where('status','Active')->get();
-        return view('standard.add',compact('boards','standard_details'));
+        if($id != null){
+            $standard_details = Standard::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+            $boards = Board::where('status','Active')->get();
+            $isset = 1;
+            $medium_details = Medium::where(['id' => $id])->first();
+            return view('standard.add',compact('boards','standard_details','medium_details','isset'));
+        }
+        else{
+            $standard_details = Standard::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+            $boards = Board::where('status','Active')->get();
+            $isset = 0;
+            $medium_details = [];
+            return view('standard.add',compact('boards','standard_details','medium_details','isset'));
+        }
+        
     }
 
     /**
@@ -249,7 +263,8 @@ class StandardController extends Controller
         }else{
             $delete = Standard::find($request->id);
             $delete->status = "Deleted";
-            $delete->save();    
+            $delete->save();
+            delete_order('standards',$request->id);    
         }
         
 

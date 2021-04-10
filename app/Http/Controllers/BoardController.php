@@ -255,6 +255,8 @@ class BoardController extends Controller
             $delete = Board::find($request->id);
             $delete->status = "Deleted";
             $delete->save();
+
+            delete_order('boards',$request->id);
         }
 
         $boards_details = Board::where('status','!=','Deleted')->orderBy('order_no','asc')->get();

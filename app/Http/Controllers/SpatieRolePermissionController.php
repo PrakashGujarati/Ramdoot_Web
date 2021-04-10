@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Permission;
 use Spatie\Permission\Models\Role;
+use App\Models\RoleHasPermission;
+
 
 class SpatieRolePermissionController extends Controller
 {
@@ -12,14 +14,24 @@ class SpatieRolePermissionController extends Controller
     {
         $data['roles'] = Role::select('id', 'name')->get();
         $data['selected_role'] = Role::whereId(request('role_id'))->first();
-        $data['permissions'] = Permission::groupBy('module_name')->orderBy('id','asc')->get();
-       // return view('spatie-role.index')->with($data);
-       return view('spatie-role.index_new')->with($data);
+        $data['permissions'] = Permission::orderBy('id','asc')->get();
+        //return view('spatie-role.index')->with($data);
+        return view('spatie-role.index_new')->with($data);
     }
 
     public function assign_permissions(Request $request, $role_id)
     {
         // dd($request->all());
+        // if(count($request->permissions) > 0){
+        //     foreach ($request->permissions as $key => $value) {
+        //         $add = new RoleHasPermission;
+        //         $add->role_id = $role_id;
+        //         $add->permission_id  = $value;
+        //         $add->save();
+        //     }
+        // }
+
+
         $selected_permissions = collect(request('permissions'))->keys()->toArray();
         $role = Role::findOrFail($role_id);
         $role->syncPermissions($selected_permissions);

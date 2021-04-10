@@ -88,6 +88,39 @@ function below_order($table,$order_no,$key=null,$value=null)
                 $updDataNew=DB::table($table)->where('id',$data->id)->update(['order_no'=>$nextOrder]);
             }
         }       
-    }
-    
+    }    
 }
+function delete_order($table,$id,$is_subject=null)
+{
+    $data=DB::table($table)->where('id',$id)->first();
+    if($data)
+    {
+        if($is_subject == 1)
+        {
+            $datas=DB::table($table)->where('id','>',$data->id)->where('subject_id',$data->subject_id)->where('status','Active')->get();
+            if($datas)
+            {
+                $number=$data->order_no;
+                foreach ($datas as $key => $value) {
+                    $upd=DB::table($table)->where('id',$value->id)->update(['order_no'=>$number]);
+                    $number=$number+1;
+                }
+            }
+        }
+        else
+        {
+            $datas=DB::table($table)->where('id','>',$data->id)->where('status','Active')->get();
+            if($datas)
+            {
+                $number=$data->order_no;
+                foreach ($datas as $key => $value) {
+                    $upd=DB::table($table)->where('id',$value->id)->update(['order_no'=>$number]);
+                    $number=$number+1;
+                }
+            }    
+        }
+        
+        $upd=DB::table($table)->where('id',$id)->update(['order_no'=>0]);
+    }
+}
+

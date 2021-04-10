@@ -73,9 +73,9 @@ class VideosController extends Controller
             'subject_id' => 'required',
             'title' => 'required',
             // 'thumbnail'  => 'required',
-            'duration' => 'required',
-            'label' => 'required',
-            'release_date' => 'required',    
+            // 'duration' => 'required',
+            // 'label' => 'required',
+            // 'release_date' => 'required',    
         ]);
 
         //       dd($request->all());
@@ -370,6 +370,8 @@ class VideosController extends Controller
             $delete = Videos::find($request->id);
             $delete->status = "Deleted";
             $delete->save();
+
+            delete_order('videos',$request->id,1);
         }
 
         $videos_details = Videos::where('status','!=','Deleted')->orderBy('order_no','asc')->get();

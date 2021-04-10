@@ -356,6 +356,7 @@ class BookController extends Controller
             $delete = Book::find($request->id);
             $delete->status = "Deleted";
             $delete->save();
+            delete_order('books',$request->id,1);
         }
 
         $book_details = Book::where('status','!=','Deleted')->orderBy('order_no','asc')->get();

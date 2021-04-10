@@ -39,12 +39,12 @@
                         <td>{{ isset($data->unit->title) ? $data->unit->title:'' }}</td>
                         <td>{{ $data->title }}</td>
                         <td>
-                            @if($data->type == 'file')
-                            @if($data->url)
+                            @if($data->url_type == 'file')
+                            @if($data->url_type)
                             <img src="{{ asset('upload/videos/url/'.$data->url) }}" class="thumbnail" height="50" width="50">
                             @endif
                             @else
-                            {{ $data->url }}
+                            {{ $data->url_type }}
                             @endif
                         </td>
                         <td>
