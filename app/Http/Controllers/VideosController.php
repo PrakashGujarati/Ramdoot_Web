@@ -73,9 +73,9 @@ class VideosController extends Controller
             'subject_id' => 'required',
             'title' => 'required',
             // 'thumbnail'  => 'required',
-            'duration' => 'required',
-            'label' => 'required',
-            'release_date' => 'required',    
+            // 'duration' => 'required',
+            // 'label' => 'required',
+            // 'release_date' => 'required',    
         ]);
 
         //       dd($request->all());

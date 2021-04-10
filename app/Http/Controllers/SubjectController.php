@@ -24,7 +24,7 @@ class SubjectController extends Controller
     }
     public function index()
     {
-        $subject_details = Subject::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $subject_details = Subject::where('status','!=','Deleted')->groupBy('semester_id')->get();
         return view('subject.index',compact('subject_details'));
     }
 
@@ -33,13 +33,26 @@ class SubjectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($id=null)
     {
-        $boards = Board::where('status','Active')->get();
-        $standards = Standard::where('status','Active')->get();
-        $semesters = Semester::where('status','Active')->get();
-        $subject_details = Subject::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
-        return view('subject.add',compact('boards','standards','semesters','subject_details'));
+        if($id != null){
+            $boards = Board::where('status','Active')->get();
+            $standards = Standard::where('status','Active')->get();
+            $semesters = Semester::where('status','Active')->get();
+            $semester_details = Semester::where(['id' => $id])->first();
+            $isset = 1;
+            $subject_details = Subject::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+            return view('subject.add',compact('boards','standards','semesters','subject_details','semester_details','isset'));
+        }
+        else{
+            $boards = Board::where('status','Active')->get();
+            $standards = Standard::where('status','Active')->get();
+            $semesters = Semester::where('status','Active')->get();
+            $semester_details = [];
+            $isset = 0;
+            $subject_details = Subject::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+            return view('subject.add',compact('boards','standards','semesters','subject_details','semester_details','isset'));
+        }
     }
 
     /**

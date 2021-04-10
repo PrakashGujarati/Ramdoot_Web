@@ -133,6 +133,23 @@
         });    
     });
 
+    $( document ).ready(function() {
+        var check_board = <?PHP echo json_encode($isset); ?>;
+        if(check_board == 1){
+            var boardid = <?PHP echo (!empty($standard_details->board_id) ? json_encode($standard_details->board_id) : '""'); ?>;
+            var mediumid = <?PHP echo (!empty($standard_details->medium_id) ? json_encode($standard_details->medium_id) : '""'); ?>;
+            var standardid = <?PHP echo (!empty($standard_details->id) ? json_encode($standard_details->id) : '""'); ?>;
+
+            $('.board_id').val(boardid);
+            var board_id = boardid;
+            var medium_id = mediumid;
+            var standard_id = standardid;
+            getMediumEdit(board_id,medium_id);
+            getStandardEdit(board_id,medium_id,standard_id);
+        }   
+
+    });
+
 
 $(document).on('change','.board_id',function(){
     var board_id = $('.board_id').val();

@@ -97,7 +97,11 @@ class VideosController extends Controller
                         
 
 	    				$thumbnail = env('APP_URL')."/upload/videos/thumbnail/".$value1->thumbnail;
-	    				$videodata[] = ['id' => $value1->id,'title' => $value1->title,'url' => $url,'video_type' => $video_type,'thumbnail' => $thumbnail,'duration' => $value1->duration,'description' => $value1->description,'label' => $value1->label,'release_date' => $value1->release_date,'is_read' => $is_read,'start_time' => $value1->start_time];
+                        $start_time='';
+                        if(!empty($value1->start_time)){
+                            $start_time = $value1->start_time;
+                        }
+	    				$videodata[] = ['id' => $value1->id,'title' => $value1->title,'url' => $url,'video_type' => $video_type,'thumbnail' => $thumbnail,'duration' => $value1->duration,'description' => $value1->description,'label' => $value1->label,'release_date' => $value1->release_date,'is_read' => $is_read,'start_time' => $start_time];
 	    			}
 
 	    			$data[] = ['id' => $value->id,'unit_title' =>$value->title,'video' => $videodata,'sub_title'=>$value->description];

@@ -28,7 +28,6 @@ class StandardController extends Controller
         }
 
         $chkmedium = Medium::where(['id' => $request->medium_id,'status' => 'Active'])->first();
-
         if($chkmedium){
         	$getboard_details = Standard::where(['medium_id' => $request->medium_id,'status' => 'Active'])->select('id','section')->groupBy('section')->get();
 

@@ -23,7 +23,7 @@ class SemesterController extends Controller
     }
     public function index()
     {
-        $semester_details = Semester::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $semester_details = Semester::where('status','!=','Deleted')->groupBy('standard_id')->get();
         return view('semester.index',compact('semester_details'));
     }
 
@@ -32,12 +32,24 @@ class SemesterController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($id=null)
     {
-        $boards = Board::where('status','Active')->get();
-        $standards = Standard::where('status','Active')->get();
-        $semester_details = Semester::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
-        return view('semester.add',compact('boards','standards','semester_details'));
+        if($id != null){
+            $boards = Board::where('status','Active')->get();
+            $standards = Standard::where('status','Active')->get();
+            $standard_details = Standard::where(['id' => $id])->first();
+            $isset = 1;
+            $semester_details = Semester::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+            return view('semester.add',compact('boards','standards','semester_details','isset','standard_details'));
+        }
+        else{
+            $boards = Board::where('status','Active')->get();
+            $standards = Standard::where('status','Active')->get();
+            $standard_details = [];
+            $isset = 0;
+            $semester_details = Semester::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+            return view('semester.add',compact('boards','standards','semester_details','isset','standard_details'));
+        }
     }
 
     /**
