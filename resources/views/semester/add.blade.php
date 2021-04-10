@@ -305,6 +305,7 @@ function getStandardEdit(board_id,medium_id,standard_id){
 
 $(document).on('click','.distroy', function() {
     var id = $(this).attr('data-id');
+    var standard_id = $('#standard_id').val();
     bootbox.confirm({
         message: "Are you sure to delete this semester ?",
         buttons: {
@@ -327,6 +328,7 @@ $(document).on('click','.distroy', function() {
                     type: "GET",
                     data: {
                         'id':id,
+                        'standard_id':standard_id,
                     },
                     success: function(data) {
                         confirm("Semester Deleted Successfully.");

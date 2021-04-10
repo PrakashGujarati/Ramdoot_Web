@@ -39,7 +39,7 @@ class SemesterController extends Controller
             $standards = Standard::where('status','Active')->get();
             $standard_details = Standard::where(['id' => $id])->first();
             $isset = 1;
-            $semester_details = Semester::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+            $semester_details = Semester::where(['standard_id' => $id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
             return view('semester.add',compact('boards','standards','semester_details','isset','standard_details'));
         }
         else{
@@ -104,7 +104,7 @@ class SemesterController extends Controller
         }
                 
 
-        $semester_details = Semester::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $semester_details = Semester::where(['standard_id' => $request->standard_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $html = view('semester.dynamic_table',compact('semester_details'))->render();
         $data = ['html' => $html,'message' => $msg];
         return response()->json($data);
@@ -194,7 +194,7 @@ class SemesterController extends Controller
             delete_order('semesters',$request->id);
         }
 
-        $semester_details = Semester::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $semester_details = Semester::where(['standard_id' => $request->standard_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         return view('semester.dynamic_table',compact('semester_details'));
         //return redirect()->route('semester.index')->with('success', 'Semester Deleted Successfully.');
     }

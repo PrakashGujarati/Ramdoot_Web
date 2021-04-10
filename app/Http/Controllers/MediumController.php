@@ -29,7 +29,7 @@ class MediumController extends Controller
     public function create($id=null)
     {
         if($id != null){
-            $mediums_details = Medium::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+            $mediums_details = Medium::where(['board_id' => $id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
             $boards = Board::where('status','Active')->get();
             $boards_details = Board::where('id',$id)->first();
             $isset = 1;
@@ -64,7 +64,7 @@ class MediumController extends Controller
             $add->medium_name = $request->medium_name;
             $add->save();
 
-            $mediums_details = Medium::where('status','Active')->orderBy('order_no','asc')->get();
+            $mediums_details = Medium::where(['board_id' => $request->board_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
             $html = view('medium.dynamic_table',compact('mediums_details'))->render();
             $data = ['html' => $html,'message' => 'Medium Update Successfully.'];
 
@@ -89,14 +89,14 @@ class MediumController extends Controller
             storeLog('medium',$add->id,date('Y-m-d H:i:s'),'create');
             storeReview('medium',$add->id,date('Y-m-d H:i:s'));
 
-            $mediums_details = Medium::where('status','Active')->orderBy('order_no','asc')->get();
+            $mediums_details = Medium::where(['board_id' => $request->board_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
             $html = view('medium.dynamic_table',compact('mediums_details'))->render();
             $data = ['html' => $html,'message' => 'Medium Added Successfully.'];
         }
   
         return response()->json($data);  
         
-        $mediums_details = Medium::where('status','!=','Deleted')->get();
+        $mediums_details = Medium::where(['board_id' => $request->board_id])->where('status','!=','Deleted')->get();
         return view('medium.dynamic_table',compact('mediums_details'));
         //return redirect()->route('medium.index')->with('success', 'Medium Added Successfully.');
     }
@@ -177,7 +177,7 @@ class MediumController extends Controller
             delete_order('mediums',$request->id);
         }
 
-        $mediums_details = Medium::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $mediums_details = Medium::where(['board_id' => $request->board_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();  
         return view('medium.dynamic_table',compact('mediums_details'));
         //return redirect()->route('medium.index')->with('success', 'Medium Deleted Successfully.');
     }    

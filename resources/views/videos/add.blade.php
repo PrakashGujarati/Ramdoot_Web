@@ -818,6 +818,7 @@ $(document).on('click','.edit-btn',function(){
 
 $(document).on('click','.distroy', function() {
     var id = $(this).attr('data-id');
+    var subject_id = $('#subject_id').val();
     bootbox.confirm({
         message: "Are you sure to delete this video ?",
         buttons: {
@@ -840,6 +841,7 @@ $(document).on('click','.distroy', function() {
                     type: "GET",
                     data: {
                         'id':id,
+                        'subject_id':subject_id,
                     },
                     success: function(data) {
                         confirm("Video Deleted Successfully.");

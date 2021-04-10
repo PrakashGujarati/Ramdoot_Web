@@ -40,7 +40,7 @@ class WorksheetController extends Controller
         {
             $units = Unit::where('status','!=','Deleted')->get();
             $boards = Board::where('status','!=','Deleted')->get();
-            $worksheet_details = Worksheet::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+            $worksheet_details = Worksheet::where(['subject_id' => $id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
             $subjects_details = Subject::where('id',$id)->first();
             $isset = 1;
             return view('worksheet.add',compact('units','boards','worksheet_details','subjects_details','isset'));
@@ -191,7 +191,7 @@ class WorksheetController extends Controller
 
         }
 
-        $worksheet_details = Worksheet::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $worksheet_details = Worksheet::where(['subject_id' => $request->subject_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $html = view('worksheet.dynamic_table',compact('worksheet_details'))->render();
         $data = ['html' => $html,'message' => $msg];
         return response()->json($data);
@@ -302,7 +302,7 @@ class WorksheetController extends Controller
             delete_order('worksheets',$request->id,1);
         }
 
-        $worksheet_details = Worksheet::where('status','!=','Deleted')->get();
+        $worksheet_details = Worksheet::where(['subject_id' => $request->subject_id])->where('status','!=','Deleted')->get();
         return view('worksheet.dynamic_table',compact('worksheet_details'));
         //return redirect()->route('worksheet.index')->with('success', 'Worksheet Deleted Successfully.');
     }

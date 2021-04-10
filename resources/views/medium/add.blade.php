@@ -167,7 +167,7 @@
                 success: function(data) {
                     confirm(data.message);
                     $('#medium_name').val('');
-                    $('#board_id').val('');
+                    //$('#board_id').val('');
                     $('#hidden_id').val('0');
                         
                     
@@ -206,6 +206,7 @@ $(document).on('click','.edit-btn',function(){
 
 $(document).on('click','.distroy', function() {
         var id = $(this).attr('data-id');
+        var board_id = $('#board_id').val();
         bootbox.confirm({
             message: "Are you sure to delete this medium ?",
             buttons: {
@@ -228,10 +229,11 @@ $(document).on('click','.distroy', function() {
                         type: "GET",
                         data: {
                             'id':id,
+                            'board_id':board_id,
                         },
                         success: function(data) {
+                            //confirm(data.message);
                             confirm("Medium Deleted Successfully.");
-                            
                             $('.dyamictable').empty();
                             $('.dyamictable').html(data);
                             $(".datatable-init").DataTable();
