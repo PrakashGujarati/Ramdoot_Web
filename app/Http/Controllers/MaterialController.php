@@ -42,7 +42,7 @@ class MaterialController extends Controller
 
           $units = Unit::where('status','!=','Deleted')->get();
           $boards = Board::where('status','!=','Deleted')->get();
-          $material_details = Material::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+          $material_details = Material::where(['subject_id' => $id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
           $question_type_details = QuestionType::where('status','!=','Deleted')->get();
           $subjects_details = Subject::where('id',$id)->first();
           $isset = 1;
@@ -78,7 +78,7 @@ class MaterialController extends Controller
             'answer' => 'required',
             'marks' => 'required',
             // 'image'  => 'required',
-            'label' => 'required', 
+            // 'label' => 'required', 
         ]);
 
 
@@ -187,7 +187,7 @@ class MaterialController extends Controller
           
         }
 
-        $material_details = Material::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $material_details = Material::where(['subject_id' => $request->subject_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $html = view('material.dynamic_table',compact('material_details'))->render();
         $data = ['html' => $html,'message' => $msg];
         return response()->json($data);
@@ -317,7 +317,7 @@ class MaterialController extends Controller
             delete_order('materials',$request->id,1);
         }
 
-        $material_details = Material::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $material_details = Material::where(['subject_id' => $request->subject_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         return view('material.dynamic_table',compact('material_details'));  
         //return redirect()->route('material.index')->with('success', 'Material Deleted Successfully.');
     }
