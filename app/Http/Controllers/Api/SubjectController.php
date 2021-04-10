@@ -46,7 +46,6 @@ class SubjectController extends Controller
             $msg = $validator->messages();
             return ['status' => "false",'msg' => $msg];
         }
-
         $chkbaord = Board::where(['id' => $request->board_id,'status' => 'Active'])->first();
         $chkstandard = Standard::where(['id' => $request->standard_id,'status' => 'Active'])->first();
         $chksemester = Semester::where(['id' => $request->semester_id,'status' => 'Active'])->first();
