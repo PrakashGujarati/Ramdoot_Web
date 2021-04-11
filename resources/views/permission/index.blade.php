@@ -32,7 +32,7 @@
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Action</th>
+                        {{--<th>Action</th>--}}
                     </tr>
                 </thead>
                 <tbody>
@@ -40,10 +40,10 @@
                 	@foreach($permissions as $permissio)
                     <tr>
                         <td>{{ isset($permissio->module_name) ? $permissio->module_name:'' }} {{ isset($permissio->name) ? $permissio->name:'' }}</td>
-                        <td>
+                        {{--<td>
                         	<a href="{{ route('permission.edit',$permissio->id) }}" class="mr-1"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
                         	<a href="javascript:;" data-url="{{ route('permission.distroy',$permissio->id) }}" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a>
-                        </td>
+                        </td>--}}
                     </tr>
                     @endforeach
                     @else
