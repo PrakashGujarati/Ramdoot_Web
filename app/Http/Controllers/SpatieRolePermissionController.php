@@ -19,9 +19,20 @@ class SpatieRolePermissionController extends Controller
         return view('spatie-role.index_new')->with($data);
     }
 
+    public function new_roles()
+    {
+        $data['roles'] = Role::select('id', 'name')->get();
+        $data['selected_role'] = Role::whereId(request('role_id'))->first();
+       // $data['permissions'] = Permission::orderBy('id','asc')->get();
+        $data['permissions'] = Permission::get();
+        return view('spatie-role.new_roles')->with($data);
+    }
+
+      
+
     public function assign_permissions(Request $request, $role_id)
     {
-        // dd($request->all());
+        // dd($request->all(),$role_id);
         // if(count($request->permissions) > 0){
         //     foreach ($request->permissions as $key => $value) {
         //         $add = new RoleHasPermission;
@@ -31,8 +42,7 @@ class SpatieRolePermissionController extends Controller
         //     }
         // }
 
-
-        $selected_permissions = collect(request('permissions'))->keys()->toArray();
+        $selected_permissions = request('permissions');//collect(request('permissions'))->keys()->toArray();
         $role = Role::findOrFail($role_id);
         $role->syncPermissions($selected_permissions);
         return redirect()->back()->with('success', "Permissions are assigned successfully to selected role.");
