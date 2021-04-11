@@ -20,7 +20,7 @@
                             
 
                             <div class="form-group col-lg-6">
-                                <label class="form-label">Name</label>
+                                <label class="form-label">Module Name</label>
                                 <div class="form-control-wrap">
                                     <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}">
                                     @error('name')
