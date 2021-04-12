@@ -22,10 +22,10 @@ class QuestionController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('permission:view-question', ['only' => ['index']]);
-        $this->middleware('permission:add-question', ['only' => ['create','store']]);
-        $this->middleware('permission:edit-question', ['only' => ['edit','update']]);
-        $this->middleware('permission:delete-question', ['only' => ['distroy']]);
+        $this->middleware('permission:Question-view', ['only' => ['index']]);
+        $this->middleware('permission:Question-add', ['only' => ['create','store']]);
+        $this->middleware('permission:Question-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:Question-delete', ['only' => ['distroy']]);
     }
     public function index()
     {

@@ -122,32 +122,45 @@
                 @php $get_details = [];
                   $row = 0;
                  @endphp   
-                  @for($i=87;$i < 116;$i+=5)
+                  {{--@for($i=87;$i < 116;$i+=5)--}}
+                  @foreach($permissions as $key => $permission)
+                    @php
+                      $row=$key+1;
+                    @endphp
                   <tr>
                   <td style="text-align: -webkit-center;">
                     <input type="checkbox" class="chk-col-blue checkboxData row main_row_{{ $row }}" data-row-id="{{ $row }}" data-id="uncheck_{{ $row }}" 
                     id="permission_checkbox" name="permissions1"><label for="permission_checkbox"></label>
                   </td>
-                  <td><p>{{ str_replace("-add","",$permissions[$i]['name']) }}</p></td>
+                  <td><p>{{$permission->module_name}}</p></td>
                   <td>
-                    <input type="checkbox" class="chk-col-blue checkboxData view_check row_{{ $row }}" id="permission_checkbox" name="permissions[]" value="{{ $i }}" data-pid="{{$i}}" {{ in_array($i, $selected_role->getAllPermissions()->pluck('id')->toArray()) ? "checked":"" }}><label for="permission_checkbox" 
+                    @php
+                      $permission_view=$permissions_data->where('name',$permission->module_name."-view")->first();
+                      $permission_add=$permissions_data->where('name',$permission->module_name."-add")->first();
+                      $permission_edit=$permissions_data->where('name',$permission->module_name."-edit")->first();
+                      $permission_delete=$permissions_data->where('name',$permission->module_name."-delete")->first();
+                      $permission_note=$permissions_data->where('name',$permission->module_name."-note")->first();
+                    @endphp
+                    <input type="checkbox" class="chk-col-blue checkboxData view_check row_{{ $row }}" id="permission_checkbox" name="permissions[{{$permission_view->name}}]" value="{{$permission_view->id}}" data-pid="{{$permission_view->id}}" {{ in_array($permission_view->id, $selected_role->getAllPermissions()->pluck('id')->toArray()) ? "checked":"" }}><label for="permission_checkbox" 
                     ></label>
                   </td>
                   <td>
-                    <input type="checkbox" class="chk-col-blue checkboxData add_check row_{{ $row }}" id="permission_checkbox" name="permissions[]" value="{{ $i+1 }}" data-pid="{{$i+1}}"  {{ in_array($i+1, $selected_role->getAllPermissions()->pluck('id')->toArray()) ? "checked":"" }}><label for="permission_checkbox"></label>
+                    <input type="checkbox" class="chk-col-blue checkboxData add_check row_{{ $row }}" id="permission_checkbox" name="permissions[{{$permission_add->name}}]" value="{{$permission_add->id}}" data-pid="{{$permission_add->id}}"  {{ in_array($permission_add->id, $selected_role->getAllPermissions()->pluck('id')->toArray()) ? "checked":"" }}><label for="permission_checkbox"></label>
                   </td>
                   <td>
-                    <input type="checkbox" class="chk-col-blue checkboxData edit_check row_{{ $row }}" id="permission_checkbox" name="permissions[]" value="{{ $i+2 }}" data-pid="{{$i+2}}"  {{ in_array($i+2, $selected_role->getAllPermissions()->pluck('id')->toArray()) ? "checked":"" }}><label for="permission_checkbox"></label>
+                    <input type="checkbox" class="chk-col-blue checkboxData edit_check row_{{ $row }}" id="permission_checkbox" name="permissions[{{$permission_edit->name}}]" value="{{$permission_edit->id}}" data-pid="{{$permission_edit->id}}"  {{ in_array($permission_edit->id, $selected_role->getAllPermissions()->pluck('id')->toArray()) ? "checked":"" }}><label for="permission_checkbox"></label>
                   </td>
                   <td>
-                    <input type="checkbox" class="chk-col-blue checkboxData delete_check row_{{ $row }}" id="permission_checkbox" name="permissions[]" value="{{ $i+3 }}" data-pid="{{$i+3}}"  {{ in_array($i+3, $selected_role->getAllPermissions()->pluck('id')->toArray()) ? "checked":"" }}><label for="permission_checkbox"></label>
+                    <input type="checkbox" class="chk-col-blue checkboxData delete_check row_{{ $row }}" id="permission_checkbox" name="permissions[{{$permission_delete->name}}]" value="{{$permission_delete->id}}" data-pid="{{$permission_delete->id}}"  {{ in_array($permission_delete->id, $selected_role->getAllPermissions()->pluck('id')->toArray()) ? "checked":"" }}><label for="permission_checkbox"></label>
                   </td>
                   <td>
-                    <input type="checkbox" class="chk-col-blue checkboxData note_check row_{{ $row }}" id="permission_checkbox" name="permissions[]" value="{{ $i+4 }}" data-pid="{{$i+4}}"  {{ in_array($i+4, $selected_role->getAllPermissions()->pluck('id')->toArray()) ? "checked":"" }}><label for="permission_checkbox"></label>
+                    <input type="checkbox" class="chk-col-blue checkboxData note_check row_{{ $row }}" id="permission_checkbox" name="permissions[{{$permission_note->name}}]" value="{{$permission_note->id}}" data-pid="{{$permission_note->id}}"  {{ in_array($permission_note->id, $selected_role->getAllPermissions()->pluck('id')->toArray()) ? "checked":"" }}><label for="permission_checkbox"></label>
                   </td>
                   </tr>
+                  @endforeach
+                  {{--
                   @php $row = $row + 1; @endphp
-                  @endfor
+                  @endfor--}}
                 
              @endif   
             </tbody>

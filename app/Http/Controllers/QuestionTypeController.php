@@ -9,6 +9,13 @@ use App\Models\QuestionType;
 
 class QuestionTypeController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:QuestionType-view', ['only' => ['index']]);
+        $this->middleware('permission:QuestionType-add', ['only' => ['create','store']]);
+        $this->middleware('permission:QuestionType-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:QuestionType-delete', ['only' => ['distroy']]);
+    }
     public function index()
     {
         $question_type_details = QuestionType::where('status','Active')->get();

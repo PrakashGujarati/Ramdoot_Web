@@ -17,10 +17,10 @@ class ExamQuestionController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('permission:view-exam-question', ['only' => ['index']]);
-        $this->middleware('permission:add-exam-question', ['only' => ['create','store']]);
-        $this->middleware('permission:edit-exam-question', ['only' => ['edit','update']]);
-        $this->middleware('permission:delete-exam-question', ['only' => ['distroy']]);
+        $this->middleware('permission:ExamQuestion-view', ['only' => ['index']]);
+        $this->middleware('permission:ExamQuestion-add', ['only' => ['create','store']]);
+        $this->middleware('permission:ExamQuestion-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:ExamQuestion-delete', ['only' => ['distroy']]);
     }
     public function index()
     {

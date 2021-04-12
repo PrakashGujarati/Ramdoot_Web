@@ -257,10 +257,10 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('permission/{id}/delete', [PermissionController::class, 'distroy'])->name('permission.distroy');	
 
 	Route::get('role_permission', [SpatieRolePermissionController::class, 'index_roles'])->name('role_permission.index');
-	Route::get('/roles', [SpatieRolePermissionController::class, 'index_roles'])->name('role.get');	
-	Route::post('/role/{role_id}/assign-permissions',[SpatieRolePermissionController::class, 'assign_permissions'])->name('role.assign_permission');
+	//Route::get('/roles', [SpatieRolePermissionController::class, 'index_roles'])->name('role.get');
+	Route::get('/roles', [SpatieRolePermissionController::class, 'new_roles'])->name('role.get');
 
-	Route::get('/new_roles', [SpatieRolePermissionController::class, 'new_roles'])->name('new.role');
+	Route::post('/role/{role_id}/assign-permissions',[SpatieRolePermissionController::class, 'assign_permissions'])->name('role.assign_permission');
 		
 	Route::get('user/index',[UserController::class,'index'])->name('user.index');
 	Route::get('user/create',[UserController::class,'create'])->name('user.create');

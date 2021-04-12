@@ -10,10 +10,10 @@ class MediumController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('permission:view-medium', ['only' => ['index']]);
-        $this->middleware('permission:add-medium', ['only' => ['create','store']]);
-        $this->middleware('permission:edit-medium', ['only' => ['edit','update']]);
-        $this->middleware('permission:delete-medium', ['only' => ['distroy']]);
+        $this->middleware('permission:Medium-view', ['only' => ['index']]);
+        $this->middleware('permission:Medium-add', ['only' => ['create','store']]);
+        $this->middleware('permission:Medium-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:Medium-delete', ['only' => ['distroy']]);
     }
 	public function index()
     {

@@ -19,10 +19,10 @@ class MaterialController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('permission:view-material', ['only' => ['index']]);
-        $this->middleware('permission:add-material', ['only' => ['create','store']]);
-        $this->middleware('permission:edit-material', ['only' => ['edit','update']]);
-        $this->middleware('permission:delete-material', ['only' => ['distroy']]);
+        $this->middleware('permission:Material-view', ['only' => ['index']]);
+        $this->middleware('permission:Material-add', ['only' => ['create','store']]);
+        $this->middleware('permission:Material-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:Material-delete', ['only' => ['distroy']]);
     }
     public function index()
     {

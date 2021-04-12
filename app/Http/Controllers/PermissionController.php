@@ -10,6 +10,13 @@ use Illuminate\Support\Str;
 
 class PermissionController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:Permission-view', ['only' => ['index']]);
+        $this->middleware('permission:Permission-add', ['only' => ['create','store']]);
+        $this->middleware('permission:Permission-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:Permission-delete', ['only' => ['distroy']]);
+    }
     public function index()
     {
     	$permissions=Permission::all();
@@ -28,6 +35,7 @@ class PermissionController extends Controller
             //$name=Str::slug($request->name, "-");
             $name = $request->name.'-'.$value;
             $add=new Permission;
+            $add->module_name=$request->name;
             $add->name=$name;
             $add->save();    
         }
