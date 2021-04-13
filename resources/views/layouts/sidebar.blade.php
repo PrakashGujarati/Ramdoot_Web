@@ -65,7 +65,7 @@
                                     <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
                                     <span class="nk-menu-text">Semester</span>
                                 </a>
-                            </li>--}}<!-- .nk-menu-item -->
+                            </li><!-- .nk-menu-item -->
                             @endcanany
                         </ul><!-- .nk-menu-sub -->
                     </li>
@@ -243,7 +243,8 @@
                     </li>
                     @endcanany
                     
-                    {{--<li class="nk-menu-item @if(\Request::route()->getName() == 'exam_student_question_answer.index' || \Request::route()->getName() == 'exam_student_question_answer.create' || \Request::route()->getName() == 'exam_student_question_answer.edit') active @endif">
+                    
+                    <li class="nk-menu-item @if(\Request::route()->getName() == 'exam_student_question_answer.index' || \Request::route()->getName() == 'exam_student_question_answer.create' || \Request::route()->getName() == 'exam_student_question_answer.edit') active @endif">
                         <a href="{{ route('exam_student_question_answer.index') }}" class="nk-menu-link">
                             <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
                             <span class="nk-menu-text">Student Question/Answer</span>
