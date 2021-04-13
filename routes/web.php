@@ -43,6 +43,9 @@ use App\Http\Controllers\UserDataReviewController;
 Route::get('/', function () {
     return redirect('/login');
 });
+Route::get('getData',[HomeController::class,'getData']);
+Route::get('getDataUnit',[HomeController::class,'getDataUnit']);
+
 Route::get('get_order_data',[HomeController::class,'get_order_data']);
 Route::group(['middleware' => 'auth'], function(){
 	Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
