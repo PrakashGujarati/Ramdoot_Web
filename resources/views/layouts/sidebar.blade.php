@@ -248,7 +248,7 @@
                             <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
                             <span class="nk-menu-text">Student Question/Answer</span>
                         </a>
-                    </li>--}}<!-- .nk-menu-item -->
+                    </li><!-- .nk-menu-item -->
 
                     @canany(['Slider-view'])
                     <li class="nk-menu-item has-sub">
