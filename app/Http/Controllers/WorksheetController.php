@@ -19,10 +19,10 @@ class WorksheetController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('permission:view-worksheet', ['only' => ['index']]);
-        $this->middleware('permission:add-worksheet', ['only' => ['create','store']]);
-        $this->middleware('permission:edit-worksheet', ['only' => ['edit','update']]);
-        $this->middleware('permission:delete-worksheet', ['only' => ['distroy']]);
+        $this->middleware('permission:Worksheet-view', ['only' => ['index']]);
+        $this->middleware('permission:Worksheet-add', ['only' => ['create','store']]);
+        $this->middleware('permission:Worksheet-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:Worksheet-delete', ['only' => ['distroy']]);
     }
     public function index()
     {

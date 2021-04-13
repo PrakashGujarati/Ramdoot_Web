@@ -69,8 +69,12 @@
                         <th>{{ $data->end_time }}</th>
                         <th>{{ $data->negative_marks }}</th>
                         <td>
-                        	<a href="{{ route('exam.edit',$data->id) }}" class="mr-1"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
+                            @canany(['Exam-edit'])
+                        	   <a href="{{ route('exam.edit',$data->id) }}" class="mr-1"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
+                            @endcanany
+                            @canany(['Exam-edit'])
                         	<a href="javascript:;" data-url="{{ route('exam.distroy',$data->id) }}" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a>
+                            @endcanany
                         </td>
                     </tr>
                     @endforeach

@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title','Units')
+@section('title','Users')
 @section('css')
 @endsection
 
@@ -49,8 +49,12 @@
                         <td>{{$user->address}}</td>
                         <td>{{$user->birth_date}}</td>
                         <td>
+                            @canany(['User-edit'])
                         	<a href="{{ route('user.edit',$user->id) }}" class="mr-1"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
+                            @endcanany
+                            @canany(['User-edit'])
                         	<a href="javascript:;" data-url="{{ route('user.distroy',$user->id) }}" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a>
+                            @endcanany
                         </td>
                     </tr>
                     @endforeach

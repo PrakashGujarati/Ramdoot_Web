@@ -14,10 +14,10 @@ class SliderController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('permission:view-slider', ['only' => ['index']]);
-        $this->middleware('permission:add-slider', ['only' => ['create','store']]);
-        $this->middleware('permission:edit-slider', ['only' => ['edit','update']]);
-        $this->middleware('permission:delete-slider', ['only' => ['distroy']]);
+        $this->middleware('permission:Slider-view', ['only' => ['index']]);
+        $this->middleware('permission:Slider-add', ['only' => ['create','store']]);
+        $this->middleware('permission:Slider-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:Slider-delete', ['only' => ['distroy']]);
     }
     public function index()
     {

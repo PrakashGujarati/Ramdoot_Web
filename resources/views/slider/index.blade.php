@@ -43,8 +43,12 @@
                         <td>{{ $data->area }}</td>
                         <td>{{ $data->text }}</td>
                         <td>
+                            @canany(['Slider-edit'])
                         	<a href="{{ route('slider.edit',$data->id) }}"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
+                            @endcanany
+                            @canany(['Slider-edit'])
                         	<a href="javascript:;" data-url="{{ route('slider.distroy',$data->id) }}" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a>
+                            @endcanany
                         </td>
                     </tr>
                     @endforeach

@@ -20,10 +20,10 @@ class SolutionController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('permission:view-solution', ['only' => ['index']]);
-        $this->middleware('permission:add-solution', ['only' => ['create','store']]);
-        $this->middleware('permission:edit-solution', ['only' => ['edit','update']]);
-        $this->middleware('permission:delete-solution', ['only' => ['distroy']]);
+        $this->middleware('permission:Solution-view', ['only' => ['index']]);
+        $this->middleware('permission:Solution-add', ['only' => ['create','store']]);
+        $this->middleware('permission:Solution-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:Solution-delete', ['only' => ['distroy']]);
     }
     public function index()
     {

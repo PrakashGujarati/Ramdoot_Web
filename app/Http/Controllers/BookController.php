@@ -19,10 +19,10 @@ class BookController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('permission:view-book', ['only' => ['index']]);
-        $this->middleware('permission:add-book', ['only' => ['create','store']]);
-        $this->middleware('permission:edit-book', ['only' => ['edit','update']]);
-        $this->middleware('permission:delete-book', ['only' => ['distroy']]);
+        $this->middleware('permission:Book-view', ['only' => ['index']]);
+        $this->middleware('permission:Book-add', ['only' => ['create','store']]);
+        $this->middleware('permission:Book-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:Book-delete', ['only' => ['distroy']]);
     }
     public function index()
     {

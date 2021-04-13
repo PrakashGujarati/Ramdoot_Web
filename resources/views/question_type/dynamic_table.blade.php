@@ -18,8 +18,12 @@
                     <tr>
                         <td>{{ isset($data->question_type) ? $data->question_type:'' }}</td>
                         <td>
+                            @canany(['QuestionType-edit'])
                             <a href="javascript:;" data-hidden-id="{{ $data->id }}" class="edit_question_type"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
+                            @endcanany
+                            @canany(['QuestionType-edit'])
                             <a href="javascript:;" data-hidden-id="{{ $data->id }}" data-url="{{ route('question_type.distroy') }}" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a>
+                            @endcanany
                         </td>
                     </tr>
                     @endforeach

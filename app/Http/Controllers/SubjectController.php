@@ -17,10 +17,10 @@ class SubjectController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('permission:view-subject', ['only' => ['index']]);
-        $this->middleware('permission:add-subject', ['only' => ['create','store']]);
-        $this->middleware('permission:edit-subject', ['only' => ['edit','update']]);
-        $this->middleware('permission:delete-subject', ['only' => ['distroy']]);
+        $this->middleware('permission:Subject-view', ['only' => ['index']]);
+        $this->middleware('permission:Subject-add', ['only' => ['create','store']]);
+        $this->middleware('permission:Subject-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:Subject-delete', ['only' => ['distroy']]);
     }
     public function index()
     {

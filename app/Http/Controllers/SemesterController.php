@@ -16,10 +16,10 @@ class SemesterController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('permission:view-semester', ['only' => ['index']]);
-        $this->middleware('permission:add-semester', ['only' => ['create','store']]);
-        $this->middleware('permission:edit-semester', ['only' => ['edit','update']]);
-        $this->middleware('permission:delete-semester', ['only' => ['distroy']]);
+        $this->middleware('permission:Semester-view', ['only' => ['index']]);
+        $this->middleware('permission:Semester-add', ['only' => ['create','store']]);
+        $this->middleware('permission:Semester-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:Semester-delete', ['only' => ['distroy']]);
     }
     public function index()
     {

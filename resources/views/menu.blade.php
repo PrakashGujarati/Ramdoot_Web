@@ -15,9 +15,15 @@
 				</div>
 		        <div class="card-inner">
 		        	<ul style="list-style-type:circle">
-		        		<li><strong><a href="{{route('user.index')}}">User</a></strong></li>
-		        		<li><strong><a href="{{route('permission.index')}}">Permission</a></strong></li>
-		        		<li><strong><a href="{{route('role_permission.index')}}">Role Permission</a></strong></li>	
+		        		@canany(['User-view'])
+		        			<li><strong><a href="{{route('user.index')}}">User</a></strong></li>
+		        		@endcanany
+		        		@canany(['Permission-view'])
+		        			<li><strong><a href="{{route('permission.index')}}">Permission</a></strong></li>
+		        		@endcanany
+		        		@canany(['Permission-view'])
+		        			<li><strong><a href="{{route('role_permission.index')}}">Role Permission</a></strong></li>
+		        		@endcanany
 		        	</ul>
 		        </div>
 		    </div>	
@@ -29,8 +35,12 @@
 				</div>
 		        <div class="card-inner">
 		        	<ul style="list-style-type:circle">
-		        		<li><strong><a href="{{route('user.log')}}">Log</a></strong></li>
-		        		<li><strong><a href="{{route('user.reviews')}}">Review</a></strong></li>	
+		        		@canany(['Log-view'])
+		        			<li><strong><a href="{{route('user.log')}}">Log</a></strong></li>
+		        		@endcanany
+		        		@canany(['Review-view'])
+		        			<li><strong><a href="{{route('user.reviews')}}">Review</a></strong></li>	
+		        		@endcanany
 		        	</ul>
 		        </div>
 		    </div>	

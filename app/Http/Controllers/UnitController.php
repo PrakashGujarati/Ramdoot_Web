@@ -18,10 +18,10 @@ class UnitController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('permission:view-unit', ['only' => ['index']]);
-        $this->middleware('permission:add-unit', ['only' => ['create','store']]);
-        $this->middleware('permission:edit-unit', ['only' => ['edit','update']]);
-        $this->middleware('permission:delete-unit', ['only' => ['distroy']]);
+        $this->middleware('permission:Unit-view', ['only' => ['index']]);
+        $this->middleware('permission:Unit-add', ['only' => ['create','store']]);
+        $this->middleware('permission:Unit-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:Unit-delete', ['only' => ['distroy']]);
     }
     public function index()
     {

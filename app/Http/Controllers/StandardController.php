@@ -17,10 +17,10 @@ class StandardController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('permission:view-standard', ['only' => ['index']]);
-        $this->middleware('permission:add-standard', ['only' => ['create','store']]);
-        $this->middleware('permission:edit-standard', ['only' => ['edit','update']]);
-        $this->middleware('permission:delete-standard', ['only' => ['distroy']]);
+        $this->middleware('permission:Standard-view', ['only' => ['index']]);
+        $this->middleware('permission:Standard-add', ['only' => ['create','store']]);
+        $this->middleware('permission:Standard-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:Standard-delete', ['only' => ['distroy']]);
     }
     
     public function index()

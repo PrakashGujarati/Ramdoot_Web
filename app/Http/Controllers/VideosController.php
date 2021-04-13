@@ -19,10 +19,10 @@ class VideosController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('permission:view-video', ['only' => ['index']]);
-        $this->middleware('permission:add-video', ['only' => ['create','store']]);
-        $this->middleware('permission:edit-video', ['only' => ['edit','update']]);
-        $this->middleware('permission:delete-video', ['only' => ['distroy']]);
+        $this->middleware('permission:Video-view', ['only' => ['index']]);
+        $this->middleware('permission:Video-add', ['only' => ['create','store']]);
+        $this->middleware('permission:Video-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:Video-delete', ['only' => ['distroy']]);
     }
     public function index()
     {
