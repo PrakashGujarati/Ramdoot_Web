@@ -10,6 +10,13 @@ use Session;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:User-view', ['only' => ['index']]);
+        $this->middleware('permission:User-add', ['only' => ['create','store']]);
+        $this->middleware('permission:User-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:User-delete', ['only' => ['distroy']]);
+    }
     public function index()
     {
     	$users=User::all();

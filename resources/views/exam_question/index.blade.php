@@ -53,8 +53,12 @@
                             class="question_view"><i class="icon ni ni-eye"></i>&nbsp;View</a></td>
                         {{-- <td>{{ isset($data->question->question) ? $data->question->question:'' }}</td>  --}}
                         <td>
+                            @canany(['ExamQuestion-edit'])
                         	<a href="{{ route('exam_question.edit',$data->exam->id) }}"><span class="nk-menu-icon success"><em class="icon ni ni-edit"></em></span></a>
+                            @endcanany
+                            @canany(['ExamQuestion-edit'])
                         	<a href="javascript:;" data-url="{{ route('exam_question.distroy',$data->exam->id) }}" class="distroy"><span class="nk-menu-icon danger"><em class="icon ni ni-trash"></em></span></a>
+                            @endcanany
                         </td>
                     </tr>
                     @endforeach

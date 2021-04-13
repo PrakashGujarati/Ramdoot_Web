@@ -13,10 +13,10 @@ class NoteController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('permission:view-note', ['only' => ['index']]);
-        $this->middleware('permission:add-note', ['only' => ['create','store']]);
-        $this->middleware('permission:edit-note', ['only' => ['edit','update']]);
-        $this->middleware('permission:delete-note', ['only' => ['distroy']]);
+        $this->middleware('permission:Note-view', ['only' => ['index']]);
+        $this->middleware('permission:Note-add', ['only' => ['create','store']]);
+        $this->middleware('permission:Note-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:Note-delete', ['only' => ['distroy']]);
     }
     public function index()
     {

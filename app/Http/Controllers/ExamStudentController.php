@@ -17,7 +17,10 @@ class ExamStudentController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('permission:view-exam-result', ['only' => ['index']]);
+        $this->middleware('permission:ExamStudent-view', ['only' => ['index']]);
+        $this->middleware('permission:ExamStudent-add', ['only' => ['create','store']]);
+        $this->middleware('permission:ExamStudent-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:ExamStudent-delete', ['only' => ['distroy']]);
     }
     public function index(Request $request)
     {
