@@ -8,6 +8,7 @@ use App\Models\Unit;
 use Auth;
 use App\Models\Board;
 use App\Models\Subject;
+use App\Models\Semester;
 
 class VideosController extends Controller
 {
@@ -39,18 +40,20 @@ class VideosController extends Controller
         if($id != null){
             $units = Unit::where('status','!=','Deleted')->get();
             $boards = Board::where('status','!=','Deleted')->get();
-            $videos_details = Videos::where(['subject_id' => $id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
-            $subjects_details = Subject::where('id',$id)->first();
+            $videos_details = Videos::where(['semester_id' => $id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+            //$subjects_details = Subject::where('id',$id)->first();
+            $semesters_details = Semester::where('id',$id)->first();
             $isset = 1;
-            return view('videos.add',compact('units','boards','videos_details','subjects_details','isset'));
+            return view('videos.add',compact('units','boards','videos_details','semesters_details','isset'));
         }
         else{
             $boards = Board::where('status','!=','Deleted')->get();
             $units = [];
             $videos_details = Videos::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
-            $subjects_details=[];
+            //$subjects_details=[];
+            $semesters_details = [];
             $isset = 0;
-            return view('videos.add',compact('units','boards','videos_details','subjects_details','isset'));
+            return view('videos.add',compact('units','boards','videos_details','semesters_details','isset'));
         }
 
         
@@ -226,7 +229,7 @@ class VideosController extends Controller
 
         }
 
-        $videos_details = Videos::where(['subject_id' => $request->subject_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $videos_details = Videos::where(['semester_id' => $request->semester_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $html = view('videos.dynamic_table',compact('videos_details'))->render();
         $data = ['html' => $html,'message' => $msg];
         return response()->json($data);
@@ -374,7 +377,7 @@ class VideosController extends Controller
             delete_order('videos',$request->id,1);
         }
 
-        $videos_details = Videos::where(['subject_id' => $request->subject_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $videos_details = Videos::where(['semester_id' => $request->semester_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         return view('videos.dynamic_table',compact('videos_details'));
         //return redirect()->route('videos.index')->with('success', 'Videos Deleted Successfully.');
     }

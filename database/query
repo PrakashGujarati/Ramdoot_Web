@@ -1,4 +1,9 @@
 
+
+-----------------------12-04-2021 -------------------
+
+ALTER TABLE `semesters` ADD `subject_id` INT(11) NOT NULL DEFAULT '0' AFTER `standard_id`;
+
 -----------------------06-04-2021 -------------------
 
 ALTER TABLE `permissions` ADD `module_name` VARCHAR(255) NULL AFTER `id`;

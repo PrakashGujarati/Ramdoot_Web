@@ -9,6 +9,7 @@ use App\Models\Board;
 use App\Models\Standard;
 use DB;
 use Validator;
+use App\Models\Subject;
 
 class SemesterController extends Controller
 {
@@ -16,12 +17,13 @@ class SemesterController extends Controller
     public function semesterList(Request $request){
 
     	$rules = array(
-            'board_id' => 'required',
-            'standard_id' => 'required'
+          //  'board_id' => 'required',
+          //  'standard_id' => 'required'
+             'subject_id' => 'required'
         );
         $messages = array(
-            'board_id.required' => 'Please enter board id.',
-            'standard_id.required' => 'Please enter standard id.'
+            'subject_id.required' => 'Please enter subject id.',
+            //'standard_id.required' => 'Please enter standard id.'
         );
 
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -31,24 +33,18 @@ class SemesterController extends Controller
             return ['status' => "false",'msg' => $msg];
         }
 
-        $chkbaord = Board::where(['id' => $request->board_id,'status' => 'Active'])->first();
-        $chkstandard = Standard::where(['id' => $request->standard_id,'status' => 'Active'])->first();
+        $chksubject = Subject::where(['id' => $request->subject_id,'status' => 'Active'])->first();
+       // $chkstandard = Standard::where(['id' => $request->standard_id,'status' => 'Active'])->first();
 
-        if(empty($chkbaord)){
+        if(empty($chksubject)){
         	return response()->json([
     			"code" => 400,
-			  	"message" => "Board not found.",
+			  	"message" => "Subject not found.",
 			  	"data" => [],
 	        ]);
         }
-        elseif (empty($chkstandard)) {
-        	return response()->json([
-    			"code" => 400,
-			  	"message" => "Standard not found.",
-			  	"data" => [],
-	        ]);
-        }else{
-        	$getdata = Semester::where(['board_id' => $request->board_id,'standard_id' => $request->standard_id,'status' => 'Active'])->orderBy('order_no','asc')->get();
+        else{
+        	$getdata = Semester::where(['subject_id' => $request->subject_id,'status' => 'Active'])->orderBy('order_no','asc')->get();
 
 	    	if(count($getdata) > 0){
 	    		$data=[];

@@ -25,7 +25,7 @@ class UnitController extends Controller
     }
     public function index()
     {
-        $unit_details = Unit::where('status','!=','Deleted')->groupBy('subject_id')->get();
+        $unit_details = Unit::where('status','!=','Deleted')->groupBy('semester_id')->get();
         return view('unit.index',compact('unit_details'));
     }
 
@@ -42,19 +42,21 @@ class UnitController extends Controller
             $semesters = Semester::where('status','!=','Deleted')->get();
             $standards = Standard::where('status','!=','Deleted')->get();
             $subjects = Subject::where('status','!=','Deleted')->get();
-            $unit_details = Unit::where('status','!=','Deleted')->where(['subject_id' => $id])->orderBy('order_no','asc')->get();
-            $subjects_details = Subject::where('id',$id)->first();
+            $unit_details = Unit::where('status','!=','Deleted')->where(['semester_id' => $id])->orderBy('order_no','asc')->get();
+            $semesters_details = Semester::where('id',$id)->first();
+            //$subjects_details = Subject::where('id',$id)->first();
             $isset = 1;
-            return view('unit.add',compact('subjects','standards','semesters','boards','unit_details','subjects_details','isset'));    
+            
+            return view('unit.add',compact('subjects','standards','semesters','boards','unit_details','semesters_details','isset'));    
         }else{
             $boards = Board::where('status','!=','Deleted')->get();
             $semesters = [];
             $standards = [];
             $subjects = [];
             $unit_details = Unit::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
-            $subjects_details=[];
+            $semesters_details=[];
             $isset = 0;
-            return view('unit.add',compact('subjects','standards','semesters','boards','unit_details','subjects_details','isset'));
+            return view('unit.add',compact('subjects','standards','semesters','boards','unit_details','semesters_details','isset'));
         }
         
         
@@ -210,7 +212,7 @@ class UnitController extends Controller
 
         }
             
-        $unit_details = Unit::where(['subject_id' => $request->subject_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $unit_details = Unit::where(['semester_id' => $request->semester_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $html = view('unit.dynamic_table',compact('unit_details'))->render();
         $data = ['html' => $html,'message' => $msg];
         return response()->json($data);
@@ -355,7 +357,7 @@ class UnitController extends Controller
             delete_order('units',$request->id);
         }
 
-        $unit_details = Unit::where(['subject_id' => $request->subject_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $unit_details = Unit::where(['semester_id' => $request->semester_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         return view('unit.dynamic_table',compact('unit_details'));
         //return redirect()->route('unit.index')->with('success', 'Unit Deleted Successfully.');
     }

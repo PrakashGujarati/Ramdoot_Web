@@ -9,6 +9,7 @@ use Auth;
 use App\Models\Board;
 use App\Models\QuestionType;
 use App\Models\Subject;
+use App\Models\Semester;
 
 class MaterialController extends Controller
 {
@@ -26,7 +27,7 @@ class MaterialController extends Controller
     }
     public function index()
     {
-        $material_details = Material::where('status','!=','Deleted')->groupBy('subject_id')->get();
+        $material_details = Material::where('status','!=','Deleted')->groupBy('semester_id')->get();
         return view('material.index',compact('material_details'));
     }
 
@@ -42,20 +43,22 @@ class MaterialController extends Controller
 
           $units = Unit::where('status','!=','Deleted')->get();
           $boards = Board::where('status','!=','Deleted')->get();
-          $material_details = Material::where(['subject_id' => $id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+          $material_details = Material::where(['semester_id' => $id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
           $question_type_details = QuestionType::where('status','!=','Deleted')->get();
-          $subjects_details = Subject::where('id',$id)->first();
+          $semesters_details = Semester::where('id',$id)->first();
+          //$subjects_details = Subject::where('id',$id)->first();
           $isset = 1;
-          return view('material.add',compact('units','boards','material_details','question_type_details','subjects_details','isset'));
+          return view('material.add',compact('units','boards','material_details','question_type_details','semesters_details','isset'));
         }
         else{
           $boards = Board::where('status','!=','Deleted')->get();
           $units = [];
           $material_details = Material::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
-          $subjects_details=[];
+          $semesters_details = [];
           $question_type_details = QuestionType::where('status','!=','Deleted')->get();
           $isset = 0;
-          return view('material.add',compact('units','boards','material_details','question_type_details','subjects_details','isset'));
+          return view('material.add',compact('units','boards','material_details','question_type_details',
+            'semesters_details','isset'));
         }
     }
 
@@ -187,7 +190,7 @@ class MaterialController extends Controller
           
         }
 
-        $material_details = Material::where(['subject_id' => $request->subject_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $material_details = Material::where(['semester_id' => $request->semester_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $html = view('material.dynamic_table',compact('material_details'))->render();
         $data = ['html' => $html,'message' => $msg];
         return response()->json($data);
@@ -317,7 +320,7 @@ class MaterialController extends Controller
             delete_order('materials',$request->id,1);
         }
 
-        $material_details = Material::where(['subject_id' => $request->subject_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $material_details = Material::where(['semester_id' => $request->semester_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         return view('material.dynamic_table',compact('material_details'));  
         //return redirect()->route('material.index')->with('success', 'Material Deleted Successfully.');
     }

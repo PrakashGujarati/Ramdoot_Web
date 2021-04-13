@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('title','Add Subject')
 @section('css')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <style>
 table {
     table-layout:fixed;
@@ -76,8 +77,27 @@ td{
                                 @enderror
                             </div>
                         </div>
-
                         <div class="form-group col-lg-6">
+                            <label class="form-label">Semester</label>
+                            <div class="form-control-wrap">
+                                <select name="semester_id[]" class="form-control" id="semester_id" multiple="multiple">
+                                    <option>Semester-1</option>
+                                    <option>Semester-2</option>
+                                    <option>Semester-3</option>
+                                    <option>Semester-4</option>
+                                    <option>Semester-5</option>
+                                    <option>Semester-6</option>
+                                    <option>Semester-7</option>
+                                    <option>Semester-8</option>
+                                </select>
+                                @error('semester_id')
+                                    <span class="text-danger" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <!-- <div class="form-group col-lg-6">
                             <label class="form-label">Semester</label>
                             <div class="form-control-wrap">
                                 <select name="semester_id" class="form-control semester_id" id="semester_id">
@@ -89,7 +109,7 @@ td{
                                     </span>
                                 @enderror
                             </div>
-                        </div>
+                        </div> -->
                         </div>
 
                         <div class="row">
@@ -167,8 +187,16 @@ td{
 @endsection
 
 @section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <script type="text/javascript">
+
+    $(document).ready(function() {
+       $("#semester_id").select2({
+            tags: true,
+            tokenSeparators: [',', ' ']
+        })
+    });
 
     $(document).on('click','.above_order', function() {
         var order_no=$(this).data('order_no');
@@ -358,6 +386,8 @@ $(document).ready(function () {
                 processData: false,
                 success: function(data) {
                     confirm(data.message);
+                    $('#semester_id').val([]);
+                    $('#semester_id').trigger('change');
                     $('#subject_name').val('');
                     $('#sub_title').val('');
                     $('#thumbnail').val();
@@ -387,22 +417,23 @@ $(document).on('click','.edit-btn',function(){
               'id':id
         },
         success: function(result) {
-            $('#board_id').val(result.board_id);
+            $('#board_id').val(result.subject_details.board_id);
             var board_id = $('#board_id').val();
-            var medium_id = result.medium_id;
-            var standard_id = result.standard_id;
-            var semester_id = result.semester_id;
+            var medium_id = result.subject_details.medium_id;
+            var standard_id = result.subject_details.standard_id;
+            //var semester_id = result.;
             getMediumEdit(board_id,medium_id);
             getStandardEdit(board_id,medium_id,standard_id);
-            getSemesterEdit(board_id,medium_id,standard_id,semester_id);
-
-            $('#subject_name').val(result.subject_name);
-            $('#sub_title').val(result.sub_title);
-            $('#hidden_thumbnail').val(result.thumbnail);
+            //getSemesterEdit(board_id,medium_id,standard_id,semester_id);
+            $('#semester_id').val(result.semester);
+            $('#semester_id').trigger('change');
+            $('#subject_name').val(result.subject_details.subject_name);
+            $('#sub_title').val(result.subject_details.sub_title);
+            $('#hidden_thumbnail').val(result.subject_details.thumbnail);
             $('#thumbnail_preview').css('display','block');
-            var url_path = "{{ env('APP_URL') }}"+"/upload/subject/thumbnail/"+result.thumbnail;
+            var url_path = "{{ env('APP_URL') }}"+"/upload/subject/thumbnail/"+result.subject_details.thumbnail;
             $('#thumbnail_preview').attr('src', url_path);
-            $('#hidden_id').val(result.id);
+            $('#hidden_id').val(result.subject_details.id);
             //$('#thumbnail').val('');
             
             
@@ -465,7 +496,7 @@ function getSemesterEdit(board_id,medium_id,standard_id,semester_id){
 
 $(document).on('click','.distroy', function() {
     var id = $(this).attr('data-id');
-    var semester_id = $('#semester_id').val();
+    var standard_id = $('#standard_id').val();
     bootbox.confirm({
         message: "Are you sure to delete this subject ?",
         buttons: {
@@ -488,7 +519,7 @@ $(document).on('click','.distroy', function() {
                     type: "GET",
                     data: {
                         'id':id,
-                        'semester_id':semester_id,
+                        'standard_id':standard_id,
                     },
                     success: function(data) {
                         confirm("Subject Deleted Successfully.");

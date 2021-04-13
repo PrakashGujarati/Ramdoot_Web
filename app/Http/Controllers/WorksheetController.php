@@ -8,6 +8,7 @@ use App\Models\Unit;
 use Auth;
 use App\Models\Board;
 use App\Models\Subject;
+use App\Models\Semester;
 
 class WorksheetController extends Controller
 {
@@ -25,7 +26,7 @@ class WorksheetController extends Controller
     }
     public function index()
     {
-        $worksheet_details = Worksheet::where('status','!=','Deleted')->groupBy('subject_id')->get();
+        $worksheet_details = Worksheet::where('status','!=','Deleted')->groupBy('semester_id')->get();
         return view('worksheet.index',compact('worksheet_details'));
     }
 
@@ -40,18 +41,19 @@ class WorksheetController extends Controller
         {
             $units = Unit::where('status','!=','Deleted')->get();
             $boards = Board::where('status','!=','Deleted')->get();
-            $worksheet_details = Worksheet::where(['subject_id' => $id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
-            $subjects_details = Subject::where('id',$id)->first();
+            $worksheet_details = Worksheet::where(['semester_id' => $id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+            $semesters_details = Semester::where('id',$id)->first();
+            //$subjects_details = Subject::where('id',$id)->first();
             $isset = 1;
-            return view('worksheet.add',compact('units','boards','worksheet_details','subjects_details','isset'));
+            return view('worksheet.add',compact('units','boards','worksheet_details','semesters_details','isset'));
         }
         else{
             $units = [];
             $boards = Board::where('status','!=','Deleted')->get();
             $worksheet_details = Worksheet::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
-            $subjects_details = [];
+            $semesters_details = [];
             $isset = 0;
-            return view('worksheet.add',compact('units','boards','worksheet_details','subjects_details','isset'));
+            return view('worksheet.add',compact('units','boards','worksheet_details','semesters_details','isset'));
         }
     }
 
@@ -191,7 +193,7 @@ class WorksheetController extends Controller
 
         }
 
-        $worksheet_details = Worksheet::where(['subject_id' => $request->subject_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $worksheet_details = Worksheet::where(['semester_id' => $request->semester_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $html = view('worksheet.dynamic_table',compact('worksheet_details'))->render();
         $data = ['html' => $html,'message' => $msg];
         return response()->json($data);
@@ -302,7 +304,7 @@ class WorksheetController extends Controller
             delete_order('worksheets',$request->id,1);
         }
 
-        $worksheet_details = Worksheet::where(['subject_id' => $request->subject_id])->where('status','!=','Deleted')->get();
+        $worksheet_details = Worksheet::where(['semester_id' => $request->semester_id])->where('status','!=','Deleted')->get();
         return view('worksheet.dynamic_table',compact('worksheet_details'));
         //return redirect()->route('worksheet.index')->with('success', 'Worksheet Deleted Successfully.');
     }

@@ -34,7 +34,7 @@
                         <th>Board</th>
                         <th>Medium</th>
                         <th>Standard</th>
-                        <th>Semester</th>
+                        <!-- <th>Semester</th> -->
                         <!-- <th>Subject</th>
                         <th>Sub Title</th>
                         <th>Thumbnail</th> -->
@@ -48,8 +48,8 @@
                         <td>{{ isset($data->board->name) ? $data->board->name:'' }}</td>
                         <td>{{ isset($data->medium->medium_name) ? $data->medium->medium_name:'' }}</td>
                         <td>{{ isset($data->standard->standard) ? $data->standard->standard:'' }}</td>
-                        <td>{{ isset($data->semester->semester) ? $data->semester->semester:'' }}</td>
-                        {{--<td>{{ $data->subject_name }}</td>
+                        {{--<td>{{ isset($data->semester->semester) ? $data->semester->semester:'' }}</td>
+                        <td>{{ $data->subject_name }}</td>
                         <td>{{ $data->sub_title }}</td>
                         <td>
                             @if($data->thumbnail)

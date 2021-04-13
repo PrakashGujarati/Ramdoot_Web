@@ -24,7 +24,7 @@ class SubjectController extends Controller
     }
     public function index()
     {
-        $subject_details = Subject::where('status','!=','Deleted')->groupBy('semester_id')->get();
+        $subject_details = Subject::where('status','!=','Deleted')->groupBy('standard_id')->get();
         return view('subject.index',compact('subject_details'));
     }
 
@@ -41,7 +41,7 @@ class SubjectController extends Controller
             $semesters = Semester::where('status','Active')->get();
             $semester_details = Semester::where(['id' => $id])->first();
             $isset = 1;
-            $subject_details = Subject::where(['semester_id' => $id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+            $subject_details = Subject::where(['standard_id' => $id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
             return view('subject.add',compact('boards','standards','semesters','subject_details','semester_details','isset'));
         }
         else{
@@ -63,6 +63,7 @@ class SubjectController extends Controller
      */
     public function store(Request $request)
     {
+        
         $this->validate($request, [
             'board_id'     => 'required',
             'medium_id'  => 'required',
@@ -102,13 +103,28 @@ class SubjectController extends Controller
             $add->board_id = $request->board_id;
             $add->medium_id = $request->medium_id;
             $add->standard_id = $request->standard_id;
-            $add->semester_id = $request->semester_id;
+            //$add->semester_id = $request->semester_id;
             $add->subject_name = $request->subject_name;
             $add->sub_title = $request->sub_title;
             //$add->url = $url_file;
             $add->thumbnail = $new_name;
             $add->save();
 
+            if(count($request->semester_id) > 0){
+                Semester::where(['subject_id' => $request->hidden_id])->delete();
+                foreach ($request->semester_id as $value) {
+                   $add_semester = new Semester;
+                   $add_semester->board_id = $request->board_id;
+                   $add_semester->medium_id = $request->medium_id;
+                   $add_semester->standard_id = $request->standard_id;
+                   $add_semester->subject_id = $add->id;
+                   $add_semester->semester = $value;
+                   $add_semester->save();
+                }    
+            }
+
+            
+            
             $msg = "Subject Updated Successfully.";
         }
         else{
@@ -147,7 +163,7 @@ class SubjectController extends Controller
             $add->board_id = $request->board_id;
             $add->medium_id = $request->medium_id;
             $add->standard_id = $request->standard_id;
-            $add->semester_id = $request->semester_id;
+            //$add->semester_id = $request->semester_id;
             $add->subject_name = $request->subject_name;
             $add->sub_title = $request->sub_title;
             $add->order_no=$last_no;
@@ -155,13 +171,27 @@ class SubjectController extends Controller
             $add->thumbnail = $new_name;
             $add->save();
 
+            if(count($request->semester_id) > 0){
+                
+                foreach ($request->semester_id as $value) {
+                   $add_semester = new Semester;
+                   $add_semester->board_id = $request->board_id;
+                   $add_semester->medium_id = $request->medium_id;
+                   $add_semester->standard_id = $request->standard_id;
+                   $add_semester->subject_id = $add->id;
+                   $add_semester->semester = $value;
+                   $add_semester->save();
+                }    
+            }
+            
+
             $msg = "Subject Added Successfully.";
 
             storeLog('subject',$add->id,date('Y-m-d H:i:s'),'create');
             storeReview('subject',$add->id,date('Y-m-d H:i:s'));
         }
 
-        $subject_details = Subject::where(['semester_id' => $request->semester_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $subject_details = Subject::where(['standard_id' => $request->standard_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $html = view('subject.dynamic_table',compact('subject_details'))->render();
         $data = ['html' => $html,'message' => $msg];
         return response()->json($data);
@@ -189,7 +219,17 @@ class SubjectController extends Controller
     public function edit(Request $request)
     {
         $subjectdata = Subject::where('id',$request->id)->first();
-        return $subjectdata;
+        $sem_data=[];
+        $getsemester = Semester::where('subject_id',$request->id)->get();
+        if(count($getsemester) > 0){
+            foreach ($getsemester as $value) {
+                $sem_data[] = $value->semester;
+            }    
+        }
+        $data = ['subject_details' => $subjectdata,'semester' => $sem_data];
+        
+        //$('#mySelect2').val(['1', '2']);
+        return $data;
         // $boards = Board::where('status','Active')->get();
         // $standards = Standard::where('status','Active')->get();
         // $semesters = Semester::where('status','Active')->get();
@@ -292,7 +332,7 @@ class SubjectController extends Controller
 
             delete_order('subjects',$request->id);
         }
-        $subject_details = Subject::where(['semester_id' => $request->semester_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $subject_details = Subject::where(['standard_id' => $request->standard_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         return view('subject.dynamic_table',compact('subject_details'));
 
         //return redirect()->route('subject.index')->with('success', 'Subject Deleted Successfully.');
@@ -316,8 +356,7 @@ class SubjectController extends Controller
 
     public function getSubject(Request $request){
 
-
-        $getsubject = Subject::where(['board_id' => $request->board_id,'standard_id' => $request->standard_id,'medium_id' => $request->medium_id,'semester_id' => $request->semester_id,'status' => 'Active'])->orderBy('order_no','asc')->get();
+        $getsubject = Subject::where(['board_id' => $request->board_id,'standard_id' => $request->standard_id,'medium_id' => $request->medium_id,'status' => 'Active'])->orderBy('order_no','asc')->get();
 
         $result="<option value=''>--Select Subject--</option>";
         if(count($getsubject) > 0)
