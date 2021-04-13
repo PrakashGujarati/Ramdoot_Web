@@ -8,6 +8,7 @@ use App\Models\Unit;
 use Auth;
 use App\Models\Board;
 use App\Models\Subject;
+use App\Models\Semester;
 
 class PaperController extends Controller
 {
@@ -25,7 +26,7 @@ class PaperController extends Controller
     }
     public function index()
     {
-        $paper_details = Paper::where('status','!=','Deleted')->groupBy('subject_id')->get();
+        $paper_details = Paper::where('status','!=','Deleted')->groupBy('semester_id')->get();
         return view('paper.index',compact('paper_details'));
     }
 
@@ -40,18 +41,19 @@ class PaperController extends Controller
         {
             $units = Unit::where('status','!=','Deleted')->get();
             $boards = Board::where('status','!=','Deleted')->get();
-            $paper_details = Paper::where(['subject_id' => $id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
-            $subjects_details = Subject::where('id',$id)->first();
+            $paper_details = Paper::where(['semester_id' => $id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+            $semesters_details = Semester::where('id',$id)->first();
+            //$subjects_details = Subject::where('id',$id)->first();
             $isset = 1;
-            return view('paper.add',compact('units','boards','paper_details','subjects_details','isset'));
+            return view('paper.add',compact('units','boards','paper_details','semesters_details','isset'));
         }
         else{
             $units = [];
             $boards = Board::where('status','!=','Deleted')->get();
             $paper_details = Paper::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
-            $subjects_details = [];
+            $semesters_details = [];
             $isset = 0;
-            return view('paper.add',compact('units','boards','paper_details','subjects_details','isset'));
+            return view('paper.add',compact('units','boards','paper_details','semesters_details','isset'));
         }
     }
 
@@ -191,7 +193,7 @@ class PaperController extends Controller
 
         }
 
-        $paper_details = Paper::where(['subject_id' => $request->subject_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $paper_details = Paper::where(['semester_id' => $request->semester_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $html = view('paper.dynamic_table',compact('paper_details'))->render();
         $data = ['html' => $html,'message' => $msg];
         return response()->json($data);
@@ -301,9 +303,11 @@ class PaperController extends Controller
             $delete = Paper::find($request->id);
             $delete->status = "Deleted";
             $delete->save();
+
+            delete_order('papers',$request->id,1);
         }
 
-        $paper_details = Paper::where(['subject_id' => $request->subject_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $paper_details = Paper::where(['semester_id' => $request->semester_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         return view('paper.dynamic_table',compact('paper_details')); 
         //return redirect()->route('paper.index')->with('success', 'Paper Deleted Successfully.');
     }

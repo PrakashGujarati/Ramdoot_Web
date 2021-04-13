@@ -40,7 +40,7 @@ class BookController extends Controller
         if($id != null){
             $units = Unit::where('status','!=','Deleted')->get();
             $boards = Board::where('status','!=','Deleted')->get();
-            $book_details = Book::where(['subject_id' => $id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+            $book_details = Book::where(['semester_id' => $id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
             $semesters_details = Semester::where('id',$id)->first();
             //$subjects_details = Subject::where('id',$id)->first();
             $isset = 1;
@@ -216,7 +216,7 @@ class BookController extends Controller
         }
 
 
-        $book_details = Book::where(['subject_id' => $request->subject_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $book_details = Book::where(['semester_id' => $request->semester_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $html = view('book.dynamic_table',compact('book_details'))->render();
         $data = ['html' => $html,'message' => $msg];
         return response()->json($data);        
@@ -359,9 +359,10 @@ class BookController extends Controller
             $delete = Book::find($request->id);
             $delete->status = "Deleted";
             $delete->save();
+            delete_order('books',$request->id,1);
         }
 
-        $book_details = Book::where(['subject_id' => $request->subject_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $book_details = Book::where(['semester_id' => $request->semester_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         return view('book.dynamic_table',compact('book_details'));
         //return redirect()->route('book.index')->with('success', 'Book Deleted Successfully.');
     }

@@ -42,7 +42,7 @@ class UnitController extends Controller
             $semesters = Semester::where('status','!=','Deleted')->get();
             $standards = Standard::where('status','!=','Deleted')->get();
             $subjects = Subject::where('status','!=','Deleted')->get();
-            $unit_details = Unit::where('status','!=','Deleted')->where(['subject_id' => $id])->orderBy('order_no','asc')->get();
+            $unit_details = Unit::where('status','!=','Deleted')->where(['semester_id' => $id])->orderBy('order_no','asc')->get();
             $semesters_details = Semester::where('id',$id)->first();
             //$subjects_details = Subject::where('id',$id)->first();
             $isset = 1;
@@ -212,7 +212,7 @@ class UnitController extends Controller
 
         }
             
-        $unit_details = Unit::where(['subject_id' => $request->subject_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $unit_details = Unit::where(['semester_id' => $request->semester_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $html = view('unit.dynamic_table',compact('unit_details'))->render();
         $data = ['html' => $html,'message' => $msg];
         return response()->json($data);
@@ -353,9 +353,11 @@ class UnitController extends Controller
             $delete = Unit::find($request->id);
             $delete->status = "Deleted";
             $delete->save();
+
+            delete_order('units',$request->id);
         }
 
-        $unit_details = Unit::where(['subject_id' => $request->subject_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $unit_details = Unit::where(['semester_id' => $request->semester_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         return view('unit.dynamic_table',compact('unit_details'));
         //return redirect()->route('unit.index')->with('success', 'Unit Deleted Successfully.');
     }

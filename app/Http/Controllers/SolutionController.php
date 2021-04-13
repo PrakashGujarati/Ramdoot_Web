@@ -9,6 +9,7 @@ use Auth;
 use App\Models\Board;
 use App\Models\QuestionType;
 use App\Models\Subject;
+use App\Models\Semester;
 
 class SolutionController extends Controller
 {
@@ -26,7 +27,7 @@ class SolutionController extends Controller
     }
     public function index()
     {
-        $solution_details = Solution::where('status','!=','Deleted')->groupBy('subject_id')->get();
+        $solution_details = Solution::where('status','!=','Deleted')->groupBy('semester_id')->get();
         return view('solution.index',compact('solution_details'));
     }
 
@@ -43,22 +44,23 @@ class SolutionController extends Controller
 
         $units = Unit::where('status','!=','Deleted')->get();
         $boards = Board::where('status','!=','Deleted')->get();
-        $solution_details = Solution::where(['subject_id' => $id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $solution_details = Solution::where(['semester_id' => $id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $question_type_details = QuestionType::where('status','!=','Deleted')->get();
         $isset = 1;
 
         $subjects_details=null;
         if($id != null){
-          $subjects_details = Subject::where('id',$id)->first();  
+          $semesters_details = Semester::where('id',$id)->first();
+          //$subjects_details = Subject::where('id',$id)->first();  
         }
 
-        return view('solution.add',compact('units','boards','solution_details','question_type_details','subjects_details','id','isset'));
+        return view('solution.add',compact('units','boards','solution_details','question_type_details','semesters_details','id','isset'));
       }
       else{
         $boards = Board::where('status','!=','Deleted')->get();
         $units = [];
         $solution_details = Solution::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
-        $subjects_details=[];
+        $semesters_details = [];
         $question_type_details = QuestionType::where('status','!=','Deleted')->get();
         $isset = 0;
 
@@ -67,7 +69,8 @@ class SolutionController extends Controller
           $subjects_details = Subject::where('id',$id)->first();  
         }
 
-        return view('solution.add',compact('units','boards','solution_details','question_type_details','subjects_details','id','isset'));
+        return view('solution.add',compact('units','boards','solution_details','question_type_details',
+          'semesters_details','id','isset'));
       }
 
         
@@ -200,7 +203,7 @@ class SolutionController extends Controller
 
         }
 
-        $solution_details = Solution::where(['subject_id' => $request->subject_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $solution_details = Solution::where(['semester_id' => $request->semester_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $html = view('solution.dynamic_table',compact('solution_details'))->render();
         $data = ['html' => $html,'message' => $msg];
         return response()->json($data);
@@ -327,9 +330,11 @@ class SolutionController extends Controller
             $delete = Solution::find($request->id);
             $delete->status = "Deleted";
             $delete->save();
+
+            delete_order('solutions',$request->id,1);
         }
 
-        $solution_details = Solution::where(['subject_id' => $request->subject_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $solution_details = Solution::where(['semester_id' => $request->semester_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         return view('solution.dynamic_table',compact('solution_details'));
         //return redirect()->route('solution.index')->with('success', 'Solution Deleted Successfully.');
     }

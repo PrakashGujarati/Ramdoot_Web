@@ -263,7 +263,8 @@ class StandardController extends Controller
         }else{
             $delete = Standard::find($request->id);
             $delete->status = "Deleted";
-            $delete->save();    
+            $delete->save();
+            delete_order('standards',$request->id);    
         }
         
 

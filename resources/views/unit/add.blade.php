@@ -1,6 +1,17 @@
 @extends('layouts.app')
 @section('title','Add Unit')
 @section('css')
+<style>
+table {
+    table-layout:fixed;
+}
+td{
+    overflow:hidden;    
+    text-overflow: ellipsis;
+    white-space: normal !important;
+}
+</style>
+
 @endsection
 
 @section('content')
@@ -137,7 +148,7 @@
                                 <div class="form-control-wrap">
                                     <input type="file" class="form-control" id="url" name="url" value="">
                                     <input type="hidden" id="hidden_url" name="hidden_url" value="">
-                                    <img id="url_preview" src="{{asset('assets/images/logo-small.png')}}" alt="your image" class="thumbnail mt-1" height="100" width="100" />
+                                    <img id="url_preview" src="{{asset('assets/images/logo-small.png')}}" alt="your image" class="thumbnail mt-1" height="100" />
                                     @error('url')
                                         <span class="text-danger" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -150,7 +161,7 @@
                                 <div class="form-control-wrap">
                                     <input type="file" class="form-control" id="thumbnail" name="thumbnail" value="">
                                     <input type="hidden" id="hidden_thumbnail" name="hidden_thumbnail" value="">
-                                    <img id="thumbnail_preview" src="{{asset('assets/images/logo-small.png')}}" alt="your image" class="thumbnail mt-1" height="100" width="100" />
+                                    <img id="thumbnail_preview" src="{{asset('assets/images/logo-small.png')}}" alt="your image" class="thumbnail mt-1" height="100" />
                                     @error('thumbnail')
                                         <span class="text-danger" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -592,8 +603,8 @@ $(document).on('click','.edit-btn',function(){
             var subject_id = result.subject_id;
             getMediumEdit(board_id,medium_id);
             getStandardEdit(board_id,medium_id,standard_id);
-            getSemesterEdit(board_id,medium_id,standard_id,semester_id);
-            getSubjectEdit(board_id,medium_id,standard_id,semester_id,subject_id);
+            getSubjectEdit(board_id,medium_id,standard_id,subject_id);
+            getSemesterEdit(board_id,medium_id,standard_id,subject_id,semester_id);
 
             $('#title').val(result.title);
             $('#description').val(result.description);
@@ -624,7 +635,7 @@ $(document).on('click','.edit-btn',function(){
 
 $(document).on('click','.distroy', function() {
     var id = $(this).attr('data-id');
-    var subject_id = $('#subject_id').val();
+    var semester_id = $('#semester_id').val();
     bootbox.confirm({
         message: "Are you sure to delete this unit ?",
         buttons: {
@@ -647,7 +658,7 @@ $(document).on('click','.distroy', function() {
                     type: "GET",
                     data: {
                         'id':id,
-                        'subject_id':subject_id,
+                        'semester_id':semester_id,
                     },
                     success: function(data) {
                         confirm("Unit Deleted Successfully.");

@@ -24,7 +24,7 @@ class SubjectController extends Controller
     }
     public function index()
     {
-        $subject_details = Subject::where('status','!=','Deleted')->groupBy('semester_id')->get();
+        $subject_details = Subject::where('status','!=','Deleted')->groupBy('standard_id')->get();
         return view('subject.index',compact('subject_details'));
     }
 
@@ -41,7 +41,7 @@ class SubjectController extends Controller
             $semesters = Semester::where('status','Active')->get();
             $semester_details = Semester::where(['id' => $id])->first();
             $isset = 1;
-            $subject_details = Subject::where(['semester_id' => $id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+            $subject_details = Subject::where(['standard_id' => $id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
             return view('subject.add',compact('boards','standards','semesters','subject_details','semester_details','isset'));
         }
         else{
@@ -191,7 +191,7 @@ class SubjectController extends Controller
             storeReview('subject',$add->id,date('Y-m-d H:i:s'));
         }
 
-        $subject_details = Subject::where(['semester_id' => $request->semester_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $subject_details = Subject::where(['standard_id' => $request->standard_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $html = view('subject.dynamic_table',compact('subject_details'))->render();
         $data = ['html' => $html,'message' => $msg];
         return response()->json($data);
@@ -219,7 +219,17 @@ class SubjectController extends Controller
     public function edit(Request $request)
     {
         $subjectdata = Subject::where('id',$request->id)->first();
-        return $subjectdata;
+        $sem_data=[];
+        $getsemester = Semester::where('subject_id',$request->id)->get();
+        if(count($getsemester) > 0){
+            foreach ($getsemester as $value) {
+                $sem_data[] = $value->semester;
+            }    
+        }
+        $data = ['subject_details' => $subjectdata,'semester' => $sem_data];
+        
+        //$('#mySelect2').val(['1', '2']);
+        return $data;
         // $boards = Board::where('status','Active')->get();
         // $standards = Standard::where('status','Active')->get();
         // $semesters = Semester::where('status','Active')->get();
@@ -319,8 +329,10 @@ class SubjectController extends Controller
             $delete = Subject::find($request->id);
             $delete->status = "Deleted";
             $delete->save();
+
+            delete_order('subjects',$request->id);
         }
-        $subject_details = Subject::where(['semester_id' => $request->semester_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $subject_details = Subject::where(['standard_id' => $request->standard_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         return view('subject.dynamic_table',compact('subject_details'));
 
         //return redirect()->route('subject.index')->with('success', 'Subject Deleted Successfully.');

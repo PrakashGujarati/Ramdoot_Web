@@ -1,6 +1,17 @@
 @extends('layouts.app')
 @section('title','Add Video')
 @section('css')
+<style>
+table {
+    table-layout:fixed;
+}
+td{
+    overflow:hidden;    
+    text-overflow: ellipsis;
+    white-space: normal !important;
+}
+</style>
+
 @endsection
 
 @section('content')
@@ -774,8 +785,8 @@ $(document).on('click','.edit-btn',function(){
             var unit_id = result.unit_id;
             getMediumEdit(board_id,medium_id);
             getStandardEdit(board_id,medium_id,standard_id);
-            getSemesterEdit(board_id,medium_id,standard_id,semester_id);
-            getSubjectEdit(board_id,medium_id,standard_id,semester_id,subject_id);
+            getSubjectEdit(board_id,medium_id,standard_id,subject_id);
+            getSemesterEdit(board_id,medium_id,standard_id,subject_id,semester_id);
             getUnitEdit(board_id,medium_id,standard_id,semester_id,subject_id,unit_id);
 
             $('#title').val(result.title);
@@ -813,7 +824,7 @@ $(document).on('click','.edit-btn',function(){
 
 $(document).on('click','.distroy', function() {
     var id = $(this).attr('data-id');
-    var subject_id = $('#subject_id').val();
+    var semester_id = $('#semester_id').val();
     bootbox.confirm({
         message: "Are you sure to delete this video ?",
         buttons: {
@@ -836,7 +847,7 @@ $(document).on('click','.distroy', function() {
                     type: "GET",
                     data: {
                         'id':id,
-                        'subject_id':subject_id,
+                        'semester_id':semester_id,
                     },
                     success: function(data) {
                         confirm("Video Deleted Successfully.");

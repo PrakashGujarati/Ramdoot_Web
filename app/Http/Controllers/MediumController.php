@@ -173,6 +173,8 @@ class MediumController extends Controller
             $delete = Medium::find($request->id);
             $delete->status = "Deleted";
             $delete->save();
+            
+            delete_order('mediums',$request->id);
         }
 
         $mediums_details = Medium::where(['board_id' => $request->board_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();  

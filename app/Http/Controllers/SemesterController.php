@@ -191,6 +191,7 @@ class SemesterController extends Controller
             $delete = Semester::find($request->id);
             $delete->status = "Deleted";
             $delete->save();
+            delete_order('semesters',$request->id);
         }
 
         $semester_details = Semester::where(['standard_id' => $request->standard_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
