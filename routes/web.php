@@ -107,6 +107,9 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::post('semester/{id}/update', [SemesterController::class, 'update'])->name('semester.update');
 	Route::get('semester/delete', [SemesterController::class, 'distroy'])->name('semester.distroy');
 
+	Route::get('load_semester', [SemesterController::class, 'loadSemester'])->name('load.semester');
+	
+
 	Route::get('get_semester', [SemesterController::class, 'getSemester'])->name('get.semester');
 	Route::get('get_semester_unit', [SemesterController::class, 'getSemesterUnit'])->name('get.semester.unit');
 

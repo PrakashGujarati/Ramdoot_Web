@@ -30,13 +30,13 @@ class SubjectController extends Controller
     	$rules = array(
             'board_id' => 'required',
             'standard_id' => 'required',
-            'semester_id' => 'required',
+           // 'semester_id' => 'required',
             'feature_id' => 'required'
         );
         $messages = array(
             'board_id.required' => 'Please enter board id.',
             'standard_id.required' => 'Please enter standard id.',
-            'semester_id.required' => 'Please enter semester id.',
+           // 'semester_id.required' => 'Please enter semester id.',
             'feature_id.required' => 'Please enter feature id.'
         );
 
@@ -48,7 +48,7 @@ class SubjectController extends Controller
         }
         $chkbaord = Board::where(['id' => $request->board_id,'status' => 'Active'])->first();
         $chkstandard = Standard::where(['id' => $request->standard_id,'status' => 'Active'])->first();
-        $chksemester = Semester::where(['id' => $request->semester_id,'status' => 'Active'])->first();
+      //  $chksemester = Semester::where(['id' => $request->semester_id,'status' => 'Active'])->first();
         //$chkfeatures = Feature::where(['id' => $request->feature_id,'status' => 'Active'])->first();
         if(empty($chkbaord)){
         	return response()->json([
@@ -64,13 +64,13 @@ class SubjectController extends Controller
 			  	"data" => [],
 	        ]);
         }
-        elseif (empty($chksemester)) {
-        	return response()->json([
-    			"code" => 400,
-			  	"message" => "Semester not found.",
-			  	"data" => [],
-	        ]);
-        }
+      //   elseif (empty($chksemester)) {
+      //   	return response()->json([
+    		// 	"code" => 400,
+			  	// "message" => "Semester not found.",
+			  	// "data" => [],
+	     //    ]);
+      //   }
         /*elseif (empty($chkfeatures)) {
             return response()->json([
                 "code" => 400,
@@ -79,8 +79,8 @@ class SubjectController extends Controller
             ]);
         }*/
         else{
-			$getdata = Subject::where(['board_id' => $request->board_id,'standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'status' => 'Active'])->orderBy('order_no','asc')->get();
-			$subjectids = Subject::where(['board_id' => $request->board_id,'standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'status' => 'Active'])->orderBy('order_no','asc')->pluck('id');
+			$getdata = Subject::where(['board_id' => $request->board_id,'standard_id' => $request->standard_id,'status' => 'Active'])->orderBy('order_no','asc')->get();
+			$subjectids = Subject::where(['board_id' => $request->board_id,'standard_id' => $request->standard_id,'status' => 'Active'])->orderBy('order_no','asc')->pluck('id');
 			//$unitcount = Unit::whereIn('subject_id',$subjectids)->count();
             //$featurecount = Feature::whereIn('subject_id',$subjectids)->count();
            

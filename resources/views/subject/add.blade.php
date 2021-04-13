@@ -1,6 +1,8 @@
 @extends('layouts.app')
 @section('title','Add Subject')
 @section('css')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
 @endsection
 
 @section('content')
@@ -65,8 +67,27 @@
                                 @enderror
                             </div>
                         </div>
-
                         <div class="form-group col-lg-6">
+                            <label class="form-label">Semester</label>
+                            <div class="form-control-wrap">
+                                <select name="semester_id[]" class="form-control" id="semester_id" multiple="multiple">
+                                    <option>Semester-1</option>
+                                    <option>Semester-2</option>
+                                    <option>Semester-3</option>
+                                    <option>Semester-4</option>
+                                    <option>Semester-5</option>
+                                    <option>Semester-6</option>
+                                    <option>Semester-7</option>
+                                    <option>Semester-8</option>
+                                </select>
+                                @error('semester_id')
+                                    <span class="text-danger" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <!-- <div class="form-group col-lg-6">
                             <label class="form-label">Semester</label>
                             <div class="form-control-wrap">
                                 <select name="semester_id" class="form-control semester_id" id="semester_id">
@@ -78,7 +99,7 @@
                                     </span>
                                 @enderror
                             </div>
-                        </div>
+                        </div> -->
                         </div>
 
                         <div class="row">
@@ -156,8 +177,16 @@
 @endsection
 
 @section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <script type="text/javascript">
+
+    $(document).ready(function() {
+       $("#semester_id").select2({
+            tags: true,
+            tokenSeparators: [',', ' ']
+        })
+    });
 
     $(document).on('click','.above_order', function() {
         var order_no=$(this).data('order_no');

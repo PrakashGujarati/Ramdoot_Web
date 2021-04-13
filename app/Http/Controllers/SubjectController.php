@@ -63,6 +63,7 @@ class SubjectController extends Controller
      */
     public function store(Request $request)
     {
+        
         $this->validate($request, [
             'board_id'     => 'required',
             'medium_id'  => 'required',
@@ -102,13 +103,28 @@ class SubjectController extends Controller
             $add->board_id = $request->board_id;
             $add->medium_id = $request->medium_id;
             $add->standard_id = $request->standard_id;
-            $add->semester_id = $request->semester_id;
+            //$add->semester_id = $request->semester_id;
             $add->subject_name = $request->subject_name;
             $add->sub_title = $request->sub_title;
             //$add->url = $url_file;
             $add->thumbnail = $new_name;
             $add->save();
 
+            if(count($request->semester_id) > 0){
+                Semester::where(['subject_id' => $request->hidden_id])->delete();
+                foreach ($request->semester_id as $value) {
+                   $add_semester = new Semester;
+                   $add_semester->board_id = $request->board_id;
+                   $add_semester->medium_id = $request->medium_id;
+                   $add_semester->standard_id = $request->standard_id;
+                   $add_semester->subject_id = $add->id;
+                   $add_semester->semester = $value;
+                   $add_semester->save();
+                }    
+            }
+
+            
+            
             $msg = "Subject Updated Successfully.";
         }
         else{
@@ -147,13 +163,27 @@ class SubjectController extends Controller
             $add->board_id = $request->board_id;
             $add->medium_id = $request->medium_id;
             $add->standard_id = $request->standard_id;
-            $add->semester_id = $request->semester_id;
+            //$add->semester_id = $request->semester_id;
             $add->subject_name = $request->subject_name;
             $add->sub_title = $request->sub_title;
             $add->order_no=$last_no;
             //$add->url = $url_file;
             $add->thumbnail = $new_name;
             $add->save();
+
+            if(count($request->semester_id) > 0){
+                
+                foreach ($request->semester_id as $value) {
+                   $add_semester = new Semester;
+                   $add_semester->board_id = $request->board_id;
+                   $add_semester->medium_id = $request->medium_id;
+                   $add_semester->standard_id = $request->standard_id;
+                   $add_semester->subject_id = $add->id;
+                   $add_semester->semester = $value;
+                   $add_semester->save();
+                }    
+            }
+            
 
             $msg = "Subject Added Successfully.";
 
@@ -314,8 +344,7 @@ class SubjectController extends Controller
 
     public function getSubject(Request $request){
 
-
-        $getsubject = Subject::where(['board_id' => $request->board_id,'standard_id' => $request->standard_id,'medium_id' => $request->medium_id,'semester_id' => $request->semester_id,'status' => 'Active'])->orderBy('order_no','asc')->get();
+        $getsubject = Subject::where(['board_id' => $request->board_id,'standard_id' => $request->standard_id,'medium_id' => $request->medium_id,'status' => 'Active'])->orderBy('order_no','asc')->get();
 
         $result="<option value=''>--Select Subject--</option>";
         if(count($getsubject) > 0)

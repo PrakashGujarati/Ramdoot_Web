@@ -26,13 +26,13 @@ class UnitController extends Controller
 {
     public function unitList(Request $request){
         $rules = array(
-            'standard_id' => 'required',
+            //'standard_id' => 'required',
             'semester_id' => 'required',
             'subject_id' => 'required',
             'feature_id' => 'required'
         );
         $messages = array(
-            'standard_id.required' => 'Please enter standard id.',
+            //'standard_id.required' => 'Please enter standard id.',
             'semester_id.required' => 'Please enter semester id.',
             'subject_id.required' => 'Please enter subject id.',
             'feature_id.required' => 'Please enter feature id.'
@@ -45,18 +45,18 @@ class UnitController extends Controller
                 return ['status' => "false",'msg' => $msg];
             }
 
-            $chkstandard = Standard::where(['id' => $request->standard_id,'status' => 'Active'])->first();
+           // $chkstandard = Standard::where(['id' => $request->standard_id,'status' => 'Active'])->first();
             $chksemester = Semester::where(['id' => $request->semester_id,'status' => 'Active'])->first();
             $chksubject = subject::where(['id' => $request->subject_id,'status' => 'Active'])->first();
 
-            if (empty($chkstandard)) {
-                return response()->json([
-                    "code" => 400,
-                    "message" => "Standard not found.",
-                    "data" => [],
-                ]);
-            }
-            elseif (empty($chksemester)) {
+            // if (empty($chkstandard)) {
+            //     return response()->json([
+            //         "code" => 400,
+            //         "message" => "Standard not found.",
+            //         "data" => [],
+            //     ]);
+            // }
+            if (empty($chksemester)) {
                 return response()->json([
                     "code" => 400,
                     "message" => "Semester not found.",
@@ -71,7 +71,7 @@ class UnitController extends Controller
                 ]);
             }
             else{
-                $getdata = Unit::where(['subject_id' => $request->subject_id,'standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'status' => 'Active'])->orderBy('order_no','asc')->get();
+                $getdata = Unit::where(['subject_id' => $request->subject_id,'semester_id' => $request->semester_id,'status' => 'Active'])->orderBy('order_no','asc')->get();
                 
                 if(count($getdata) > 0){
                     $data=[];$totalcount=0;

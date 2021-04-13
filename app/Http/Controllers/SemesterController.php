@@ -240,7 +240,8 @@ class SemesterController extends Controller
 
     public function getSemesterUnit(Request $request){
 
-        $getsemester = Semester::where(['standard_id' => $request->standard_id,'status' => 'Active'])->orderBy('order_no','asc')->get();
+        $getsemester = Semester::where(["board_id" => $request->board_id,"medium_id" => $request->medium_id,
+            "standard_id" => $request->standard_id,"subject_id" => $request->subject_id,'status' => 'Active'])->orderBy('order_no','asc')->get();
 
         $result="<option value=''>--Select Semester--</option>";
         if(count($getsemester) > 0)
@@ -295,4 +296,18 @@ class SemesterController extends Controller
         $data = ['html' => $html];
         return response()->json($data);
     }
+
+    // public function loadSemester(){
+    //    return $semester_details = Semester::where('status','!=','Deleted')->groupBy('semester')->get();
+    //     $data=[];
+    //     if(count($semester_details) > 0){
+    //         foreach ($semester_details as $value) {
+    //               $get_semesterdetails =  Semester::where(['semester' => $value->id])->first();
+    //               $data[] = ['id' => $get_semesterdetails->id,'text' => $value->semester];  
+    //         }   
+    //     }
+
+    //     return $data;
+
+    // }
 }

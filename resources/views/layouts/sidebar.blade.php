@@ -59,12 +59,12 @@
                             </li><!-- .nk-menu-item -->
                             @endcanany
                             @canany(['view-semester'])
-                            <li class="nk-menu-item @if(\Request::route()->getName() == 'semester.index' || \Request::route()->getName() == 'semester.create' || \Request::route()->getName() == 'semester.edit') active @endif">
+                            {{--<li class="nk-menu-item @if(\Request::route()->getName() == 'semester.index' || \Request::route()->getName() == 'semester.create' || \Request::route()->getName() == 'semester.edit') active @endif">
                                 <a href="{{ route('semester.index') }}" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
                                     <span class="nk-menu-text">Semester</span>
                                 </a>
-                            </li><!-- .nk-menu-item -->
+                            </li>--}}<!-- .nk-menu-item -->
                             @endcanany
                         </ul><!-- .nk-menu-sub -->
                     </li>

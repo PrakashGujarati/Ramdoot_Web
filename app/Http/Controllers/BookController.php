@@ -8,6 +8,7 @@ use App\Models\Subject;
 use App\Models\Unit;
 use Auth;
 use App\Models\Board;
+use App\Models\Semester;
 
 class BookController extends Controller
 {
@@ -25,7 +26,7 @@ class BookController extends Controller
     }
     public function index()
     {
-        $book_details = Book::where('status','!=','Deleted')->groupBy('subject_id')->get();
+        $book_details = Book::where('status','!=','Deleted')->groupBy('semester_id')->get();
         return view('book.index',compact('book_details'));
     }
 
@@ -40,17 +41,19 @@ class BookController extends Controller
             $units = Unit::where('status','!=','Deleted')->get();
             $boards = Board::where('status','!=','Deleted')->get();
             $book_details = Book::where(['subject_id' => $id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
-            $subjects_details = Subject::where('id',$id)->first();
+            $semesters_details = Semester::where('id',$id)->first();
+            //$subjects_details = Subject::where('id',$id)->first();
             $isset = 1;
-            return view('book.add',compact('units','boards','book_details','subjects_details','isset'));
+            return view('book.add',compact('units','boards','book_details','semesters_details','isset'));
         }
         else{
             $boards = Board::where('status','!=','Deleted')->get();
             $units = [];
             $book_details = Book::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
-            $subjects_details=[];
+            //$subjects_details=[];
+            $semesters_details = Semester::where('id',$id)->first();
             $isset = 0;
-            return view('book.add',compact('units','boards','book_details','subjects_details','isset'));
+            return view('book.add',compact('units','boards','book_details','semesters_details','isset'));
         }
     }
 
