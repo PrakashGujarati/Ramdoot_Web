@@ -1,18 +1,35 @@
 <div class="card card-preview">
     <div class="card-inner">
         <div class="card-head">
-            <h5 class="card-title">Material List</h5>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-10">
+                        <label><strong>Board : {{ isset($material_details->first()->board->name) ? $material_details->first()->board->name:'' }}</strong></label>
+                        <br>
+                        <label><strong>Medium : {{ isset($material_details->first()->medium->medium_name) ? $material_details->first()->medium->medium_name:'' }}</strong></label>
+                        <br>
+                        <label><strong>Standard : {{ isset($material_details->first()->standard->standard) ? $material_details->first()->standard->standard:'' }}</strong></label>
+                        <br>
+                        <label><strong>Subject : {{ isset($material_details->first()->subject->subject_name) ? $material_details->first()->subject->subject_name:'' }}</strong></label>
+                        <br>
+                        <label><strong>Semester : {{ isset($material_details->first()->semester->semester) ? $material_details->first()->semester->semester:'' }}</strong></label>
+                    </div>
+                    <div class="col-md-2">
+                        <h5 class="card-title">Material List</h5>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="" style="width: 100%;overflow-x: auto;">
         <table class="datatable-init table">
             <thead>
                 <tr>
                     <th>Order No</th>
-                    <th>Board</th>
+                    {{--<th>Board</th>
                     <th>Medium</th>
                     <th>Standard</th>
                     <th>Semester</th>
-                    <th>Subject</th>
+                    <th>Subject</th>--}}
                     <th>Unit</th>
                     <th>Question</th>
                     <th>Answer</th>
@@ -29,11 +46,11 @@
                     @foreach($material_details as $data)
                     <tr>
                         <td>{{$data->order_no}}</td>
-                        <td>{{ isset($data->board->name) ? $data->board->name:'' }}</td>
+                        {{--<td>{{ isset($data->board->name) ? $data->board->name:'' }}</td>
                         <td>{{ isset($data->medium->medium_name) ? $data->medium->medium_name:'' }}</td>
                         <td>{{ isset($data->standard->standard) ? $data->standard->standard:'' }}</td>
                         <td>{{ isset($data->semester->semester) ? $data->semester->semester:'' }}</td>
-                        <td>{{ isset($data->subject->subject_name) ? $data->subject->subject_name:'' }}</td>
+                        <td>{{ isset($data->subject->subject_name) ? $data->subject->subject_name:'' }}</td>--}}
                         <td>{{ isset($data->unit->title) ? $data->unit->title:'' }}</td>
                         <td>{{ $data->question }}</td>
                         <td>{{ $data->answer }}</td>

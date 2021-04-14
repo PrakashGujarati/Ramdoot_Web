@@ -1,18 +1,36 @@
 <div class="card card-preview">
     <div class="card-inner">
         <div class="card-head">
-            <h5 class="card-title">Unit List</h5>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-10">
+                        <label><strong>Board : {{ isset($unit_details->first()->board->name) ? $unit_details->first()->board->name:'' }}</strong></label>
+                        <br>
+                        <label><strong>Medium : {{ isset($unit_details->first()->medium->medium_name) ? $unit_details->first()->medium->medium_name:'' }}</strong></label>
+                        <br>
+                        <label><strong>Standard : {{ isset($unit_details->first()->standard->standard) ? $unit_details->first()->standard->standard:'' }}</strong></label>
+                        <br>
+                        <label><strong>Subject : {{ isset($unit_details->first()->subject->subject_name) ? $unit_details->first()->subject->subject_name:'' }}</strong></label>
+                        <br>
+                        <label><strong>Semester : {{ isset($unit_details->first()->semester->semester) ? $unit_details->first()->semester->semester:'' }}</strong></label>
+                    </div>
+                    <div class="col-md-2">
+                        <h5 class="card-title">Unit List</h5>
+                    </div>
+                </div>
+            </div>
+            
         </div>
         <div class="" style="width: 100%;overflow-x: auto;">
         <table class="datatable-init table">
             <thead>
                 <tr>
                     <th>Order No</th>
-                    <th>Board</th>
+                    {{--<th>Board</th>
                     <th>Medium</th>
                     <th>Standard</th>
                     <th>Semester</th>
-                    <th>Subject</th>
+                    <th>Subject</th>--}}
                     <th>Title</th>
                     <th>Sub Title</th>
                     <th>URL</th>
@@ -28,11 +46,11 @@
                     @foreach($unit_details as $data)
                     <tr>
                         <td>{{$data->order_no}}</td>
-                        <td>{{ isset($data->board->name) ? $data->board->name:'' }}</td>
+                        {{--<td>{{ isset($data->board->name) ? $data->board->name:'' }}</td>
                         <td>{{ isset($data->medium->medium_name) ? $data->medium->medium_name:'' }}</td>
                         <td>{{ isset($data->standard->standard) ? $data->standard->standard:'' }}</td>
                         <td>{{ isset($data->semester->semester) ? $data->semester->semester:'' }}</td>
-                        <td>{{ isset($data->subject->subject_name) ? $data->subject->subject_name:'' }}</td>
+                        <td>{{ isset($data->subject->subject_name) ? $data->subject->subject_name:'' }}</td>--}}
                         <td>{{ isset($data->title) ? $data->title:'' }}</td>
                         <td>{{ isset($data->description) ? $data->description:'' }}</td>
                         <td>

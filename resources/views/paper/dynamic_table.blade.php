@@ -1,7 +1,24 @@
 <div class="card card-preview">
     <div class="card-inner">
         <div class="card-head">
-            <h5 class="card-title">Paper List</h5>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-10">
+                        <label><strong>Board : {{ isset($paper_details->first()->board->name) ? $paper_details->first()->board->name:'' }}</strong></label>
+                        <br>
+                        <label><strong>Medium : {{ isset($paper_details->first()->medium->medium_name) ? $paper_details->first()->medium->medium_name:'' }}</strong></label>
+                        <br>
+                        <label><strong>Standard : {{ isset($paper_details->first()->standard->standard) ? $paper_details->first()->standard->standard:'' }}</strong></label>
+                        <br>
+                        <label><strong>Subject : {{ isset($paper_details->first()->subject->subject_name) ? $paper_details->first()->subject->subject_name:'' }}</strong></label>
+                        <br>
+                        <label><strong>Semester : {{ isset($paper_details->first()->semester->semester) ? $paper_details->first()->semester->semester:'' }}</strong></label>
+                    </div>
+                    <div class="col-md-2">
+                        <h5 class="card-title">Paper List</h5>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="" style="width: 100%;overflow-x: auto;">
         <table class="datatable-init table">
