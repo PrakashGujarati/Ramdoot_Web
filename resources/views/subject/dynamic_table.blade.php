@@ -1,17 +1,31 @@
 <div class="card card-preview">
     <div class="card-inner">
         <div class="card-head">
-            <h5 class="card-title">Subject List</h5>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-10">
+                        <label><strong>Board : {{ isset($subject_details->first()->board->name) ? $subject_details->first()->board->name:'' }}</strong></label>
+                        <br>
+                        <label><strong>Medium : {{ isset($subject_details->first()->medium->medium_name) ? $subject_details->first()->medium->medium_name:'' }}</strong></label>
+                        <br>
+                        <label><strong>Standard : {{ isset($subject_details->first()->standard->standard) ? $subject_details->first()->standard->standard:'' }}</strong></label>
+                        <br>
+                    </div>
+                    <div class="col-md-2">
+                        <h5 class="card-title">Subject List</h5>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="" style="width: 100%;overflow-x: auto;">
         <table class="datatable-init table">
             <thead>
                 <tr>
                     <td>Order No</td>
-                    <th>Board</th>
+                    {{--<th>Board</th>
                     <th>Medium</th>
                     <th>Standard</th>
-                    <th>Semester</th>
+                    <th>Semester</th>--}}
                     <th>Subject</th>
                     <th>Sub Title</th>
                     <th>Thumbnail</th>
@@ -25,10 +39,10 @@
                     @foreach($subject_details as $data)
                     <tr>
                         <td>{{$data->order_no}}</td>
-                        <td>{{ isset($data->board->name) ? $data->board->name:'' }}</td>
+                        {{--<td>{{ isset($data->board->name) ? $data->board->name:'' }}</td>
                         <td>{{ isset($data->medium->medium_name) ? $data->medium->medium_name:'' }}</td>
                         <td>{{ isset($data->standard->standard) ? $data->standard->standard:'' }}</td>
-                        <td>{{ isset($data->semester->semester) ? $data->semester->semester:'' }}</td>
+                        <td>{{ isset($data->semester->semester) ? $data->semester->semester:'' }}</td>--}}
                         <td>{{ $data->subject_name }}</td>
                         <td>{{ $data->sub_title }}</td>
                         <td>
