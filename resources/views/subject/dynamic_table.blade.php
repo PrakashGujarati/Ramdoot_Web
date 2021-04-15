@@ -3,17 +3,23 @@
         <div class="card-head">
             <div class="col-md-12">
                 <div class="row">
-                    <div class="col-md-10">
-                        <label><strong>Board : {{ isset($subject_details->first()->board->name) ? $subject_details->first()->board->name:'' }}</strong></label>
-                        <br>
-                        <label><strong>Medium : {{ isset($subject_details->first()->medium->medium_name) ? $subject_details->first()->medium->medium_name:'' }}</strong></label>
-                        <br>
-                        <label><strong>Standard : {{ isset($subject_details->first()->standard->standard) ? $subject_details->first()->standard->standard:'' }}</strong></label>
-                        <br>
+                    <div class="col-md-12">
+                    	<table class="table table-bordered">
+                    		<tr>
+                    			<th>Board</th>
+                    			<th>Medium</th>
+                    			<th>Standard</th>
+                    		</tr>
+                    		<tr>
+                    			<td>{{ isset($subject_details->first()->board->name) ? $subject_details->first()->board->name:'' }}</td>
+                    			<td>{{ isset($subject_details->first()->medium->medium_name) ? $subject_details->first()->medium->medium_name:'' }}</td>
+                    			<td>{{ isset($subject_details->first()->standard->standard) ? $subject_details->first()->standard->standard:'' }}</td>
+                    		</tr>
+                    	</table>
                     </div>
-                    <div class="col-md-2">
-                        <h5 class="card-title">Subject List</h5>
-                    </div>
+                    
+                        <!-- <h5 class="card-title">Subject List</h5> -->
+                    
                 </div>
             </div>
         </div>
