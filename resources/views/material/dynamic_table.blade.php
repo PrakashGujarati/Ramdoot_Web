@@ -3,19 +3,23 @@
         <div class="card-head">
             <div class="col-md-12">
                 <div class="row">
-                    <div class="col-md-10">
-                        <label><strong>Board : {{ isset($material_details->first()->board->name) ? $material_details->first()->board->name:'' }}</strong></label>
-                        <br>
-                        <label><strong>Medium : {{ isset($material_details->first()->medium->medium_name) ? $material_details->first()->medium->medium_name:'' }}</strong></label>
-                        <br>
-                        <label><strong>Standard : {{ isset($material_details->first()->standard->standard) ? $material_details->first()->standard->standard:'' }}</strong></label>
-                        <br>
-                        <label><strong>Subject : {{ isset($material_details->first()->subject->subject_name) ? $material_details->first()->subject->subject_name:'' }}</strong></label>
-                        <br>
-                        <label><strong>Semester : {{ isset($material_details->first()->semester->semester) ? $material_details->first()->semester->semester:'' }}</strong></label>
-                    </div>
-                    <div class="col-md-2">
-                        <h5 class="card-title">Material List</h5>
+                    <div class="col-md-12">
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>Board</th>
+                                <th>Medium</th>
+                                <th>Standard</th>
+                                <th>Subject</th>
+                                <th>Semester</th>
+                            </tr>
+                            <tr>
+                                <td>{{ isset($material_details->first()->board->name) ? $material_details->first()->board->name:'' }}</td>
+                                <td>{{ isset($material_details->first()->medium->medium_name) ? $material_details->first()->medium->medium_name:'' }}</td>
+                                <td>{{ isset($material_details->first()->standard->standard) ? $material_details->first()->standard->standard:'' }}</td>
+                                <td>{{ isset($material_details->first()->subject->subject_name) ? $material_details->first()->subject->subject_name:'' }}</td>
+                                <td>{{ isset($material_details->first()->semester->semester) ? $material_details->first()->semester->semester:'' }}</td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </div>

@@ -3,19 +3,23 @@
         <div class="card-head">
             <div class="col-md-12">
                 <div class="row">
-                    <div class="col-md-10">
-                        <label><strong>Board : {{ isset($worksheet_details->first()->board->name) ? $worksheet_details->first()->board->name:'' }}</strong></label>
-                        <br>
-                        <label><strong>Medium : {{ isset($worksheet_details->first()->medium->medium_name) ? $worksheet_details->first()->medium->medium_name:'' }}</strong></label>
-                        <br>
-                        <label><strong>Standard : {{ isset($worksheet_details->first()->standard->standard) ? $worksheet_details->first()->standard->standard:'' }}</strong></label>
-                        <br>
-                        <label><strong>Subject : {{ isset($worksheet_details->first()->subject->subject_name) ? $worksheet_details->first()->subject->subject_name:'' }}</strong></label>
-                        <br>
-                        <label><strong>Semester : {{ isset($worksheet_details->first()->semester->semester) ? $worksheet_details->first()->semester->semester:'' }}</strong></label>
-                    </div>
-                    <div class="col-md-2">
-                        <h5 class="card-title">Worksheet List</h5>
+                    <div class="col-md-12">
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>Board</th>
+                                <th>Medium</th>
+                                <th>Standard</th>
+                                <th>Subject</th>
+                                <th>Semester</th>
+                            </tr>
+                            <tr>
+                                <td>{{ isset($worksheet_details->first()->board->name) ? $worksheet_details->first()->board->name:'' }}</td>
+                                <td>{{ isset($worksheet_details->first()->medium->medium_name) ? $worksheet_details->first()->medium->medium_name:'' }}</td>
+                                <td>{{ isset($worksheet_details->first()->standard->standard) ? $worksheet_details->first()->standard->standard:'' }}</td>
+                                <td>{{ isset($worksheet_details->first()->subject->subject_name) ? $worksheet_details->first()->subject->subject_name:'' }}</td>
+                                <td>{{ isset($worksheet_details->first()->semester->semester) ? $worksheet_details->first()->semester->semester:'' }}</td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </div>
