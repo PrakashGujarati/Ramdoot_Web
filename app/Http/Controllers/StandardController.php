@@ -128,7 +128,7 @@ class StandardController extends Controller
                     $this->compressImage($image->getPathName(),$location,60);
                 }
             }
-            $last_data=Standard::select('*')->orderBy('order_no','asc')->first();
+            $last_data=Standard::select('*')->where('medium_id',$request->medium_id)->orderBy('order_no','asc')->first();
             if($last_data)
             {
                 $last_number=intval($last_data->order_no)+1;
@@ -348,7 +348,14 @@ class StandardController extends Controller
     }
     public function above_order(request $request)
     {
-        above_order('standards',$request->order_no);
+        if($request->has('medium_id') && $request->medium_id != null)
+        {
+            above_order('standards',$request->order_no,'medium_id',$request->medium_id);
+        }   
+        else
+        {
+            above_order('standards',$request->order_no);
+        }
 
         $standard_details = Standard::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $html = view('standard.dynamic_table',compact('standard_details'))->render();
@@ -357,7 +364,15 @@ class StandardController extends Controller
     }
     public function below_order(request $request)
     {
-        below_order('standards',$request->order_no);
+        if($request->has('medium_id') && $request->medium_id != null)
+        {
+            below_order('standards',$request->order_no,'medium_id',$request->medium_id);
+        }
+        else
+        {
+            below_order('standards',$request->order_no);
+        }
+        
         $standard_details = Standard::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $html = view('standard.dynamic_table',compact('standard_details'))->render();
         $data = ['html' => $html];

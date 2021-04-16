@@ -177,7 +177,7 @@ class BookController extends Controller
                 $url_file = $request->url;
             }
 
-            $last_data=Book::select('*')->where('subject_id',$request->subject_id)->orderBy('order_no','desc')->first();
+            $last_data=Book::select('*')->where('semester_id',$request->semester_id)->orderBy('order_no','desc')->first();
             if($last_data)
             {
               $last_no=intval($last_data->order_no)+1;
@@ -418,21 +418,21 @@ class BookController extends Controller
     }
     public function above_order(request $request)
     {
-        above_order('books',$request->order_no,'subject_id',$request->subject_id);
+        above_order('books',$request->order_no,'semester_id',$request->semester_id);
 
-        $book_details = Book::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $book_details = Book::where(['semester_id' => $request->semester_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $html = view('book.dynamic_table',compact('book_details'))->render();
-        $data = ['html' => $html];
-        return response()->json($data);    
+        $data = ['html' => $html,'message' => $msg];
+        return response()->json($data);      
     }
     public function below_order(request $request)
     {
         //dd($request->subject_id);
-        below_order('books',$request->order_no,'subject_id',$request->subject_id);
+        below_order('books',$request->order_no,'semester_id',$request->semester_id);
 
-        $book_details = Book::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $book_details = Book::where(['semester_id' => $request->semester_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $html = view('book.dynamic_table',compact('book_details'))->render();
         $data = ['html' => $html];
-        return response()->json($data);    
+        return response()->json($data);      
     }
 }

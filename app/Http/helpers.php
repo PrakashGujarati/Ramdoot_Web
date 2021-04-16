@@ -28,7 +28,7 @@ function storeReview($type,$type_id,$review_time,$status="Pending")
 }
 function above_order($table,$order_no,$key=null,$value=null)
 {
-    if($key == null)
+    if($key != null)
     {
         $data=DB::table($table)->where($key,$value)->where('order_no',$order_no)->first();
         if($data)
@@ -61,7 +61,7 @@ function above_order($table,$order_no,$key=null,$value=null)
 function below_order($table,$order_no,$key=null,$value=null)
 {
 
-    if($key == null)
+    if($key != null)
     {
         $data=DB::table($table)->where($key,$value)->where('order_no',$order_no)->first();
         if($data)
@@ -97,7 +97,7 @@ function delete_order($table,$id,$is_subject=null)
     {
         if($is_subject == 1)
         {
-            $datas=DB::table($table)->where('id','>',$data->id)->where('subject_id',$data->subject_id)->where('status','Active')->get();
+            $datas=DB::table($table)->where('id','>',$data->id)->where('semester_id',$data->semester_id)->where('status','Active')->get();
             if($datas)
             {
                 $number=$data->order_no;

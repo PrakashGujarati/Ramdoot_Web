@@ -42,7 +42,8 @@ class SubjectController extends Controller
             $semester_details = Semester::where(['id' => $id])->first();
             $isset = 1;
             $subject_details = Subject::where(['standard_id' => $id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
-            return view('subject.add',compact('boards','standards','semesters','subject_details','semester_details','isset'));
+            $standard_id=$id;
+            return view('subject.add',compact('boards','standards','semesters','subject_details','semester_details','isset'),'id','standard_id');
         }
         else{
             $boards = Board::where('status','Active')->get();
@@ -50,8 +51,9 @@ class SubjectController extends Controller
             $semesters = Semester::where('status','Active')->get();
             $semester_details = [];
             $isset = 0;
+            $standard_id=0;
             $subject_details = Subject::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
-            return view('subject.add',compact('boards','standards','semesters','subject_details','semester_details','isset'));
+            return view('subject.add',compact('boards','standards','semesters','subject_details','semester_details','isset','standard_id'));
         }
     }
 
@@ -149,7 +151,7 @@ class SubjectController extends Controller
                 }
             }
 
-            $last_data=Subject::select('*')->orderBy('order_no','desc')->first();
+            $last_data=Subject::select('*')->where('standard_id',$request->standard_id)->orderBy('order_no','desc')->first();
             if($last_data)
             {
               $last_no=intval($last_data->order_no)+1;
@@ -413,7 +415,14 @@ class SubjectController extends Controller
     }    
     public function above_order(request $request)
     {
-        above_order('subjects',$request->order_no);
+        if($request->has('standard_id') && intval($request->standard_id) != null)
+        {
+            above_order('subjects',$request->order_no,'standard_id',$request->standard_id);    
+        }
+        else
+        {
+            above_order('subjects',$request->order_no);
+        }
         $subject_details = Subject::where('status','Active')->orderBy('order_no','asc')->get();
         $html = view('subject.dynamic_table',compact('subject_details'))->render();
         $data = ['html' => $html];
@@ -421,7 +430,14 @@ class SubjectController extends Controller
     }
     public function below_order(request $request)
     {
-        below_order('subjects',$request->order_no);
+        if($request->has('standard_id') && intval($request->standard_id) != null)
+        {
+            below_order('subjects',$request->order_no,'standard_id',$request->standard_id);
+        }
+        else
+        {
+            below_order('subjects',$request->order_no);   
+        }
         $subject_details = Subject::where('status','Active')->orderBy('order_no','asc')->get();
         $html = view('subject.dynamic_table',compact('subject_details'))->render();
         $data = ['html' => $html];

@@ -204,7 +204,8 @@ td{
                 url: "{{route('above_order.subject')}}",
                 type: "GET",
                 data: {
-                    "order_no": order_no
+                    "order_no": order_no,
+                    "standard_id":"{{$standard_id}}"
                 },
                 success: function(html) {
                     $('.dyamictable').empty();
@@ -219,7 +220,8 @@ td{
                 url: "{{route('below_order.subject')}}",
                 type: "GET",
                 data: {
-                    "order_no": order_no
+                    "order_no": order_no,
+                    "standard_id":"{{$standard_id}}"
                 },
                 success: function(html) {
                     $('.dyamictable').empty();
