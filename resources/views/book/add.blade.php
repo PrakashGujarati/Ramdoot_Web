@@ -735,7 +735,8 @@ $(document).on('click','.edit-btn',function(){
             if(result.url_type == 'file'){
                 $('#hidden_url').val(result.url);
                 $('#url_preview').css('display','block');
-                var url_path = "{{ env('APP_URL') }}"+"/upload/book/url/"+result.url;
+                var url_path = "{{ env('APP_URL') }}"+"/upload/"+board_id+"/"+medium_id+"/"+standard_id+"/"+
+                semester_id+"/"+subject_id+"/"+unit_id+"/book/url/"+result.url;
                 $('#url_preview').attr('src', url_path);    
             }
             else{
@@ -747,7 +748,7 @@ $(document).on('click','.edit-btn',function(){
             }
             $('#hidden_thumbnail').val(result.thumbnail);
             $('#thumbnail_preview').css('display','block');
-            var thumbnail_path = "{{ env('APP_URL') }}"+"/upload/book/thumbnail/"+result.thumbnail;
+            var thumbnail_path = "{{ env('APP_URL') }}"+"/upload/"+board_id+"/"+medium_id+"/"+standard_id+"/"+semester_id+"/"+subject_id+"/"+unit_id+"/book/thumbnail/"+result.thumbnail;
             $('#thumbnail_preview').attr('src', thumbnail_path);
             
             $('#hidden_id').val(result.id);

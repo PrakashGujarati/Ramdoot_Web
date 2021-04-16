@@ -124,3 +124,21 @@ function delete_order($table,$id,$is_subject=null)
     }
 }
 
+function imagePathCreate($imagePath = ''){
+    if(!empty($imagePath)){
+        $originalPath = public_path();
+        $urlArr = explode('/',$imagePath);
+
+        foreach($urlArr as $url){
+            if(!empty($url)){
+                $originalPath .= '/'.$url;
+                if (!file_exists($originalPath)) {
+                    mkdir($originalPath, 0777, true);
+                }
+            }
+        }
+        return $originalPath."/";
+    }
+    return public_path()."/upload/";
+}
+
