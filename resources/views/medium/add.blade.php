@@ -77,7 +77,8 @@
                 url: "{{route('above_order.medium')}}",
                 type: "GET",
                 data: {
-                    "order_no": order_no
+                    "order_no": order_no,
+                    "board_id":"{{(!empty($boards_details->id) ? $boards_details->id : '""')}}"
                 },
                 success: function(html) {
                     $('.dyamictable').empty();
@@ -92,7 +93,8 @@
                 url: "{{route('below_order.medium')}}",
                 type: "GET",
                 data: {
-                    "order_no": order_no
+                    "order_no": order_no,
+                    "board_id":"{{(!empty($boards_details->id) ? $boards_details->id : '""')}}"
                 },
                 success: function(html) {
                     $('.dyamictable').empty();

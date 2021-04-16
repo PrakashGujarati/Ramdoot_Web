@@ -282,7 +282,14 @@ class SemesterController extends Controller
     }
     public function above_order(request $request)
     {
-        above_order('semesters',$request->order_no);
+        if($request->has('standard_id') && $request->standard_id != null)
+        {
+            above_order('semesters',$request->order_no,'standard_id',$request->standard_id);
+        }
+        else
+        {
+            above_order('semesters',$request->order_no);
+        }
 
         $semester_details = Semester::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $html = view('semester.dynamic_table',compact('semester_details'))->render();
@@ -291,7 +298,15 @@ class SemesterController extends Controller
     }
     public function below_order(request $request)
     {
-        below_order('semesters',$request->order_no);
+        if($request->has('standard_id') && $request->standard_id != null)
+        {
+            below_order('semesters',$request->order_no,'standard_id',$request->standard_id);
+        }
+        else
+        {
+            below_order('semesters',$request->order_no);    
+        }
+        
         $semester_details = Semester::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $html = view('semester.dynamic_table',compact('semester_details'))->render();
         $data = ['html' => $html];

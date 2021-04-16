@@ -291,7 +291,7 @@ $(document).on('click','.above_order', function() {
                 type: "GET",
                 data: {
                     "order_no": order_no,
-                    "subject_id":"{{(!empty($subjects_details->id) ? $subjects_details->id : '""')}}"
+                    "semester_id":"{{(!empty($semesters_details->id) ? $semesters_details->id : '""')}}"
                 },
                 success: function(html) {
                     $('.dyamictable').empty();
@@ -307,7 +307,7 @@ $(document).on('click','.above_order', function() {
                 type: "GET",
                 data: {
                     "order_no": order_no,
-                    "subject_id":"{{(!empty($subjects_details->id) ? $subjects_details->id : '""')}}"
+                    "semester_id":"{{(!empty($semesters_details->id) ? $semesters_details->id : '""')}}"
                 },
                 success: function(html) {
                     $('.dyamictable').empty();

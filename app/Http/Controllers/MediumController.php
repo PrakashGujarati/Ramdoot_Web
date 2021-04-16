@@ -70,7 +70,7 @@ class MediumController extends Controller
 
         }else{
 
-            $last_data=Medium::select('*')->orderBy('order_no','desc')->first();
+            $last_data=Medium::select('*')->where('board_id',$request->board_id)->orderBy('order_no','desc')->first();
             if($last_data)
             {
               $last_no=intval($last_data->order_no)+1;
@@ -225,8 +225,15 @@ class MediumController extends Controller
     }
     public function above_order(request $request)
     {
-        above_order('mediums',$request->order_no);
-
+        if($request->has('board_id') && $request->board_id != null)
+        {
+            above_order('mediums',$request->order_no,'board_id',$request->board_id);
+        }
+        else
+        {
+            above_order('mediums',$request->order_no);
+        }   
+        
         $mediums_details = Medium::where('status','Active')->orderBy('order_no','asc')->get();
         $html = view('medium.dynamic_table',compact('mediums_details'))->render();
         $data = ['html' => $html];
@@ -234,7 +241,15 @@ class MediumController extends Controller
     }
     public function below_order(request $request)
     {
-        below_order('mediums',$request->order_no);
+        if($request->has('board_id') && $request->board_id != null)
+        {
+            below_order('mediums',$request->order_no,'board_id',$request->board_id);
+        }
+        else
+        {
+            below_order('mediums',$request->order_no);   
+        }
+        
         $mediums_details = Medium::where('status','Active')->orderBy('order_no','asc')->get();
         $html = view('medium.dynamic_table',compact('mediums_details'))->render();
         $data = ['html' => $html];

@@ -139,7 +139,8 @@ td{
                 url: "{{route('above_order.standard')}}",
                 type: "GET",
                 data: {
-                    "order_no": order_no
+                    "order_no": order_no,
+                    "medium_id":"{{(!empty($medium_details->id) ? $medium_details->id : '""')}}"
                 },
                 success: function(html) {
                     $('.dyamictable').empty();
@@ -154,7 +155,8 @@ td{
                 url: "{{route('below_order.standard')}}",
                 type: "GET",
                 data: {
-                    "order_no": order_no
+                    "order_no": order_no,
+                    "medium_id":"{{(!empty($medium_details->id) ? $medium_details->id : '""')}}"
                 },
                 success: function(html) {
                     $('.dyamictable').empty();

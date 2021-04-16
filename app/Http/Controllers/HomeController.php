@@ -27,35 +27,37 @@ class HomeController extends Controller
     			$upd=Board::find($board->id);
     			$upd->order_no=$key+1;
     			$upd->save();
-    		}
-    	}
 
-    	$mediums=Medium::where('status','Active')->get();
-    	if(count($mediums) > 0)
-    	{
-    		foreach ($mediums as $key => $medium) {
-    			$upd=Medium::find($medium->id);
-    			$upd->order_no=$key+1;
-    			$upd->save();
-    		}
-    	}
-    	$standards=Standard::where('status','Active')->get();
-    	if(count($standards) > 0)
-    	{
-    		foreach ($standards as $key => $standard) {
-    			$upd=Standard::find($standard->id);
-    			$upd->order_no=$key+1;
-    			$upd->save();
-    		}
-    	}
+                $mediums=Medium::where('status','Active')->where('board_id',$board->id)->get();
+                if(count($mediums) > 0)
+                {
+                    foreach ($mediums as $key => $medium) {
+                        $upd=Medium::find($medium->id);
+                        $upd->order_no=$key+1;
+                        $upd->save();
 
-    	$semesters=Semester::where('status','Active')->get();
-    	if(count($semesters) > 0)
-    	{
-    		foreach ($semesters as $key => $semester) {
-    			$upd=Semester::find($semester->id);
-    			$upd->order_no=$key+1;
-    			$upd->save();
+                        $standards=Standard::where('status','Active')->where('medium_id',$medium->id)->get();
+                        if(count($standards) > 0)
+                        {
+                            foreach ($standards as $key => $standard) {
+                                $upd=Standard::find($standard->id);
+                                $upd->order_no=$key+1;
+                                $upd->save();
+
+                                $semesters=Semester::where('status','Active')->where('standard_id',$standard->id)->get();
+                                if(count($semesters) > 0)
+                                {
+                                    foreach ($semesters as $key => $semester) {
+                                        $upd=Semester::find($semester->id);
+                                        $upd->order_no=$key+1;
+                                        $upd->save();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
     		}
     	}
     }

@@ -108,7 +108,8 @@
                 url: "{{route('above_order.semester')}}",
                 type: "GET",
                 data: {
-                    "order_no": order_no
+                    "order_no": order_no,
+                    "standard_id":"{{(!empty($standard_details->id) ? $standard_details->id : '""')}}"
                 },
                 success: function(html) {
                     $('.dyamictable').empty();
@@ -123,7 +124,8 @@
                 url: "{{route('below_order.semester')}}",
                 type: "GET",
                 data: {
-                    "order_no": order_no
+                    "order_no": order_no,
+                    "standard_id":"{{(!empty($standard_details->id) ? $standard_details->id : '""')}}"
                 },
                 success: function(html) {
                     $('.dyamictable').empty();

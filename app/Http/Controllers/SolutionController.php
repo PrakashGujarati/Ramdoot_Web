@@ -168,7 +168,7 @@ class SolutionController extends Controller
               }
           }
 
-          $last_data=Solution::select('*')->where('subject_id',$request->subject_id)->orderBy('order_no','desc')->first();
+          $last_data=Solution::select('*')->where('semester_id',$request->semester_id)->orderBy('order_no','desc')->first();
           if($last_data)
           {
             $last_no=intval($last_data->order_no)+1;
@@ -355,7 +355,7 @@ class SolutionController extends Controller
     }
     public function above_order(request $request)
     {
-        above_order('solutions',$request->order_no,'subject_id',$request->subject_id);
+        above_order('solutions',$request->order_no,'semester_id',$request->semester_id);
 
         $solution_details = Solution::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $html = view('solution.dynamic_table',compact('solution_details'))->render();
@@ -364,7 +364,7 @@ class SolutionController extends Controller
     }
     public function below_order(request $request)
     {
-        below_order('solutions',$request->order_no,'subject_id',$request->subject_id);
+        below_order('solutions',$request->order_no,'semester_id',$request->semester_id);
 
         $solution_details = Solution::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $html = view('solution.dynamic_table',compact('solution_details'))->render();
