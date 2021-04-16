@@ -85,19 +85,22 @@ class BookController extends Controller
             
                 $image = $request->file('thumbnail');
 
-                $new_name = rand() . '.' . $image->getClientOriginalExtension();
-
-                $valid_ext = array('png','jpeg','jpg');
+                $url = 'upload/'.$request->board_id.'/'.$request->medium_id.'/'.$request->standard_id.'/'.$request->subject_id.'/'.$request->semester_id.'/'.$request->unit_id.'/book/thumbnail/';
+                $originalPath = imagePathCreate($url);
+                $name = time() . mt_rand(10000, 99999);
+                $new_name = $name . '.' . $image->getClientOriginalExtension();
+                $image->move($originalPath, $new_name);
+                //$originalPath = public_path() . '/images/patient';
 
                 // Location
-                $location = public_path('upload/book/thumbnail/').$new_name;
+                // $location = public_path('upload/'.$request->board_id.'/'.$request->medium_id.'/'.$request->standard_id.'/'.$request->subject_id.'/'.$request->semester_id.'/'.$request->unit_id.'/book/thumbnail/').$new_name;
 
-                $file_extension = pathinfo($location, PATHINFO_EXTENSION);
-                $file_extension = strtolower($file_extension);
+                // $file_extension = pathinfo($location, PATHINFO_EXTENSION);
+                // $file_extension = strtolower($file_extension);
 
-                if(in_array($file_extension,$valid_ext)){
-                    $this->compressImage($image->getPathName(),$location,60);
-                }
+                // if(in_array($file_extension,$valid_ext)){
+                //     $this->compressImage($image->getPathName(),$location,60);
+                // }
             }
             else{
                 $new_name = $request->hidden_thumbnail;
@@ -107,10 +110,19 @@ class BookController extends Controller
             if($request->url_type == 'file'){
                 if($request->file('url'))
                 {
+                    
                     $image = $request->file('url');
-                    $url_file = time().'.'.$image->getClientOriginalExtension();
-                    $destinationPath = public_path('upload/book/url/');
-                    $image->move($destinationPath, $url_file);
+                    $url = 'upload/'.$request->board_id.'/'.$request->medium_id.'/'.$request->standard_id.'/'.$request->subject_id.'/'.$request->semester_id.'/'.$request->unit_id.'/book/url/';
+                    $originalPath = imagePathCreate($url);
+                    $name = time() . mt_rand(10000, 99999);
+                    $url_file = $name . '.' . $image->getClientOriginalExtension();
+                    //$destinationPath = public_path('upload/book/url/');
+                    $image->move($originalPath, $url_file);
+
+                    // $image = $request->file('url');
+                    // $url_file = time().'.'.$image->getClientOriginalExtension();
+                    // $destinationPath = public_path('upload/book/url/');
+                    // $image->move($destinationPath, $url_file);
                 }
                 else{
                     $url_file = $request->hidden_url;
@@ -148,20 +160,11 @@ class BookController extends Controller
             {
             
                 $image = $request->file('thumbnail');
-
-                $new_name = rand() . '.' . $image->getClientOriginalExtension();
-
-                $valid_ext = array('png','jpeg','jpg');
-
-                // Location
-                $location = public_path('upload/book/thumbnail/').$new_name;
-
-                $file_extension = pathinfo($location, PATHINFO_EXTENSION);
-                $file_extension = strtolower($file_extension);
-
-                if(in_array($file_extension,$valid_ext)){
-                    $this->compressImage($image->getPathName(),$location,60);
-                }
+                $url = 'upload/'.$request->board_id.'/'.$request->medium_id.'/'.$request->standard_id.'/'.$request->subject_id.'/'.$request->semester_id.'/'.$request->unit_id.'/book/thumbnail/';
+                $originalPath = imagePathCreate($url);
+                $name = time() . mt_rand(10000, 99999);
+                $new_name = $name . '.' . $image->getClientOriginalExtension();
+                $image->move($originalPath, $new_name);
             }
 
             $url_file='';
@@ -169,9 +172,12 @@ class BookController extends Controller
                 if($request->file('url'))
                 {
                     $image = $request->file('url');
-                    $url_file = time().'.'.$image->getClientOriginalExtension();
-                    $destinationPath = public_path('upload/book/url/');
-                    $image->move($destinationPath, $url_file);
+                    $url = 'upload/'.$request->board_id.'/'.$request->medium_id.'/'.$request->standard_id.'/'.$request->subject_id.'/'.$request->semester_id.'/'.$request->unit_id.'/book/url/';
+                    $originalPath = imagePathCreate($url);
+                    $name = time() . mt_rand(10000, 99999);
+                    $url_file = $name . '.' . $image->getClientOriginalExtension();
+                    //$destinationPath = public_path('upload/book/url/');
+                    $image->move($originalPath, $url_file);
                 }
             }else{
                 $url_file = $request->url;

@@ -11,6 +11,7 @@ use Validator;
 use App\Models\Standard;
 use App\Models\Subject;
 use App\Models\Semester;
+use App\Models\QuestionType;
 
 class SolutionController extends Controller
 {
@@ -47,30 +48,41 @@ class SolutionController extends Controller
 	    		$data=[];$getdata=[];
 				$title="";
 
-	    		$getdata = Solution::where(['unit_id' => $request->unit_id,'status' => 'Active'])->orderBy('order_no','asc')->get();
-	    			$solutiondata=[];
-	    			foreach ($getdata as $value1) {
-	    				$image = env('APP_URL')."/upload/solution/thumbnail/".$value1->image;
-						$title = $value1->label;
-	    				$solutiondata[] = ['id' => $value1->id,'question' => $value1->question,'answer' => $value1->answer,'marks' => $value1->marks,'image' => $image,'label' => $value1->label];
-	    			}
+	    		$getdata = Solution::where(['unit_id' => $request->unit_id,'status' => 'Active'])
+	    		->groupBy('question_type')->get();
 	    			
-	    			$sub_title = Unit::where(['id' => $request->unit_id,'status' => 'Active'])->first();
-	    			if($sub_title)
-	    			{
-	    				$sub_title=$sub_title->description;
+	    			foreach ($getdata as $value1) {
+
+	    				$getdata_solution = Solution::where(['question_type' => $value1->question_type,
+	    					'status' => 'Active'])->orderBy('order_no','asc')->get();
+	    				$solutiondata=[];
+	    				foreach ($getdata_solution as $value_sub) {
+
+	    					$image = env('APP_URL')."/upload/solution/thumbnail/".$value_sub->image;
+							$title = $value_sub->label;
+		    				$solutiondata[] = ['id' => $value_sub->id,'question' => $value_sub->question,'answer' => $value_sub->answer,'marks' => $value_sub->marks,'image' => $image,'label' => $value_sub->label];
+	    				}
+
+	    				$sub_title = Unit::where(['id' => $request->unit_id,'status' => 'Active'])->first();
+		    			if($sub_title)
+		    			{
+		    				$sub_title=$sub_title->description;
+		    			}
+		    			else
+		    			{
+		    				$sub_title="";
+		    			}	
+		    			//$data[] = ['id' => $request->unit_id,'unit_title' =>$title,'solution' => $solutiondata,"sub_title"=>$sub_title];
+		    			$getquestion_type_details = QuestionType::where(['id' => $value1->question_type])->first();
+		    			$data[] = ['question_type' => $getquestion_type_details->question_type,'solution' => $solutiondata];
 	    			}
-	    			else
-	    			{
-	    				$sub_title="";
-	    			}	
-	    			$data[] = ['id' => $request->unit_id,'unit_title' =>$title,'solution' => $solutiondata,"sub_title"=>$sub_title];
-	    		
+
 	    		return response()->json([
 	    			"code" => 200,
 				  	"message" => "success",
 				  	"data" => $data,
 		        ]);
+	    			
 	    	}
 	    	else{
 	    		return response()->json([
