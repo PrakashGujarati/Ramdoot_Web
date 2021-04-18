@@ -276,6 +276,40 @@
                         </ul><!-- .nk-menu-sub -->
                     </li>
                     @endcanany
+
+                    <li class="nk-menu-item has-sub">
+                        <a href="#" class="nk-menu-link nk-menu-toggle">
+                            <span class="nk-menu-icon"><em class="icon ni ni-align-right"></em></span>
+                            <span class="nk-menu-text">Data ExcelSheet</span>
+                        </a>
+                        <ul class="nk-menu-sub">
+                            
+                            <li class="nk-menu-item @if(\Request::route()->getName() == 'generate.excel') active @endif">
+                                <a href="{{ route('generate.excel') }}" class="nk-menu-link">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
+                                    <span class="nk-menu-text">Generate Excel</span>
+                                </a>
+                            </li><!-- .nk-menu-item -->
+
+                            <li class="nk-menu-item">
+                                <a href="#" class="nk-menu-link">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
+                                    <span class="nk-menu-text">Upload Excel</span>
+                                </a>
+                            </li><!-- .nk-menu-item -->
+
+                            <li class="nk-menu-item @if(\Request::route()->getName() == 'all_data_excel.index') active @endif">
+                                <a href="{{ route('all_data_excel.index') }}" class="nk-menu-link">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
+                                    <span class="nk-menu-text">All Data in Excel</span>
+                                </a>
+                            </li><!-- .nk-menu-item -->
+
+                        </ul><!-- .nk-menu-sub -->
+                    </li>
+                    
+                    
+
                     @canany(['Setting-view'])
                     <li class="nk-menu-item has-sub">
                         <a href="{{route('settings')}}" class="nk-menu-link">

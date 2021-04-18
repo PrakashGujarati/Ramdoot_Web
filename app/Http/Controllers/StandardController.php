@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use App\Models\Board;
 use App\Models\Medium;
 
-
 class StandardController extends Controller
 {
     /**

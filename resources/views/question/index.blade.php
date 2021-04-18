@@ -166,7 +166,7 @@
 
     });
 
-    $(document).on('change','.board_id',function(){
+$(document).on('change','.board_id',function(){
     var board_id = $('.board_id').val();
     getMedium(board_id);
 });

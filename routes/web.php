@@ -30,6 +30,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\QuestionTypeController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\UserDataReviewController;
+use App\Http\Controllers\ExportController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -56,6 +58,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('board/edit', [BoardController::class, 'edit'])->name('board.edit');
 	Route::post('board/{id}/update', [BoardController::class, 'update'])->name('board.update');
 	Route::get('board/delete', [BoardController::class, 'distroy'])->name('board.distroy');
+	Route::get('board_export', [BoardController::class, 'boardExport'])->name('board.export');
 
 	/*Standard*/
 	Route::get('standard', [StandardController::class, 'index'])->name('standard.index');
@@ -64,6 +67,8 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('standard/edit', [StandardController::class, 'edit'])->name('standard.edit');
 	Route::post('standard/{id}/update', [StandardController::class, 'update'])->name('standard.update');
 	Route::get('standard/delete', [StandardController::class, 'distroy'])->name('standard.distroy');
+	Route::get('standard_export', [StandardController::class, 'standardExport'])->name('standard.export');
+
 
 	Route::get('get_standard', [StandardController::class, 'getStandard'])->name('get.standard');
 
@@ -74,6 +79,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('subject/edit', [SubjectController::class, 'edit'])->name('subject.edit');
 	Route::post('subject/{id}/update', [SubjectController::class, 'update'])->name('subject.update');
 	Route::get('subject/delete', [SubjectController::class, 'distroy'])->name('subject.distroy');
+	Route::get('subject_export', [SubjectController::class, 'subjectExport'])->name('subject.export');
 
 	Route::get('get_subject', [SubjectController::class, 'getSubject'])->name('get.subject');
 
@@ -84,6 +90,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('book/edit', [BookController::class, 'edit'])->name('book.edit');
 	Route::post('book/{id}/update', [BookController::class, 'update'])->name('book.update');
 	Route::get('book/delete', [BookController::class, 'distroy'])->name('book.distroy');
+	Route::get('book_export', [BookController::class, 'bookExport'])->name('book.export');
 
 	/*Book*/
 	Route::get('medium', [MediumController::class, 'index'])->name('medium.index');
@@ -92,8 +99,9 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('medium/edit', [MediumController::class, 'edit'])->name('medium.edit');
 	Route::post('medium/{id}/update', [MediumController::class, 'update'])->name('medium.update');
 	Route::get('medium/delete', [MediumController::class, 'distroy'])->name('medium.distroy');
-
+	Route::get('medium_export', [MediumController::class, 'mediumExport'])->name('medium.export');
 	Route::get('get_medium', [MediumController::class, 'getMedium'])->name('get.medium');
+	Route::get('get_medium_excel', [MediumController::class, 'get_excel_Medium'])->name('get.medium.excel');
 	/* */
 	Route::get('note', [NoteController::class, 'index'])->name('note.index');
 	Route::get('note/create/{subject_id?}', [NoteController::class, 'create'])->name('note.create');
@@ -109,6 +117,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('semester/edit', [SemesterController::class, 'edit'])->name('semester.edit');
 	Route::post('semester/{id}/update', [SemesterController::class, 'update'])->name('semester.update');
 	Route::get('semester/delete', [SemesterController::class, 'distroy'])->name('semester.distroy');
+	Route::get('semester_export', [SemesterController::class, 'semesterExport'])->name('semester.export');
 
 	Route::get('load_semester', [SemesterController::class, 'loadSemester'])->name('load.semester');
 	
@@ -123,7 +132,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('unit/edit', [UnitController::class, 'edit'])->name('unit.edit');
 	Route::post('unit/{id}/update', [UnitController::class, 'update'])->name('unit.update');
 	Route::get('unit/delete', [UnitController::class, 'distroy'])->name('unit.distroy');
-
+	Route::get('unit_export', [UnitController::class, 'unitExport'])->name('unit.export');
 	Route::get('get_unit', [UnitController::class, 'getUnit'])->name('get.unit');
 
 	/*slider*/
@@ -142,6 +151,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('videos/edit', [VideosController::class, 'edit'])->name('videos.edit');
 	Route::post('videos/{id}/update', [VideosController::class, 'update'])->name('videos.update');
 	Route::get('videos/delete', [VideosController::class, 'distroy'])->name('videos.distroy');
+	Route::get('videos_export', [VideosController::class, 'videosExport'])->name('videos.export');
 
 	/*solutions*/
 	Route::get('solution', [SolutionController::class, 'index'])->name('solution.index');
@@ -150,6 +160,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('solution/edit', [SolutionController::class, 'edit'])->name('solution.edit');
 	Route::post('solution/{id}/update', [SolutionController::class, 'update'])->name('solution.update');
 	Route::get('solution/delete', [SolutionController::class, 'distroy'])->name('solution.distroy');
+
 
 	/*materials*/
 	Route::get('material', [MaterialController::class, 'index'])->name('material.index');
@@ -360,4 +371,12 @@ Route::group(['middleware' => 'auth'], function(){
 
 	Route::post('question/blank_export',[QuestionController::class,'blank_export'])->name('question.blank_export');
 	Route::post('import/bluck_question',[QuestionController::class,'import_bluck_question'])->name('import.bluck_question');
+
+	/*export*/
+	Route::get('/all_data_excel',[ExportController::class,'allDataExcel'])->name('all_data_excel.index');
+	Route::post('/get_all_data_excel',[ExportController::class,'getAllDataExcel'])->name('get.all_data_excel');
+
+	Route::get('/generate_excel',[ExportController::class,'generateExcel'])->name('generate.excel');
+	Route::post('/get_generate_excel',[ExportController::class,'getGenerateExcel'])->name('get.generate.excel');
+
 });	

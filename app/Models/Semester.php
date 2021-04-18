@@ -22,4 +22,10 @@ class Semester extends Model
     {
     	return $this->belongsTo(Standard::class,'standard_id');
     }
+
+    public function subject()
+    {
+        return $this->belongsTo(Subject::class,'subject_id');
+    }
+    
 }
