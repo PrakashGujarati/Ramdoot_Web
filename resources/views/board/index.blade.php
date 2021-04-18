@@ -27,12 +27,15 @@ td{
 				</div>
 			@endif
         	<div class="row">
-        		<div class="col-lg-8">
+        		<div class="col-lg-6">
             		<h4 class="nk-block-title">Board / Organisation List</h4>
             	</div>
             	<div class="col-lg-4 text-right">
             		<a href="{{ route('board.create') }}" class="btn btn-primary text-light">Add Board / Organisation</a>
             	</div>
+                <div class="col-lg-2">
+                    
+                </div>
             </div>
         </div>
     </div>

@@ -17,10 +17,10 @@
 				</div>
 			@endif
         	<div class="row">
-        		<div class="col-lg-8">
+        		<div class="col-lg-9">
             		<h4 class="nk-block-title">Standard / Class List</h4>
             	</div>
-            	<div class="col-lg-4 text-right">
+            	<div class="col-lg-3 text-right">
             		<a href="{{ route('standard.create') }}" class="btn btn-primary text-light">Add Standard / Class</a>
             	</div>
             </div>

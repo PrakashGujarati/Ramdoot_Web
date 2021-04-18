@@ -206,6 +206,31 @@ class MediumController extends Controller
         }
         return response()->json(['html'=>$result]);
     }
+
+    public function get_excel_Medium(Request $request)
+    {
+        $getmedium = Medium::where(['board_id' => $request->board_id,'status' => 'Active'])->orderBy('order_no','asc')->get();
+
+        $result="<option value=''>--Select Medium--</option><option value='All'>All</option>";
+        if(count($getmedium) > 0)
+        {
+            foreach ($getmedium as $medium) {
+
+                if($request->has('medium_id')){
+                    if($request->medium_id == $medium->id){
+                        $result.="<option value='".$medium->id."' selected>".$medium->medium_name."</option>";
+                    }
+                    else{
+                        $result.="<option value='".$medium->id."'>".$medium->medium_name."</option>";    
+                    }
+                }else{
+                    $result.="<option value='".$medium->id."'>".$medium->medium_name."</option>";
+                }
+            }
+        }
+        return response()->json(['html'=>$result]);
+    }
+
     public function load_autocomplete(request $request)
     {
         $response=[];
@@ -255,4 +280,5 @@ class MediumController extends Controller
         $data = ['html' => $html];
         return response()->json($data); 
     }
+    
 }

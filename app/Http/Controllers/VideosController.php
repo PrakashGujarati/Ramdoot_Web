@@ -448,4 +448,6 @@ class VideosController extends Controller
         $data = ['html' => $html];
         return response()->json($data);    
     }
+    
 }
+

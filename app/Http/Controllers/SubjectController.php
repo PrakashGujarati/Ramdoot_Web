@@ -443,4 +443,5 @@ class SubjectController extends Controller
         $data = ['html' => $html];
         return response()->json($data);
     }
+
 }

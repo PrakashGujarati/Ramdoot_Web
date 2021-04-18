@@ -19,7 +19,7 @@
         	<div class="row">
         		<div class="col-lg-10">
             		<h4 class="nk-block-title">Medium List</h4>
-            	</div>
+                </div>
             	<div class="col-lg-2 text-right">
             		<a href="{{ route('medium.create') }}" class="btn btn-primary text-light">Add Medium</a>
             	</div>
