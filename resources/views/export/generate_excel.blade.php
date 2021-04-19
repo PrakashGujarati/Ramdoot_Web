@@ -176,7 +176,7 @@ $(document).on('change','.medium_id',function(){
 function getStandard(board_id,medium_id){
     $.ajax({
         type: "GET",
-        url: "{{route('get.standard')}}",
+        url: "{{route('get.standard.export')}}",
         data: {
             "board_id":board_id,
             "medium_id":medium_id,
@@ -193,14 +193,16 @@ $(document).on('change','.standard_id',function(){
     var standard_id = $('.standard_id').val();
     var medium_id = $('.medium_id').val();
     var board_id = $('.board_id').val();
-    getSubject(standard_id,medium_id,board_id);
+    if(standard_id != "All"){
+    	getSubject(standard_id,medium_id,board_id);
+	}
     //getSemester(standard_id,medium_id,board_id);
 });
 
 function getSubject(standard_id,medium_id,board_id){
     $.ajax({
         type: "GET",
-        url: "{{route('get.subject')}}",
+        url: "{{route('get.subject.export')}}",
         data: {
             "standard_id":standard_id,
             "medium_id":medium_id,
@@ -220,14 +222,16 @@ $(document).on('change','.subject_id',function(){
     var standard_id = $('.standard_id').val();
     var semester_id = $('.semester_id').val();
     var subject_id = $('.subject_id').val();
-    getSemester(board_id,medium_id,standard_id,subject_id);
+    if(subject_id != "All"){
+    	getSemester(board_id,medium_id,standard_id,subject_id);
+    }
     //getUnit(board_id,medium_id,standard_id,semester_id,subject_id);
 });
 
 function getSemester(board_id,medium_id,standard_id,subject_id){
     $.ajax({
         type: "GET",
-        url: "{{route('get.semester.unit')}}",
+        url: "{{route('get.semester.export')}}",
         data: {
             "board_id":board_id,
             "medium_id":medium_id,
@@ -247,14 +251,16 @@ $(document).on('change','.semester_id',function(){
     var medium_id = $('.medium_id').val();
     var board_id = $('.board_id').val();
     var subject_id = $('.subject_id').val();
-    getUnit(board_id,medium_id,standard_id,semester_id,subject_id);
+    if(semester_id != "All"){
+    	getUnit(board_id,medium_id,standard_id,semester_id,subject_id);
+   	}
 });
 
 
 function getUnit(board_id,medium_id,standard_id,semester_id,subject_id){
     $.ajax({
         type: "GET",
-        url: "{{route('get.unit')}}",
+        url: "{{route('get.unit.export')}}",
         data: {
             "board_id":board_id,
             "medium_id":medium_id,

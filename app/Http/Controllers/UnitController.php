@@ -403,6 +403,34 @@ class UnitController extends Controller
         
         return response()->json(['html'=>$result]); 
     }
+
+
+    public function get_excel_unit(Request $request){
+
+       //$getunit = Unit::where(['unit_id' => $request->board_id])->get();
+       $getunit = Unit::where(['board_id' => $request->board_id,'medium_id' => $request->medium_id,'standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'subject_id' => $request->subject_id,'status' => 'Active'])->get();
+
+        $result="<option value=''>--Select Unit--</option><option value='All'>All</option>";
+        if(count($getunit) > 0)
+        {
+            foreach ($getunit as $unit) {
+
+                if($request->has('unit_id')){
+                    if($request->unit_id == $unit->id){
+                        $result.="<option value='".$unit->id."' selected>".$unit->title."</option>";
+                    }
+                    else{
+                        $result.="<option value='".$unit->id."'>".$unit->title."</option>";    
+                    }
+                }else{
+                    $result.="<option value='".$unit->id."'>".$unit->title."</option>";
+                }
+            }
+        }
+        
+        return response()->json(['html'=>$result]); 
+    }
+
     public function load_autocomplete(request $request)
     {
         $response=[];

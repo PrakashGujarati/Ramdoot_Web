@@ -263,6 +263,34 @@ class SemesterController extends Controller
         }
         return response()->json(['html'=>$result]);   
     }
+
+    public function get_excel_semester(Request $request){
+
+        $getsemester = Semester::where(["board_id" => $request->board_id,"medium_id" => $request->medium_id,
+            "standard_id" => $request->standard_id,"subject_id" => $request->subject_id,'status' => 'Active'])->orderBy('order_no','asc')->get();
+
+        $result="<option value=''>--Select Semester--</option><option value='All'>All</option>";
+        if(count($getsemester) > 0)
+        {
+            foreach ($getsemester as $semester) {
+
+                if($request->has('semester_id')){
+                    if($request->semester_id == $semester->id){
+                        $result.="<option value='".$semester->id."' selected>".$semester->semester."</option>";
+                    }
+                    else{
+                        $result.="<option value='".$semester->id."'>".$semester->semester."</option>";    
+                    }
+                }else{
+                    $result.="<option value='".$semester->id."'>".$semester->semester."</option>";
+                }
+            }
+        }
+        return response()->json(['html'=>$result]);   
+    }
+
+    
+
     public function load_autocomplete(request $request)
     {
         $response=[];
