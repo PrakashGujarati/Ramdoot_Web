@@ -377,6 +377,32 @@ class SubjectController extends Controller
         }
         return response()->json(['html'=>$result]);   
     }
+
+    public function get_excel_subject(Request $request){
+
+        $getsubject = Subject::where(['board_id' => $request->board_id,'standard_id' => $request->standard_id,'medium_id' => $request->medium_id,'status' => 'Active'])->orderBy('order_no','asc')->get();
+
+        $result="<option value=''>--Select Subject--</option><option value='All'>All</option>";
+        if(count($getsubject) > 0)
+        {
+            foreach ($getsubject as $subject) {
+
+                if($request->has('subject_id')){
+                    if($request->subject_id == $subject->id){
+                        $result.="<option value='".$subject->id."' selected>".$subject->subject_name."</option>";
+                    }
+                    else{
+                        $result.="<option value='".$subject->id."'>".$subject->subject_name."</option>";    
+                    }
+                }else{
+                    $result.="<option value='".$subject->id."'>".$subject->subject_name."</option>";
+                }
+            }
+        }
+        return response()->json(['html'=>$result]);   
+    }
+
+    
     public function load_autocomplete(request $request)
     {
         $response=[];

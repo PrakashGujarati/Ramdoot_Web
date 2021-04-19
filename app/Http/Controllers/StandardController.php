@@ -311,6 +311,33 @@ class StandardController extends Controller
         }
         return response()->json(['html'=>$result]);   
     }
+
+
+    public function get_excel_Standard(Request $request){
+
+        $getstandard = Standard::where(['board_id' => $request->board_id,'medium_id' => $request->medium_id,'status' => 'Active'])->orderBy('order_no','asc')->get();
+
+        $result="<option value=''>--Select Standard--</option><option value='All'>All</option>";
+        if(count($getstandard) > 0)
+        {
+            foreach ($getstandard as $standard) {
+
+                if($request->has('standard_id')){
+                    if($request->standard_id == $standard->id){
+                        $result.="<option value='".$standard->id."' selected>".$standard->standard."</option>";
+                    }
+                    else{
+                        $result.="<option value='".$standard->id."'>".$standard->standard."</option>";    
+                    }
+                }else{
+                    $result.="<option value='".$standard->id."'>".$standard->standard."</option>";
+                }
+            }
+        }
+        return response()->json(['html'=>$result]);   
+    }
+
+
     public function load_autocomplete(request $request)
     {
         $response=[];

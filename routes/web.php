@@ -68,6 +68,8 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::post('standard/{id}/update', [StandardController::class, 'update'])->name('standard.update');
 	Route::get('standard/delete', [StandardController::class, 'distroy'])->name('standard.distroy');
 	Route::get('standard_export', [StandardController::class, 'standardExport'])->name('standard.export');
+	Route::get('get_standard_export', [StandardController::class, 'get_excel_Standard'])->name('get.standard.export');
+
 
 
 	Route::get('get_standard', [StandardController::class, 'getStandard'])->name('get.standard');
@@ -80,6 +82,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::post('subject/{id}/update', [SubjectController::class, 'update'])->name('subject.update');
 	Route::get('subject/delete', [SubjectController::class, 'distroy'])->name('subject.distroy');
 	Route::get('subject_export', [SubjectController::class, 'subjectExport'])->name('subject.export');
+	Route::get('get_subject_export', [SubjectController::class, 'get_excel_subject'])->name('get.subject.export');
 
 	Route::get('get_subject', [SubjectController::class, 'getSubject'])->name('get.subject');
 
@@ -118,6 +121,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::post('semester/{id}/update', [SemesterController::class, 'update'])->name('semester.update');
 	Route::get('semester/delete', [SemesterController::class, 'distroy'])->name('semester.distroy');
 	Route::get('semester_export', [SemesterController::class, 'semesterExport'])->name('semester.export');
+	Route::get('get_semester_export', [SemesterController::class, 'get_excel_semester'])->name('get.semester.export');
 
 	Route::get('load_semester', [SemesterController::class, 'loadSemester'])->name('load.semester');
 	
@@ -134,6 +138,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('unit/delete', [UnitController::class, 'distroy'])->name('unit.distroy');
 	Route::get('unit_export', [UnitController::class, 'unitExport'])->name('unit.export');
 	Route::get('get_unit', [UnitController::class, 'getUnit'])->name('get.unit');
+	Route::get('get_unit_export', [UnitController::class, 'get_excel_unit'])->name('get.unit.export');
 
 	/*slider*/
 	Route::get('slider', [SliderController::class, 'index'])->name('slider.index');
