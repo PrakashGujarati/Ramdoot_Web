@@ -34,9 +34,14 @@ class StandardController extends Controller
 	    	if(count($getboard_details) > 0){
 
 	    		$data=[];$getdata=[];
-	    		foreach ($getboard_details as $value) {
-	    			$getdata = Standard::select('id','standard')->where(['medium_id' => $request->medium_id,'section' => $value->section])->orderBy('order_no','asc')->get();
-	    			$data[] = ['id' => $value->id,'section' => $value->section,'standard' => $getdata];
+	    		foreach ($getboard_details as $value) {                    
+	    			$getdata = Standard::select('id','standard','thumbnail')->where(['medium_id' => $request->medium_id,'section' => $value->section])->orderBy('order_no','asc')->get();
+	    			foreach ($getdata as $key => $std_value) 
+                    {
+                       $thumbnail = env('APP_URL')."/upload/board/thumbnail/".$std_value->thumbnail;
+                       $stdArray[] = ['id' => $std_value->id,'medium_name' => $std_value->medium_name,'thumbnail' => $thumbnail];
+                    }
+                    $data[] = ['id' => $value->id,'section' => $value->section,'standard' => $stdArray];
 	    		}
 
 	    		return response()->json([
