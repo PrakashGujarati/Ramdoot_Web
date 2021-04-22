@@ -125,6 +125,22 @@ td{
 						</div>
 					</div>
 
+					<div class="row">
+						<div class="form-group col-lg-6">
+						    <label class="form-label">Data Content</label>
+						    <div class="form-control-wrap">
+						        <select name="data_content" class="form-control data_content" id="data_content">
+						            <option value="">--Select Data Content--</option>
+						        </select>
+						        @error('data_content')
+						            <span class="text-danger" role="alert">
+						                <strong>{{ $message }}</strong>
+						            </span>
+						        @enderror
+						    </div>
+						</div>
+					</div>
+
 	                <div class="row">    
 		                <div class="form-group col-lg-4 mt-4">
 	                        <button type="submit" class="btn btn-lg btn-primary">Export</button>
@@ -271,6 +287,38 @@ function getUnit(board_id,medium_id,standard_id,semester_id,subject_id){
         success: function(result) { 
             $('.unit_id').html('');
             $('.unit_id').html(result.html);
+        } 
+    });
+}
+
+$(document).on('change','.unit_id',function(){
+    var standard_id = $('.standard_id').val();
+    var semester_id = $('.semester_id').val();
+    var medium_id = $('.medium_id').val();
+    var board_id = $('.board_id').val();
+    var subject_id = $('.subject_id').val();
+	var unit_id = $('.unit_id').val();
+    if(semester_id != "All"){
+    	getDataContent(board_id,medium_id,standard_id,subject_id,semester_id,unit_id);
+   	}
+});
+
+
+function getDataContent(board_id,medium_id,standard_id,subject_id,semester_id,unit_id){
+    $.ajax({
+        type: "GET",
+        url: "{{route('get.datacontent.export')}}",
+        data: {
+            "board_id":board_id,
+            "medium_id":medium_id,
+            "standard_id":standard_id,
+            "semester_id":semester_id,
+            "subject_id":subject_id,
+            "unit_id":unit_id,
+        },
+        success: function(result) { 
+            $('.data_content').html('');
+            $('.data_content').html(result.html);
         } 
     });
 }

@@ -139,6 +139,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('unit_export', [UnitController::class, 'unitExport'])->name('unit.export');
 	Route::get('get_unit', [UnitController::class, 'getUnit'])->name('get.unit');
 	Route::get('get_unit_export', [UnitController::class, 'get_excel_unit'])->name('get.unit.export');
+	Route::get('get_datacontent_export', [UnitController::class, 'getDataContentExport'])->name('get.datacontent.export');
 
 	/*slider*/
 	Route::get('slider', [SliderController::class, 'index'])->name('slider.index');

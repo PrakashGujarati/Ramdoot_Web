@@ -8,6 +8,9 @@ use App\Models\Board;
 use App\Models\Standard;
 use App\Models\Semester;
 use App\Models\Subject;
+use App\Models\Book;
+use App\Models\Videos;
+use App\Models\Solution;
 
 class UnitController extends Controller
 {
@@ -483,4 +486,38 @@ class UnitController extends Controller
         $data = ['html' => $html];
         return response()->json($data);
     }
+
+    public function getDataContentExport(Request $request){
+        $getBook=0;
+        $getVideo=0;
+        $getSolution=0;
+
+        if($request->unit_id=="All")
+        {
+            $getBook = Book::where(['subject_id' => $request->subject_id,'semester_id' => $request->semester_id,'status' => 'Active'])->get();
+            $getVideo = Videos::where(['subject_id' => $request->subject_id,'semester_id' => $request->semester_id,'status' => 'Active'])->get();
+            $getSolution = Solution::where(['subject_id' => $request->subject_id,'semester_id' => $request->semester_id,'status' => 'Active'])->get();
+        }else{
+            $getBook = Book::where(['unit_id' => $request->unit_id,'status' => 'Active'])->get();
+            $getVideo = Videos::where(['unit_id' => $request->unit_id,'status' => 'Active'])->get();
+            $getSolution = Solution::where(['unit_id' => $request->unit_id,'status' => 'Active'])->get();
+        }
+        //$getunit = Unit::where(['board_id' => $request->board_id,'medium_id' => $request->medium_id,'standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'subject_id' => $request->subject_id,'status' => 'Active'])->get();
+ 
+         $result="<option value=''>--Select Data Content--</option>";
+         if(count($getBook) > 0)
+         {
+            $result.="<option value='books'>Books</option>";
+         }
+         if(count($getVideo) > 0)
+         {
+            $result.="<option value='videos'>Video</option>";
+         }
+         if(count($getSolution) > 0)
+         {
+            $result.="<option value='solutions'>Solution</option>";
+         }
+         
+         return response()->json(['html'=>$result]); 
+     }
 }
