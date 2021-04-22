@@ -167,23 +167,49 @@ class ExportController extends Controller
             && $request->data_content != null){
 
             if($request->data_content == 'books'){
-                $data = Book::where(['board_id' => $request->board_id,'medium_id' => $request->medium_id
-                ,'standard_id' => $request->standard_id,'subject_id' => $request->subject_id,
-                'semester_id' => $request->semester_id,'unit_id' => $request->unit_id,'status' => 'Active'])->get();
+
+                if($request->unit_id=='All')
+                {
+                    $data = Book::where(['board_id' => $request->board_id,'medium_id' => $request->medium_id,
+                    'standard_id' => $request->standard_id,'subject_id' => $request->subject_id,
+                    'semester_id' => $request->semester_id,'status' => 'Active'])->get();
+                }else
+                {
+                    $data = Book::where(['board_id' => $request->board_id,'medium_id' => $request->medium_id,
+                    'standard_id' => $request->standard_id,'subject_id' => $request->subject_id,
+                    'semester_id' => $request->semester_id,'unit_id' => $request->unit_id,'status' => 'Active'])->get();
+                }
+
                 return Excel::download(new BooksExport($data), 'Books.xlsx');
             }
 
             if($request->data_content == 'videos'){
-                $data = Videos::where(['board_id' => $request->board_id,'medium_id' => $request->medium_id
-                ,'standard_id' => $request->standard_id,'subject_id' => $request->subject_id,
-                'semester_id' => $request->semester_id,'unit_id' => $request->unit_id,'status' => 'Active'])->get();
+                if($request->unit_id=='All')
+                {
+                    $data = Book::where(['board_id' => $request->board_id,'medium_id' => $request->medium_id,
+                    'standard_id' => $request->standard_id,'subject_id' => $request->subject_id,
+                    'semester_id' => $request->semester_id,'status' => 'Active'])->get();
+                }else
+                {
+                    $data = Videos::where(['board_id' => $request->board_id,'medium_id' => $request->medium_id,
+                    'standard_id' => $request->standard_id,'subject_id' => $request->subject_id,
+                    'semester_id' => $request->semester_id,'unit_id' => $request->unit_id,'status' => 'Active'])->get();
+                }
                 return Excel::download(new VideosExport($data), 'Videos.xlsx');
             }
 
             if($request->data_content == 'solutions'){
-                $data = Solution::where(['board_id' => $request->board_id,'medium_id' => $request->medium_id
-                ,'standard_id' => $request->standard_id,'subject_id' => $request->subject_id,
-                'semester_id' => $request->semester_id,'unit_id' => $request->unit_id,'status' => 'Active'])->get();
+                if($request->unit_id=='All')
+                {
+                    $data = Book::where(['board_id' => $request->board_id,'medium_id' => $request->medium_id,
+                    'standard_id' => $request->standard_id,'subject_id' => $request->subject_id,
+                    'semester_id' => $request->semester_id,'status' => 'Active'])->get();
+                }else
+                {
+                    $data = Solution::where(['board_id' => $request->board_id,'medium_id' => $request->medium_id,
+                    'standard_id' => $request->standard_id,'subject_id' => $request->subject_id,
+                    'semester_id' => $request->semester_id,'unit_id' => $request->unit_id,'status' => 'Active'])->get();                    
+                }
                 return Excel::download(new SolutionsExport($data), 'Solutions.xlsx');
             }
 
