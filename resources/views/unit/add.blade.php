@@ -28,7 +28,7 @@ td{
                     @csrf
                         <input type="hidden" name="hidden_id" class="hidden_id" id="hidden_id" value="0">
                         <div class="row">
-                            <div class="form-group col-lg-6">
+                            <div class="form-group col-lg-4">
                                 <label class="form-label">Board</label>
                                 <div class="form-control-wrap">
                                     <select name="board_id" class="form-control board_id" id="board_id">
@@ -45,7 +45,7 @@ td{
                                 </div>
                             </div>
 
-                            <div class="form-group col-lg-6">
+                            <div class="form-group col-lg-4">
                                 <label class="form-label">Medium</label>
                                 <div class="form-control-wrap">
                                     <select name="medium_id" class="form-control medium_id" id="medium_id">
@@ -58,57 +58,49 @@ td{
                                     @enderror
                                 </div>
                             </div>
-
+                            <div class="form-group col-lg-4">
+                                <label class="form-label">Standard</label>
+                                <div class="form-control-wrap">
+                                    <select name="standard_id" class="form-control standard_id" id="standard_id">
+                                        <option>--Select Standard--</option>
+                                    </select>
+                                    @error('standard_id')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
 
                         </div>
                         <div class="row">
-                        <div class="form-group col-lg-4">
-                            <label class="form-label">Standard</label>
-                            <div class="form-control-wrap">
-                                <select name="standard_id" class="form-control standard_id" id="standard_id">
-                                    <option>--Select Standard--</option>
-                                </select>
-                                @error('standard_id')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                            <div class="form-group col-lg-4">
+                                <label class="form-label">Subject</label>
+                                <div class="form-control-wrap">
+                                    <select name="subject_id" class="form-control subject_id" id="subject_id">
+                                        <option>--Select Subject--</option>
+                                    </select>
+                                    @error('subject_id')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="form-group col-lg-4">
-                            <label class="form-label">Subject</label>
-                            <div class="form-control-wrap">
-                                <select name="subject_id" class="form-control subject_id" id="subject_id">
-                                    <option>--Select Subject--</option>
-                                </select>
-                                @error('subject_id')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                            <div class="form-group col-lg-4">
+                                <label class="form-label">Semester</label>
+                                <div class="form-control-wrap">
+                                    <select name="semester_id" class="form-control semester_id" id="semester_id">
+                                        <option>--Select Semester--</option>
+                                    </select>
+                                    @error('semester_id')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="form-group col-lg-4">
-                            <label class="form-label">Semester</label>
-                            <div class="form-control-wrap">
-                                <select name="semester_id" class="form-control semester_id" id="semester_id">
-                                    <option>--Select Semester--</option>
-                                </select>
-                                @error('semester_id')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        
-                        </div>
-                        
-
-                        <div class="row">
                             <div class="form-group col-lg-4">
                                 <label class="form-label">Title</label>
                                 <div class="form-control-wrap">
@@ -120,12 +112,18 @@ td{
                                     @enderror
                                 </div>
                             </div>
+                        
+                        </div>
+                        
+
+                        <div class="row">
+                           
 
                             <div class="form-group col-lg-3">
                                 <label class="form-label">Sub Title</label>
                                 <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="description" name="description" value="{{ old('description') }}">
-                                    @error('description')
+                                    <input type="text" class="form-control" id="sub_title" name="sub_title" value="{{ old('sub_title') }}">
+                                    @error('sub_title')
                                         <span class="text-danger" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
@@ -133,7 +131,7 @@ td{
                                 </div>
                             </div>
 
-                            <div class="form-group col-lg-2">
+                            <div class="form-group col-lg-3">
                                 <div class="row">
                                     <input type="hidden" name="url_type" class="url_type" id="url_type" value="file">
                                     <div class="col-lg-6"><label class="form-label">Url</label></div>
@@ -156,7 +154,7 @@ td{
                                     @enderror
                                 </div>
                             </div>
-                            <div class="form-group col-lg-2">
+                            <div class="form-group col-lg-3">
                                 <label class="form-label">Thumbnail</label>
                                 <div class="form-control-wrap">
                                     <input type="file" class="form-control" id="thumbnail" name="thumbnail" value="">
@@ -170,7 +168,7 @@ td{
                                 </div>
                             </div>
 
-                            <div class="form-group col-lg-1">
+                            <div class="form-group col-lg-3">
                                 <label class="form-label">Pages</label>
                                 <div class="form-control-wrap">
                                     <input type="text" class="form-control" id="pages" name="pages" value="{{ old('pages') }}">
@@ -217,7 +215,22 @@ td{
 @section('scripts')
 
 <script type="text/javascript">
-
+    $("#sub_title").keypress(function (e) {
+            var keyCode = e.keyCode || e.which;
+ 
+            $("#lblError").html("");
+ 
+            //Regex for Valid Characters i.e. Alphabets.
+            var regex = /^[A-Za-z]+$/;
+ 
+            //Validate TextBox value against the Regex.
+            var isValid = regex.test(String.fromCharCode(keyCode));
+            if (!isValid) {
+                $("#error_sub_title").html("Only Alphabets allowed.");
+            }
+ 
+            return isValid;
+    });
     $(document).on('click','.above_order', function() {
         var order_no=$(this).data('order_no');
         $.ajax({
@@ -575,7 +588,18 @@ $(document).ready(function () {
                     $('.dyamictable').empty();
                     $('.dyamictable').html(data.html);
                     $(".datatable-init").DataTable();
-                }            
+                },
+                error :function( data ) {
+                    var errors = $.parseJSON(data.responseText);
+                    
+                    $.each(errors, function (key, value) {               
+                        if(key=="errors")
+                        { 
+                           alert(value.sub_title[0]);
+                        }
+
+                    });
+                }             
             });
         }
     });
@@ -626,7 +650,8 @@ $(document).on('click','.edit-btn',function(){
             $('#thumbnail_preview').css('display','block');
             var thumbnail_path = "{{ env('APP_URL') }}"+"/upload/unit/thumbnail/"+result.thumbnail;
             $('#thumbnail_preview').attr('src', thumbnail_path);
-            
+            $('#sub_title').val(result.sub_title);
+            $('#sub_title').prop("readonly", true);   
             $('#hidden_id').val(result.id);
             //$('#thumbnail').val('');
         }            

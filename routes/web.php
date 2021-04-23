@@ -382,7 +382,10 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('/all_data_excel',[ExportController::class,'allDataExcel'])->name('all_data_excel.index');
 	Route::post('/get_all_data_excel',[ExportController::class,'getAllDataExcel'])->name('get.all_data_excel');
 
-	Route::get('/generate_excel',[ExportController::class,'generateExcel'])->name('generate.excel');
-	Route::post('/get_generate_excel',[ExportController::class,'getGenerateExcel'])->name('get.generate.excel');
+	Route::get('/generate_specific_excel',[ExportController::class,'generateExcel'])->name('generate.specific.excel');
+	Route::post('/get_generate_specific_excel',[ExportController::class,'getGenerateExcel'])->name('get.generate.specific.excel');
+
+	Route::get('/generate_excel_sample',[ExportController::class,'generateExcelSample'])->name('generate.excel.sample');
+	Route::post('/get_generate_excel_sample',[ExportController::class,'getGenerateExcelSample'])->name('get.generate.excel.sample');
 
 });	

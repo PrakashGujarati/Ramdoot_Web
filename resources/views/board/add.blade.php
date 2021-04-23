@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title','Add Board')
+@section('title','Board')
 @section('css')
 <style>
 table {
@@ -21,7 +21,7 @@ td{
             <div class="card h-100">
                 <div class="card-inner">
                     <div class="card-head">
-                        <h5 class="card-title">Add Board / Organisation</h5>
+                        <h5 class="card-title">Board / Organisation</h5>
                     </div>
                     <form action="{{ route('board.store') }}" method="POST" enctype='multipart/form-data' id="board_form">
                     @csrf
@@ -37,17 +37,7 @@ td{
                                 @enderror
                             </div>
                         </div>
-                        {{--<div class="form-group">
-                            <label class="form-label">Medium</label>
-                            <div class="form-control-wrap">
-                                <input type="text" class="form-control" id="medium" name="medium" value="{{ old('medium') }}">
-                                @error('medium')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>--}}
+                       
                         <div class="form-group">
                             <label class="form-label">Full form of Board/Organisation</label>
                             <div class="form-control-wrap">
@@ -59,34 +49,35 @@ td{
                                 @enderror
                             </div>
                         </div>
-                        {{--<div class="form-group">
-                            <label class="form-label">Url</label>
-                            <div class="form-control-wrap">
-                                <input type="file" class="form-control" id="url" name="url" value="">
-                                @error('url')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>--}}
+                        
                         <div class="row">
-                        <div class="form-group col-lg-6">
-                            <label class="form-label">Thumbnail</label>
-                            <div class="form-control-wrap">
-                                <input type="file" class="form-control" id="thumbnail" name="thumbnail" value="">
-                                <input type="hidden" id="hidden_thumbnail" name="hidden_thumbnail" value="">
-                                
-                                @error('thumbnail')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                            <div class="form-group col-lg-6">
+                                <label class="form-label">Subtitle</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" id="sub_title" name="sub_title" value="">
+                                    @error('sub_title')
+                                        <span class="text-danger" id="error_sub_title" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group col-lg-6">
-                            <img id="thumbnail_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" width="100" />
-                        </div>
+                            <div class="form-group col-lg-3">
+                                <label class="form-label">Thumbnail</label>
+                                <div class="form-control-wrap">
+                                    <input type="file" class="form-control" id="thumbnail" name="thumbnail" value="">
+                                    <input type="hidden" id="hidden_thumbnail" name="hidden_thumbnail" value="">
+                                    
+                                    @error('thumbnail')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-3">
+                                <img id="thumbnail_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" width="100" />
+                            </div>
                         </div>
                         
                         <div class="form-group">
@@ -111,7 +102,38 @@ td{
 
 
 <script type="text/javascript">
-    
+    $("#sub_title").keypress(function (e) {
+            var keyCode = e.keyCode || e.which;
+ 
+            $("#lblError").html("");
+ 
+            //Regex for Valid Characters i.e. Alphabets.
+            var regex = /^[A-Za-z]+$/;
+ 
+            //Validate TextBox value against the Regex.
+            var isValid = regex.test(String.fromCharCode(keyCode));
+            if (!isValid) {
+                $("#error_sub_title").html("Only Alphabets allowed.");
+            }
+ 
+            return isValid;
+    });
+    $("#sub_title").blur(function (e) {
+            var keyCode = e.keyCode || e.which;
+ 
+            $("#lblError").html("");
+ 
+            //Regex for Valid Characters i.e. Alphabets.
+            var regex = /^[A-Za-z]+$/;
+ 
+            //Validate TextBox value against the Regex.
+            var isValid = regex.test(String.fromCharCode(keyCode));
+            if (!isValid) {
+                $("#error_sub_title").html("Only Alphabets allowed.");
+            }
+ 
+            return isValid;
+    });
 
     $(document).on('click','.above_order', function() {
         var order_no=$(this).data('order_no');
@@ -194,22 +216,29 @@ td{
                 contentType: false,
                 processData: false,
                 success: function(data) {
-                    
                     confirm(data.message);
-                    
-                    
                     $('#name').val('');
                     $('#abbreviation').val('');
+                    $('#sub_title').val('');
                     $('#thumbnail').val('');
                     $('#hidden_thumbnail').val('');
                     $('#hidden_id').val('0');
                     $('#thumbnail_preview').css('display','none');
-                    
-                    
                     $('.dyamictable').empty();
                     $('.dyamictable').html(data.html);
                     $(".datatable-init").DataTable();
-                }            
+                },
+                error :function( data ) {
+                    var errors = $.parseJSON(data.responseText);
+                    
+                    $.each(errors, function (key, value) {               
+                        if(key=="errors")
+                        { 
+                           alert(value.sub_title[0]);
+                        }
+
+                    });
+                }             
             });
         }
     });
@@ -230,6 +259,8 @@ $(document).on('click','.edit-btn',function(){
         success: function(result) {
             $('#name').val(result.name);
             $('#abbreviation').val(result.abbreviation);
+            $('#sub_title').val(result.sub_title);
+            $('#sub_title').prop("readonly", true);
             $('#hidden_thumbnail').val(result.thumbnail);
             $('#thumbnail_preview').css('display','block');
             var url_path = "{{ env('APP_URL') }}"+"/upload/board/thumbnail/"+result.thumbnail;

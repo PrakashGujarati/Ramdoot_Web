@@ -48,8 +48,9 @@ class BoardController extends Controller
     {
         $this->validate($request, [
             'name'     => 'required',
-            //'medium'  => 'required',
+            'sub_title'  => 'required',
             'abbreviation' => 'required',
+            'sub_title' => 'required|alpha'
            // 'url'  => 'required',
             //'thumbnail'  => 'required',
         ]);
@@ -61,9 +62,7 @@ class BoardController extends Controller
             {
             
                 $image = $request->file('thumbnail');
-
                 $new_name = rand() . '.' . $image->getClientOriginalExtension();
-
                 $valid_ext = array('png','jpeg','jpg');
 
                 // Location
@@ -81,8 +80,9 @@ class BoardController extends Controller
             }
 
             $update = Board::find($request->hidden_id);
-            $update->name = $request->name;
+            $update->name = $request->name;            
             $update->abbreviation = $request->abbreviation;
+            $update->sub_title = $request->sub_title;
             $update->thumbnail = $new_name;
             $update->save();
 
@@ -122,6 +122,7 @@ class BoardController extends Controller
             $add = new Board;
             $add->name = $request->name;
             $add->abbreviation = $request->abbreviation;
+            $add->sub_title = $request->sub_title;
             $add->thumbnail = $new_name;
             $add->order_no=$last_number;
             $add->save();
@@ -177,9 +178,9 @@ class BoardController extends Controller
     public function update(Request $request, Board $board,$id)
     {
         $this->validate($request, [
-            'name'     => 'required',
-           // 'medium'  => 'required',
-            'abbreviation' => 'required'
+            'name'     => 'required',           
+            'abbreviation' => 'required',
+            'sub_title' => 'required|alpha'
         ]);
 
         $new_name='';
@@ -206,26 +207,10 @@ class BoardController extends Controller
             $new_name = $request->hidden_thumbnail;
         }
 
-
-        // $url_file='';
-        // if($request->has('url'))
-        // {
-        //     $image = $request->file('url');
-        //     $url_file = time().'.'.$image->getClientOriginalExtension();
-        //     $destinationPath = public_path('upload/board/url/');
-        //     $image->move($destinationPath, $url_file);
-        // }
-        // else{
-        //     $url_file = $request->hidden_url;
-        // }
-
-        
-
         $update = Board::find($id);
-        $update->name = $request->name;
-       // $update->medium = $request->medium;
-        $update->abbreviation = $request->abbreviation;
-        //$update->url = $url_file;
+        $update->name = $request->name;       
+        $update->abbreviation = $request->abbreviation; 
+        $update->sub_title = $update->sub_title;        
         $update->thumbnail = $new_name;
         $update->save();
 

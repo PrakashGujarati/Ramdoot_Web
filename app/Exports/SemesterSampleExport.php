@@ -35,8 +35,8 @@ class SemesterSampleExport implements FromCollection,WithHeadings,ShouldAutoSize
                 'standard_id' => $value->standard_id,
                 'standard' => isset($value->standard->standard) ? $value->standard->standard:'',
                 'subject_id' => $value->subject_id,
-                'subject_name' => isset($value->subject->subject_name) ? $value->subject->subject_name:'',
-                'semester' => $value->semester,
+                'subject_name' => "",
+                'semester' => "",
                 'status' => $value->status,
                 'order_no' => $value->order_no
             );

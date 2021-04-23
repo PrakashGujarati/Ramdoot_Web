@@ -97,19 +97,6 @@ td{
                                 @enderror
                             </div>
                         </div>
-                        <!-- <div class="form-group col-lg-6">
-                            <label class="form-label">Semester</label>
-                            <div class="form-control-wrap">
-                                <select name="semester_id" class="form-control semester_id" id="semester_id">
-                                    <option value="">--Select Semester--</option>
-                                </select>
-                                @error('semester_id')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div> -->
                         </div>
 
                         <div class="row">
@@ -137,18 +124,6 @@ td{
                                 </div>
                             </div>
                         </div>
-
-                        {{--<div class="form-group">
-                            <label class="form-label">Url</label>
-                            <div class="form-control-wrap">
-                                <input type="file" class="form-control" id="url" name="url" value="">
-                                @error('url')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>--}}
 
                         <div class="row">
                         <div class="form-group col-lg-6">
@@ -190,7 +165,23 @@ td{
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <script type="text/javascript">
-
+    $("#sub_title").keypress(function (e) {
+            var keyCode = e.keyCode || e.which;
+ 
+            $("#lblError").html("");
+ 
+            //Regex for Valid Characters i.e. Alphabets.
+            var regex = /^[A-Za-z]+$/;
+ 
+            //Validate TextBox value against the Regex.
+            var isValid = regex.test(String.fromCharCode(keyCode));
+            if (!isValid) {
+                $("#error_sub_title").html("Only Alphabets allowed.");
+            }
+ 
+            return isValid;
+    });
+    
     $(document).ready(function() {
        $("#semester_id").select2({
             tags: true,
@@ -400,6 +391,17 @@ $(document).ready(function () {
                     $('.dyamictable').empty();
                     $('.dyamictable').html(data.html);
                     $(".datatable-init").DataTable();
+                },
+                error :function( data ) {
+                    var errors = $.parseJSON(data.responseText);
+                    
+                    $.each(errors, function (key, value) {               
+                        if(key=="errors")
+                        { 
+                           alert(value.sub_title[0]);
+                        }
+
+                    });
                 }            
             });
         }
@@ -431,6 +433,7 @@ $(document).on('click','.edit-btn',function(){
             $('#semester_id').trigger('change');
             $('#subject_name').val(result.subject_details.subject_name);
             $('#sub_title').val(result.subject_details.sub_title);
+            $('#sub_title').prop("readonly", true);
             $('#hidden_thumbnail').val(result.subject_details.thumbnail);
             $('#thumbnail_preview').css('display','block');
             var url_path = "{{ env('APP_URL') }}"+"/upload/subject/thumbnail/"+result.subject_details.thumbnail;
@@ -527,7 +530,7 @@ $(document).on('click','.distroy', function() {
                         confirm("Subject Deleted Successfully.");
                             
                         $('#subject_name').val('');
-                        $('#sub_title').val('');
+                        $('#sub_title').val('');     
                         $('#thumbnail').val('');
                         $('#hidden_thumbnail').val('');
                         $('#thumbnail_preview').css('display','none');

@@ -65,6 +65,7 @@ class SemesterController extends Controller
             'medium_id'  => 'required',
             'standard_id'  => 'required',
             'semester' => 'required',
+            'sub_title' => 'required|alpha'
         ]);
 
         if($request->hidden_id != "0"){
@@ -73,6 +74,7 @@ class SemesterController extends Controller
             $add->medium_id = $request->medium_id;
             $add->standard_id = $request->standard_id;
             $add->semester = $request->semester;
+            $add->sub_title = $request->sub_title;
             $add->save();
 
             $msg = "Semester Updated Successfully.";
@@ -94,6 +96,7 @@ class SemesterController extends Controller
             $add->medium_id = $request->medium_id;
             $add->standard_id = $request->standard_id;
             $add->semester = $request->semester;
+            $add->sub_title = $request->sub_title;
             $add->order_no=$last_no;
             $add->save();
 
@@ -155,6 +158,7 @@ class SemesterController extends Controller
             'medium_id'  => 'required',
             'standard_id'  => 'required',
             'semester' => 'required',
+            'sub_title' => 'required|alpha'
         ]);
 
         $update = Semester::find($id);
@@ -162,6 +166,7 @@ class SemesterController extends Controller
         $update->medium_id = $request->medium_id;
         $update->standard_id = $request->standard_id;
         $update->semester = $request->semester;
+        $add->sub_title = $request->sub_title;
         $update->save();
 
         return redirect()->route('semester.index')->with('success', 'Semester Updated Successfully.');
@@ -341,17 +346,4 @@ class SemesterController extends Controller
         return response()->json($data);
     }
 
-    // public function loadSemester(){
-    //    return $semester_details = Semester::where('status','!=','Deleted')->groupBy('semester')->get();
-    //     $data=[];
-    //     if(count($semester_details) > 0){
-    //         foreach ($semester_details as $value) {
-    //               $get_semesterdetails =  Semester::where(['semester' => $value->id])->first();
-    //               $data[] = ['id' => $get_semesterdetails->id,'text' => $value->semester];  
-    //         }   
-    //     }
-
-    //     return $data;
-
-    // }
 }

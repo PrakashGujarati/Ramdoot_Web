@@ -17,7 +17,7 @@
                     @csrf
                         <input type="hidden" name="hidden_id" class="hidden_id" id="hidden_id" value="0">
                         <div class="row">
-                            <div class="form-group col-lg-6">
+                            <div class="form-group col-lg-4">
                                 <label class="form-label">Board</label>
                                 <div class="form-control-wrap">
                                     <select name="board_id" class="form-control board_id" id="board_id">
@@ -33,8 +33,7 @@
                                     @enderror
                                 </div>
                             </div>
-
-                            <div class="form-group col-lg-6">
+                            <div class="form-group col-lg-4">
                                 <label class="form-label">Medium</label>
                                 <div class="form-control-wrap">
                                     <select name="medium_id" class="form-control medium_id" id="medium_id">
@@ -47,24 +46,25 @@
                                     @enderror
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                        <div class="form-group col-lg-6">
-                            <label class="form-label">Standard</label>
-                            <div class="form-control-wrap">
-                                <select name="standard_id" class="form-control standard_id" id="standard_id">
-                                    <option value="">--Select Standard--</option>
-                                    {{--@foreach($standards as $standards_data)
-                                    <option value="{{ $standards_data->id }}" @if(old('standard_id') == $standards_data->id) selected="" @endif>{{ $standards_data->standard }}</option>
-                                    @endforeach--}}
-                                </select>
-                                @error('standard_id')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                            <div class="form-group col-lg-4">
+                                <label class="form-label">Standard</label>
+                                <div class="form-control-wrap">
+                                    <select name="standard_id" class="form-control standard_id" id="standard_id">
+                                        <option value="">--Select Standard--</option>
+                                        {{--@foreach($standards as $standards_data)
+                                        <option value="{{ $standards_data->id }}" @if(old('standard_id') == $standards_data->id) selected="" @endif>{{ $standards_data->standard }}</option>
+                                        @endforeach--}}
+                                    </select>
+                                    @error('standard_id')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
                             </div>
                         </div>
+                        <div class="row">
+                        
                         <div class="form-group col-lg-6">
                             <label class="form-label">Semester</label>
                             <div class="form-control-wrap">
@@ -76,6 +76,17 @@
                                 @enderror
                             </div>
                         </div>
+                        <div class="form-group col-lg-6">
+                                <label class="form-label">Subtitle</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" id="sub_title" name="sub_title" value="">
+                                    @error('sub_title')
+                                        <span class="text-danger" id="error_sub_title" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
                         </div>
                         
                         <div class="form-group">
@@ -100,7 +111,22 @@
 @section('scripts')
 
 <script type="text/javascript">
-
+    $("#sub_title").keypress(function (e) {
+            var keyCode = e.keyCode || e.which;
+ 
+            $("#lblError").html("");
+ 
+            //Regex for Valid Characters i.e. Alphabets.
+            var regex = /^[A-Za-z]+$/;
+ 
+            //Validate TextBox value against the Regex.
+            var isValid = regex.test(String.fromCharCode(keyCode));
+            if (!isValid) {
+                $("#error_sub_title").html("Only Alphabets allowed.");
+            }
+ 
+            return isValid;
+    });
 
     $(document).on('click','.above_order', function() {
         var order_no=$(this).data('order_no');
@@ -235,11 +261,22 @@ $(document).ready(function () {
                     confirm(data.message);
                     $('#semester').val('');
                     $('#hidden_id').val('0');
-                    
+                    $('#sub_title').val('');
                     $('.dyamictable').empty();
                     $('.dyamictable').html(data.html);
                     $(".datatable-init").DataTable();
-                }            
+                },
+                error :function( data ) {
+                    var errors = $.parseJSON(data.responseText);
+                    
+                    $.each(errors, function (key, value) {               
+                        if(key=="errors")
+                        { 
+                           alert(value.sub_title[0]);
+                        }
+
+                    });
+                }               
             });
         }
     });
@@ -261,6 +298,8 @@ $(document).on('click','.edit-btn',function(){
             $('#board_id').val(result.board_id);
             $('#medium_id').val(result.medium_id);
             $('#standard_id').val(result.standard_id);
+            $('#sub_title').val(result.sub_title);
+            $('#sub_title').prop("readonly", true);           
             var board_id = $('#board_id').val();
             var medium_id = result.medium_id;
             var standard_id = result.standard_id;

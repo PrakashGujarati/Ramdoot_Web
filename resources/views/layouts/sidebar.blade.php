@@ -58,7 +58,15 @@
                                 </a>
                             </li><!-- .nk-menu-item -->
                             @endcanany
-
+                           
+                            @canany(['Subject-view'])
+                            <li class="nk-menu-item @if(\Request::route()->getName() == 'subject.index' || \Request::route()->getName() == 'subject.create' || \Request::route()->getName() == 'subject.edit') active @endif">
+                                <a href="{{ route('subject.index') }}" class="nk-menu-link">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
+                                    <span class="nk-menu-text">Subject</span>
+                                </a>
+                            </li><!-- .nk-menu-item -->
+                            @endcanany
                             @canany(['Semester-view'])
                             <li class="nk-menu-item @if(\Request::route()->getName() == 'semester.index' || \Request::route()->getName() == 'semester.create' || \Request::route()->getName() == 'semester.edit') active @endif">
                                 <a href="{{ route('semester.index') }}" class="nk-menu-link">
@@ -67,38 +75,18 @@
                                 </a>
                             </li><!-- .nk-menu-item -->
                             @endcanany
+                            @canany(['Unit-view'])
+                            <li class="nk-menu-item @if(\Request::route()->getName() == 'unit.index' || \Request::route()->getName() == 'unit.create' || \Request::route()->getName() == 'unit.edit') active @endif">
+                                <a href="{{ route('unit.index') }}" class="nk-menu-link">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
+                                    <span class="nk-menu-text">Unit</span>
+                                </a>
+                            </li><!-- .nk-menu-item -->
+                            @endcanany
                         </ul><!-- .nk-menu-sub -->
                     </li>
                     @endcanany
-
-                    @canany(['Subject-view','Unit-view'])
-                    <li class="nk-menu-item has-sub">
-                        
-                        <a href="#" class="nk-menu-link nk-menu-toggle">
-                            <span class="nk-menu-icon"><em class="icon ni ni-view-group-fill"></em></span>
-                            <span class="nk-menu-text">Sources</span>
-                        </a>
-                        
-                        <ul class="nk-menu-sub">
-                        @canany(['Subject-view'])
-                            <li class="nk-menu-item @if(\Request::route()->getName() == 'subject.index' || \Request::route()->getName() == 'subject.create' || \Request::route()->getName() == 'subject.edit') active @endif">
-                            <a href="{{ route('subject.index') }}" class="nk-menu-link">
-                                <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
-                                <span class="nk-menu-text">Subject</span>
-                            </a>
-                        </li><!-- .nk-menu-item -->
-                        @endcanany
-                        @canany(['Unit-view'])
-                        <li class="nk-menu-item @if(\Request::route()->getName() == 'unit.index' || \Request::route()->getName() == 'unit.create' || \Request::route()->getName() == 'unit.edit') active @endif">
-                            <a href="{{ route('unit.index') }}" class="nk-menu-link">
-                                <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
-                                <span class="nk-menu-text">Unit</span>
-                            </a>
-                        </li><!-- .nk-menu-item -->
-                        @endcanany
-                        </ul><!-- .nk-menu-sub -->
-                    </li>
-                    @endcanany
+                 
                     @canany(['Feature-view'])
                     <li class="nk-menu-item @if(\Request::route()->getName() == 'feature.index' || \Request::route()->getName() == 'feature.create' || \Request::route()->getName() == 'feature.edit') active @endif">
                         <a href="{{ route('feature.index') }}" class="nk-menu-link">
@@ -284,20 +272,25 @@
                         </a>
                         <ul class="nk-menu-sub">
                             
-                            <li class="nk-menu-item @if(\Request::route()->getName() == 'generate.excel') active @endif">
-                                <a href="{{ route('generate.excel') }}" class="nk-menu-link">
+                            <li class="nk-menu-item @if(\Request::route()->getName() == 'generate.excel.sample') active @endif">
+                                <a href="{{ route('generate.excel.sample') }}" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
                                     <span class="nk-menu-text">Generate Excel</span>
                                 </a>
                             </li><!-- .nk-menu-item -->
-
+                           
                             <li class="nk-menu-item">
                                 <a href="#" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
                                     <span class="nk-menu-text">Upload Excel</span>
                                 </a>
                             </li><!-- .nk-menu-item -->
-
+                            <li class="nk-menu-item @if(\Request::route()->getName() == 'generate.specific.excel') active @endif">
+                                <a href="{{ route('generate.specific.excel') }}" class="nk-menu-link">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
+                                    <span class="nk-menu-text">Specific Data in Excel</span>
+                                </a>
+                            </li><!-- .nk-menu-item -->
                             <li class="nk-menu-item @if(\Request::route()->getName() == 'all_data_excel.index') active @endif">
                                 <a href="{{ route('all_data_excel.index') }}" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>

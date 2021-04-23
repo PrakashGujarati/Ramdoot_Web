@@ -15,7 +15,7 @@ td{
 @endsection
 @section('content')
 
-<div class="nk-block nk-block-lg">
+<div class="nk-block nk-block-lg">	
     <div class="row g-gs">
     	<div class="col-lg-12">
 	    	<div class="card h-100">
@@ -24,7 +24,7 @@ td{
 	                    <h5 class="card-title">Generate Excel</h5>
 	                </div>
 	            
-	            <form action="{{ route('get.generate.specific.excel') }}" method="POST" enctype='multipart/form-data' id="board_form">
+	            <form action="{{ route('get.generate.excel.sample') }}" method="POST" enctype='multipart/form-data' id="board_form">
 	                @csrf
 	                <input type="hidden" name="hidden_id" class="hidden_id" id="hidden_id" value="0">
 

@@ -25,20 +25,9 @@
                                     </span>
                                 @enderror
                             </div>
-                        </div>
-                        {{--<div class="form-group">
-                            <label class="form-label">Medium</label>
-                            <div class="form-control-wrap">
-                                <input type="text" class="form-control" id="medium" name="medium" value="{{ $boarddata->medium }}">
-                                @error('medium')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>--}}
+                        </div>                        
                         <div class="form-group">
-                            <label class="form-label">Abbreviation</label>
+                            <label class="form-label">Full form of Board/Organisation</label>
                             <div class="form-control-wrap">
                                 <input type="text" class="form-control" id="abbreviation" name="abbreviation" value="{{ $boarddata->abbreviation }}">
                                 @error('abbreviation')
@@ -48,44 +37,34 @@
                                 @enderror
                             </div>
                         </div>
-                        {{--<div class="form-group">
-                            <label class="form-label">Url</label>
-                            <div class="form-control-wrap">
-                                <input type="file" class="form-control" id="url" name="url" value="">
-                                <input type="hidden" name="hidden_url" value="{{ $boarddata->url }}">
-                                <br/>
-                                @if($boarddata->url)
-                                    @php $ext = pathinfo($boarddata->url, PATHINFO_EXTENSION); @endphp
-                                    @if($ext == "png" || $ext == "jpg" || $ext == "jpeg")
-                                    <img src="{{ asset('upload/board/url/'.$boarddata->url) }}" class="thumbnail" height="100" width="100">
-                                    @else
-                                    <p>{{ $boarddata->url }}</p>
-                                    @endif
-                                @endif
-                                @error('url')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>--}}
                         <div class="form-group">
-                            <label class="form-label">Thumbnail</label>
-                            <div class="form-control-wrap">
-                                <input type="file" class="form-control" id="thumbnail" name="thumbnail" value="">
-                                <input type="hidden" name="hidden_thumbnail" value="{{ $boarddata->thumbnail }}">
-                                <br/>
-                                @if($boarddata->thumbnail)
-                                <img src="{{ asset('upload/board/thumbnail/'.$boarddata->thumbnail) }}" class="thumbnail" height="100" width="100">
-                                @endif
-                                @error('thumbnail')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-                        
+                                <div class="form-group col-lg-6">
+                                    <label class="form-label">Subtitle</label>
+                                    <div class="form-control-wrap">
+                                        <input type="text" class="form-control" id="sub_title" name="sub_title" value="{{ $boarddata->sub_title }}" readonly>
+                                        @error('sub_title')
+                                            <span class="text-danger" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="form-group col-lg-3">
+                                    <label class="form-label">Thumbnail</label>
+                                    <div class="form-control-wrap">
+                                        <input type="file" class="form-control" id="thumbnail" name="thumbnail" value="">
+                                        <input type="hidden" id="hidden_thumbnail" name="hidden_thumbnail" value="{{ $boarddata->thumbnail }}">                                        
+                                        @error('thumbnail')
+                                            <span class="text-danger" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="form-group col-lg-3">
+                                    <img id="thumbnail_preview" src="{{ $boarddata->thumbnail }}" alt="thumbnail image" class="thumbnail mt-1" height="100" width="100" />
+                                </div>                           
+                        </div>                        
                         <div class="form-group">
                             <button type="submit" class="btn btn-lg btn-primary">Submit</button>
                             <a type="button" href="{{ route('board.index') }}" class="btn btn-lg btn-danger text-light">Cancel</a>

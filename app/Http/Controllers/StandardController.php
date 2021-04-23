@@ -65,6 +65,7 @@ class StandardController extends Controller
             'board_id'     => 'required',
             'medium_id'  => 'required',
             'standard'  => 'required',
+            'sub_title'  => 'required|alpha',
             'section' => 'required'
         ]);
 
@@ -99,6 +100,7 @@ class StandardController extends Controller
             $add->medium_id = $request->medium_id;
             $add->board_id = $request->board_id;
             $add->standard = $request->standard;
+            $add->sub_title = $request->sub_title;
             $add->section = $request->section;
             $add->thumbnail = $new_name;
             $add->save();
@@ -140,6 +142,7 @@ class StandardController extends Controller
             $add->medium_id = $request->medium_id;
             $add->board_id = $request->board_id;
             $add->standard = $request->standard;
+            $add->sub_title = $request->sub_title;
             $add->section = $request->section;
             $add->thumbnail = $new_name;
             $add->order_no=$last_number;
@@ -200,7 +203,7 @@ class StandardController extends Controller
             'board_id'     => 'required',
             'medium_id'  => 'required',
             'standard'  => 'required',
-           // 'semester' => 'required',
+            'sub_title' => 'required|alpha',
             'section' => 'required',
         ]);
 
@@ -232,6 +235,7 @@ class StandardController extends Controller
         $update->board_id = $request->board_id;
         $update->medium_id = $request->medium_id;
         $update->standard = $request->standard;
+        $update->sub_title = $request->sub_title;
         $update->section = $request->section;
         $update->thumbnail = $new_name;
         $update->save();

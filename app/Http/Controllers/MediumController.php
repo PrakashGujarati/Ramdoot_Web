@@ -55,6 +55,7 @@ class MediumController extends Controller
         $this->validate($request, [
             'board_id'     => 'required',
             'medium_name' => 'required',
+            'sub_title' => 'required|alpha'
         ]);
 //        Medium
 
@@ -62,6 +63,7 @@ class MediumController extends Controller
             $add = Medium::find($request->hidden_id);
             $add->board_id = $request->board_id;
             $add->medium_name = $request->medium_name;
+            $add->sub_title = $request->sub_title;
             $add->save();
 
             $mediums_details = Medium::where(['board_id' => $request->board_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
@@ -83,6 +85,7 @@ class MediumController extends Controller
             $add = new Medium;
             $add->board_id = $request->board_id;
             $add->medium_name = $request->medium_name;
+            $add->sub_title = $request->sub_title;
             $add->order_no=$last_no;
             $add->save();
             
@@ -140,11 +143,13 @@ class MediumController extends Controller
         $this->validate($request, [
             'board_id'     => 'required',
             'medium_name' => 'required',
+            'sub_title' => 'required|alpha'
         ]);
 
         $add = Medium::find($id);
         $add->board_id = $request->board_id;
         $add->medium_name = $request->medium_name;
+        $add->sub_title = $request->sub_title;
         $add->save();
 
         return redirect()->route('medium.index')->with('success', 'Medium Updated Successfully.');

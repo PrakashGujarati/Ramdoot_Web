@@ -32,11 +32,11 @@ class StandardSampleExport implements FromCollection,WithHeadings,ShouldAutoSize
                 'board_name' => isset($value->board->name) ? $value->board->name:'',
                 'medium_id' => $value->medium_id,
                 'medium_name' => isset($value->medium->medium_name) ? $value->medium->medium_name:'',
-                'standard' => $value->standard,
+                'standard' => "",
                 'section' => $value->section,
-                'thumbnail' => $value->thumbnail,
+                'thumbnail' => "",
                 'status' => $value->status,
-                'order_no' => $value->order_no,
+                'order_no' => $value->order_no
             );
         }
 

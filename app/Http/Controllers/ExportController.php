@@ -84,7 +84,7 @@ class ExportController extends Controller
         if($request->board_id != null && $request->medium_id == null && $request->standard_id == null && 
             $request->subject_id == null && $request->semester_id == null && $request->unit_id == null){
                 $data = Board::where(['id' => $request->board_id])->first();
-                return Excel::download(new BoardSampleExport($data), 'Boards.xlsx');
+                return Excel::download(new BoardsExport($data), 'Boards.xlsx');
         }
 
         if($request->board_id != null && $request->medium_id != null && $request->standard_id == null && 
@@ -92,11 +92,11 @@ class ExportController extends Controller
 
             if($request->medium_id != 'All'){
                 $data = Medium::where(['board_id' => $request->board_id,'id' => $request->medium_id])->get();
-                return Excel::download(new MediumSampleExport($data), 'Mediums.xlsx');
+                return Excel::download(new MediumsExport($data), 'Mediums.xlsx');
             }
             else{
                 $data = Medium::where(['board_id' => $request->board_id])->get();
-                return Excel::download(new MediumSampleExport($data), 'Mediums.xlsx');
+                return Excel::download(new MediumsExport($data), 'Mediums.xlsx');
             }
         }
 
@@ -106,11 +106,11 @@ class ExportController extends Controller
             if($request->standard_id != 'All'){
                 $data = Standard::where(['board_id' => $request->board_id,'medium_id' => $request->medium_id,
                     'id' => $request->standard_id])->get();
-                return Excel::download(new StandardSampleExport($data), 'Standards.xlsx');
+                return Excel::download(new StandardsExport($data), 'Standards.xlsx');
             }
             else{
                 $data = Standard::where(['board_id' => $request->board_id,'medium_id' => $request->medium_id])->get();
-                return Excel::download(new StandardSampleExport($data), 'Standards.xlsx');
+                return Excel::download(new StandardsExport($data), 'Standards.xlsx');
             }
         }
 
@@ -120,12 +120,12 @@ class ExportController extends Controller
            if($request->subject_id != 'All'){
                 $data = Subject::where(['board_id' => $request->board_id,'medium_id' => $request->medium_id
                     ,'standard_id' => $request->standard_id,'id' => $request->subject_id])->get();
-                return Excel::download(new SubjectSampleExport($data), 'Subjects.xlsx');
+                return Excel::download(new SubjectsExport($data), 'Subjects.xlsx');
             }
             else{
                 $data = Subject::where(['board_id' => $request->board_id,'medium_id' => $request->medium_id
                     ,'standard_id' => $request->standard_id])->get();
-                return Excel::download(new SubjectSampleExport($data), 'Subjects.xlsx');
+                return Excel::download(new SubjectsExport($data), 'Subjects.xlsx');
             } 
         }
 
@@ -135,12 +135,12 @@ class ExportController extends Controller
            if($request->semester_id != 'All'){
                 $data = Semester::where(['board_id' => $request->board_id,'medium_id' => $request->medium_id
                     ,'standard_id' => $request->standard_id,'subject_id' => $request->subject_id,'id' => $request->semester_id])->get();
-                return Excel::download(new SemesterSampleExport($data), 'Semesters.xlsx');
+                return Excel::download(new SemestersExport($data), 'Semesters.xlsx');
             }
             else{
                 $data = Semester::where(['board_id' => $request->board_id,'medium_id' => $request->medium_id,
                     'standard_id' => $request->standard_id,'subject_id' => $request->subject_id])->get();
-                return Excel::download(new SemesterSampleExport($data), 'Semesters.xlsx');
+                return Excel::download(new SemestersExport($data), 'Semesters.xlsx');
             } 
         }
 
@@ -186,7 +186,7 @@ class ExportController extends Controller
             if($request->data_content == 'videos'){
                 if($request->unit_id=='All')
                 {
-                    $data = Book::where(['board_id' => $request->board_id,'medium_id' => $request->medium_id,
+                    $data = Videos::where(['board_id' => $request->board_id,'medium_id' => $request->medium_id,
                     'standard_id' => $request->standard_id,'subject_id' => $request->subject_id,
                     'semester_id' => $request->semester_id,'status' => 'Active'])->get();
                 }else
@@ -201,7 +201,7 @@ class ExportController extends Controller
             if($request->data_content == 'solutions'){
                 if($request->unit_id=='All')
                 {
-                    $data = Book::where(['board_id' => $request->board_id,'medium_id' => $request->medium_id,
+                    $data = Solution::where(['board_id' => $request->board_id,'medium_id' => $request->medium_id,
                     'standard_id' => $request->standard_id,'subject_id' => $request->subject_id,
                     'semester_id' => $request->semester_id,'status' => 'Active'])->get();
                 }else
@@ -214,7 +214,130 @@ class ExportController extends Controller
             }
 
 
+        }    	
+    }
+
+    public function generateExcelSample(){
+        $boards = Board::where('status','Active')->get();
+    	return view('export.generate_excel_sample',compact('boards'));
+    }
+
+    public function getGenerateExcelSample(Request $request){
+
+        if($request->board_id != null && $request->medium_id == null && $request->standard_id == null && 
+            $request->subject_id == null && $request->semester_id == null && $request->unit_id == null){
+                $data = Medium::where(['board_id' => $request->board_id])->get();
+                return Excel::download(new MediumSampleExport($data), 'Mediums.xlsx');
         }
-    	
+
+        if($request->board_id != null && $request->medium_id != null && $request->standard_id == null && 
+            $request->subject_id == null && $request->semester_id == null && $request->unit_id == null){
+
+            if($request->medium_id != 'All'){
+                $data = Standard::where(['board_id' => $request->board_id,'medium_id' => $request->medium_id])->get();
+                return Excel::download(new StandardSampleExport($data), 'Standards.xlsx');
+            }
+            else{
+                $data = Standard::where(['board_id' => $request->board_id])->get();
+                return Excel::download(new StandardSampleExport($data), 'Standards.xlsx');
+            }
+        }
+
+        if($request->board_id != null && $request->medium_id != null && $request->standard_id != null && 
+            $request->subject_id == null && $request->semester_id == null && $request->unit_id == null){
+
+            if($request->standard_id != 'All'){
+                $data = Subject::where(['board_id' => $request->board_id,'medium_id' => $request->medium_id
+                ,'standard_id' => $request->standard_id])->get();
+            return Excel::download(new SubjectSampleExport($data), 'Subjects.xlsx');
+            }
+            else{
+                $data = Subject::where(['board_id' => $request->board_id,'medium_id' => $request->medium_id])->get();
+                return Excel::download(new SubjectSampleExport($data), 'Subjects.xlsx');
+            }
+        }
+
+        if($request->board_id != null && $request->medium_id != null && $request->standard_id != null && 
+            $request->subject_id != null && $request->semester_id == null && $request->unit_id == null){
+
+           if($request->subject_id != 'All'){
+                $data = Semester::where(['board_id' => $request->board_id,'medium_id' => $request->medium_id,
+                'standard_id' => $request->standard_id,'subject_id' => $request->subject_id])->get();
+                return Excel::download(new SemesterSampleExport($data), 'Semesters.xlsx');
+            }
+            else{
+                $data = Semester::where(['board_id' => $request->board_id,'medium_id' => $request->medium_id,
+                    'standard_id' => $request->standard_id])->get();
+                return Excel::download(new SemesterSampleExport($data), 'Semesters.xlsx');
+            } 
+        }
+
+        if($request->board_id != null && $request->medium_id != null && $request->standard_id != null && 
+            $request->subject_id != null && $request->semester_id != null && $request->unit_id == null){
+
+           if($request->semester_id != 'All'){
+                $data = Unit::where(['board_id' => $request->board_id,'medium_id' => $request->medium_id
+                ,'standard_id' => $request->standard_id,'subject_id' => $request->subject_id,
+                'semester_id' => $request->semester_id])->get();
+                return Excel::download(new UnitsExport($data), 'Units.xlsx');
+            }
+            else{
+                $data = Unit::where(['board_id' => $request->board_id,'medium_id' => $request->medium_id
+                    ,'standard_id' => $request->standard_id,'subject_id' => $request->subject_id])->get();
+                return Excel::download(new UnitsExport($data), 'Units.xlsx');
+            } 
+        }
+
+
+        if($request->board_id != null && $request->medium_id != null && $request->standard_id != null && 
+            $request->subject_id != null && $request->semester_id != null && $request->unit_id != null && $request->data_content != null){
+
+                if($request->data_content == 'books'){
+
+                    if($request->unit_id=='All')
+                    {
+                        $data = Book::where(['board_id' => $request->board_id,'medium_id' => $request->medium_id,
+                        'standard_id' => $request->standard_id,'subject_id' => $request->subject_id,
+                        'semester_id' => $request->semester_id,'status' => 'Active'])->get();
+                    }else
+                    {
+                        $data = Book::where(['board_id' => $request->board_id,'medium_id' => $request->medium_id,
+                        'standard_id' => $request->standard_id,'subject_id' => $request->subject_id,
+                        'semester_id' => $request->semester_id,'unit_id' => $request->unit_id,'status' => 'Active'])->get();
+                    }
+    
+                    return Excel::download(new BooksExport($data), 'Books.xlsx');
+                }
+    
+                if($request->data_content == 'videos'){
+                    if($request->unit_id=='All')
+                    {
+                        $data = Videos::where(['board_id' => $request->board_id,'medium_id' => $request->medium_id,
+                        'standard_id' => $request->standard_id,'subject_id' => $request->subject_id,
+                        'semester_id' => $request->semester_id,'status' => 'Active'])->get();
+                    }else
+                    {
+                        $data = Videos::where(['board_id' => $request->board_id,'medium_id' => $request->medium_id,
+                        'standard_id' => $request->standard_id,'subject_id' => $request->subject_id,
+                        'semester_id' => $request->semester_id,'unit_id' => $request->unit_id,'status' => 'Active'])->get();
+                    }
+                    return Excel::download(new VideosExport($data), 'Videos.xlsx');
+                }
+    
+                if($request->data_content == 'solutions'){
+                    if($request->unit_id=='All')
+                    {
+                        $data = Solution::where(['board_id' => $request->board_id,'medium_id' => $request->medium_id,
+                        'standard_id' => $request->standard_id,'subject_id' => $request->subject_id,
+                        'semester_id' => $request->semester_id,'status' => 'Active'])->get();
+                    }else
+                    {
+                        $data = Solution::where(['board_id' => $request->board_id,'medium_id' => $request->medium_id,
+                        'standard_id' => $request->standard_id,'subject_id' => $request->subject_id,
+                        'semester_id' => $request->semester_id,'unit_id' => $request->unit_id,'status' => 'Active'])->get();                    
+                    }
+                    return Excel::download(new SolutionsExport($data), 'Solutions.xlsx');
+                }
+        }
     }
 }

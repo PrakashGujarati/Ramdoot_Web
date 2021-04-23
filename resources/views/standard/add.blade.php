@@ -82,35 +82,35 @@ td{
                             </div>
                         </div>
                         </div>
-                        <!-- <div class="form-group">
-                            <label class="form-label">Semester</label>
-                            <div class="form-control-wrap">
-                                <input type="text" class="form-control" id="semester" name="semester" value="{{ old('semester') }}">
-                                @error('semester')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div> -->
                         <div class="row">
-                        <div class="form-group col-lg-6">
-                            <label class="form-label">Thumbnail</label>
-                            <div class="form-control-wrap">
-                                <input type="file" class="form-control" id="thumbnail" name="thumbnail" value="">
-                                <input type="hidden" id="hidden_thumbnail" name="hidden_thumbnail" value="">
-                                @error('thumbnail')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                            <div class="form-group col-lg-6">
+                                <label class="form-label">Subtitle</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" id="sub_title" name="sub_title" value="">
+                                    @error('sub_title')
+                                        <span class="text-danger" id="error_sub_title" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group col-lg-6">
-                            <img id="thumbnail_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" width="100" />
-                        </div>
-                        </div>
-                        
+                            <div class="form-group col-lg-3">
+                                <label class="form-label">Thumbnail</label>
+                                <div class="form-control-wrap">
+                                    <input type="file" class="form-control" id="thumbnail" name="thumbnail" value="">
+                                    <input type="hidden" id="hidden_thumbnail" name="hidden_thumbnail" value="">
+                                    
+                                    @error('thumbnail')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-3">
+                                <img id="thumbnail_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" width="100" />
+                            </div>
+                        </div>                        
                         <div class="form-group">
                             <button type="submit" class="btn btn-lg btn-primary">Submit</button>
                             <a type="button" href="{{ route('standard.index') }}" class="btn btn-lg btn-danger text-light">Cancel</a>
@@ -132,7 +132,22 @@ td{
 @section('scripts')
 
 <script type="text/javascript">
-
+    $("#sub_title").keypress(function (e) {
+                var keyCode = e.keyCode || e.which;
+    
+                $("#lblError").html("");
+    
+                //Regex for Valid Characters i.e. Alphabets.
+                var regex = /^[A-Za-z]+$/;
+    
+                //Validate TextBox value against the Regex.
+                var isValid = regex.test(String.fromCharCode(keyCode));
+                if (!isValid) {
+                    $("#error_sub_title").html("Only Alphabets allowed.");
+                }
+    
+                return isValid;
+    });
     $(document).on('click','.above_order', function() {
         var order_no=$(this).data('order_no');
         $.ajax({
@@ -287,16 +302,27 @@ $(document).ready(function () {
                 success: function(data) {
                     confirm(data.message);
                     $('#standard').val('');
+                    $('#sub_title').val('');
                     $('#section').val('');
                     $('#thumbnail').val('');
                     $('#hidden_thumbnail').val('');
                     $('#thumbnail_preview').css('display','none');
-                    $('#hidden_id').val('0');
-                    
+                    $('#hidden_id').val('0');                    
                     
                     $('.dyamictable').empty();
                     $('.dyamictable').html(data.html);
                     $(".datatable-init").DataTable();
+                },
+                error :function( data ) {
+                    var errors = $.parseJSON(data.responseText);
+                    
+                    $.each(errors, function (key, value) {               
+                        if(key=="errors")
+                        { 
+                           alert(value.sub_title[0]);
+                        }
+
+                    });
                 }            
             });
         }
@@ -321,6 +347,8 @@ $(document).on('click','.edit-btn',function(){
             var medium_id = result.medium_id;
             getMediumEdit(board_id,medium_id);
             $('#standard').val(result.standard);
+            $('#sub_title').val(result.sub_title);
+            $('#sub_title').prop("readonly", true);   
             $('#section').val(result.section);
             $('#hidden_thumbnail').val(result.thumbnail);
             $('#thumbnail_preview').css('display','block');
@@ -388,6 +416,7 @@ $(document).on('click','.distroy', function() {
                         $('#standard').val('');
                         $('#section').val('');
                         $('#thumbnail').val('');
+                        $('#sub_title').val('');
                         $('#hidden_thumbnail').val('');
                         $('#thumbnail_preview').css('display','none');
 

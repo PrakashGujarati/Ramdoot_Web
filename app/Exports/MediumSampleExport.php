@@ -30,9 +30,9 @@ class MediumSampleExport implements FromCollection,WithHeadings,ShouldAutoSize, 
                 'id' => $value->id,
                 'board_id' => $value->board_id,
                 'board_name' => isset($value->board->name) ? $value->board->name:'',
-                'medium_name' => $value->medium_name,
+                'medium_name' => "",
                 'status' => $value->status,
-                'order_no' => $value->order_no,
+                'order_no' => $value->order_no
             );
         }
 

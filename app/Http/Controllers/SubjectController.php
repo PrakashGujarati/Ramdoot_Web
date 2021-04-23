@@ -72,7 +72,7 @@ class SubjectController extends Controller
             'semester_id' => 'required',
             'standard_id'  => 'required',
             'subject_name' => 'required',
-            'sub_title' => 'required'
+            'sub_title' => 'required|alpha'
         ]);
 
         if($request->hidden_id != "0")
@@ -254,7 +254,7 @@ class SubjectController extends Controller
             'semester_id' => 'required',
             'standard_id'  => 'required',
             'subject_name' => 'required',
-            'sub_title' => 'required',
+            'sub_title' => 'required|alpha'
         ]);
 
         $new_name='';
@@ -300,7 +300,6 @@ class SubjectController extends Controller
         $update->semester_id = $request->semester_id;
         $update->subject_name = $request->subject_name;
         $update->sub_title = $request->sub_title;
-        //$update->url = $url_file;
         $update->thumbnail = $new_name;
         $update->save();
 
