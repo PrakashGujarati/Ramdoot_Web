@@ -64,7 +64,7 @@ class UnitController extends Controller
                 ]);
             }
             else{
-                if($request->semester_id)
+                if($request->semester_id==0)
                 {   
                     $getdata = Unit::where(['subject_id' => $request->subject_id,'status' => 'Active'])->orderBy('order_no','asc')->get();
                 }else
