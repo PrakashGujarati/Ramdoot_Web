@@ -46,7 +46,7 @@ class UnitController extends Controller
             }
 
            // $chkstandard = Standard::where(['id' => $request->standard_id,'status' => 'Active'])->first();
-            $chksemester = Semester::where(['id' => $request->semester_id,'status' => 'Active'])->first();
+            //$chksemester = Semester::where(['id' => $request->semester_id,'status' => 'Active'])->first();
             $chksubject = subject::where(['id' => $request->subject_id,'status' => 'Active'])->first();
 
             // if (empty($chkstandard)) {
@@ -56,14 +56,7 @@ class UnitController extends Controller
             //         "data" => [],
             //     ]);
             // }
-            if (empty($chksemester)) {
-                return response()->json([
-                    "code" => 400,
-                    "message" => "Semester not found.",
-                    "data" => [],
-                ]);
-            }
-            elseif (empty($chksubject)) {
+            if (empty($chksubject)) {
                 return response()->json([
                     "code" => 400,
                     "message" => "subject not found.",
@@ -71,7 +64,13 @@ class UnitController extends Controller
                 ]);
             }
             else{
-                $getdata = Unit::where(['subject_id' => $request->subject_id,'semester_id' => $request->semester_id,'status' => 'Active'])->orderBy('order_no','asc')->get();
+                if($request->semester_id)
+                {   
+                    $getdata = Unit::where(['subject_id' => $request->subject_id,'status' => 'Active'])->orderBy('order_no','asc')->get();
+                }else
+                {
+                    $getdata = Unit::where(['subject_id' => $request->subject_id,'semester_id' => $request->semester_id,'status' => 'Active'])->orderBy('order_no','asc')->get();
+                }
                 
                 if(count($getdata) > 0){
                     $data=[];$totalcount=0;

@@ -8,7 +8,6 @@ use App\Models\Standard;
 use DB;
 use Validator;
 use App\Models\Medium;
-
 class StandardController extends Controller
 {
     public function standardList(Request $request){
