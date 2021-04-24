@@ -19,4 +19,9 @@ class Standard extends Model
     	return $this->belongsTo(Medium::class,'medium_id');
     }
 
+    public function getThumbnailAttribute($value)
+    {
+        return "/upload/standard/thumbnail/".$value;
+    }
+
 }
