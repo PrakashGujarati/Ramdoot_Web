@@ -80,7 +80,7 @@ Route::group(['middleware' => 'auth'], function(){
 
 	/*Subjects*/
 	Route::get('subject', [SubjectController::class, 'index'])->name('subject.index');
-	Route::get('subject/create/{semester_id?}', [SubjectController::class, 'create'])->name('subject.create');
+	Route::get('subject/create/{id?}', [SubjectController::class, 'create'])->name('subject.create')->where('id', '[0-9]+');
 	Route::post('subject/store', [SubjectController::class, 'store'])->name('subject.store');
 	Route::get('subject/edit', [SubjectController::class, 'edit'])->name('subject.edit');
 	Route::post('subject/{id}/update', [SubjectController::class, 'update'])->name('subject.update');
