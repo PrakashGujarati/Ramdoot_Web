@@ -257,7 +257,7 @@ class SemesterController extends Controller
         $getsemester = Semester::where(["board_id" => $request->board_id,"medium_id" => $request->medium_id,
             "standard_id" => $request->standard_id,"subject_id" => $request->subject_id,'status' => 'Active'])->orderBy('order_no','asc')->get();
 
-        $result="<option value=''>--Select Semester--</option>";
+        $result="<option value=''>--Select Semester--</option><option value='0'>No Semester</option>";
         if(count($getsemester) > 0)
         {
             foreach ($getsemester as $semester) {

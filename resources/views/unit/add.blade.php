@@ -93,6 +93,7 @@ td{
                                 <div class="form-control-wrap">
                                     <select name="semester_id" class="form-control semester_id" id="semester_id">
                                         <option>--Select Semester--</option>
+                                        <option value="0">No Semester</option>
                                     </select>
                                     @error('semester_id')
                                         <span class="text-danger" role="alert">
