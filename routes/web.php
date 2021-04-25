@@ -119,7 +119,7 @@ Route::group(['middleware' => 'auth'], function(){
 	
 	/*Semester*/
 	Route::get('semester', [SemesterController::class, 'index'])->name('semester.index');
-	Route::get('semester/create/{standard_id?}', [SemesterController::class, 'create'])->name('semester.create');
+	Route::get('semester/create/{id?}', [SemesterController::class, 'create'])->name('semester.create');
 	Route::post('semester/store', [SemesterController::class, 'store'])->name('semester.store');
 	Route::get('semester/edit', [SemesterController::class, 'edit'])->name('semester.edit');
 	Route::post('semester/{id}/update', [SemesterController::class, 'update'])->name('semester.update');

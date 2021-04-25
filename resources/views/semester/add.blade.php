@@ -64,8 +64,23 @@
                             </div>
                         </div>
                         <div class="row">
-                        
-                        <div class="form-group col-lg-6">
+                        <div class="form-group col-lg-4">
+                                <label class="form-label">Subject</label>
+                                <div class="form-control-wrap">
+                                    <select name="subject_id" class="form-control subject_id" id="subject_id">
+                                        <option value="">--Select Subject--</option>
+                                        {{--@foreach($subjects as $subjects_data)
+                                        <option value="{{ $subjects_data->id }}" @if(old('subject_id') == $subjects_data->id) selected="" @endif>{{ $subjects_data->subject }}</option>
+                                        @endforeach--}}
+                                    </select>
+                                    @error('subject_id')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                        <div class="form-group col-lg-4">
                             <label class="form-label">Semester</label>
                             <div class="form-control-wrap">
                                 <input type="text" class="form-control" id="semester" name="semester" value="{{ old('semester') }}">
@@ -76,7 +91,7 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="form-group col-lg-6">
+                        <div class="form-group col-lg-4">
                                 <label class="form-label">Subtitle</label>
                                 <div class="form-control-wrap">
                                     <input type="text" class="form-control" id="sub_title" name="sub_title" value="">
@@ -135,7 +150,7 @@
                 type: "GET",
                 data: {
                     "order_no": order_no,
-                    "standard_id":"{{(!empty($standard_details->id) ? $standard_details->id : '""')}}"
+                    "standard_id":"{{(!empty($subject_details->id) ? $subject_details->id : '""')}}"
                 },
                 success: function(html) {
                     $('.dyamictable').empty();
@@ -151,7 +166,7 @@
                 type: "GET",
                 data: {
                     "order_no": order_no,
-                    "standard_id":"{{(!empty($standard_details->id) ? $standard_details->id : '""')}}"
+                    "standard_id":"{{(!empty($subject_details->id) ? $subject_details->id : '""')}}"
                 },
                 success: function(html) {
                     $('.dyamictable').empty();
@@ -164,16 +179,20 @@
     $( document ).ready(function() {
         var check_board = <?PHP echo json_encode($isset); ?>;
         if(check_board == 1){
-            var boardid = <?PHP echo (!empty($standard_details->board_id) ? json_encode($standard_details->board_id) : '""'); ?>;
-            var mediumid = <?PHP echo (!empty($standard_details->medium_id) ? json_encode($standard_details->medium_id) : '""'); ?>;
-            var standardid = <?PHP echo (!empty($standard_details->id) ? json_encode($standard_details->id) : '""'); ?>;
+            var boardid = <?PHP echo (!empty($subject_details->board_id) ? json_encode($subject_details->board_id) : '""'); ?>;
+            var mediumid = <?PHP echo (!empty($subject_details->medium_id) ? json_encode($subject_details->medium_id) : '""'); ?>;
+            var standardid = <?PHP echo (!empty($subject_details->standard_id) ? json_encode($subject_details->standard_id) : '""'); ?>;
+            var subjectdid = <?PHP echo (!empty($subject_details->id) ? json_encode($subject_details->id) : '""'); ?>;
+            var subjectdid = <?PHP echo (!empty($subject_details->id) ? json_encode($subject_details->id) : '""'); ?>;
 
             $('.board_id').val(boardid);
             var board_id = boardid;
             var medium_id = mediumid;
             var standard_id = standardid;
-            getMediumEdit(board_id,medium_id);
+            var subjectd_id = subjectdid;
+            getMediumEdit(board_id,medium_id);            
             getStandardEdit(board_id,medium_id,standard_id);
+            getSubjectEdit(board_id,medium_id,standard_id,subjectd_id);
         }   
 
     });
@@ -295,18 +314,14 @@ $(document).on('click','.edit-btn',function(){
               'id':id
         },
         success: function(result) {
+            console.log(result);
             $('#board_id').val(result.board_id);
             $('#medium_id').val(result.medium_id);
             $('#standard_id').val(result.standard_id);
-            $('#sub_title').val(result.sub_title);
-            //$('#sub_title').prop("readonly", true);           
-            var board_id = $('#board_id').val();
-            var medium_id = result.medium_id;
-            var standard_id = result.standard_id;
-            getMediumEdit(board_id,medium_id);
-            getStandardEdit(board_id,medium_id,standard_id);
+            $('#subject_id').val(result.subject_id);
             $('#semester').val(result.semester);
-            $('#hidden_id').val(result.id);
+            $('#sub_title').val(result.sub_title);
+            $('#hidden_id').val(result.id);           
         }            
     });
 });
@@ -337,12 +352,31 @@ function getStandardEdit(board_id,medium_id,standard_id){
             "medium_id":medium_id,
             "standard_id":standard_id,
         },
-        success: function(result) {
+        success: function(result) {            
             $('.standard_id').html('');
             $('.standard_id').html(result.html);
         } 
     });
 }
+
+function getSubjectEdit(board_id,medium_id,standard_id,subject_id){
+    
+    $.ajax({
+        type: "GET",
+        url: "{{route('get.subject')}}",
+        data: {
+            "board_id":board_id,
+            "medium_id":medium_id,
+            "standard_id":standard_id,
+            "subject_id":subject_id,
+        },
+        success: function(result) {
+            $('.subject_id').html('');
+            $('.subject_id').html(result.html);
+        } 
+    });
+}
+
 
 $(document).on('click','.distroy', function() {
     var id = $(this).attr('data-id');

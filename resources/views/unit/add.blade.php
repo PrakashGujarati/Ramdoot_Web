@@ -542,8 +542,7 @@ $(document).ready(function () {
          rules: {
                 board_id:"required",
                 medium_id:"required",
-                standard_id:"required",
-                semester_id:"required",
+                standard_id:"required",                
                 title:"required",
                 description:"required"
 
@@ -552,8 +551,7 @@ $(document).ready(function () {
         messages: {
                 board_id:"Please selete board.",
                 medium_id:"Please selete medium.",
-                standard_id:"Please selete standard.",
-                semester_id:"Please enter semester.",
+                standard_id:"Please selete standard.",                
                 title:"Please enter title.",
                 description:"Please enter sub title."
         },
