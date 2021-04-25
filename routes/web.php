@@ -74,8 +74,6 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('standard_export', [StandardController::class, 'standardExport'])->name('standard.export');
 	Route::get('get_standard_export', [StandardController::class, 'get_excel_Standard'])->name('get.standard.export');
 
-
-
 	Route::get('get_standard', [StandardController::class, 'getStandard'])->name('get.standard');
 
 	/*Subjects*/
