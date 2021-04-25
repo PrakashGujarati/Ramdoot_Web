@@ -81,8 +81,8 @@ class TextbookController extends Controller
                         {
                             $is_read = 1;
                         }
-                        $url = env('APP_URL')."/upload/".$value1->board_id."/".$value1->medium_id."/".$value1->standard_id."/".$value1->semester_id."/".$value1->subject_id."/".$value1->unit_id."/"."book/url/".$value1->url;
-	    				$thumbnail = env('APP_URL')."/upload/".$value1->board_id."/".$value1->medium_id."/".$value1->standard_id."/".$value1->semester_id."/".$value1->subject_id."/".$value1->unit_id."/"."book/thumbnail/".$value1->thumbnail;
+                        $url = env('APP_URL')."/upload/".$value1->board_id."/".$value1->medium_id."/".$value1->standard_id."/".$value1->subject_id."/".$value1->semester_id."/".$value1->unit_id."/"."book/url/".$value1->url;
+	    				$thumbnail = env('APP_URL')."/upload/".$value1->board_id."/".$value1->medium_id."/".$value1->standard_id."/".$value1->subject_id."/".$value1->semester_id."/".$value1->unit_id."/"."book/thumbnail/".$value1->thumbnail;
 	    				$bookdata[] = ['id' => $value1->id,'title' => $value1->title,'sub_title' => $value1->sub_title,
                         'url' => $url,'thumbnail' => $thumbnail,
                         'pages' => $value1->pages,'description' => $value1->description,'label' => $value1->label,'release_date' => $value1->release_date,'is_read' => $is_read];
