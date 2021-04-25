@@ -87,7 +87,7 @@ class SemesterController extends Controller
         }
         else{
 
-            $last_data=Semester::select('*')->orderBy('order_no','desc')->first();
+            $last_data=Semester::select('*')->where('subject_id',$request->subject_id)->orderBy('order_no','desc')->first();
             if($last_data)
             {
               $last_no=intval($last_data->order_no)+1;

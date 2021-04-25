@@ -238,6 +238,29 @@ function getStandard(board_id,medium_id){
     });
 }
 
+$(document).on('change','.standard_id',function(){
+    var board_id = $('.board_id').val();
+    var medium_id = $('.medium_id').val();
+    var standard_id = $('.standard_id').val();
+    getSubject(board_id,medium_id,standard_id);
+});
+
+function getSubject(board_id,medium_id,standard_id){
+    $.ajax({
+        type: "GET",
+        url: "{{route('get.subject')}}",
+        data: {
+            "board_id":board_id,
+            "medium_id":medium_id,
+            "standard_id":standard_id,
+        },
+        success: function(result) {
+            $('#subject_id').html('');
+            $('#subject_id').html(result.html);
+        } 
+    });
+}
+
 $(document).ready(function () {
 
     $('#semester').autocomplete({
