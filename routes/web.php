@@ -45,6 +45,9 @@ use App\Http\Controllers\ExportController;
 Route::get('/', function () {
     return redirect('/login');
 });
+
+Route::post('deploy', [DeployController::class, "deploy"])->name('app.deploy.dev');
+
 Route::get('getData',[HomeController::class,'getData']);
 Route::get('getDataUnit',[HomeController::class,'getDataUnit']);
 
