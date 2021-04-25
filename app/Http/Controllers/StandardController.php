@@ -129,7 +129,7 @@ class StandardController extends Controller
                     $this->compressImage($image->getPathName(),$location,60);
                 }
             }
-            $last_data=Standard::select('*')->where('medium_id',$request->medium_id)->orderBy('order_no','asc')->first();
+            $last_data=Standard::select('*')->where('medium_id',$request->medium_id)->orderBy('order_no','desc')->first();
             if($last_data)
             {
                 $last_number=intval($last_data->order_no)+1;

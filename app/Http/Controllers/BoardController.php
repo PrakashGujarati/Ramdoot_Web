@@ -108,7 +108,7 @@ class BoardController extends Controller
                     $this->compressImage($image->getPathName(),$location,60);
                 }
             }
-            $last_board=Board::select('*')->orderBy('order_no','asc')->first();
+            $last_board=Board::select('*')->orderBy('order_no','desc')->first();
             if($last_board)
             {
               $last_number=intval($last_board->order_no)+1;
