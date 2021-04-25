@@ -80,16 +80,7 @@ td{
                         <div class="form-group col-lg-6">
                             <label class="form-label">Semester</label>
                             <div class="form-control-wrap">
-                                <select name="semester_id[]" class="form-control" id="semester_id" multiple="multiple">
-                                    <option>Semester-1</option>
-                                    <option>Semester-2</option>
-                                    <option>Semester-3</option>
-                                    <option>Semester-4</option>
-                                    <option>Semester-5</option>
-                                    <option>Semester-6</option>
-                                    <option>Semester-7</option>
-                                    <option>Semester-8</option>
-                                </select>
+                                <select name="semester_id[]" class="form-control" id="semester_id" multiple="multiple"></select>
                                 @error('semester_id')
                                     <span class="text-danger" role="alert">
                                         <strong>{{ $message }}</strong>
