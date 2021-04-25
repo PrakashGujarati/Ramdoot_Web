@@ -65,7 +65,7 @@ class SemesterController extends Controller
             'medium_id'  => 'required',
             'standard_id'  => 'required',
             'semester' => 'required',
-            'sub_title' => 'required|alpha'
+            'sub_title' => 'required|regex:/^[0-9A-Za-z.\-_]+$/|max:60'
         ]);
 
         if($request->hidden_id != "0"){
@@ -158,7 +158,7 @@ class SemesterController extends Controller
             'medium_id'  => 'required',
             'standard_id'  => 'required',
             'semester' => 'required',
-            'sub_title' => 'required|alpha'
+            'sub_title' => 'required|regex:/^[0-9A-Za-z.\-_]+$/|max:60'
         ]);
 
         $update = Semester::find($id);

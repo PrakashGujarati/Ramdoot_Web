@@ -171,7 +171,7 @@ td{
             $("#lblError").html("");
  
             //Regex for Valid Characters i.e. Alphabets.
-            var regex = /^[A-Za-z]+$/;
+            var regex = /^[0-9A-Za-z.\-_]+$/;
  
             //Validate TextBox value against the Regex.
             var isValid = regex.test(String.fromCharCode(keyCode));
@@ -433,7 +433,7 @@ $(document).on('click','.edit-btn',function(){
             $('#semester_id').trigger('change');
             $('#subject_name').val(result.subject_details.subject_name);
             $('#sub_title').val(result.subject_details.sub_title);
-            $('#sub_title').prop("readonly", true);
+            //$('#sub_title').prop("readonly", true);
             $('#hidden_thumbnail').val(result.subject_details.thumbnail);
             $('#thumbnail_preview').css('display','block');
             var url_path = "{{ env('APP_URL') }}"+"/upload/subject/thumbnail/"+result.subject_details.thumbnail;

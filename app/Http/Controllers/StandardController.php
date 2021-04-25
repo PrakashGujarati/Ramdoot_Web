@@ -203,7 +203,7 @@ class StandardController extends Controller
             'board_id'     => 'required',
             'medium_id'  => 'required',
             'standard'  => 'required',
-            'sub_title' => 'required|alpha',
+            'sub_title' => 'required|regex:/^[0-9A-Za-z.\-_]+$/|max:60',
             'section' => 'required',
         ]);
 

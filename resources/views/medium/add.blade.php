@@ -84,7 +84,7 @@
             $("#lblError").html("");
  
             //Regex for Valid Characters i.e. Alphabets.
-            var regex = /^[A-Za-z]+$/;
+            var regex = /^[0-9A-Za-z.\-_]+$/;
  
             //Validate TextBox value against the Regex.
             var isValid = regex.test(String.fromCharCode(keyCode));
@@ -232,7 +232,7 @@ $(document).on('click','.edit-btn',function(){
             $('#board_id').val(result.board_id);
             $('#hidden_id').val(result.id);
             $('#sub_title').val(result.sub_title);
-            $('#sub_title').prop("readonly", true);            
+            //$('#sub_title').prop("readonly", true);            
             // $('.dyamictable').empty();
             // $('.dyamictable').html(data);
         }            

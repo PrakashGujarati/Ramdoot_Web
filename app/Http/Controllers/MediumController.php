@@ -55,7 +55,7 @@ class MediumController extends Controller
         $this->validate($request, [
             'board_id'     => 'required',
             'medium_name' => 'required',
-            'sub_title' => 'required|alpha'
+            'sub_title' => 'required|regex:/^[0-9A-Za-z.\-_]+$/|max:60'
         ]);
 //        Medium
 
@@ -143,7 +143,7 @@ class MediumController extends Controller
         $this->validate($request, [
             'board_id'     => 'required',
             'medium_name' => 'required',
-            'sub_title' => 'required|alpha'
+            'sub_title' => 'required|regex:/^[0-9A-Za-z.\-_]+$/|max:60'
         ]);
 
         $add = Medium::find($id);

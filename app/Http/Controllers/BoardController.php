@@ -50,9 +50,7 @@ class BoardController extends Controller
             'name'     => 'required',
             'sub_title'  => 'required',
             'abbreviation' => 'required',
-            'sub_title' => 'required|alpha'
-           // 'url'  => 'required',
-            //'thumbnail'  => 'required',
+            'sub_title' => 'required|regex:/^[0-9A-Za-z.\-_]+$/|max:60'
         ]);
 
         if($request->hidden_id != "0"){
@@ -180,7 +178,7 @@ class BoardController extends Controller
         $this->validate($request, [
             'name'     => 'required',           
             'abbreviation' => 'required',
-            'sub_title' => 'required|alpha'
+            'sub_title' => 'required|regex:/^[0-9A-Za-z.\-_]+$/|max:60'
         ]);
 
         $new_name='';

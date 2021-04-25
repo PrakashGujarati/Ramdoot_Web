@@ -72,7 +72,7 @@ class SubjectController extends Controller
             'semester_id' => 'required',
             'standard_id'  => 'required',
             'subject_name' => 'required',
-            'sub_title' => 'required|alpha'
+            'sub_title' => 'required|regex:/^[0-9A-Za-z.\-_]+$/|max:60'
         ]);
 
         if($request->hidden_id != "0")
@@ -254,7 +254,7 @@ class SubjectController extends Controller
             'semester_id' => 'required',
             'standard_id'  => 'required',
             'subject_name' => 'required',
-            'sub_title' => 'required|alpha'
+            'sub_title' => 'required|regex:/^[0-9A-Za-z.\-_]+$/|max:60'
         ]);
 
         $new_name='';

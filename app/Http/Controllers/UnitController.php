@@ -81,7 +81,7 @@ class UnitController extends Controller
             'standard_id'  => 'required',
             'semester_id' => 'required',
             'subject_id' => 'required',
-            // 'title' => 'required',
+            'sub_title' => 'required|regex:/^[0-9A-Za-z.\-_]+$/|max:60'
             // 'url' => 'required',
             // 'thumbnail' => 'required',
             // 'pages' => 'required',
@@ -270,8 +270,7 @@ class UnitController extends Controller
             'standard_id'  => 'required',
             'semester_id' => 'required',
             'subject_id' => 'required',
-            // 'title' => 'required',
-            // 'pages' => 'required',
+            'sub_title' => 'required|regex:/^[0-9A-Za-z.\-_]+$/|max:60'
         ]);
 
         $new_name='';
