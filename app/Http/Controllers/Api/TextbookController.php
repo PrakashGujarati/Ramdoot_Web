@@ -41,7 +41,7 @@ class TextbookController extends Controller
 
 
         $chkstandard = Standard::where(['id' => $request->standard_id,'status' => 'Active'])->first();
-        $chksemester = Semester::where(['id' => $request->semester_id,'status' => 'Active'])->first();
+        //$chksemester = Semester::where(['id' => $request->semester_id,'status' => 'Active'])->first();
         $chksuject = Subject::where(['id' => $request->subject_id,'status' => 'Active'])->first();
 
         if(empty($chkstandard)){
@@ -51,13 +51,13 @@ class TextbookController extends Controller
 			  	"data" => [],
 	        ]);
         }
-        elseif (empty($chksemester)) {
+        /*elseif (empty($chksemester)) {
         	return response()->json([
     			"code" => 400,
 			  	"message" => "Semester not found.",
 			  	"data" => [],
 	        ]);
-        }
+        }*/
         elseif (empty($chksuject)) {
         	return response()->json([
     			"code" => 400,
