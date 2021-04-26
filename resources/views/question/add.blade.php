@@ -125,8 +125,8 @@
                         </div>
 
                         <div class="row">
-                            <div class="form-group col-lg-3">
-                                <label class="form-label">Option-A</label>
+                            <div class="form-group col-lg-6">
+                                <label class="form-label"><input type="radio" value="A" name="answer" class="answer"> Option-A</label>
                                 <div class="form-control-wrap">
                                     <input type="text" class="form-control" id="option_a" name="option_a" value="{{ old('option_a') }}">
                                     @error('option_a')
@@ -136,8 +136,8 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="form-group col-lg-3">
-                                <label class="form-label">Option-B</label>
+                            <div class="form-group col-lg-6">
+                                <label class="form-label"><input type="radio" value="B" name="answer" class="answer"> Option-B</label>
                                 <div class="form-control-wrap">
                                     <input type="text" class="form-control" id="option_b" name="option_b" value="{{ old('option_b') }}">
                                     @error('option_b')
@@ -147,8 +147,8 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="form-group col-lg-3">
-                                <label class="form-label">Option-C</label>
+                            <div class="form-group col-lg-6">
+                                <label class="form-label"><input type="radio" value="C" name="answer" class="answer"> Option-C</label>
                                 <div class="form-control-wrap">
                                     <input type="text" class="form-control" id="option_c" name="option_c" value="{{ old('option_c') }}">
                                     @error('option_c')
@@ -158,8 +158,8 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="form-group col-lg-3">
-                                <label class="form-label">Option-D</label>
+                            <div class="form-group col-lg-6">
+                                <label class="form-label"><input type="radio" value="D" name="answer" class="answer"> Option-D</label>
                                 <div class="form-control-wrap">
                                     <input type="text" class="form-control" id="option_d" name="option_d" value="{{ old('option_d') }}">
                                     @error('option_d')
@@ -171,24 +171,9 @@
                             </div>
                         </div>
 
-                        <div class="row mb-3">
-                            <div class="form-group col-lg-12">
-                                <label class="form-label">Answer</label>
-                                <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="answer" name="answer" value="{{ old('answer') }}">
-                                    @error('answer')
-                                        <span class="text-danger" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-
-
-                            <div class="form-group col-lg-2">
+                        
+                        <div class="row">                           
+                            <div class="form-group col-lg-4">
                                 <label class="form-label">Per Question Marks</label>
                                 <div class="form-control-wrap">
                                     <input type="text" class="form-control" id="per_question_marks" name="per_question_marks" value="{{ old('per_question_marks') }}">
@@ -200,7 +185,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group col-lg-3">
+                            <div class="form-group col-lg-4">
                                 <label class="form-label">Level</label>
                                 <div class="form-control-wrap">
                                     <select class="form-control" id="level" name="level">
@@ -220,7 +205,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group col-lg-7">
+                            <div class="form-group col-lg-4">
                                 <label class="form-label">Note</label>
                                 <div class="form-control-wrap">
                                     <input type="text" class="form-control" id="note" name="note" value="{{ old('note') }}">
@@ -479,7 +464,7 @@ $(document).ready(function () {
 //     e.preventDefault();
 //     if(x < max_fields){
 //         x++;
-// $(wrapper).append('<div class="newMinus"><div class="row mb-3"><div class="col-lg-12 text-right"><button type="button" class="btn btn-danger mt-1 remove_field"><i class="icon ni ni-minus"></i></button></div><div class="form-group col-lg-12"><label class="form-label">Question</label><div class="form-control-wrap"><input type="text" class="form-control" id="question" name="question[]" value=""></div></div></div><div class="row"><div class="form-group col-lg-3"><label class="form-label">Option-A</label><div class="form-control-wrap"><input type="text" class="form-control" id="option_a" name="option_a[]" value=""></div></div><div class="form-group col-lg-3"><label class="form-label">Option-B</label><div class="form-control-wrap"><input type="text" class="form-control" id="option_b" name="option_b[]" value=""></div></div><div class="form-group col-lg-3"><label class="form-label">Option-C</label><div class="form-control-wrap"><input type="text" class="form-control" id="option_c" name="option_c[]" value=""></div></div><div class="form-group col-lg-3"><label class="form-label">Option-D</label><div class="form-control-wrap"><input type="text" class="form-control" id="option_d" name="option_d[]" value=""></div></div></div><div class="row mb-3"><div class="form-group col-lg-12"><label class="form-label">Answer</label><div class="form-control-wrap"><input type="text" class="form-control" id="answer" name="answer[]" value=""></div></div></div><div class="row"><div class="form-group col-lg-7"><label class="form-label">Note</label><div class="form-control-wrap"><input type="text" class="form-control" id="note" name="note[]" value=""></div></div><div class="form-group col-lg-2"><label class="form-label">Per Question Marks</label><div class="form-control-wrap"><input type="text" class="form-control" id="per_question_marks" name="per_question_marks[]" value=""></div></div><div class="form-group col-lg-3"><label class="form-label">Level</label><div class="form-control-wrap"><select class="form-control" id="level" name="level[]"><option value="" selected="" disabled="">-Select Level-</option><option value="Easy">Easy</option><option value="Normal">Normal</option><option value="Moderate">Moderate</option><option value="Hard">Hard</option><option value="Expert">Expert</option></select></div></div></div></div>');     
+// $(wrapper).append('<div class="newMinus"><div class="row mb-3"><div class="col-lg-12 text-right"><button type="button" class="btn btn-danger mt-1 remove_field"><i class="icon ni ni-minus"></i></button></div><div class="form-group col-lg-12"><label class="form-label">Question</label><div class="form-control-wrap"><input type="text" class="form-control" id="question" name="question[]" value=""></div></div></div><div class="row"> <div class="form-group col-lg-3"><label class="form-label">Option-A</label><div class="form-control-wrap"><input type="text" class="form-control" id="option_a" name="option_a[]" value=""></div></div><div class="form-group col-lg-3"><label class="form-label">Option-B</label><div class="form-control-wrap"><input type="text" class="form-control" id="option_b" name="option_b[]" value=""></div></div><div class="form-group col-lg-3"><label class="form-label">Option-C</label><div class="form-control-wrap"><input type="text" class="form-control" id="option_c" name="option_c[]" value=""></div></div><div class="form-group col-lg-3"><label class="form-label">Option-D</label><div class="form-control-wrap"><input type="text" class="form-control" id="option_d" name="option_d[]" value=""></div></div></div><div class="row mb-3"><div class="form-group col-lg-12"><label class="form-label">Answer</label><div class="form-control-wrap"><input type="text" class="form-control" id="answer" name="answer[]" value=""></div></div></div><div class="row"><div class="form-group col-lg-7"><label class="form-label">Note</label><div class="form-control-wrap"><input type="text" class="form-control" id="note" name="note[]" value=""></div></div><div class="form-group col-lg-2"><label class="form-label">Per Question Marks</label><div class="form-control-wrap"><input type="text" class="form-control" id="per_question_marks" name="per_question_marks[]" value=""></div></div><div class="form-group col-lg-3"><label class="form-label">Level</label><div class="form-control-wrap"><select class="form-control" id="level" name="level[]"><option value="" selected="" disabled="">-Select Level-</option><option value="Easy">Easy</option><option value="Normal">Normal</option><option value="Moderate">Moderate</option><option value="Hard">Hard</option><option value="Expert">Expert</option></select></div></div></div></div>');     
 //     }
 // });
 

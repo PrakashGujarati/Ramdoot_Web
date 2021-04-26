@@ -53,8 +53,6 @@ Route::group(['middleware'=>'auth:api'], function()
     Route::post('all_in_one', [FeatureController::class, 'all_in_one']);
     Route::post('mcq_practice', [McqController::class, 'mcqPractice']);
 
-    Route::post('mcq_practice', [McqController::class, 'mcqPractice']);
-
     Route::post('add_bookmark', [TextbookController::class, 'addBookmark']);
     Route::post('view_bookmark', [TextbookController::class, 'viewBookmark']);
 
