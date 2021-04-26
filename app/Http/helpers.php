@@ -130,7 +130,7 @@ function imagePathCreate($imagePath = ''){
         $urlArr = explode('/',$imagePath);
 
         foreach($urlArr as $url){
-            if(!empty($url)){
+            if(!empty($url) || $url == "0"){
                 $originalPath .= '/'.$url;
                 if (!file_exists($originalPath)) {
                     mkdir($originalPath, 0777, true);

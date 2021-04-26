@@ -64,8 +64,7 @@
                         <td>
                             @if($data->url_type == 'file')
                             @if($data->url)
-                            <img src="{{ asset('upload/'.$data->board_id.'/'.$data->medium_id.'/'.$data->standard_id.'/'.$data->subject_id.'/'.$data->semester_id.'/'.$data->unit_id.'/book/url/'.$data->url) }}" class="thumbnail" height="50" width="50">
-
+                            <a href="{{ asset('upload/'.$data->board_id.'/'.$data->medium_id.'/'.$data->standard_id.'/'.$data->subject_id.'/'.$data->semester_id.'/'.$data->unit_id.'/book/url/'.$data->url) }}">{{$data->unit->title}}</a>
                             @endif
                             @else
                             {{ $data->url }}

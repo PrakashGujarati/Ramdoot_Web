@@ -175,22 +175,21 @@ td{
                                     </div>
                                 </div>
                                 <div class="form-control-wrap">
-                                    <input type="file" class="form-control" id="url" name="url" value="">
+                                    <input type="file" class="form-control" id="url" name="url" value="" require>
                                     <input type="hidden" id="hidden_url" name="hidden_url" value="">
-                                    <img id="url_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" width="100" />
+                                    {{--<img id="url_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" width="100" />
                                     @error('url')
                                         <span class="text-danger" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
-                                    @enderror
+                                    @enderror--}}
                                 </div>
                             </div>
-                            <div class="form-group col-lg-4">
+                            <div class="form-group col-lg-2">
                                 <label class="form-label">Thumbnail</label>
                                 <div class="form-control-wrap">
                                     <input type="file" class="form-control" id="thumbnail" name="thumbnail" value="">
-                                    <input type="hidden" id="hidden_thumbnail" name="hidden_thumbnail" value="">
-                                    <img id="thumbnail_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" width="100" />
+                                    <input type="hidden" id="hidden_thumbnail" name="hidden_thumbnail" value="">                                    
                                     @error('thumbnail')
                                         <span class="text-danger" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -198,15 +197,17 @@ td{
                                     @enderror
                                 </div>
                             </div>
+                            <div class="form-group col-lg-2">
+                            <img id="thumbnail_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" width="100" />
+                            </div>
 
                             <div class="form-group col-lg-4">
                                 <label class="form-label">Label</label>
                                 <div class="form-control-wrap">
                                     <select class="form-control" id="label" name="label">
-                                        <option value="" selected="" disabled="">--Select Label--</option>
-                                        <option value="new">New</option>
-                                        <option value="commingsoon">CommingSoon</option>
                                         <option value="leatest">Leatest</option>
+                                        <option value="new">New</option>
+                                        <option value="commingsoon">CommingSoon</option>                                        
                                     </select>
                                     @error('label')
                                         <span class="text-danger" role="alert">
@@ -235,9 +236,8 @@ td{
                                 <label class="form-label">Edition</label>
                                 <div class="form-control-wrap">
                                     <select class="form-control edition" name="edition" id="edition">
-                                        <option value="" selected="" disabled="">--Select Edition--</option>
-                                        <option value="old">Old</option>
                                         <option value="new">New</option>
+                                        <option value="old">Old</option>                                        
                                     </select>
                                     @error('edition')
                                         <span class="text-danger" role="alert">
@@ -331,11 +331,8 @@ $(document).ready(function(){
             $(this).val(suggestion.data);
         }
     });
-
-    
-
     $('#thumbnail_preview').css('display','none');
-    $('#url_preview').css('display','none');
+    //$('#url_preview').css('display','none');
 });    
 
 function readThumbnail(input) {
@@ -618,7 +615,7 @@ $(document).on('change','.urlchk',function(){
         $("#url").attr('type', 'text');
         $('#url_type').val('text');
         $('#url').val('');
-        $('#url_preview').css('display','none');
+        //$('#url_preview').css('display','none');
     }
     else if($(this).prop("checked") == false){
         $("#url").attr('type', 'file');
@@ -639,8 +636,6 @@ $(document).ready(function () {
                 unit_id:"required",
                 title:"required",
                 sub_title:"required",
-               // url:"required",
-               // thumbnail:"required",
                 edition:"required"
             },
         //For custom messages
@@ -686,7 +681,7 @@ $(document).ready(function () {
                     $('#thumbnail_preview').css('display','none');
 
                     $('#url').val('');
-                    $('#url_preview').css('display','none');
+                    //$('#url_preview').css('display','none');
                     $('#hidden_id').val('0');
                     $('.urlchk').prop("checked",false);
                     
@@ -734,21 +729,20 @@ $(document).on('click','.edit-btn',function(){
             $('#edition').val(result.edition);
             if(result.url_type == 'file'){
                 $('#hidden_url').val(result.url);
-                $('#url_preview').css('display','block');
-                var url_path = "{{ env('APP_URL') }}"+"/upload/"+board_id+"/"+medium_id+"/"+standard_id+"/"+
-                semester_id+"/"+subject_id+"/"+unit_id+"/book/url/"+result.url;
-                $('#url_preview').attr('src', url_path);    
+                //$('#url_preview').css('display','block');
+                //var url_path = "{{ env('APP_URL') }}"+"/upload/"+board_id+"/"+medium_id+"/"+standard_id+"/"+semester_id+"/"+subject_id+"/"+unit_id+"/book/url/"+result.url;
+                //$('#url_preview').attr('src', url_path);    
             }
             else{
                 $('.urlchk').prop("checked",true);
                 $("#url").attr('type', 'text');
                 $('#url_type').val('text');
-                $('#url_preview').css('display','none');   
+                //$('#url_preview').css('display','none');   
                 $('#url').val(result.url);
             }
             $('#hidden_thumbnail').val(result.thumbnail);
             $('#thumbnail_preview').css('display','block');
-            var thumbnail_path = "{{ env('APP_URL') }}"+"/upload/"+board_id+"/"+medium_id+"/"+standard_id+"/"+semester_id+"/"+subject_id+"/"+unit_id+"/book/thumbnail/"+result.thumbnail;
+            var thumbnail_path = "{{ env('APP_URL') }}"+"/upload/"+board_id+"/"+medium_id+"/"+standard_id+"/"+subject_id+"/"+semester_id+"/"+unit_id+"/book/thumbnail/"+result.thumbnail;
             $('#thumbnail_preview').attr('src', thumbnail_path);
             
             $('#hidden_id').val(result.id);
@@ -801,7 +795,7 @@ $(document).on('click','.distroy', function() {
                         $('#thumbnail_preview').css('display','none');
 
                         $('#url').val('');
-                        $('#url_preview').css('display','none');
+                        //$('#url_preview').css('display','none');
 
                         $('#hidden_thumbnail').val('');
                         $('#hidden_url').val('');
