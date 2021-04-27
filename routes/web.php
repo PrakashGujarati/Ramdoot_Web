@@ -32,6 +32,8 @@ use App\Http\Controllers\QuestionTypeController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\UserDataReviewController;
 use App\Http\Controllers\ExportController;
+use App\Http\Controllers\ImportController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -389,5 +391,11 @@ Route::group(['middleware' => 'auth'], function(){
 
 	Route::get('/generate_excel_sample',[ExportController::class,'generateExcelSample'])->name('generate.excel.sample');
 	Route::post('/get_generate_excel_sample',[ExportController::class,'getGenerateExcelSample'])->name('get.generate.excel.sample');
+
+	Route::get('/import_excel',[ImportController::class,'importExcel'])->name('import_excel.index');
+
+	Route::post('/import_excel_data',[ImportController::class,'importExcelData'])->name('import.data_excel');
+
+	//
 
 });	
