@@ -96,7 +96,7 @@ class VideosController extends Controller
                         }
                         
 
-	    				$thumbnail = env('APP_URL')."/upload/videos/thumbnail/".$value1->thumbnail;
+	    				$thumbnail = $value1->thumbnail;
                         $start_time='';
                         if(!empty($value1->start_time)){
                             $start_time = $value1->start_time;

@@ -77,7 +77,7 @@ class PaperController extends Controller
                             $is_read = 1;
                         }
 
-                        $url = env('APP_URL')."/upload/paper/url/".$value1->url;
+                        $url = $value1->url;
 	    				$paperdata[] = ['id' => $value1->id,'title' => $value1->title,'url' => $url,'description' => $value1->description,'label' => $value1->label,'is_read' => $is_read];
 	    			}
 

@@ -59,11 +59,10 @@ class MaterialController extends Controller
                     $materialdata=[];
                     foreach ($getdata_material as $value_sub) {
 
-                        $image = env('APP_URL')."/upload/material/thumbnail/".$value_sub->image;
+                        $image = $value_sub->image;
                         $materialdata[] = ['id' => $value_sub->id,'question' => $value_sub->question,'answer' => $value_sub->answer,'marks' => $value_sub->marks,'image' => $image,'label' => $value_sub->label];
                     }    
 
-                    //$url = env('APP_URL')."/upload/material/url/".$value1->url;
                     $getquestion_type_details = QuestionType::where(['id' => $value1->question_type])->first();
                     $data[] = ['question_type' => $getquestion_type_details->question_type,'material' => $materialdata];
                 }
