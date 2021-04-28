@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Unit extends Model
 {
     use HasFactory;
+    protected $fillable = ['board_id','medium_id','standard_id','subject_id','semester_id','title','sub_title',
+    'url_type','url','thumbnail','pages','description','status','order_no'];
 
     public function standard()
     {

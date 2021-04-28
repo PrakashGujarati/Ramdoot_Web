@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title','All Data Excel')
+@section('title','Import Excel')
 @section('css')
 <style>
 table {
@@ -21,10 +21,19 @@ td{
 	    	<div class="card h-100">
 	            <div class="card-inner">
 	                <div class="card-head">
-	                    <h5 class="card-title">All Data Excel</h5>
+	                    <h5 class="card-title">Import Data Excel</h5>
 	                </div>
-	            
-	            <form action="{{ route('get.all_data_excel') }}" method="POST" enctype='multipart/form-data' id="board_form">
+	            @if(session()->has('success'))
+	        		<div class="row mb-3">
+	        			<div class="col-lg-12">
+						    <div class="alert alert-success">
+						        {{ session()->get('success') }}
+						    </div>
+						</div>
+					</div>
+				@endif
+	            <form action="{{ route('import.data_excel') }}" method="POST" enctype='multipart/form-data' 
+	            id="import_form">
 	                @csrf
 	                <input type="hidden" name="hidden_id" class="hidden_id" id="hidden_id" value="0">
 	                <div class="row">
@@ -48,8 +57,17 @@ td{
 		                        @enderror
 		                    </div>
 		                </div>
+		                <div class="form-group col-lg-4">
+		                	<label class="form-label">Select File <span class="text-danger">(.csv, .xls, .xlsx)</span></label>
+		                	<input type="file" name="file" value="" id="file" class="form-control">
+		                	@error('file')
+                                <span class="text-danger" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+		                </div>
 		                <div class="form-group col-lg-4 mt-4">
-	                        <button type="submit" class="btn btn-lg btn-primary">Export</button>
+	                        <button type="submit" class="btn btn-lg btn-primary">Import</button>
 	                    </div>
 		            </div>
 
@@ -63,5 +81,28 @@ td{
 @endsection
 
 @section('scripts')
+
+<script type="text/javascript">
+	
+$(document).ready(function () {
+    
+    // $('#import_form').validate({
+    //      rules: {
+    //         file : {
+	   //          required : true,
+	   //          extension: "xls|csv"
+    //     	},	
+    //     },
+    //     messages: {
+    //     	file:{
+    //     		required : "A csv file is required.",
+    //         	extension: "The file type must be 'CSV'."	
+    //     	},
+        	
+    //     },
+    // });
+});
+
+</script>
 
 @endsection

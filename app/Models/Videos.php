@@ -10,6 +10,9 @@ class Videos extends Model
     use HasFactory;
 
     protected $table="videos";
+    protected $fillable = ['board_id','medium_id','standard_id','subject_id','semester_id','unit_id','user_id',
+    'title','sub_title','url_type','url','thumbnail','duration','description','edition','label','release_date',
+    'status','start_time','order_no'];
 
     public function board()
 	{
