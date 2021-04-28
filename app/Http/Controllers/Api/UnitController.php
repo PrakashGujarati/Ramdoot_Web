@@ -171,7 +171,7 @@ class UnitController extends Controller
                                 $solutions = Solution::where('unit_id',$value->id)->orderBy('order_no','asc')->get();
                                 foreach($solutions as $solution)
                                 {
-                                    $c = pdf_view::where(['type' => 'Exercise','type_id' => $solution->id])->count();
+                                    $c = pdf_view::where(['type' => 'Solution','type_id' => $solution->id])->count();
                                     if($c)
                                     {
                                         $readcount++;
