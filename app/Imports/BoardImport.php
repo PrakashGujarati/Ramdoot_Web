@@ -14,10 +14,6 @@ class BoardImport implements ToModel,WithHeadingRow
 {
     use Importable;
 
-    public function startRow(): int
-    {
-        return 1;
-    }
     /**
     * @param array $row
     *
@@ -25,21 +21,17 @@ class BoardImport implements ToModel,WithHeadingRow
     */
     public function model(array $row)
     {
-        return new Board([
-            'id' => $row['id'],
-            'name' => $row['name'],
-            'sub_title' => $row['sub_title'],
-            'abbreviation' => $row['full_form_of_boardorganisation'],
-            'thumbnail' => $row['thumbnail'],
-            'status' => $row['status'],
-            'order_no' => $row['order_no'],
-        ]);
+        $data = Board::find($row['id']);
+        if (empty($data)) {
+            return new Board([                
+                'name' => $row['name'],
+                'sub_title' => $row['sub_title'],
+                'abbreviation' => $row['full_form_of_boardorganisation'],
+                'thumbnail' => $row['thumbnail'],
+                'status' => $row['status'],
+                'order_no' => $row['order_no'],
+            ]);
+        }
     }
 
-    public function rules(): array
-    {
-        return [
-            '0' => Rule::unique(['boards', 'name'])
-        ];
-    }
 }
