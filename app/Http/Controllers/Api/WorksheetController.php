@@ -79,10 +79,10 @@ class WorksheetController extends Controller
                         }   
 
                         $url = $value1->url;
-	    				$worksheetdata[] = ['id' => $value1->id,'title' => $value1->title,'url' => $url,'type' => $value1->type,'description' => $value1->description,'label' => $value1->label,'is_read' => $is_read];
+	    				$worksheetdata[] = ['id' => $value1->id,'title' => $value1->title,'url' => $url,'type' => $value1->type,'sub_title'=>$value->sub_title,'description' => $value1->description,'label' => $value1->label,'is_read' => $is_read];
 	    			}
 
-	    			$data[] = ['id' => $value->id,'unit_title' =>$value->title,'worksheet' => $worksheetdata,'sub_title'=>$value->description];
+	    			$data[] = ['id' => $value->id,'unit_title' =>$value->title,'worksheet' => $worksheetdata,'sub_title'=>$value->sub_title,'description'=>$value->description];
 	    		}
 	    		
 	    		return response()->json([

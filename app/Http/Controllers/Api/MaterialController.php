@@ -60,7 +60,7 @@ class MaterialController extends Controller
                     foreach ($getdata_material as $value_sub) {
 
                         $image = $value_sub->image;
-                        $materialdata[] = ['id' => $value_sub->id,'question' => $value_sub->question,'answer' => $value_sub->answer,'marks' => $value_sub->marks,'image' => $image,'label' => $value_sub->label];
+                        $materialdata[] = ['id' => $value_sub->id,'question' => $value_sub->question,'sub_title'=>$value->sub_title,'answer' => $value_sub->answer,'marks' => $value_sub->marks,'image' => $image,'label' => $value_sub->label];
                     }    
 
                     $getquestion_type_details = QuestionType::where(['id' => $value1->question_type])->first();

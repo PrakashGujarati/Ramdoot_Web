@@ -181,7 +181,7 @@ class UnitController extends Controller
                         }
 
                         $unitcount = Question::where('unit_id',$value->id)->count();
-                        $data[] = ['id' => $value->id,'title' => $value->title,'sub_title' => $value->description,'url' => $url,'thumbnail' => $thumbnail,"pages"=> $value->pages,"total_questions"=>$unitcount,"total_count"=>$totalcount,"readcount"=>$readcount];
+                        $data[] = ['id' => $value->id,'title' => $value->title,'sub_title'=>$value->sub_title,'description' => $value->description,'url' => $url,'thumbnail' => $thumbnail,"pages"=> $value->pages,"total_questions"=>$unitcount,"total_count"=>$totalcount,"readcount"=>$readcount];
                     }
 
                     return response()->json([
