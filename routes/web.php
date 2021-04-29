@@ -33,7 +33,7 @@ use App\Http\Controllers\LogController;
 use App\Http\Controllers\UserDataReviewController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\ImportController;
-
+use App\Http\Controllers\NotificationsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -396,6 +396,9 @@ Route::group(['middleware' => 'auth'], function(){
 
 	Route::post('/import_excel_data',[ImportController::class,'importExcelData'])->name('import.data_excel');
 
-	//
+	/*notifications*/
+	Route::get('/notification',[NotificationsController::class,'index'])->name('notification.index');
+	Route::post('/notification_store',[NotificationsController::class,'store'])->name('notification.store');
+
 
 });	
