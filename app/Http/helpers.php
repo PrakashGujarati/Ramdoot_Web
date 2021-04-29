@@ -143,7 +143,7 @@ function imagePathCreate($imagePath = ''){
 }
 
 
-function send_notification($utoken, $message, $title = null) {
+function send_notification($token, $message, $title = null) {
         
     $API_ACCESS_KEY = 'AAAAZkwzjLI:APA91bGJMNIZjlE8ormC8l_Re1CYwSolNwEa_rhyk7EPl1tzwF1EnqHzq5VUeEDMFGFErQQivaTYx1jNX7bfP7BJyx1dqag0vaAJ3p1V8vp9R5RPszIumzOF6EKFVvrM8vdKWqUV-DLg';
 
@@ -151,9 +151,7 @@ function send_notification($utoken, $message, $title = null) {
     (
     'Authorization: key=' . $API_ACCESS_KEY,
     'Content-Type: application/json'
-    );                
-
-    $token = $utoken;
+    );             
 
     $msg = array(
     'alert' => $message,
