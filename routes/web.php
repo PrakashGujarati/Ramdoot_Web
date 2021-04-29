@@ -399,6 +399,6 @@ Route::group(['middleware' => 'auth'], function(){
 	/*notifications*/
 	Route::get('/notification',[NotificationsController::class,'index'])->name('notification.index');
 	Route::post('/notification_store',[NotificationsController::class,'store'])->name('notification.store');
-
+	Route::get('/notification/create',[NotificationsController::class,'create']);
 
 });	
