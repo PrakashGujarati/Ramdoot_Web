@@ -16,7 +16,7 @@ class NotificationsController extends Controller
      */
     public function index(Request $request)
     {
-        $userdata = User::all();
+        $userdata = User::whereNotNull('device_token')->get();
         return view('notification.index',compact('userdata'));
     }
 
@@ -44,7 +44,7 @@ class NotificationsController extends Controller
     {
 
         if($request->has('user_id')){
-            if(count($request->user_id) > 0){
+            if(count($request->user_id) > 1){
                 foreach ($request->user_id as $value) {
                     $user=User::find($value);
                     send_notification($user->device_token,$request->message,$request->title);
