@@ -23,6 +23,8 @@ class RegisterController extends Controller
             ];
 
             $user = User::where('mobile',$request->mobile)->first();
+            $user->device_token = $request->device_token;
+            $user->save();
             $token = $user->createToken('Ramdoot')->accessToken;
             $image="";
             if($user->profile_photo_path){
@@ -36,7 +38,8 @@ class RegisterController extends Controller
             ]);
         }else{        
             $user = User::create([            
-                'mobile' => $request->mobile,            
+                'mobile' => $request->mobile,           
+                'device_token' => $request->device_token,
             ]);
            
             $token = $user->createToken('Ramdoot')->accessToken;
@@ -50,7 +53,6 @@ class RegisterController extends Controller
                 "message" => "success",
                 "data" => $data,
             ]);
-            //return response()->json(['token' => $token], 200);
         }
 
         
@@ -93,21 +95,7 @@ class RegisterController extends Controller
     }
 
     public function profile_update(Request $request)
-    {
-        
-        // $rules = array(
-        //     'user_id' => 'required'
-        // );
-        // $messages = array(
-        //     'user_id.required' => 'Please enter user id.'
-        // );
-
-        // $rules = array(
-        //     'mobile' => 'required|unique:users,mobile,'.$request->user_id,
-        // );
-        // $messages = array(      
-        //     'mobile.required' => 'Please enter mobile number.'
-        // );
+    {        
 
         $rules = array(
              'mobile' => 'required',
