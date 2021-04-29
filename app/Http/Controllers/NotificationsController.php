@@ -59,7 +59,7 @@ class NotificationsController extends Controller
                 return redirect()->route('notification.index')->with('success', 'Notification Send Successfully.');
             }else
             {
-                $users = User::all();
+                $users = User::whereNotNull('device_token')->get();
                 foreach ($users as $user) {                    
                     send_notification($user->device_token,$request->message,$request->title);
                     $add = new Notification;
