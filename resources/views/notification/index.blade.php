@@ -37,7 +37,7 @@ td{
 	            id="notification_form">
 	                @csrf
 	                <div class="row">
-	                	<div class="form-group col-lg-6">
+	                	<div class="form-group col-lg-12">
                             <label class="form-label">Device Id</label>
                             <div class="form-control-wrap">
                                 <select name="device_id[]" class="form-control" id="device_id" multiple="multiple" value="">
