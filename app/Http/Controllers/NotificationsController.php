@@ -39,14 +39,15 @@ class NotificationsController extends Controller
     public function store(Request $request)
     {
 
-        if($request->has('device_id')){
-            if(count($request->device_id) > 0){
-                foreach ($request->device_id as $value) {
-                    send_notification($value,$request->message,$request->title,$request->user_name);
+        if($request->has('user_id')){
+            if(count($request->user_id) > 0){
+                foreach ($request->user_id as $value) {
+                    $user=User::find($value)->first();
+                    send_notification($user->device_token,$request->message,$request->title);
 
                     $add = new Notification;
-                    $add->device_id = $value;
-                    $add->user_id = Auth::user()->id;
+                    $add->device_id = $user->device_token;
+                    $add->user_id = $value;
                     $add->title = $request->title;
                     $add->message = $request->message;
                     $add->save();

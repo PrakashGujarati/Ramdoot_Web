@@ -36,15 +36,14 @@ td{
 	            <form action="{{ route('notification.store') }}" method="POST" enctype='multipart/form-data' 
 	            id="notification_form">
 	                @csrf
-	                <div class="row">
-	                	<div class="form-group col-lg-12">
+	                <div class="form-group col-lg-12">
                             <label class="form-label">Device Id</label>
                             <div class="form-control-wrap">
-                                <select name="device_id[]" class="form-control" id="device_id" multiple="multiple" value="">
+                                <select name="user_id[]" class="form-control" id="user_id" multiple="multiple" value="">
 								<option value="">-- Select User --</option>
 		                            @foreach($userdata as $user)
 		                            	@if($user->name)
-		                                <option value="{{ $user->device_token }}">{{ $user->name }}</option>
+		                                <option value="{{ $user->id }}">{{ $user->name }}</option>
 		                                @endif
 		                            @endforeach
                                 </select>
@@ -54,8 +53,7 @@ td{
                                     </span>
                                 @enderror
                             </div>
-                        </div>
-		            </div>
+                    </div>
 		            <div class="row">
 		            	<div class="form-group col-lg-4">
 		                    <label class="form-label">Title</label>
