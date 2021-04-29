@@ -109,7 +109,7 @@ class NotificationsController extends Controller
 
     public function push_notification($utoken, $message, $title = null) {
         
-            $API_ACCESS_KEY = 'AIzaSyCC3WAurKIK_h3h39QXxMm3_M2u61C_CkM';
+            $API_ACCESS_KEY = 'AAAAZkwzjLI:APA91bGJMNIZjlE8ormC8l_Re1CYwSolNwEa_rhyk7EPl1tzwF1EnqHzq5VUeEDMFGFErQQivaTYx1jNX7bfP7BJyx1dqag0vaAJ3p1V8vp9R5RPszIumzOF6EKFVvrM8vdKWqUV-DLg';
 
             $headers = array
             (
