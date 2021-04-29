@@ -16,7 +16,7 @@ class NotificationsController extends Controller
      */
     public function index(Request $request)
     {
-        $userdata = User::whereNotNull('device_token')->get();
+        $userdata = User::where('device_token','!=','')->get();
         return view('notification.index',compact('userdata'));
     }
 
@@ -59,7 +59,7 @@ class NotificationsController extends Controller
                 return redirect()->route('notification.index')->with('success', 'Notification Send Successfully.');
             }else
             {
-                $users = User::whereNotNull('device_token')->get();
+                $users = User::where('device_token','!=','')->get();
                 foreach ($users as $user) {                    
                     send_notification($user->device_token,$request->message,$request->title);
                     $add = new Notification;
