@@ -30,7 +30,7 @@ class RegisterController extends Controller
             if($user->profile_photo_path){
                 $image = env('APP_URL')."/upload/profile/".$user->profile_photo_path;    
             }
-            $data = ['id' => $user->id,'name' => $user->name,'mobile' => $user->mobile,'email' => $user->email,'address' => $user->address,'pin_code' => $user->pin_code,'city' => $user->city,'birth_date' => $user->birth_date,'profile_photo' => $image,'username' => $user->username,'token' => $token];
+            $data = ['id' => $user->id,'name' => $user->name,'mobile' => $user->mobile,'email' => $user->email,'address' => $user->address,'pin_code' => $user->pin_code,'city' => $user->city,'birth_date' => $user->birth_date,'user_type' => $user->user_type,'gender' => $user->gender,'profile_photo' => $image,'username' => $user->username,'token' => $token];
             return response()->json([
                 "code" => 200,
                 "message" => "success",
@@ -47,7 +47,7 @@ class RegisterController extends Controller
             if($user->profile_photo_path){
                 $image = env('APP_URL')."/upload/profile/".$user->profile_photo_path;    
             }
-            $data = ['id' => $user->id,'name' => $user->name,'mobile' => $user->mobile,'email' => $user->email,'address' => $user->address,'pin_code' => $user->pin_code,'city' => $user->city,'birth_date' => $user->birth_date,'profile_photo' => $image,'username' => $user->username,'token' => $token];
+            $data = ['id' => $user->id,'name' => $user->name,'mobile' => $user->mobile,'email' => $user->email,'address' => $user->address,'pin_code' => $user->pin_code,'city' => $user->city,'birth_date' => $user->birth_date,'user_type' => $user->user_type,'gender' => $user->gender,'profile_photo' => $image,'username' => $user->username,'token' => $token];
             return response()->json([
                 "code" => 200,
                 "message" => "success",
@@ -146,6 +146,8 @@ class RegisterController extends Controller
             $update->pin_code = $request->pin_code;
             $update->city = $request->city;
             $update->birth_date = $request->birth_date;
+            $update->user_type = $request->user_type;
+            $update->gender = $request->gender;
             $update->profile_photo_path = $profile;
             $update->save();
 
@@ -154,7 +156,7 @@ class RegisterController extends Controller
                 $image = env('APP_URL')."/upload/profile/".$update->profile_photo_path;    
             }
 
-            $data = ['name' => $update->name,'mobile' => $update->mobile,'email' => $update->email,'address' => $update->address,'pin_code' => $update->pin_code,'city' => $update->city,'birth_date' => $update->birth_date,'profile_photo' => $image,'username' => $update->username,'user_id'=>$checkuser->id];
+            $data = ['name' => $update->name,'mobile' => $update->mobile,'email' => $update->email,'address' => $update->address,'pin_code' => $update->pin_code,'city' => $update->city,'birth_date' => $update->birth_date,'user_type' => $update->user_type,'gender' => $update->gender,'profile_photo' => $image,'username' => $update->username,'user_id'=>$checkuser->id];
 
             return response()->json([
                 "code" => 200,
@@ -176,6 +178,12 @@ class RegisterController extends Controller
 
     public function logout(Request $request)
     {      
+        $this->validate($request, [            
+            'user_id' => 'required',            
+        ]);
+        $user = User::find($request->user_id);
+        $user->device_token = "";
+        $user->save();
 		$request->user()->token()->revoke();
         return response()->json([
             'message' => 'Successfully logged out'

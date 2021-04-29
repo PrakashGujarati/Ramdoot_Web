@@ -35,7 +35,7 @@ use App\Http\Controllers\Api\ExamController;
 */
 Route::group(['middleware'=>'auth:api'], function()
 {
-	Route::get('logout',[RegisterController::class, 'logout']); 
+	Route::post('logout',[RegisterController::class, 'logout']); 
     Route::post('board_medium', [BoardController::class, 'boardMedium']);
     Route::post('slider', [SliderController::class, 'slider']);
     Route::post('standard_list', [StandardController::class, 'standardList']);
