@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Semester;
 use Illuminate\Http\Request;
 use App\Models\Board;
+use App\Models\Medium;
 use App\Models\Standard;
+use App\Models\Subject;
 
 class SemesterController extends Controller
 {
@@ -23,7 +25,7 @@ class SemesterController extends Controller
     }
     public function index()
     {
-        $semester_details = Semester::where('status','!=','Deleted')->groupBy('standard_id')->get();
+        $semester_details = Semester::where('status','!=','Deleted')->groupBy('subject_id')->get();
         return view('semester.index',compact('semester_details'));
     }
 
@@ -35,20 +37,23 @@ class SemesterController extends Controller
     public function create($id=null)
     {
         if($id != null){
+            
             $boards = Board::where('status','Active')->get();
             $standards = Standard::where('status','Active')->get();
-            $standard_details = Standard::where(['id' => $id])->first();
+            $subjects = Subject::where('status','Active')->get();
+            $subject_details = Subject::where(['id' => $id])->first();
             $isset = 1;
-            $semester_details = Semester::where(['standard_id' => $id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
-            return view('semester.add',compact('boards','standards','semester_details','isset','standard_details'));
+            $semester_details = Semester::where(['subject_id' => $id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+            return view('semester.add',compact('boards','standards','semester_details','isset','subject_details'));
         }
         else{
             $boards = Board::where('status','Active')->get();
             $standards = Standard::where('status','Active')->get();
-            $standard_details = [];
+            $subjects = Subject::where('status','Active')->get();
+            $subject_details = [];
             $isset = 0;
             $semester_details = Semester::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
-            return view('semester.add',compact('boards','standards','semester_details','isset','standard_details'));
+            return view('semester.add',compact('boards','standards','semester_details','isset','subject_details'));
         }
     }
 
@@ -73,6 +78,7 @@ class SemesterController extends Controller
             $add->board_id = $request->board_id;
             $add->medium_id = $request->medium_id;
             $add->standard_id = $request->standard_id;
+            $add->subject_id = $request->subject_id;
             $add->semester = $request->semester;
             $add->sub_title = $request->sub_title;
             $add->save();
@@ -81,7 +87,7 @@ class SemesterController extends Controller
         }
         else{
 
-            $last_data=Semester::select('*')->orderBy('order_no','desc')->first();
+            $last_data=Semester::select('*')->where('subject_id',$request->subject_id)->orderBy('order_no','desc')->first();
             if($last_data)
             {
               $last_no=intval($last_data->order_no)+1;
@@ -95,6 +101,7 @@ class SemesterController extends Controller
             $add->board_id = $request->board_id;
             $add->medium_id = $request->medium_id;
             $add->standard_id = $request->standard_id;
+            $add->subject_id = $request->subject_id;
             $add->semester = $request->semester;
             $add->sub_title = $request->sub_title;
             $add->order_no=$last_no;
@@ -107,7 +114,7 @@ class SemesterController extends Controller
         }
                 
 
-        $semester_details = Semester::where(['standard_id' => $request->standard_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $semester_details = Semester::where(['subject_id' => $request->subject_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
         $html = view('semester.dynamic_table',compact('semester_details'))->render();
         $data = ['html' => $html,'message' => $msg];
         return response()->json($data);
@@ -165,8 +172,9 @@ class SemesterController extends Controller
         $update->board_id = $request->board_id;
         $update->medium_id = $request->medium_id;
         $update->standard_id = $request->standard_id;
+        $update->standard_id = $request->standard_id;        
         $update->semester = $request->semester;
-        $add->sub_title = $request->sub_title;
+        $update->sub_title = $request->sub_title;
         $update->save();
 
         return redirect()->route('semester.index')->with('success', 'Semester Updated Successfully.');
@@ -249,7 +257,7 @@ class SemesterController extends Controller
         $getsemester = Semester::where(["board_id" => $request->board_id,"medium_id" => $request->medium_id,
             "standard_id" => $request->standard_id,"subject_id" => $request->subject_id,'status' => 'Active'])->orderBy('order_no','asc')->get();
 
-        $result="<option value=''>--Select Semester--</option>";
+        $result="<option value=''>--Select Semester--</option><option value='0'>No Semester</option>";
         if(count($getsemester) > 0)
         {
             foreach ($getsemester as $semester) {

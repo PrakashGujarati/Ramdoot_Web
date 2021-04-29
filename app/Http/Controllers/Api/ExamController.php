@@ -27,13 +27,11 @@ class ExamController extends Controller
 
     	$rules = array(
             'standard_id' => 'required',
-            'semester_id' => 'required',
             'subject_id' => 'required',
             'student_id' => 'required',
         );
         $messages = array(
-        	'standard_id.required' => 'Please enter standard id.',
-            'semester_id.required' => 'Please enter semester id.',
+        	'standard_id.required' => 'Please enter standard id.',            
             'subject_id.required' => 'Please enter subject id.',
             'student_id.required' => 'Please enter student id.',
         );
@@ -45,22 +43,14 @@ class ExamController extends Controller
             return ['status' => "false",'msg' => $msg];
         }
 
-        $chkstandard = Standard::where(['id' => $request->standard_id,'status' => 'Active'])->first();
-        $chksemester = Semester::where(['id' => $request->semester_id,'status' => 'Active'])->first();
+        $chkstandard = Standard::where(['id' => $request->standard_id,'status' => 'Active'])->first();       
         $chksuject = Subject::where(['id' => $request->subject_id,'status' => 'Active'])->first();
-        $chkuser = User::where(['id' => $request->student_id])->first();
+        $chkuser = User::where(['id' => $request->student_id])->first();		
 
         if(empty($chkstandard)){
         	return response()->json([
     			"code" => 400,
 			  	"message" => "Standard not found.",
-			  	"data" => [],
-	        ]);
-        }
-        elseif (empty($chksemester)) {
-        	return response()->json([
-    			"code" => 400,
-			  	"message" => "Semester not found.",
 			  	"data" => [],
 	        ]);
         }
@@ -80,21 +70,25 @@ class ExamController extends Controller
         }
         else{
 
-
-        	$getexam = Exam::where(['standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'subject_id' => $request->subject_id,'status' => 'Active'])->get();
+			if($request->semester_id==0)
+			{ 
+				
+        		$getexam = Exam::where(['standard_id' => $request->standard_id,'subject_id' => $request->subject_id,'status' => 'Active'])->get();
+			}else
+			{
+				$getexam = Exam::where(['standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'subject_id' => $request->subject_id,'status' => 'Active'])->get();
+			}
         	$examdata=[];
         	if(count($getexam) > 0){
         		foreach ($getexam as $value) {
         			
         			$getunit = Unit::where(['id' => $value->unit_id,'status' => 'Active'])->first();
-
+					
         			$chk_student = exam_student::where(['exam_id' => $value->id,'user_id' => $request->student_id])->first();
 
         			if(empty($chk_student)){
-
         				//$chk_student = User::where(['id' => $request->student_id])->first();
-
-        				$examdata[] = ['id' => $value->id,'standard_id' => isset($chkstandard->standard) ? $chkstandard->standard:'','semester' => isset($chksemester->semester) ? $chksemester->semester:'','subject' => $chksuject->subject_name,'name' => $value->name,'note' => $value->note,'time_duration' => $value->time_duration,'exam_date' =>  $value->exam_date,'total_marks' => $value->total_marks,'total_question' => $value->total_question,'start_time' => $value->start_time,'end_time' => $value->end_time,'negative_marks' => $value->negative_marks];	
+        				$examdata[] = ['id' => $value->id,'standard_id' => isset($chkstandard->standard) ? $chkstandard->standard:'','semester' => isset($request->semester_id) ? $request->semester_id:'','subject' => $chksuject->subject_name,'name' => $value->name,'note' => $value->note,'time_duration' => $value->time_duration,'exam_date' =>  $value->exam_date,'total_marks' => $value->total_marks,'total_question' => $value->total_question,'start_time' => $value->start_time,'end_time' => $value->end_time,'negative_marks' => $value->negative_marks];	
         			}
         		}
         		return response()->json([

@@ -49,7 +49,7 @@ class SemesterController extends Controller
 	    	if(count($getdata) > 0){
 	    		$data=[];
 	    		foreach ($getdata as $value) {
-	    			$data[] = ['id' => $value->id,'semester' => $value->semester];
+	    			$data[] = ['id' => $value->id,'semester' => $value->semester,'sub_title' => $value->sub_title];
 	    		}
 
 	    		return response()->json([

@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Book extends Model
 {
     use HasFactory;
+    protected $fillable = ['board_id','medium_id','standard_id','subject_id','semester_id','unit_id','user_id',
+    'title','sub_title','url_type','url','thumbnail','pages','description','edition','label','release_date','status','order_no'];
 
     public function board()
     {

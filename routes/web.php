@@ -32,6 +32,8 @@ use App\Http\Controllers\QuestionTypeController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\UserDataReviewController;
 use App\Http\Controllers\ExportController;
+use App\Http\Controllers\ImportController;
+use App\Http\Controllers\NotificationsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -74,13 +76,11 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('standard_export', [StandardController::class, 'standardExport'])->name('standard.export');
 	Route::get('get_standard_export', [StandardController::class, 'get_excel_Standard'])->name('get.standard.export');
 
-
-
 	Route::get('get_standard', [StandardController::class, 'getStandard'])->name('get.standard');
 
 	/*Subjects*/
 	Route::get('subject', [SubjectController::class, 'index'])->name('subject.index');
-	Route::get('subject/create/{semester_id?}', [SubjectController::class, 'create'])->name('subject.create');
+	Route::get('subject/create/{id?}', [SubjectController::class, 'create'])->name('subject.create')->where('id', '[0-9]+');
 	Route::post('subject/store', [SubjectController::class, 'store'])->name('subject.store');
 	Route::get('subject/edit', [SubjectController::class, 'edit'])->name('subject.edit');
 	Route::post('subject/{id}/update', [SubjectController::class, 'update'])->name('subject.update');
@@ -119,7 +119,7 @@ Route::group(['middleware' => 'auth'], function(){
 	
 	/*Semester*/
 	Route::get('semester', [SemesterController::class, 'index'])->name('semester.index');
-	Route::get('semester/create/{standard_id?}', [SemesterController::class, 'create'])->name('semester.create');
+	Route::get('semester/create/{id?}', [SemesterController::class, 'create'])->name('semester.create');
 	Route::post('semester/store', [SemesterController::class, 'store'])->name('semester.store');
 	Route::get('semester/edit', [SemesterController::class, 'edit'])->name('semester.edit');
 	Route::post('semester/{id}/update', [SemesterController::class, 'update'])->name('semester.update');
@@ -391,5 +391,14 @@ Route::group(['middleware' => 'auth'], function(){
 
 	Route::get('/generate_excel_sample',[ExportController::class,'generateExcelSample'])->name('generate.excel.sample');
 	Route::post('/get_generate_excel_sample',[ExportController::class,'getGenerateExcelSample'])->name('get.generate.excel.sample');
+
+	Route::get('/import_excel',[ImportController::class,'importExcel'])->name('import_excel.index');
+
+	Route::post('/import_excel_data',[ImportController::class,'importExcelData'])->name('import.data_excel');
+
+	/*notifications*/
+	Route::get('/notification',[NotificationsController::class,'index'])->name('notification.index');
+	Route::post('/notification_store',[NotificationsController::class,'store'])->name('notification.store');
+
 
 });	

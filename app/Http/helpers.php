@@ -130,7 +130,7 @@ function imagePathCreate($imagePath = ''){
         $urlArr = explode('/',$imagePath);
 
         foreach($urlArr as $url){
-            if(!empty($url)){
+            if(!empty($url) || $url == "0"){
                 $originalPath .= '/'.$url;
                 if (!file_exists($originalPath)) {
                     mkdir($originalPath, 0777, true);
@@ -140,5 +140,80 @@ function imagePathCreate($imagePath = ''){
         return $originalPath."/";
     }
     return public_path()."/upload/";
+}
+
+
+function send_notification($utoken, $message, $title = null,$user_id, $notification_type = null, $user_type = null,$item_data_id = null,$flag = null, $notification_sub_type = null, $client_id = null, $receiverUserId = null,$senderUserId = null) 
+{
+
+    $API_ACCESS_KEY = 'AIzaSyCC3WAurKIK_h3h39QXxMm3_M2u61C_CkM';
+
+
+    $headers = array
+    (
+    'Authorization: key=' . $API_ACCESS_KEY,
+    'Content-Type: application/json'
+    );
+
+    $token = 'eqoHAda0_2k:APA91bHuRRWquDt700IoQtRZfEh7kr1ISmXBu1qu6NsvIpNNGyS0Qfnjn3x4fs6xFX-GW4_Brkgt1_QHPkgiOli1mC4Ft89tv_g4ofERFhUeGUhcarHxcBDXE-_nftizhnkWg3rOpijd';
+
+    //$token = $utoken;
+
+    //$message = 'Test push notification message';
+    //$message = "Request sent";
+
+    $msg = array(
+    'alert' => $message,
+    'title' => $title,
+    'message' => $message,
+    'notification_type' => $notification_type,
+    'user_type' => $user_type,
+    'sound' => 'default',
+    'client_id' => $client_id,
+    'item_id' => $item_data_id,
+    'flag'=>$flag
+    );
+
+       
+
+    $notification = array(
+    'title' => $title,
+    'body' => $message,
+    'sound' => 'default',
+    );
+    
+
+    $fields = array(
+    'to' => $token,
+    'data' => $msg,
+    'priority' => 'high',
+    'notification' => $notification
+    );
+
+    try {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+        
+        $result = curl_exec($ch);
+        curl_close($ch);
+        $errMsg = '';
+        $res = (array) json_decode($result);
+
+        $errMsg = '';
+          if (!empty($res)) {
+                if ($res['failure'] == 1) {                     
+                $errMsg = $res['results'][0]->error;                
+            }
+        }
+        
+    } catch (Exception $e) {
+
+            Log::info("ERROR IN CACHE");
+    }
 }
 

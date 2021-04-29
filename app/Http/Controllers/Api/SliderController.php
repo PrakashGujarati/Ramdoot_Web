@@ -14,7 +14,7 @@ class SliderController extends Controller
     	if(count($getdata) > 0){
     		$data=[];
     		foreach ($getdata as $value) {
-    			$image = env('APP_URL')."/upload/slider/".$value->image;
+    			$image = $value->image;
     			$data[] = ['id' => $value->id,'title' => $value->area,'short_desc' => $value->text,'image' => $image,'url' => $value->url];
     		}
 

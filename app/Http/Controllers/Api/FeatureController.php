@@ -9,6 +9,7 @@ use Validator;
 use App\Models\Standard;
 use App\Models\Subject;
 use App\Models\Semester;
+use App\Models\Question;
 use App\Models\Unit;
 
 class FeatureController extends Controller
@@ -94,7 +95,7 @@ class FeatureController extends Controller
             ]);
         }
         else{
-
+            $totalQuestionCount=0;
             $getunit = Unit::where(['standard_id' => $request->standard_id,'semester_id' => $request->semester_id,'subject_id' => $request->subject_id,'status' => 'Active'])->orderBy('order_no','asc')->get();
             //$getdata = videos::where(['unit_id' => $request->unit_id,'status' => 'Active'])->get();
             if(count($getunit) > 0){
@@ -105,9 +106,12 @@ class FeatureController extends Controller
                     foreach ($getdata as $value1) {
                         $image = env('APP_URL')."/upload/feature/".$value1->image;
                         $featuredata[] = ['id' => $value1->id,'title' => $value1->title,'image' => $image,"flag"=>$value1->flag];
+                        if($value1->id == 8){
+                            $totalQuestionCount = Question::where('unit_id',$value->id)->count();
+                        }
                     }
-
-                    $data[] = ['id' => $value->id,'unit_title' =>$value->title,'page_no' => $value->pages,'features' => $featuredata,'sub_title'=>$value->description];
+                    
+                    $data[] = ['id' => $value->id,'unit_title' =>$value->title,'page_no' => $value->pages,'features' => $featuredata,'sub_title'=>$value->description,'totalQuestionCount' =>$totalQuestionCount];
                 }
                 
                 return response()->json([

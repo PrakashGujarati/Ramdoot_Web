@@ -76,22 +76,8 @@ td{
                                     </span>
                                 @enderror
                             </div>
-                        </div>
+                        </div>                      
                         <div class="form-group col-lg-6">
-                            <label class="form-label">Semester</label>
-                            <div class="form-control-wrap">
-                                <select name="semester_id[]" class="form-control" id="semester_id" multiple="multiple"></select>
-                                @error('semester_id')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="form-group col-lg-6">
                                 <label class="form-label">Subject Name</label>
                                 <div class="form-control-wrap">
                                     <input type="text" class="form-control" id="subject_name" name="subject_name" value="{{ old('subject_name') }}">
@@ -102,7 +88,9 @@ td{
                                     @enderror
                                 </div>
                             </div>
+                        </div>
 
+                        <div class="row">
                             <div class="form-group col-lg-6">
                                 <label class="form-label">Sub Title</label>
                                 <div class="form-control-wrap">
@@ -114,10 +102,7 @@ td{
                                     @enderror
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="row">
-                        <div class="form-group col-lg-6">
+                            <div class="form-group col-lg-3">
                             <label class="form-label">Thumbnail</label>
                             <div class="form-control-wrap">
                                 <input type="file" class="form-control" id="thumbnail" name="thumbnail" value="">
@@ -129,9 +114,13 @@ td{
                                 @enderror
                             </div>
                         </div>
-                        <div class="form-group col-lg-6">
+                        <div class="form-group col-lg-3">
                             <img id="thumbnail_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" width="100" />
                         </div>
+                        </div>
+
+                        <div class="row">
+                        
 
                         </div>
                         
@@ -173,13 +162,6 @@ td{
             return isValid;
     });
     
-    $(document).ready(function() {
-       $("#semester_id").select2({
-            tags: true,
-            tokenSeparators: [',', ' ']
-        })
-    });
-
     $(document).on('click','.above_order', function() {
         var order_no=$(this).data('order_no');
         $.ajax({
@@ -216,18 +198,15 @@ td{
     $( document ).ready(function() {
         var check_board = <?PHP echo json_encode($isset); ?>;
         if(check_board == 1){
-            var boardid = <?PHP echo (!empty($semester_details->board_id) ? json_encode($semester_details->board_id) : '""'); ?>;
-            var mediumid = <?PHP echo (!empty($semester_details->medium_id) ? json_encode($semester_details->medium_id) : '""'); ?>;
-            var standardid = <?PHP echo (!empty($semester_details->standard_id) ? json_encode($semester_details->standard_id) : '""'); ?>;
-            var semesterid = <?PHP echo (!empty($semester_details->id) ? json_encode($semester_details->id) : '""'); ?>;
+            var boardid = <?PHP echo (!empty($subject_details->board_id) ? json_encode($subject_details->board_id) : '""'); ?>;
+            var mediumid = <?PHP echo (!empty($subject_details->medium_id) ? json_encode($subject_details->medium_id) : '""'); ?>;
+            var standardid = <?PHP echo (!empty($subject_details->standard_id) ? json_encode($subject_details->standard_id) : '""'); ?>;            
             $('.board_id').val(boardid);
             var board_id = boardid;
             var medium_id = mediumid;
-            var standard_id = standardid;
-            var semester_id = semesterid;
+            var standard_id = standardid;            
             getMediumEdit(board_id,medium_id);
-            getStandardEdit(board_id,medium_id,standard_id);
-            getSemesterEdit(board_id,medium_id,standard_id,semester_id);
+            getStandardEdit(board_id,medium_id,standard_id);            
         }   
 
     });
@@ -311,30 +290,6 @@ function getStandard(board_id,medium_id){
     });
 }    
 
-$(document).on('change','.standard_id',function(){
-    var standard_id = $('.standard_id').val();
-    var board_id = $('.board_id').val();
-    var medium_id = $('.medium_id').val();
-    getSemester(standard_id,board_id,medium_id);
-});
-
-function getSemester(standard_id,board_id,medium_id){
-    $.ajax({
-        type: "GET",
-        url: "{{route('get.semester')}}",
-        data: {
-            "board_id":board_id,
-            "standard_id":standard_id,
-            "medium_id":medium_id,
-        },
-        success: function(result) {
-            $('.semester_id').html('');
-            $('.semester_id').html(result.html);
-        } 
-    });
-}
-
-
 $(document).ready(function () {
     
     $('#subject_form').validate({
@@ -342,7 +297,6 @@ $(document).ready(function () {
                 board_id:"required",
                 medium_id:"required",
                 standard_id:"required",
-                semester_id:"required",
                 subject_name:"required",
                 sub_title:"required"
 
@@ -351,8 +305,7 @@ $(document).ready(function () {
         messages: {
                 board_id:"Please selete board.",
                 medium_id:"Please selete medium.",
-                standard_id:"Please selete standard.",
-                semester_id:"Please enter semester.",
+                standard_id:"Please selete standard.",                
                 subject_name:"Please enter subject name.",
                 sub_title:"Please enter sub title."
         },
@@ -370,8 +323,7 @@ $(document).ready(function () {
                 processData: false,
                 success: function(data) {
                     confirm(data.message);
-                    $('#semester_id').val([]);
-                    $('#semester_id').trigger('change');
+                    $('#semester_id').val([]);                    
                     $('#subject_name').val('');
                     $('#sub_title').val('');
                     $('#thumbnail').val();
@@ -415,26 +367,16 @@ $(document).on('click','.edit-btn',function(){
             $('#board_id').val(result.subject_details.board_id);
             var board_id = $('#board_id').val();
             var medium_id = result.subject_details.medium_id;
-            var standard_id = result.subject_details.standard_id;
-            //var semester_id = result.;
+            var standard_id = result.subject_details.standard_id;            
             getMediumEdit(board_id,medium_id);
             getStandardEdit(board_id,medium_id,standard_id);
-            //getSemesterEdit(board_id,medium_id,standard_id,semester_id);
-            $('#semester_id').val(result.semester);
-            $('#semester_id').trigger('change');
             $('#subject_name').val(result.subject_details.subject_name);
-            $('#sub_title').val(result.subject_details.sub_title);
-            //$('#sub_title').prop("readonly", true);
+            $('#sub_title').val(result.subject_details.sub_title);            
             $('#hidden_thumbnail').val(result.subject_details.thumbnail);
             $('#thumbnail_preview').css('display','block');
             var url_path = "{{ env('APP_URL') }}"+"/upload/subject/thumbnail/"+result.subject_details.thumbnail;
             $('#thumbnail_preview').attr('src', url_path);
-            $('#hidden_id').val(result.subject_details.id);
-            //$('#thumbnail').val('');
-            
-            
-            // $('.dyamictable').empty();
-            // $('.dyamictable').html(data);
+            $('#hidden_id').val(result.subject_details.id);            
         }            
     });
 });
@@ -472,23 +414,7 @@ function getStandardEdit(board_id,medium_id,standard_id){
     });
 }
 
-function getSemesterEdit(board_id,medium_id,standard_id,semester_id){
-    
-    $.ajax({
-        type: "GET",
-        url: "{{route('get.semester')}}",
-        data: {
-            "board_id":board_id,
-            "medium_id":medium_id,
-            "standard_id":standard_id,
-            "semester_id":semester_id,
-        },
-        success: function(result) {
-            $('.semester_id').html('');
-            $('.semester_id').html(result.html);
-        } 
-    });
-}
+
 
 $(document).on('click','.distroy', function() {
     var id = $(this).attr('data-id');

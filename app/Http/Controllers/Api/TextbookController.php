@@ -41,7 +41,7 @@ class TextbookController extends Controller
 
 
         $chkstandard = Standard::where(['id' => $request->standard_id,'status' => 'Active'])->first();
-        $chksemester = Semester::where(['id' => $request->semester_id,'status' => 'Active'])->first();
+        //$chksemester = Semester::where(['id' => $request->semester_id,'status' => 'Active'])->first();
         $chksuject = Subject::where(['id' => $request->subject_id,'status' => 'Active'])->first();
 
         if(empty($chkstandard)){
@@ -51,13 +51,13 @@ class TextbookController extends Controller
 			  	"data" => [],
 	        ]);
         }
-        elseif (empty($chksemester)) {
+        /*elseif (empty($chksemester)) {
         	return response()->json([
     			"code" => 400,
 			  	"message" => "Semester not found.",
 			  	"data" => [],
 	        ]);
-        }
+        }*/
         elseif (empty($chksuject)) {
         	return response()->json([
     			"code" => 400,
@@ -81,14 +81,14 @@ class TextbookController extends Controller
                         {
                             $is_read = 1;
                         }
-                        $url = env('APP_URL')."/upload/book/url/".$value1->url;
-	    				$thumbnail = env('APP_URL')."/upload/book/thumbnail/".$value1->thumbnail;
+                        $url = $value1->url;
+	    				$thumbnail = $value1->thumbnail;
 	    				$bookdata[] = ['id' => $value1->id,'title' => $value1->title,'sub_title' => $value1->sub_title,
                         'url' => $url,'thumbnail' => $thumbnail,
                         'pages' => $value1->pages,'description' => $value1->description,'label' => $value1->label,'release_date' => $value1->release_date,'is_read' => $is_read];
 	    			}
 
-	    			$data[] = ['id' => $value->id,'unit_title' =>$value->title,'book' => $bookdata,'sub_title'=>$value->description];
+	    			$data[] = ['id' => $value->id,'unit_title' =>$value->title,'book' => $bookdata,'sub_title'=>$value->sub_title];
 	    		}
 	    		
 	    		return response()->json([
@@ -325,8 +325,8 @@ class TextbookController extends Controller
                             $is_read = 1;
                         }
 
-                        $url = env('APP_URL')."/upload/book/url/".$value1->url;
-                        $thumbnail = env('APP_URL')."/upload/book/thumbnail/".$value1->thumbnail;
+                        $url = $value1->url;
+                        $thumbnail = $value1->thumbnail;
                         $bookdata[] = ['id' => $value1->id,'title' => $value1->title,'sub_title' => $value1->sub_title,
                         'url' => $url,'thumbnail' => $thumbnail,
                         'pages' => $value1->pages,'description' => $value1->description,'label' => $value1->label,'release_date' => $value1->release_date,'is_read' => $is_read];

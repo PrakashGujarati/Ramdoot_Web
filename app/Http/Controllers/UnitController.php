@@ -28,7 +28,7 @@ class UnitController extends Controller
     }
     public function index()
     {
-        $unit_details = Unit::where('status','!=','Deleted')->groupBy('semester_id')->get();
+        $unit_details = Unit::where('status','!=','Deleted')->groupBy('subject_id')->get();
         return view('unit.index',compact('unit_details'));
     }
 
@@ -78,8 +78,7 @@ class UnitController extends Controller
         $this->validate($request, [
             'board_id'  => 'required',
             'medium_id'  => 'required',
-            'standard_id'  => 'required',
-            'semester_id' => 'required',
+            'standard_id'  => 'required',            
             'subject_id' => 'required',
             'sub_title' => 'required|regex:/^[0-9A-Za-z.\-_]+$/|max:60'
             // 'url' => 'required',
@@ -138,6 +137,7 @@ class UnitController extends Controller
             $add->semester_id = $request->semester_id;
             $add->subject_id = $request->subject_id;
             $add->title = $request->title;
+            $add->sub_title = $request->sub_title;
             $add->url_type = $request->url_type;
             $add->url = $url_file;
             $add->thumbnail = $new_name;
@@ -200,6 +200,7 @@ class UnitController extends Controller
             $add->semester_id = $request->semester_id;
             $add->subject_id = $request->subject_id;
             $add->title = $request->title;
+            $add->sub_title = $request->sub_title;
             $add->url_type = $request->url_type;
             $add->url = $url_file;
             $add->thumbnail = $new_name;

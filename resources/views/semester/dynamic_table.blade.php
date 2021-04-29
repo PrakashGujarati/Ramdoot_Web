@@ -1,8 +1,32 @@
 <div class="card card-preview">
     <div class="card-inner">
-        <div class="card-head">
-            <h5 class="card-title">Semester List</h5>
+    <div class="card-head">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-12">
+                    	<table class="table table-bordered">
+                    		<tr>
+                    			<th>Board</th>
+                    			<th>Medium</th>
+                    			<th>Standard</th>
+                                <th>Subject</th>
+                    		</tr>
+                    		<tr>
+                    			<td>{{ isset($semester_details->first()->board->name) ? $semester_details->first()->board->name:'' }}</td>
+                    			<td>{{ isset($semester_details->first()->medium->medium_name) ? $semester_details->first()->medium->medium_name:'' }}</td>
+                                <td>{{ isset($semester_details->first()->standard->standard) ? $semester_details->first()->standard->standard:'' }}</td>
+                                <td>{{ isset($semester_details->first()->subject->subject_name) ? $semester_details->first()->subject->subject_name:'' }}</td>
+                    		</tr>
+                    	</table>
+                    </div>
+                    
+                        <!-- <h5 class="card-title">Subject List</h5> -->
+                    
+                </div>
+            </div>
         </div>
+
+
         <div class="" style="width: 100%;overflow-x: auto;">
         <table class="datatable-init table">
             <thead>

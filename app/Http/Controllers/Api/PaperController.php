@@ -77,11 +77,11 @@ class PaperController extends Controller
                             $is_read = 1;
                         }
 
-                        $url = env('APP_URL')."/upload/paper/url/".$value1->url;
-	    				$paperdata[] = ['id' => $value1->id,'title' => $value1->title,'url' => $url,'description' => $value1->description,'label' => $value1->label,'is_read' => $is_read];
+                        $url = $value1->url;
+	    				$paperdata[] = ['id' => $value1->id,'title' => $value1->title,'url' => $url,'sub_title'=>$value->sub_title,'description' => $value1->description,'label' => $value1->label,'is_read' => $is_read];
 	    			}
 
-	    			$data[] = ['id' => $value->id,'unit_title' =>$value->title,'paper' => $paperdata,'sub_title'=>$value->description];
+	    			$data[] = ['id' => $value->id,'unit_title' =>$value->title,'paper' => $paperdata,'sub_title'=>$value->sub_title,'description'=>$value->description];
 	    		}
 	    		
 	    		return response()->json([

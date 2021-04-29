@@ -76,8 +76,8 @@ class UnitController extends Controller
                     $data=[];$totalcount=0;
                     foreach ($getdata as $value) {
                         $readcount=0;
-                        $url = env('APP_URL')."/upload/subject/url/".$value->url;
-                        $thumbnail = env('APP_URL')."/upload/subject/thumbnail/".$value->thumbnail;
+                        $url = $value->url;
+                        $thumbnail = $value->thumbnail;
 
                         if($request->feature_id != 0){
 
@@ -171,7 +171,7 @@ class UnitController extends Controller
                                 $solutions = Solution::where('unit_id',$value->id)->orderBy('order_no','asc')->get();
                                 foreach($solutions as $solution)
                                 {
-                                    $c = pdf_view::where(['type' => 'Exercise','type_id' => $solution->id])->count();
+                                    $c = pdf_view::where(['type' => 'Solution','type_id' => $solution->id])->count();
                                     if($c)
                                     {
                                         $readcount++;
@@ -181,7 +181,7 @@ class UnitController extends Controller
                         }
 
                         $unitcount = Question::where('unit_id',$value->id)->count();
-                        $data[] = ['id' => $value->id,'title' => $value->title,'sub_title' => $value->description,'url' => $url,'thumbnail' => $thumbnail,"pages"=> $value->pages,"total_questions"=>$unitcount,"total_count"=>$totalcount,"readcount"=>$readcount];
+                        $data[] = ['id' => $value->id,'title' => $value->title,'sub_title'=>$value->sub_title,'description' => $value->description,'url' => $url,'thumbnail' => $thumbnail,"pages"=> $value->pages,"total_questions"=>$unitcount,"total_count"=>$totalcount,"readcount"=>$readcount];
                     }
 
                     return response()->json([

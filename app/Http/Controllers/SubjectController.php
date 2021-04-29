@@ -6,7 +6,6 @@ use App\Models\Subject;
 use Illuminate\Http\Request;
 use App\Models\Board;
 use App\Models\Standard;
-use App\Models\Semester;
 
 class SubjectController extends Controller
 {
@@ -35,25 +34,23 @@ class SubjectController extends Controller
      */
     public function create($id=null)
     {
-        if($id != null){
+        
+        if($id > 0){
+            
             $boards = Board::where('status','Active')->get();
-            $standards = Standard::where('status','Active')->get();
-            $semesters = Semester::where('status','Active')->get();
-            $semester_details = Semester::where(['id' => $id])->first();
+            $standards = Standard::where('status','Active')->get();            
             $isset = 1;
             $subject_details = Subject::where(['standard_id' => $id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
             $standard_id=$id;
-            return view('subject.add',compact('boards','standards','semesters','subject_details','semester_details','isset'),'id','standard_id');
+            return view('subject.add',compact('boards','standards','subject_details','isset','id','standard_id'));
         }
-        else{
+        else{            
             $boards = Board::where('status','Active')->get();
-            $standards = Standard::where('status','Active')->get();
-            $semesters = Semester::where('status','Active')->get();
-            $semester_details = [];
+            $standards = Standard::where('status','Active')->get();            
             $isset = 0;
             $standard_id=0;
             $subject_details = Subject::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
-            return view('subject.add',compact('boards','standards','semesters','subject_details','semester_details','isset','standard_id'));
+            return view('subject.add',compact('boards','standards','subject_details','isset','standard_id'));
         }
     }
 
@@ -68,9 +65,7 @@ class SubjectController extends Controller
         
         $this->validate($request, [
             'board_id'     => 'required',
-            'medium_id'  => 'required',
-            'semester_id' => 'required',
-            'standard_id'  => 'required',
+            'medium_id'  => 'required',            
             'subject_name' => 'required',
             'sub_title' => 'required|regex:/^[0-9A-Za-z.\-_]+$/|max:60'
         ]);
@@ -105,27 +100,12 @@ class SubjectController extends Controller
             $add->board_id = $request->board_id;
             $add->medium_id = $request->medium_id;
             $add->standard_id = $request->standard_id;
-            //$add->semester_id = $request->semester_id;
+            
             $add->subject_name = $request->subject_name;
             $add->sub_title = $request->sub_title;
             //$add->url = $url_file;
             $add->thumbnail = $new_name;
             $add->save();
-
-            if(count($request->semester_id) > 0){
-                Semester::where(['subject_id' => $request->hidden_id])->delete();
-                foreach ($request->semester_id as $value) {
-                   $add_semester = new Semester;
-                   $add_semester->board_id = $request->board_id;
-                   $add_semester->medium_id = $request->medium_id;
-                   $add_semester->standard_id = $request->standard_id;
-                   $add_semester->subject_id = $add->id;
-                   $add_semester->semester = $value;
-                   $add_semester->save();
-                }    
-            }
-
-            
             
             $msg = "Subject Updated Successfully.";
         }
@@ -164,28 +144,12 @@ class SubjectController extends Controller
             $add = new Subject;
             $add->board_id = $request->board_id;
             $add->medium_id = $request->medium_id;
-            $add->standard_id = $request->standard_id;
-            //$add->semester_id = $request->semester_id;
+            $add->standard_id = $request->standard_id;            
             $add->subject_name = $request->subject_name;
             $add->sub_title = $request->sub_title;
-            $add->order_no=$last_no;
-            //$add->url = $url_file;
+            $add->order_no=$last_no;            
             $add->thumbnail = $new_name;
             $add->save();
-
-            if(count($request->semester_id) > 0){
-                
-                foreach ($request->semester_id as $value) {
-                   $add_semester = new Semester;
-                   $add_semester->board_id = $request->board_id;
-                   $add_semester->medium_id = $request->medium_id;
-                   $add_semester->standard_id = $request->standard_id;
-                   $add_semester->subject_id = $add->id;
-                   $add_semester->semester = $value;
-                   $add_semester->save();
-                }    
-            }
-            
 
             $msg = "Subject Added Successfully.";
 
@@ -221,22 +185,9 @@ class SubjectController extends Controller
     public function edit(Request $request)
     {
         $subjectdata = Subject::where('id',$request->id)->first();
-        $sem_data=[];
-        $getsemester = Semester::where('subject_id',$request->id)->get();
-        if(count($getsemester) > 0){
-            foreach ($getsemester as $value) {
-                $sem_data[] = $value->semester;
-            }    
-        }
-        $data = ['subject_details' => $subjectdata,'semester' => $sem_data];
-        
-        //$('#mySelect2').val(['1', '2']);
+        $sem_data=[];        
+        $data = ['subject_details' => $subjectdata];        
         return $data;
-        // $boards = Board::where('status','Active')->get();
-        // $standards = Standard::where('status','Active')->get();
-        // $semesters = Semester::where('status','Active')->get();
-        //return view('subject.edit',compact('subjectdata','boards','standards','semesters'));
-
     }
 
     /**
@@ -250,8 +201,7 @@ class SubjectController extends Controller
     {
         $this->validate($request, [
             'board_id'     => 'required',
-            'medium_id'  => 'required',
-            'semester_id' => 'required',
+            'medium_id'  => 'required',            
             'standard_id'  => 'required',
             'subject_name' => 'required',
             'sub_title' => 'required|regex:/^[0-9A-Za-z.\-_]+$/|max:60'
@@ -296,8 +246,7 @@ class SubjectController extends Controller
         $update = Subject::find($id);
         $update->board_id = $request->board_id;
         $update->medium_id = $request->medium_id;
-        $update->standard_id = $request->standard_id;
-        $update->semester_id = $request->semester_id;
+        $update->standard_id = $request->standard_id;        
         $update->subject_name = $request->subject_name;
         $update->sub_title = $request->sub_title;
         $update->thumbnail = $new_name;
