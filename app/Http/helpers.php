@@ -143,11 +143,10 @@ function imagePathCreate($imagePath = ''){
 }
 
 
-function send_notification($utoken, $message, $title = null,$user_id, $notification_type = null, $user_type = null,$item_data_id = null,$flag = null, $notification_sub_type = null, $client_id = null, $receiverUserId = null,$senderUserId = null) 
+function send_notification($token, $message, $title = null,$user_id, $notification_type = null, $user_type = null,$item_data_id = null,$flag = null, $notification_sub_type = null, $client_id = null, $receiverUserId = null,$senderUserId = null) 
 {
 
     $API_ACCESS_KEY = 'AIzaSyCC3WAurKIK_h3h39QXxMm3_M2u61C_CkM';
-
 
     $headers = array
     (
@@ -155,7 +154,7 @@ function send_notification($utoken, $message, $title = null,$user_id, $notificat
     'Content-Type: application/json'
     );
 
-    $token = 'eqoHAda0_2k:APA91bHuRRWquDt700IoQtRZfEh7kr1ISmXBu1qu6NsvIpNNGyS0Qfnjn3x4fs6xFX-GW4_Brkgt1_QHPkgiOli1mC4Ft89tv_g4ofERFhUeGUhcarHxcBDXE-_nftizhnkWg3rOpijd';
+    //$token = 'eqoHAda0_2k:APA91bHuRRWquDt700IoQtRZfEh7kr1ISmXBu1qu6NsvIpNNGyS0Qfnjn3x4fs6xFX-GW4_Brkgt1_QHPkgiOli1mC4Ft89tv_g4ofERFhUeGUhcarHxcBDXE-_nftizhnkWg3rOpijd';
 
     //$token = $utoken;
 
