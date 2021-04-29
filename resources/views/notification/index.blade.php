@@ -36,7 +36,8 @@ td{
 	            <form action="{{ route('notification.store') }}" method="POST" enctype='multipart/form-data' 
 	            id="notification_form">
 	                @csrf
-	                <div class="form-group col-lg-12">
+	                <div class="row">
+	                	<div class="form-group col-lg-12">
                             <label class="form-label">Device Id</label>
                             <div class="form-control-wrap">
                                 <select name="user_id[]" class="form-control" id="user_id" multiple="multiple" value="">
@@ -53,7 +54,8 @@ td{
                                     </span>
                                 @enderror
                             </div>
-                    </div>
+                        </div>
+		            </div>
 		            <div class="row">
 		            	<div class="form-group col-lg-4">
 		                    <label class="form-label">Title</label>
