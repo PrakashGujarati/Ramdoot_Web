@@ -57,6 +57,19 @@ class NotificationsController extends Controller
                     $add->save();
                 }
                 return redirect()->route('notification.index')->with('success', 'Notification Send Successfully.');
+            }else
+            {
+                $users = User::all();
+                foreach ($users as $user) {                    
+                    send_notification($user->device_token,$request->message,$request->title);
+                    $add = new Notification;
+                    $add->device_id = $user->device_token;
+                    $add->user_id = $user->id;
+                    $add->title = $request->title;
+                    $add->message = $request->message;
+                    $add->save();
+                }
+                return redirect()->route('notification.index')->with('success', 'Notification Send Successfully.. to All Users');
             } 
         }
     }

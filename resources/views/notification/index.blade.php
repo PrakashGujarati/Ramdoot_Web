@@ -41,7 +41,7 @@ td{
                             <label class="form-label">Device Id</label>
                             <div class="form-control-wrap">
                                 <select name="user_id[]" class="form-control" id="user_id" multiple="multiple" value="">
-								<option value="">-- Select User --</option>
+								<option value="0">-- Select All Users --</option>
 		                            @foreach($userdata as $user)
 		                            	@if($user->name)
 		                                <option value="{{ $user->id }}">{{ $user->name }}</option>
@@ -56,7 +56,7 @@ td{
                             </div>
                         </div>
 		            </div>
-		            <div class="row">
+		            <div class="row mt-2">
 		            	<div class="form-group col-lg-4">
 		                    <label class="form-label">Title</label>
 		                    <input type="text" name="title" id="title" class="form-control" value=""> 
