@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Notification;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class NotificationsController extends Controller
 {
@@ -45,7 +46,7 @@ class NotificationsController extends Controller
 
                     $add = new Notification;
                     $add->device_id = $value;
-                    $add->user_id = $request->user_name;
+                    $add->user_id = Auth::user()->id;
                     $add->title = $request->title;
                     $add->message = $request->message;
                     $add->save();

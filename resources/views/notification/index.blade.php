@@ -41,23 +41,10 @@ td{
                             <label class="form-label">Device Id</label>
                             <div class="form-control-wrap">
                                 <select name="device_id[]" class="form-control" id="device_id" multiple="multiple" value="">
-                                </select>
-                                @error('device_id')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group col-lg-6">
-                            <label class="form-label">User</label>
-                            <div class="form-control-wrap">
-                                <select name="user_name" class="form-control" id="user_name">
-                                	<option value="">-- Select User Name --</option>
+								<option value="">-- Select User --</option>
 		                            @foreach($userdata as $user)
 		                            	@if($user->name)
-		                                <option value="{{ $user->id }}">{{ $user->name }}</option>
+		                                <option value="{{ $user->device_token }}">{{ $user->name }}</option>
 		                                @endif
 		                            @endforeach
                                 </select>
