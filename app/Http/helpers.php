@@ -143,41 +143,32 @@ function imagePathCreate($imagePath = ''){
 }
 
 
-function send_notification($token, $message, $title = null,$user_id, $notification_type = null, $user_type = null,$item_data_id = null,$flag = null, $notification_sub_type = null, $client_id = null, $receiverUserId = null,$senderUserId = null) 
-{
-
-    $API_ACCESS_KEY = 'AIzaSyCC3WAurKIK_h3h39QXxMm3_M2u61C_CkM';
+function send_notification($utoken, $message, $title = null) {
+        
+    $API_ACCESS_KEY = 'AAAAZkwzjLI:APA91bGJMNIZjlE8ormC8l_Re1CYwSolNwEa_rhyk7EPl1tzwF1EnqHzq5VUeEDMFGFErQQivaTYx1jNX7bfP7BJyx1dqag0vaAJ3p1V8vp9R5RPszIumzOF6EKFVvrM8vdKWqUV-DLg';
 
     $headers = array
     (
     'Authorization: key=' . $API_ACCESS_KEY,
     'Content-Type: application/json'
-    );
+    );                
 
-    //$token = 'eqoHAda0_2k:APA91bHuRRWquDt700IoQtRZfEh7kr1ISmXBu1qu6NsvIpNNGyS0Qfnjn3x4fs6xFX-GW4_Brkgt1_QHPkgiOli1mC4Ft89tv_g4ofERFhUeGUhcarHxcBDXE-_nftizhnkWg3rOpijd';
-
-    //$token = $utoken;
-
-    //$message = 'Test push notification message';
-    //$message = "Request sent";
+    $token = $utoken;
 
     $msg = array(
     'alert' => $message,
     'title' => $title,
     'message' => $message,
-    'notification_type' => $notification_type,
-    'user_type' => $user_type,
+    'notification_type' => "",
+    'user_type' => "",
     'sound' => 'default',
-    'client_id' => $client_id,
-    'item_id' => $item_data_id,
-    'flag'=>$flag
+    'client_id' => "",
+    'flag'=>"",
     );
-
-       
 
     $notification = array(
     'title' => $title,
-    'body' => $message,
+    'body' => $message,               
     'sound' => 'default',
     );
     
@@ -186,9 +177,10 @@ function send_notification($token, $message, $title = null,$user_id, $notificati
     'to' => $token,
     'data' => $msg,
     'priority' => 'high',
+    'vibrate' => 1,             
     'notification' => $notification
     );
-
+        
     try {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
@@ -202,17 +194,19 @@ function send_notification($token, $message, $title = null,$user_id, $notificati
         curl_close($ch);
         $errMsg = '';
         $res = (array) json_decode($result);
-
+        print_r($res);
         $errMsg = '';
-          if (!empty($res)) {
-                if ($res['failure'] == 1) {                     
-                $errMsg = $res['results'][0]->error;                
+        
+        if (!empty($res)) {
+            if ($res['failure'] == 1) {
+                $errMsg = $res['results'][0]->error;
             }
         }
         
+        
     } catch (Exception $e) {
-
             Log::info("ERROR IN CACHE");
-    }
+    }                    
+
 }
 
