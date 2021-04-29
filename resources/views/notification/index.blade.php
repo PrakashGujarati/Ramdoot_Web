@@ -102,7 +102,7 @@ td{
 <script type="text/javascript">
 
 	$(document).ready(function() {
-       $("#device_id").select2({
+       $("#user_id").select2({
             tags: true,
             tokenSeparators: [',', ' ']
         })
