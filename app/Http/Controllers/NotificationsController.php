@@ -27,10 +27,11 @@ class NotificationsController extends Controller
      */
     public function create()
     {
-        $utoken="dWkMsvDzR-GLb-OJg1byo7:APA91bF-sisz1ifoNqW9SludcIu2aCtbnwVPdcdfGButhbgZI5vVs6rLXDpY7pInrOK_4uubV4T6reIPKZoHzzcgMMcyvFaHnibMDeNEFPdiZj4V91B8I5GiU9r9ybIIUTRlbZsYWmbu";
+        return "create";
+       /* $utoken="dWkMsvDzR-GLb-OJg1byo7:APA91bF-sisz1ifoNqW9SludcIu2aCtbnwVPdcdfGButhbgZI5vVs6rLXDpY7pInrOK_4uubV4T6reIPKZoHzzcgMMcyvFaHnibMDeNEFPdiZj4V91B8I5GiU9r9ybIIUTRlbZsYWmbu";
         $title="title for notification";
         $message="message body";
-        $this->push_notification($utoken, $message, $title);
+        $this->push_notification($utoken, $message, $title);*/
     }
 
     /**
