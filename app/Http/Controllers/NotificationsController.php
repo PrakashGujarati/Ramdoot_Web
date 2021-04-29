@@ -46,7 +46,7 @@ class NotificationsController extends Controller
         if($request->has('user_id')){
             if(count($request->user_id) > 0){
                 foreach ($request->user_id as $value) {
-                    $user=User::find($value)->first();
+                    $user=User::find($value);
                     send_notification($user->device_token,$request->message,$request->title);
 
                     $add = new Notification;
