@@ -8,7 +8,7 @@ use App\Models\Slider;
 
 class SliderController extends Controller
 {
-    public function slider(){
+    public function slider(Request $request){
 		$this->validate($request, [            
             'area' => 'required',            
         ]);
