@@ -46,9 +46,11 @@ use App\Http\Controllers\NotificationsController;
 |
 */
 Route::get('/', function () {
+    return view('index');
+});
+Route::get('/login', function () {
     return redirect('/login');
 });
-
 Route::post('deploy', [DeployController::class, "deploy"])->name('app.deploy.dev');
 
 Route::get('getData',[HomeController::class,'getData']);
