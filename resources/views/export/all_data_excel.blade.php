@@ -38,7 +38,12 @@ td{
 		                    	<option>Semester</option>
 		                    	<option>Unit</option>
 		                    	<option>Book</option>
+		                    	<option>Note</option>
 		                    	<option>Video</option>
+		                    	<option>Solution</option>
+		                    	<option>Material</option>
+		                    	<option>Paper</option>
+		                    	<option>Worksheet</option>
 		                    </select>
 		                    <div class="form-control-wrap">
 		                        @error('module')

@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Models\Solution;
+use App\Worksheet;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -10,12 +10,11 @@ use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class SolutionsExport implements FromCollection,WithHeadings,ShouldAutoSize, WithEvents
+class WorksheetsExport implements FromCollection,WithHeadings,ShouldAutoSize, WithEvents
 {
     /**
     * @return \Illuminate\Support\Collection
     */
-    
     private  $data = [];
 
     public function __construct($data)
@@ -25,9 +24,9 @@ class SolutionsExport implements FromCollection,WithHeadings,ShouldAutoSize, Wit
 
     public function collection()
     {
-        $solutions=[];
+        $worksheets=[];
         foreach ($this->data as $value) {
-            $solutions[] = array(
+            $worksheets[] = array(
                 'id' => $value->id,
                 'board_id' => $value->board_id,
                 'board_name' => isset($value->board->name) ? $value->board->name:'',
@@ -41,22 +40,24 @@ class SolutionsExport implements FromCollection,WithHeadings,ShouldAutoSize, Wit
                 "semester_name" => isset($value->semester->semester) ? $value->semester->semester:'',
                 'unit_id' => $value->unit_id,
                 "unit_name" => isset($value->unit->title) ? $value->unit->title:'',
-                "user_id" => $value->user_id,                
-                'question' => isset($value->question) ? $value->question:'',
-                'answer' => isset($value->answer) ? $value->answer:'',
-                "marks" => isset($value->marks) ? $value->marks:'',
-                'image' => isset($value->image) ? $value->image:'',
+                "user_id" => $value->user_id,
+                "title" => $value->title,
+                'sub_title' => isset($value->sub_title) ? $value->sub_title:'',
+                "url_type" => isset($value->url_type) ? $value->url_type:'',
+                'url' => isset($value->url) ? $value->url:'',
+                'thumbnail' => isset($value->thumbnail) ? $value->thumbnail:'',
+                'pages' => $value->pages,
                 'label' => isset($value->label) ? $value->label:'',
-                'question_type_id' => isset($value->question_type) ? $value->question_type:'',
-                'question_type' => isset($value->questionType->question_type) ? $value->questionType->question_type:'',
-                'level' => isset($value->level) ? $value->level:'',                
+                'description' => $value->description,
+                'edition' => $value->edition,	
+                'release_date' => $value->release_date,                
                 'status' => $value->status,
                 'order_no' => $value->order_no
             );
         }
 
         return collect([
-            $solutions
+            $worksheets
         ]);
     }
 
@@ -78,16 +79,18 @@ class SolutionsExport implements FromCollection,WithHeadings,ShouldAutoSize, Wit
 	    	"Unit Id",
 	    	"Unit Name",
 	    	"User Id",
-	        "Question",
-	        "Answer",
-	        "Marks",
-	        "Image",
-	    	"Label",
-	        "QuestionType Id",
-            "QuestionType",
-	        "Level",	        
+	    	"Title",
+	        "Sub Title",
+	        "Url Type",
+	        "URL",
+	    	"Thumbnail",
+	        "Pages",
+	        "Label",
+	        "Description",
+	        "Edition",
+			"Release Date",        
 	        "Status",
-	        "Order No",
+	        "Order No"
         ];
     }
 
@@ -100,5 +103,4 @@ class SolutionsExport implements FromCollection,WithHeadings,ShouldAutoSize, Wit
             },
         ];
     }
-
 }
