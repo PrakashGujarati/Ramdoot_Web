@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Semester extends Model
 {
     use HasFactory;
-    protected $fillable = ['board_id','medium_id','standard_id','subject_id','semester','status','order_no'];
+    protected $fillable = ['board_id','medium_id','standard_id','subject_id','semester','sub_title','status','order_no'];
 
     public function board()
     {

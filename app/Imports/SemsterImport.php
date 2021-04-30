@@ -22,6 +22,7 @@ class SemsterImport implements ToModel,WithHeadingRow
             'standard_id' => $row['standard_id'],
             'subject_id' => $row['subject_id'],
             'semester' => $row['semester'],
+            'sub_title' => $row['sub_title'],
             'status' => $row['status'],
             'order_no' => $row['order_no']
         ]);

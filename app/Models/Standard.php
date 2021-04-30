@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Standard extends Model
 {
     use HasFactory;
-    protected $fillable = ['board_id','medium_id','standard','section','thumbnail','status','order_no'];
+    protected $fillable = ['board_id','medium_id','standard','sub_title','section','thumbnail','status','order_no'];
 
     public function board()
     {
