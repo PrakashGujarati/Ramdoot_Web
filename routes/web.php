@@ -48,7 +48,7 @@ use App\Http\Controllers\NotificationsController;
 Route::get('/', function () {
     return view('index');
 });
-Route::get('/login', function () {
+Route::get('/ramdoot', function () {
     return redirect('/login');
 });
 Route::post('deploy', [DeployController::class, "deploy"])->name('app.deploy.dev');
