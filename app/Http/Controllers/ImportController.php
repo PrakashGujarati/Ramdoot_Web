@@ -16,6 +16,14 @@ use App\Imports\UnitImport;
 use App\Imports\BookImport;
 use App\Imports\VideoImport;
 
+use App\Imports\NoteImport;
+use App\Imports\SolutionImport;
+use App\Imports\MaterialImport;
+use App\Imports\PaperImport;
+use App\Imports\WorksheetImport;
+
+
+
 class ImportController extends Controller
 {
     public function importExcel(Request $request){
@@ -62,6 +70,26 @@ class ImportController extends Controller
     		Excel::import(new VideoImport($request), request()->file('file'));
  	    	return redirect()->route('import_excel.index')->with('success',$msg);
     	}
+        elseif($request->module == "Note"){
+            Excel::import(new NoteImport($request), request()->file('file'));
+            return redirect()->route('import_excel.index')->with('success',$msg);
+        }
+        elseif($request->module == "Solution"){
+            Excel::import(new SolutionImport($request), request()->file('file'));
+            return redirect()->route('import_excel.index')->with('success',$msg);
+        }
+        elseif($request->module == "Material"){
+            Excel::import(new MaterialImport($request), request()->file('file'));
+            return redirect()->route('import_excel.index')->with('success',$msg);
+        }
+        elseif($request->module == "Paper"){
+            Excel::import(new PaperImport($request), request()->file('file'));
+            return redirect()->route('import_excel.index')->with('success',$msg);
+        }
+        elseif($request->module == "Worksheet"){
+            Excel::import(new WorksheetImport($request), request()->file('file'));
+            return redirect()->route('import_excel.index')->with('success',$msg);
+        }
     }
 
 }

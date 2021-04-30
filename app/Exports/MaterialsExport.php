@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Models\Solution;
+use App\Models\Material;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -10,12 +10,11 @@ use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class SolutionsExport implements FromCollection,WithHeadings,ShouldAutoSize, WithEvents
+class MaterialsExport implements FromCollection,WithHeadings,ShouldAutoSize, WithEvents
 {
     /**
     * @return \Illuminate\Support\Collection
     */
-    
     private  $data = [];
 
     public function __construct($data)
@@ -25,9 +24,9 @@ class SolutionsExport implements FromCollection,WithHeadings,ShouldAutoSize, Wit
 
     public function collection()
     {
-        $solutions=[];
+        $materials=[];
         foreach ($this->data as $value) {
-            $solutions[] = array(
+            $materials[] = array(
                 'id' => $value->id,
                 'board_id' => $value->board_id,
                 'board_name' => isset($value->board->name) ? $value->board->name:'',
@@ -56,7 +55,7 @@ class SolutionsExport implements FromCollection,WithHeadings,ShouldAutoSize, Wit
         }
 
         return collect([
-            $solutions
+            $materials
         ]);
     }
 
@@ -100,5 +99,4 @@ class SolutionsExport implements FromCollection,WithHeadings,ShouldAutoSize, Wit
             },
         ];
     }
-
 }
