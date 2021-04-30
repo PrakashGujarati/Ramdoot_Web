@@ -48,12 +48,9 @@ use App\Http\Controllers\NotificationsController;
 Route::get('/', function () {
     return view('index');
 });
-
 Route::post('deploy', [DeployController::class, "deploy"])->name('app.deploy.dev');
-
 Route::get('getData',[HomeController::class,'getData']);
 Route::get('getDataUnit',[HomeController::class,'getDataUnit']);
-
 Route::get('get_order_data',[HomeController::class,'get_order_data']);
 Route::group(['middleware' => 'auth'], function(){
 	Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
