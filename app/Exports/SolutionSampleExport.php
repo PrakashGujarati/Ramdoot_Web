@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\Solution;
+use App\Models\Book;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -10,12 +11,11 @@ use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class SolutionsExport implements FromCollection,WithHeadings,ShouldAutoSize, WithEvents
+class SolutionSampleExport implements FromCollection
 {
     /**
     * @return \Illuminate\Support\Collection
     */
-    
     private  $data = [];
 
     public function __construct($data)
@@ -47,8 +47,7 @@ class SolutionsExport implements FromCollection,WithHeadings,ShouldAutoSize, Wit
                 "marks" => isset($value->marks) ? $value->marks:'',
                 'image' => isset($value->image) ? $value->image:'',
                 'label' => isset($value->label) ? $value->label:'',
-                'question_type_id' => isset($value->question_type) ? $value->question_type:'',
-                'question_type' => isset($value->questionType->question_type) ? $value->questionType->question_type:'',
+                'question_type' => isset($value->question_type) ? $value->question_type:'',
                 'level' => isset($value->level) ? $value->level:'',                
                 'status' => $value->status,
                 'order_no' => $value->order_no
@@ -83,8 +82,7 @@ class SolutionsExport implements FromCollection,WithHeadings,ShouldAutoSize, Wit
 	        "Marks",
 	        "Image",
 	    	"Label",
-	        "QuestionType Id",
-            "QuestionType",
+	        "QuestionType",
 	        "Level",	        
 	        "Status",
 	        "Order No",
@@ -95,10 +93,9 @@ class SolutionsExport implements FromCollection,WithHeadings,ShouldAutoSize, Wit
     {
         return [
             AfterSheet::class    => function(AfterSheet $event) {
-                $cellRange = 'A1:Z1';
+                $cellRange = 'A1:W1';
                 $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setBold(true)->setSize(14);
             },
         ];
     }
-
 }
