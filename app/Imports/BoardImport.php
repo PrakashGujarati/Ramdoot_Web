@@ -23,7 +23,6 @@ class BoardImport implements ToModel,WithHeadingRow
     public function model(array $row)
     {
         return new Board([
-            'id' => $row['id'],
             'name' => $row['name'],
             'sub_title' => $row['sub_title'],
             'abbreviation' => $row['full_form_of_boardorganisation'],

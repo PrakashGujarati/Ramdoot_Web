@@ -18,6 +18,7 @@ class MediumImport implements ToModel,WithHeadingRow
         return new Medium([
             'board_id' => $row['board_id'],
             'medium_name' => $row['medium_name'],
+            'sub_title' => $row['sub_title'],
             'status' => $row['status'],
             'order_no' => $row['order_no']
         ]);

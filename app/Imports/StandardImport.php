@@ -19,6 +19,7 @@ class StandardImport implements ToModel,WithHeadingRow
             'board_id' => $row['board_id'],
             'medium_id' => $row['medium_id'],
             'standard' => $row['standard'],
+            'sub_title' => $row['sub_title'],
             'section' => $row['section'],
             'thumbnail' => $row['thumbnail'],
             'status' => $row['status'],
