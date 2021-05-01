@@ -1,4 +1,12 @@
 
+-----------------------01-04-2021 -------------------
+
+ALTER TABLE `boards` ADD `thumbnail_file_type` ENUM('Server','Drive') NULL AFTER `url`;
+
+ALTER TABLE `standards` ADD `thumbnail_file_type` ENUM('Server','Drive') NULL AFTER `semester`;
+
+ALTER TABLE `subjects` ADD `thumbnail_file_type` ENUM('Server','Drive') NULL AFTER `url`;
+
 -----------------------29-04-2021 -------------------
 
 CREATE TABLE `notifications` (

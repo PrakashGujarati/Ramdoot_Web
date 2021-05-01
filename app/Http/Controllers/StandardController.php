@@ -73,27 +73,32 @@ class StandardController extends Controller
         if($request->hidden_id != "0"){
 
             $new_name='';
-            if($request->has('thumbnail'))
-            {
-            
-                $image = $request->file('thumbnail');
+            if($request->thumbnail_file_type == 'Server'){
+                if($request->has('thumbnail'))
+                {
+                
+                    $image = $request->file('thumbnail');
 
-                $new_name = rand() . '.' . $image->getClientOriginalExtension();
+                    $new_name = rand() . '.' . $image->getClientOriginalExtension();
 
-                $valid_ext = array('png','jpeg','jpg');
+                    $valid_ext = array('png','jpeg','jpg');
 
-                // Location
-                $location = public_path('upload/standard/thumbnail/').$new_name;
+                    // Location
+                    $location = public_path('upload/standard/thumbnail/').$new_name;
 
-                $file_extension = pathinfo($location, PATHINFO_EXTENSION);
-                $file_extension = strtolower($file_extension);
+                    $file_extension = pathinfo($location, PATHINFO_EXTENSION);
+                    $file_extension = strtolower($file_extension);
 
-                if(in_array($file_extension,$valid_ext)){
-                    $this->compressImage($image->getPathName(),$location,60);
+                    if(in_array($file_extension,$valid_ext)){
+                        $this->compressImage($image->getPathName(),$location,60);
+                    }
+                }
+                else{
+                    $new_name = $request->hidden_thumbnail;
                 }
             }
             else{
-                $new_name = $request->hidden_thumbnail;
+                $new_name = $request->thumbnail;
             }
 
             $add = Standard::find($request->hidden_id);
@@ -103,6 +108,7 @@ class StandardController extends Controller
             $add->sub_title = $request->sub_title;
             $add->section = $request->section;
             $add->thumbnail = $new_name;
+            $add->thumbnail_file_type = $request->thumbnail_file_type;
             $add->save();
 
             $msg = "Standard Updated Successfully.";
@@ -110,25 +116,32 @@ class StandardController extends Controller
         else{
 
             $new_name='';
-            if($request->has('thumbnail'))
-            {
-            
-                $image = $request->file('thumbnail');
+            if($request->thumbnail_file_type == 'Server'){
+                if($request->has('thumbnail'))
+                {
+                
+                    $image = $request->file('thumbnail');
 
-                $new_name = rand() . '.' . $image->getClientOriginalExtension();
+                    $new_name = rand() . '.' . $image->getClientOriginalExtension();
 
-                $valid_ext = array('png','jpeg','jpg');
+                    $valid_ext = array('png','jpeg','jpg');
 
-                // Location
-                $location = public_path('upload/standard/thumbnail/').$new_name;
+                    // Location
+                    $location = public_path('upload/standard/thumbnail/').$new_name;
 
-                $file_extension = pathinfo($location, PATHINFO_EXTENSION);
-                $file_extension = strtolower($file_extension);
+                    $file_extension = pathinfo($location, PATHINFO_EXTENSION);
+                    $file_extension = strtolower($file_extension);
 
-                if(in_array($file_extension,$valid_ext)){
-                    $this->compressImage($image->getPathName(),$location,60);
+                    if(in_array($file_extension,$valid_ext)){
+                        $this->compressImage($image->getPathName(),$location,60);
+                    }
                 }
             }
+            else{
+                $new_name = $request->thumbnail;
+            }
+
+
             $last_data=Standard::select('*')->where('medium_id',$request->medium_id)->orderBy('order_no','desc')->first();
             if($last_data)
             {
@@ -138,6 +151,7 @@ class StandardController extends Controller
             {
                 $last_number=1;
             }
+            
             $add = new Standard;
             $add->medium_id = $request->medium_id;
             $add->board_id = $request->board_id;
@@ -145,6 +159,7 @@ class StandardController extends Controller
             $add->sub_title = $request->sub_title;
             $add->section = $request->section;
             $add->thumbnail = $new_name;
+            $add->thumbnail_file_type = $request->thumbnail_file_type;
             $add->order_no=$last_number;
             $add->save();
 

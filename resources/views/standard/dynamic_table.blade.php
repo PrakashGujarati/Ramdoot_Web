@@ -28,8 +28,12 @@
                         <td>{{ $data->standard }}</td>
                         <td>{{ $data->section }}</td>
                         <td>
+                            @if($data->thumbnail_file_type == 'Server')
                             @if($data->thumbnail)
                             <img src="{{ asset('upload/standard/thumbnail/'.$data->thumbnail) }}" class="thumbnail" height="50" width="50">
+                            @endif
+                            @else
+                            {{ $data->thumbnail }}
                             @endif
                         </td>
                         <td>

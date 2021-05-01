@@ -48,8 +48,12 @@
                         <td>{{ $data->subject_name }}</td>
                         <td>{{ $data->sub_title }}</td>
                         <td>
-                            @if($data->thumbnail)
-                            <img src="{{ asset('upload/subject/thumbnail/'.$data->thumbnail) }}" class="thumbnail" height="50" width="50">
+                            @if($data->thumbnail_file_type == 'Server')
+                                @if($data->thumbnail)
+                                <img src="{{ asset('upload/subject/thumbnail/'.$data->thumbnail) }}" class="thumbnail" height="50" width="50">
+                                @endif
+                            @else
+                                {{ $data->thumbnail }}
                             @endif
                         </td>
                         <td>
