@@ -66,7 +66,7 @@ class SolutionController extends Controller
 	    				$sub_title = Unit::where(['id' => $request->unit_id,'status' => 'Active'])->first();
 		    			if($sub_title)
 		    			{
-		    				$sub_title=$sub_title->description;
+		    				$sub_title=$sub_title->sub_title;
 		    			}
 		    			else
 		    			{
