@@ -84,7 +84,7 @@
                               <li><a href="#" title="Twitter" class="dt-sc-tooltip-top twitter"><span class="fa fa-twitter"></span></a></li>
                               <li><a href="#" title="Google Plus" class="dt-sc-tooltip-top gplus"><span class="fa fa-google-plus"></span></a></li>
                               <li>
-                                 <a href="{{asset('apk/RamdootEduWorld.apk')}}" title="Download Application" class="dt-sc-tooltip-top download"><span class="fa fa-download"></span></a>
+                                 <a href="{{asset('web/apk/RamdootEduWorld.apk')}}" title="Download Application" class="dt-sc-tooltip-top download"><span class="fa fa-download"></span></a>
                               </li>
                            </ul>
                         </div>
@@ -97,7 +97,7 @@
 Gift of <span style="color:#007cc2;">RAMDOOT EDU.WORLD</span> to all children on Gujarat State Establishment Day</p>
                         </marquee>
                      </div>
-                     <a id="download" href="{{asset('apk/RamdootEduWorld.apk')}}"><img style="height: 90px;top:78%;left:80%;position:fixed;z-index: 50;" src="{{asset('web/images/layerslider-gallery/download.png')}}" alt=""></a>
+                     <a id="download" href="{{asset('web/apk/RamdootEduWorld.apk')}}"><img style="height: 90px;top:78%;left:80%;position:fixed;z-index: 50;" src="{{asset('web/images/layerslider-gallery/download.png')}}" alt=""></a>
                      <div id="slider">
                         <div id="layerslider_4" class="ls-wp-container" style="width:100%;height:610px;max-width:1920px;margin:0 auto;margin-bottom: 0px;">
                            <div class="ls-slide" data-ls="slidedelay:7000; transition2d: all;">
