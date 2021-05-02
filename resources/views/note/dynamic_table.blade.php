@@ -52,7 +52,7 @@
                         <td>{{ $data->title }}</td>
                         <td>{{ $data->sub_title }}</td>
                         <td>
-                            @if($data->url_type == 'file')
+                            @if($data->url_type == 'Server')
                             @if($data->url)
                             <img src="{{ asset('upload/note/url/'.$data->url) }}" class="thumbnail" height="50" width="50">
                             @endif
@@ -61,8 +61,12 @@
                             @endif
                         </td>
                         <td>
+                            @if($data->thumbnail_file_type == 'Server')
                             @if($data->thumbnail)
                             <img src="{{ asset('upload/note/thumbnail/'.$data->thumbnail) }}" class="thumbnail" height="50" width="50">
+                            @endif
+                            @else
+                            {{ $data->thumbnail }}
                             @endif
                         </td>
                         <td>{{ $data->pages }}</td>

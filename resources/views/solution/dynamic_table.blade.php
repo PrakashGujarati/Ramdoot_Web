@@ -61,8 +61,12 @@
                         <td>{{ $data->marks }}</td>
                         <td>{{ $data->label }}</td>
                         <td>
+                            @if($data->image_file_type == 'Server')
                             @if($data->image)
                             <img src="{{ asset('upload/solution/thumbnail/'.$data->image) }}" class="thumbnail" height="50" width="50">
+                            @endif
+                            @else
+                            {{ $data->image }}
                             @endif
                         </td>
 

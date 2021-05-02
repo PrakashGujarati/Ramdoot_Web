@@ -166,7 +166,7 @@ td{
 
                             <div class="form-group col-lg-4">
                                 <div class="row">
-                                    <input type="hidden" name="url_type" class="url_type" id="url_type" value="file">
+                                    <input type="hidden" name="url_type" class="url_type" id="url_type" value="Drive">
                                     <div class="col-lg-6"><label class="form-label">Url</label></div>
                                     <div class="col-lg-6 text-right"><div class="g">
                                         <div class="custom-control custom-control-sm custom-checkbox">
@@ -177,9 +177,9 @@ td{
                                     </div>
                                 </div>
                                 <div class="form-control-wrap">
-                                    <input type="file" class="form-control" id="url" name="url" value="">
+                                    <input type="text" class="form-control" id="url" name="url" value="">
                                     <input type="hidden" id="hidden_url" name="hidden_url" value="">
-                                    <img id="url_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" width="100" />
+                                    <img id="url_preview" src="#" alt="your image" class="thumbnail mt-1" height="100"  />
                                     @error('url')
                                         <span class="text-danger" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -189,17 +189,29 @@ td{
                             </div>
 
                             <div class="form-group col-lg-4">
-                                <label class="form-label">Thumbnail</label>
+                                <div class="row">
+                                    <input type="hidden" name="thumbnail_file_type" class="thumbnail_file_type" id="thumbnail_file_type" value="Drive">
+                                    <div class="col-lg-6"><label class="form-label">Thumbnail</label></div>
+                                    <div class="col-lg-6 text-right"><div class="g">
+                                        <div class="custom-control custom-control-sm custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input thumbnailchk" name="thumbnail_result" value="1" id="thumbnail_result">
+                                            <label class="custom-control-label" for="thumbnail_result"></label>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+
                                 <div class="form-control-wrap">
-                                    <input type="file" class="form-control" id="thumbnail" name="thumbnail" value="">
+                                    <input type="text" class="form-control" id="thumbnail" name="thumbnail" value="">
                                     <input type="hidden" id="hidden_thumbnail" name="hidden_thumbnail" value="">
-                                    <img id="thumbnail_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" width="100" />
+                                    
                                     @error('thumbnail')
                                         <span class="text-danger" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
                                 </div>
+                                <img id="thumbnail_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" />    
                             </div>
 
 
@@ -353,8 +365,14 @@ function readThumbnail(input) {
 }
 
 $("#thumbnail").change(function() {
-    $('#thumbnail_preview').css('display','block');
-  readThumbnail(this);
+    if($('.thumbnailchk').prop("checked") == true){
+        $('#thumbnail_preview').css('display','block');
+    }
+    else if($('.thumbnailchk').prop("checked") == false){
+        $('#thumbnail_preview').css('display','none');
+    }
+    //$('#thumbnail_preview').css('display','block');
+    readThumbnail(this);
 });
 
 function readURL(input) {
@@ -370,11 +388,20 @@ function readURL(input) {
 }
 
 $("#url").change(function() {
+    // var url_type = $('#url_type').val();
+
+    // if(url_type == "file"){
+    //     $('#url_preview').css('display','block');
+    //     readURL(this);
+    // }
     var url_type = $('#url_type').val();
 
-    if(url_type == "file"){
+    if(url_type == "Server"){
         $('#url_preview').css('display','block');
         readURL(this);
+    }
+    else{
+        $('#url_preview').css('display','none');
     }
 });
 
@@ -620,22 +647,34 @@ function getUnit(board_id,medium_id,standard_id,semester_id,subject_id){
     });
 }
 
-
-
-
 $(document).on('change','.urlchk',function(){
     if($(this).prop("checked") == true){
+        $("#url").attr('type', 'file');
+        $('#url_type').val('Server');
+        $('#url').val('');
+    }
+    else if($(this).prop("checked") == false){
         $("#url").attr('type', 'text');
-        $('#url_type').val('text');
+        $('#url_type').val('Drive');
         $('#url').val('');
         $('#url_preview').css('display','none');
     }
-    else if($(this).prop("checked") == false){
-        $("#url").attr('type', 'file');
-        $('#url_type').val('file');
-        $('#url').val('');
-    }
 });
+
+
+// $(document).on('change','.urlchk',function(){
+//     if($(this).prop("checked") == true){
+//         $("#url").attr('type', 'text');
+//         $('#url_type').val('text');
+//         $('#url').val('');
+//         $('#url_preview').css('display','none');
+//     }
+//     else if($(this).prop("checked") == false){
+//         $("#url").attr('type', 'file');
+//         $('#url_type').val('file');
+//         $('#url').val('');
+//     }
+// });
 
 $(document).ready(function () {
     
@@ -692,13 +731,23 @@ $(document).ready(function () {
                     $('#release_date').val('');
                     $('#pages').val('');
 
-                    $('#thumbnail').val('');
-                    $('#thumbnail_preview').css('display','none');
+                    // $('#url').val('');
+                    // $('#url_preview').css('display','none');
+                    // $('.urlchk').prop("checked",false);
 
-                    $('#url').val('');
                     $('#url_preview').css('display','none');
-                    $('.urlchk').prop("checked",false);
+                    $(".urlchk").prop("checked",false);
+                    $("#url").attr('type', 'text');
+                    $('#url_type').val('Drive');
+                    $('#hidden_url').val('');
+
+
                     $('#hidden_id').val('0');
+                    $('#thumbnail_preview').css('display','none');
+                    $('.thumbnailchk').prop("checked",false);
+                    $("#thumbnail").attr('type', 'text');
+                    $('#thumbnail_file_type').val('Drive');
+                    $('#thumbnail').val('');
 
                     $('.dyamictable').empty();
                     $('.dyamictable').html(data.html);
@@ -742,23 +791,63 @@ $(document).on('click','.edit-btn',function(){
             $('#label').val(result.label);
             $('#release_date').val(result.release_date);
             $('#edition').val(result.edition);
-            if(result.url_type == 'file'){
+
+            if(result.thumbnail_file_type == 'Drive'){
+
+                $('.thumbnailchk').prop("checked",false);
+                $('#hidden_thumbnail').val(result.thumbnail);
+                $('#thumbnail').val(result.thumbnail);
+                $('#thumbnail_preview').css('display','none');
+                $("#thumbnail").attr('type', 'text');
+                $('#thumbnail_file_type').val('Drive');
+        
+            }
+            else{
+                $('.thumbnailchk').prop("checked",true);
+                $('#hidden_thumbnail').val(result.thumbnail);
+                $('#thumbnail_preview').css('display','block');
+                $("#thumbnail").attr('type', 'file');
+                $('#thumbnail_file_type').val('Server');  
+                var thumbnail_path = "{{ env('APP_URL') }}"+"/upload/paper/thumbnail/"+result.thumbnail;
+                $('#thumbnail_preview').attr('src', thumbnail_path);              
+            }
+
+            if(result.url_type == 'Drive'){
+
+                $('.urlchk').prop("checked",false);
                 $('#hidden_url').val(result.url);
-                $('#url_preview').css('display','block');
-                var url_path = "{{ env('APP_URL') }}"+"/upload/paper/url/"+result.url;
-                $('#url_preview').attr('src', url_path);    
+                $("#url").val(result.url);
+                $('#url_preview').css('display','none');
+                $("#url").attr('type', 'text');
+                $('#url_type').val('Drive');   
             }
             else{
                 $('.urlchk').prop("checked",true);
-                $("#url").attr('type', 'text');
-                $('#url_type').val('text');
-                $('#url_preview').css('display','none');   
-                $('#url').val(result.url);
+                $('#hidden_url').val(result.url);
+                $('#url_preview').css('display','block');
+                $("#url").attr('type', 'file');
+                $('#url_type').val('Server'); 
+                
+                //var url_path = "{{ env('APP_URL') }}"+"/upload/note/url/"+result.url;
+                //$('#url_preview').attr('src', url_path);   
+                var url_path = "{{ env('APP_URL') }}"+"/upload/paper/url/"+result.url;
+                $('#url_preview').attr('src', url_path);  
             }
-            $('#hidden_thumbnail').val(result.thumbnail);
-            $('#thumbnail_preview').css('display','block');
-            var thumbnail_path = "{{ env('APP_URL') }}"+"/upload/paper/thumbnail/"+result.thumbnail;
-            $('#thumbnail_preview').attr('src', thumbnail_path);
+
+            // if(result.url_type == 'file'){
+            //     $('#hidden_url').val(result.url);
+            //     $('#url_preview').css('display','block');
+            //     var url_path = "{{ env('APP_URL') }}"+"/upload/paper/url/"+result.url;
+            //     $('#url_preview').attr('src', url_path);    
+            // }
+            // else{
+            //     $('.urlchk').prop("checked",true);
+            //     $("#url").attr('type', 'text');
+            //     $('#url_type').val('text');
+            //     $('#url_preview').css('display','none');   
+            //     $('#url').val(result.url);
+            // }
+            
             
             $('#hidden_id').val(result.id);
             //$('#thumbnail').val('');
@@ -849,6 +938,20 @@ $(document).on('click','.status_change', function() {
             $(".datatable-init").DataTable();
         }            
     });
+});
+
+$(document).on('change','.thumbnailchk',function(){
+    if($(this).prop("checked") == true){
+        $("#thumbnail").attr('type', 'file');
+        $('#thumbnail_file_type').val('Server');
+        $('#thumbnail').val('');
+    }
+    else if($(this).prop("checked") == false){
+        $("#thumbnail").attr('type', 'text');
+        $('#thumbnail_file_type').val('Drive');
+        $('#thumbnail').val('');
+        $('#thumbnail_preview').css('display','none');
+    }
 });
 
 </script>

@@ -74,31 +74,36 @@ class BookController extends Controller
             'subject_id' => 'required',
             'unit_id' => 'required',
             'title' => 'required',
-            'url' => 'required',
+            //'url' => 'required',
             'sub_title' => 'required'
         ]);
 
         if($request->hidden_id != "0")
         {
             $new_name='';
-            if($request->has('thumbnail'))
-            {
-            
-                $image = $request->file('thumbnail');
-
-                $url = 'upload/'.$request->board_id.'/'.$request->medium_id.'/'.$request->standard_id.'/'.$request->subject_id.'/'.$request->semester_id.'/'.$request->unit_id.'/book/thumbnail/';
-                $originalPath = imagePathCreate($url);
-                $name = time() . mt_rand(10000, 99999);
-                $new_name = $name . '.' . $image->getClientOriginalExtension();
-                $image->move($originalPath, $new_name);
+            if($request->thumbnail_file_type == 'Server'){
+                if($request->has('thumbnail'))
+                {
                 
+                    $image = $request->file('thumbnail');
+
+                    $url = 'upload/'.$request->board_id.'/'.$request->medium_id.'/'.$request->standard_id.'/'.$request->subject_id.'/'.$request->semester_id.'/'.$request->unit_id.'/book/thumbnail/';
+                    $originalPath = imagePathCreate($url);
+                    $name = time() . mt_rand(10000, 99999);
+                    $new_name = $name . '.' . $image->getClientOriginalExtension();
+                    $image->move($originalPath, $new_name);
+                    
+                }
+                else{
+                    $new_name = $request->hidden_thumbnail;
+                }
             }
             else{
-                $new_name = $request->hidden_thumbnail;
+                $new_name = $request->thumbnail;
             }
 
             $url_file='';
-            if($request->url_type == 'file'){
+            if($request->url_type == 'Server'){
                 if($request->file('url'))
                 {
                     
@@ -129,6 +134,7 @@ class BookController extends Controller
             $add->url_type = $request->url_type;
             $add->url = $url_file;
             $add->thumbnail = $new_name;
+            $add->thumbnail_file_type = $request->thumbnail_file_type;
             $add->pages = isset($request->pages) ? $request->pages:'';
             $add->description = isset($request->description) ? $request->description:'';
             $add->label = $request->label;
@@ -141,19 +147,24 @@ class BookController extends Controller
         else{
 
             $new_name='';
-            if($request->has('thumbnail'))
-            {
-            
-                $image = $request->file('thumbnail');
-                $url = 'upload/'.$request->board_id.'/'.$request->medium_id.'/'.$request->standard_id.'/'.$request->subject_id.'/'.$request->semester_id.'/'.$request->unit_id.'/book/thumbnail/';
-                $originalPath = imagePathCreate($url);
-                $name = time() . mt_rand(10000, 99999);
-                $new_name = $name . '.' . $image->getClientOriginalExtension();
-                $image->move($originalPath, $new_name);
+            if($request->thumbnail_file_type == 'Server'){
+                if($request->has('thumbnail'))
+                {
+                
+                    $image = $request->file('thumbnail');
+                    $url = 'upload/'.$request->board_id.'/'.$request->medium_id.'/'.$request->standard_id.'/'.$request->subject_id.'/'.$request->semester_id.'/'.$request->unit_id.'/book/thumbnail/';
+                    $originalPath = imagePathCreate($url);
+                    $name = time() . mt_rand(10000, 99999);
+                    $new_name = $name . '.' . $image->getClientOriginalExtension();
+                    $image->move($originalPath, $new_name);
+                }
+            }
+            else{
+              $new_name = $request->thumbnail;
             }
 
             $url_file='';
-            if($request->url_type == 'file'){
+            if($request->url_type == 'Server'){
                 if($request->file('url'))
                 {
                     $image = $request->file('url');
@@ -191,6 +202,7 @@ class BookController extends Controller
             $add->url_type = $request->url_type;
             $add->url = $url_file;
             $add->thumbnail = $new_name;
+            $add->thumbnail_file_type = $request->thumbnail_file_type;
             $add->pages = isset($request->pages) ? $request->pages:'';
             $add->description = isset($request->description) ? $request->description:'';
             $add->label = $request->label;

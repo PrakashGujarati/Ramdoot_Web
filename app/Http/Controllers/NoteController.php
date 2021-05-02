@@ -64,20 +64,25 @@ class NoteController extends Controller
         {   
 
             $new_name='';
-            if($request->has('thumbnail'))
-            {
-            
-                $image = $request->file('thumbnail');
-                $new_name = rand() . '.' . $image->getClientOriginalExtension();
-                $destinationPath = public_path('upload/note/thumbnail/');
-                $image->move($destinationPath, $new_name);
+            if($request->thumbnail_file_type == 'Server'){
+                if($request->has('thumbnail'))
+                {
+                
+                    $image = $request->file('thumbnail');
+                    $new_name = rand() . '.' . $image->getClientOriginalExtension();
+                    $destinationPath = public_path('upload/note/thumbnail/');
+                    $image->move($destinationPath, $new_name);
+                }
+                else{
+                    $new_name = $request->hidden_thumbnail;
+                }
             }
             else{
-                $new_name = $request->hidden_thumbnail;
+                $new_name = $request->thumbnail;
             }
 
             $url_file='';
-            if($request->url_type == 'file'){
+            if($request->url_type == 'Server'){
                 if($request->file('url'))
                 {
                     $image = $request->file('url');
@@ -106,6 +111,7 @@ class NoteController extends Controller
             $add->url_type = $request->url_type;
             $add->url = $url_file;
             $add->thumbnail = $new_name;
+            $add->thumbnail_file_type = $request->thumbnail_file_type;
             $add->pages = isset($request->pages) ? $request->pages:'';
             $add->description = isset($request->description) ? $request->description:'';
             $add->label = $request->label;
@@ -119,24 +125,23 @@ class NoteController extends Controller
         else{
 
             $new_name='';
-            if($request->has('thumbnail'))
+            if($request->thumbnail_file_type == 'Server')
             {
-            
-                $image = $request->file('thumbnail');
-                $new_name = rand() . '.' . $image->getClientOriginalExtension();
-                $destinationPath = public_path('upload/note/thumbnail/');
-                $image->move($destinationPath, $new_name);
-
-                // $file_extension = pathinfo($location, PATHINFO_EXTENSION);
-                // $file_extension = strtolower($file_extension);
-
-                // if(in_array($file_extension,$valid_ext)){
-                //     $this->compressImage($image->getPathName(),$location,60);
-                // }
+                if($request->has('thumbnail'))
+                {
+                
+                    $image = $request->file('thumbnail');
+                    $new_name = rand() . '.' . $image->getClientOriginalExtension();
+                    $destinationPath = public_path('upload/note/thumbnail/');
+                    $image->move($destinationPath, $new_name);
+                }
+            }
+            else{
+                $new_name = $request->thumbnail;
             }
 
             $url_file='';
-            if($request->url_type == 'file'){
+            if($request->url_type == 'Server'){
                 if($request->file('url'))
                 {
                     $image = $request->file('url');
@@ -171,6 +176,7 @@ class NoteController extends Controller
             $add->url_type = $request->url_type;
             $add->url = $url_file;
             $add->thumbnail = $new_name;
+            $add->thumbnail_file_type = $request->thumbnail_file_type;
             $add->pages = isset($request->pages) ? $request->pages:'';
             $add->description = isset($request->description) ? $request->description:'';
             $add->label = $request->label;

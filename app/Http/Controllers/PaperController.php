@@ -79,20 +79,25 @@ class PaperController extends Controller
         if($request->hidden_id != "0")
         {   
             $new_name='';
-            if($request->has('thumbnail'))
-            {
-            
-                $image = $request->file('thumbnail');
-                $new_name = rand() . '.' . $image->getClientOriginalExtension();
-                $destinationPath = public_path('upload/paper/thumbnail/');
-                $image->move($destinationPath, $new_name);
+            if($request->thumbnail_file_type == 'Server'){
+                if($request->has('thumbnail'))
+                {
+                
+                    $image = $request->file('thumbnail');
+                    $new_name = rand() . '.' . $image->getClientOriginalExtension();
+                    $destinationPath = public_path('upload/paper/thumbnail/');
+                    $image->move($destinationPath, $new_name);
+                }
+                else{
+                    $new_name = $request->hidden_thumbnail;
+                }
             }
             else{
-                $new_name = $request->hidden_thumbnail;
+                $new_name = $request->thumbnail;
             }
 
             $url_file='';
-            if($request->url_type == 'file'){
+            if($request->url_type == 'Server'){
                 if($request->file('url'))
                 {
                     $image = $request->file('url');
@@ -121,6 +126,7 @@ class PaperController extends Controller
             $add->url_type = $request->url_type;
             $add->url = $url_file;
             $add->thumbnail = $new_name;
+            $add->thumbnail_file_type = $request->thumbnail_file_type;
             $add->pages = isset($request->pages) ? $request->pages:'';
             $add->label = $request->label;
             $add->description = isset($request->description) ? $request->description:'';
@@ -133,17 +139,22 @@ class PaperController extends Controller
         else{
             
             $new_name='';
-            if($request->has('thumbnail'))
-            {
-            
-                $image = $request->file('thumbnail');
-                $new_name = rand() . '.' . $image->getClientOriginalExtension();
-                $destinationPath = public_path('upload/paper/thumbnail/');
-                $image->move($destinationPath, $new_name);
+            if($request->thumbnail_file_type == 'Server'){
+                if($request->has('thumbnail'))
+                {
+                
+                    $image = $request->file('thumbnail');
+                    $new_name = rand() . '.' . $image->getClientOriginalExtension();
+                    $destinationPath = public_path('upload/paper/thumbnail/');
+                    $image->move($destinationPath, $new_name);
+                }
+            }
+            else{
+                $new_name = $request->thumbnail;
             }
 
             $url_file='';
-            if($request->url_type == 'file'){
+            if($request->url_type == 'Server'){
                 if($request->file('url'))
                 {
                     $image = $request->file('url');
@@ -178,6 +189,7 @@ class PaperController extends Controller
             $add->url_type = $request->url_type;
             $add->url = $url_file;
             $add->thumbnail = $new_name;
+            $add->thumbnail_file_type = $request->thumbnail_file_type;
             $add->pages = isset($request->pages) ? $request->pages:'';
             $add->label = $request->label;
             $add->description = isset($request->description) ? $request->description:'';

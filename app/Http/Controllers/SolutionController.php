@@ -103,6 +103,60 @@ class SolutionController extends Controller
         if($request->hidden_id != "0")
         {   
             $new_name='';
+            if($request->image_file_type == 'Server'){
+              if($request->has('image'))
+              {
+              
+                  $image = $request->file('image');
+
+                  $new_name = rand() . '.' . $image->getClientOriginalExtension();
+
+                  $valid_ext = array('png','jpeg','jpg');
+
+                  // Location
+                  $location = public_path('upload/solution/thumbnail/').$new_name;
+
+                  $file_extension = pathinfo($location, PATHINFO_EXTENSION);
+                  $file_extension = strtolower($file_extension);
+
+                  if(in_array($file_extension,$valid_ext)){
+                      $this->compressImage($image->getPathName(),$location,60);
+                  }
+              }
+              else{
+                  $new_name = $request->hidden_image;
+              }
+            }
+            else{
+              $new_name = $request->image;
+            }
+
+
+            $add = Solution::find($request->hidden_id);
+            $add->user_id  = Auth::user()->id;
+            $add->unit_id = $request->unit_id;
+            $add->board_id = $request->board_id;
+            $add->medium_id = $request->medium_id;
+            $add->standard_id = $request->standard_id;
+            $add->semester_id = $request->semester_id;
+            $add->subject_id = $request->subject_id;
+            $add->question = $request->question;
+            $add->answer = $request->answer;
+            $add->image = $new_name;
+            $add->image_file_type = $request->image_file_type;
+            $add->marks = $request->marks;
+            $add->label = $request->label;
+            $add->question_type = $request->question_type;
+            $add->level = $request->level;
+            $add->save();
+            
+            $msg = "Solution Updated Successfully.";
+        }
+        else{
+
+          $new_name='';
+          if($request->image_file_type == 'Server')
+          {
             if($request->has('image'))
             {
             
@@ -122,50 +176,9 @@ class SolutionController extends Controller
                     $this->compressImage($image->getPathName(),$location,60);
                 }
             }
-            else{
-                $new_name = $request->hidden_image;
-            }
-
-            $add = Solution::find($request->hidden_id);
-            $add->user_id  = Auth::user()->id;
-            $add->unit_id = $request->unit_id;
-            $add->board_id = $request->board_id;
-            $add->medium_id = $request->medium_id;
-            $add->standard_id = $request->standard_id;
-            $add->semester_id = $request->semester_id;
-            $add->subject_id = $request->subject_id;
-            $add->question = $request->question;
-            $add->answer = $request->answer;
-            $add->image = $new_name;
-            $add->marks = $request->marks;
-            $add->label = $request->label;
-            $add->question_type = $request->question_type;
-            $add->level = $request->level;
-            $add->save();
-            
-            $msg = "Solution Updated Successfully.";
-        }
-        else{
-
-          $new_name='';
-          if($request->has('image'))
-          {
-          
-              $image = $request->file('image');
-
-              $new_name = rand() . '.' . $image->getClientOriginalExtension();
-
-              $valid_ext = array('png','jpeg','jpg');
-
-              // Location
-              $location = public_path('upload/solution/thumbnail/').$new_name;
-
-              $file_extension = pathinfo($location, PATHINFO_EXTENSION);
-              $file_extension = strtolower($file_extension);
-
-              if(in_array($file_extension,$valid_ext)){
-                  $this->compressImage($image->getPathName(),$location,60);
-              }
+          }
+          else{
+            $new_name = $request->image;
           }
 
           $last_data=Solution::select('*')->where('semester_id',$request->semester_id)->orderBy('order_no','desc')->first();
@@ -189,6 +202,7 @@ class SolutionController extends Controller
           $add->question = $request->question;
           $add->answer = $request->answer;
           $add->image = $new_name;
+          $add->image_file_type = $request->image_file_type;
           $add->marks = $request->marks;
           $add->label = $request->label;
           $add->question_type = $request->question_type;

@@ -58,7 +58,7 @@
                         <td>{{ isset($data->unit->title) ? $data->unit->title:'' }}</td>
                         <td>{{ $data->title }}</td>
                         <td>
-                            @if($data->url_type == 'file')
+                            @if($data->url_type == 'Server')
                             @if($data->url)
                             <img src="{{ asset('upload/worksheet/url/'.$data->url) }}" class="thumbnail" height="50" width="50">
                             @endif
