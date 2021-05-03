@@ -22,6 +22,7 @@ class StandardImport implements ToModel,WithHeadingRow
             'sub_title' => $row['sub_title'],
             'section' => $row['section'],
             'thumbnail' => $row['thumbnail'],
+            'thumbnail_file_type' => $row['thumbnail_file_type'],
             'status' => $row['status'],
             'order_no' => $row['order_no'],
         ]);

@@ -27,6 +27,7 @@ class SolutionImport implements ToModel,WithHeadingRow
             'answer' => $row['answer'],
             'marks' => $row['marks'],
             'image' => $row['image'],
+            'image_file_type' => $row['image_file_type'],
             'label' => $row['label'],
             'question_type' => $row['questiontype_id'],
             'level' => $row['level'],

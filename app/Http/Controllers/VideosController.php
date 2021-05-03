@@ -81,37 +81,41 @@ class VideosController extends Controller
             // 'release_date' => 'required',    
         ]);
 
-        //       dd($request->all());
 
         if($request->hidden_id != "0")
         {
 
             $new_name='';
-            if($request->has('thumbnail'))
-            {
-            
-                $image = $request->file('thumbnail');
+            if($request->thumbnail_file_type == 'Server'){
+                if($request->has('thumbnail'))
+                {
+                
+                    $image = $request->file('thumbnail');
 
-                $new_name = rand() . '.' . $image->getClientOriginalExtension();
+                    $new_name = rand() . '.' . $image->getClientOriginalExtension();
 
-                $valid_ext = array('png','jpeg','jpg');
+                    $valid_ext = array('png','jpeg','jpg');
 
-                // Location
-                $location = public_path('upload/videos/thumbnail/').$new_name;
+                    // Location
+                    $location = public_path('upload/videos/thumbnail/').$new_name;
 
-                $file_extension = pathinfo($location, PATHINFO_EXTENSION);
-                $file_extension = strtolower($file_extension);
+                    $file_extension = pathinfo($location, PATHINFO_EXTENSION);
+                    $file_extension = strtolower($file_extension);
 
-                if(in_array($file_extension,$valid_ext)){
-                    $this->compressImage($image->getPathName(),$location,60);
+                    if(in_array($file_extension,$valid_ext)){
+                        $this->compressImage($image->getPathName(),$location,60);
+                    }
+                }
+                else{
+                    $new_name = $request->hidden_thumbnail;
                 }
             }
             else{
-                $new_name = $request->hidden_thumbnail;
+                $new_name = $request->thumbnail;
             }
 
 
-            if($request->url_type == "file"){
+            if($request->url_type == "Server"){
                 $url_file='';
                 if($request->has('url'))
                 {
@@ -142,6 +146,7 @@ class VideosController extends Controller
             $add->url_type = $request->url_type;
             $add->url = $url_file;
             $add->thumbnail = $new_name;
+            $add->thumbnail_file_type = $request->thumbnail_file_type;
             $add->duration = $request->duration;
             $add->description = isset($request->description) ? $request->description:'';
             $add->label = $request->label;
@@ -155,28 +160,33 @@ class VideosController extends Controller
         else{
 
             $new_name='';
-            if($request->has('thumbnail'))
-            {
-            
-                $image = $request->file('thumbnail');
+            if($request->thumbnail_file_type == 'Server'){
+                if($request->has('thumbnail'))
+                {
+                
+                    $image = $request->file('thumbnail');
 
-                $new_name = rand() . '.' . $image->getClientOriginalExtension();
+                    $new_name = rand() . '.' . $image->getClientOriginalExtension();
 
-                $valid_ext = array('png','jpeg','jpg');
+                    $valid_ext = array('png','jpeg','jpg');
 
-                // Location
-                $location = public_path('upload/videos/thumbnail/').$new_name;
+                    // Location
+                    $location = public_path('upload/videos/thumbnail/').$new_name;
 
-                $file_extension = pathinfo($location, PATHINFO_EXTENSION);
-                $file_extension = strtolower($file_extension);
+                    $file_extension = pathinfo($location, PATHINFO_EXTENSION);
+                    $file_extension = strtolower($file_extension);
 
-                if(in_array($file_extension,$valid_ext)){
-                    $this->compressImage($image->getPathName(),$location,60);
+                    if(in_array($file_extension,$valid_ext)){
+                        $this->compressImage($image->getPathName(),$location,60);
+                    }
                 }
+            }
+            else{
+                $new_name = $request->thumbnail;
             }
 
 
-            if($request->url_type == "file"){
+            if($request->url_type == "Server"){
                 $url_file='';
                 if($request->has('url'))
                 {
@@ -213,6 +223,7 @@ class VideosController extends Controller
             $add->url_type = $request->url_type;
             $add->url = $url_file;
             $add->thumbnail = $new_name;
+            $add->thumbnail_file_type = $request->thumbnail_file_type;
             $add->duration = $request->duration;
             $add->description = isset($request->description) ? $request->description:'';
             $add->label = $request->label;

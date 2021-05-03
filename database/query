@@ -1,5 +1,10 @@
 
 
+-----------------------03-05-2021 -------------------
+
+ALTER TABLE `videos` ADD `thumbnail_file_type` ENUM('Youtube','Server','Drive') NULL AFTER `url`;
+
+ALTER TABLE `videos` CHANGE `url_type` `url_type` ENUM('Youtube','Server','Drive') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;
 
 -----------------------02-05-2021 -------------------
 

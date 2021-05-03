@@ -26,6 +26,7 @@ class BoardImport implements ToModel,WithHeadingRow
             'name' => $row['name'],
             'sub_title' => $row['sub_title'],
             'abbreviation' => $row['full_form_of_boardorganisation'],
+            'thumbnail_file_type' => $row['thumbnail_file_type'],
             'thumbnail' => $row['thumbnail'],
             'status' => $row['status'],
             'order_no' => $row['order_no'],

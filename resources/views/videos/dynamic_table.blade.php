@@ -69,8 +69,12 @@
                             @endif
                         </td>
                         <td>
+                            @if($data->thumbnail_file_type == 'Server')
                             @if($data->thumbnail)
                             <img src="{{ asset('upload/videos/thumbnail/'.$data->thumbnail) }}" class="thumbnail" height="50" width="50">
+                            @endif
+                            @else
+                            {{ $data->thumbnail }}
                             @endif
                         </td>
                         <td>{{ $data->duration }}</td>
