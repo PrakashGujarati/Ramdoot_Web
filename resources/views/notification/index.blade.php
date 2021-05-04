@@ -81,6 +81,22 @@ td{
 		                </div>
 		            </div>
 		            <div class="row">
+		            	<div class="form-group col-lg-4">
+			                <label class="form-label">Select Image</label>
+		                    <input type="file" name="file" id="file" class="form-control" value=""> 
+		                    <div class="form-control-wrap">
+		                        @error('file')
+		                            <span class="text-danger" role="alert">
+		                                <strong>{{ $message }}</strong>
+		                            </span>
+		                        @enderror
+		                    </div>
+		                </div>
+		                <div class="form-group col-lg-4">
+		                	<img id="thumbnail_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" />
+		                </div>
+		            </div>
+		            <div class="row">
 		                <div class="form-group col-lg-4 mt-4">
 	                        <button type="submit" class="btn btn-lg btn-primary">Send Notification</button>
 	                    </div>
@@ -106,6 +122,7 @@ td{
             tags: true,
             tokenSeparators: [',', ' ']
         })
+       $('#thumbnail_preview').css('display','none');
     });	
 
 $(document).ready(function () {
@@ -126,6 +143,23 @@ $(document).ready(function () {
         },
     });
 });
+
+$("#file").change(function() {
+    $('#thumbnail_preview').css('display','block');
+  	readThumbnail(this);
+});
+
+function readThumbnail(input) {
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+    
+    reader.onload = function(e) {
+      $('#thumbnail_preview').attr('src', e.target.result);
+    }
+    
+    reader.readAsDataURL(input.files[0]); // convert to base64 string
+  }
+}
 
 </script>
 

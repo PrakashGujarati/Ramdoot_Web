@@ -1,4 +1,8 @@
 
+-----------------------04-05-2021 -------------------
+
+ALTER TABLE `notifications` ADD `image` VARCHAR(255) NULL DEFAULT NULL AFTER `message`;
+
 
 -----------------------03-05-2021 -------------------
 

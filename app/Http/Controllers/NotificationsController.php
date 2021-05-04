@@ -43,8 +43,24 @@ class NotificationsController extends Controller
     public function store(Request $request)
     {
 
+        $request->validate([
+            'file' => 'mimes:jpeg,jpg,png'
+        ]);
+        
         if($request->has('user_id')){
             if(count($request->user_id) > 1){
+                $new_name='';
+                if($request->has('file'))
+                {
+                
+                    $image = $request->file('file');
+
+                    $url = public_path('upload/notifications/');
+                    $originalPath = $url;
+                    $name = time() . mt_rand(10000, 99999);
+                    $new_name = $name . '.' . $image->getClientOriginalExtension();
+                    $image->move($originalPath, $new_name);   
+                }
                 foreach ($request->user_id as $value) {
                     $user=User::find($value);
                     send_notification($user->device_token,$request->message,$request->title);
@@ -54,12 +70,25 @@ class NotificationsController extends Controller
                     $add->user_id = $value;
                     $add->title = $request->title;
                     $add->message = $request->message;
+                    $add->image = $new_name;
                     $add->save();
                 }
                 return redirect()->route('notification.index')->with('success', 'Notification Send Successfully.');
             }else
             {
                 $users = User::where('device_token','!=','')->get();
+                $new_name='';
+                if($request->has('file'))
+                {
+                
+                    $image = $request->file('file');
+
+                    $url = public_path('upload/notifications/');
+                    $originalPath = $url;
+                    $name = time() . mt_rand(10000, 99999);
+                    $new_name = $name . '.' . $image->getClientOriginalExtension();
+                    $image->move($originalPath, $new_name);   
+                }
                 foreach ($users as $user) {                    
                     send_notification($user->device_token,$request->message,$request->title);
                     $add = new Notification;
@@ -67,6 +96,7 @@ class NotificationsController extends Controller
                     $add->user_id = $user->id;
                     $add->title = $request->title;
                     $add->message = $request->message;
+                    $add->image = $new_name;
                     $add->save();
                 }
                 return redirect()->route('notification.index')->with('success', 'Notification Send Successfully.. to All Users');
