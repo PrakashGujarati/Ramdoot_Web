@@ -346,8 +346,9 @@ $(document).ready(function(){
         }
     });
 
-    $('#thumbnail_preview').css('display','none');
     $('#url_preview').css('display','none');
+    $('#thumbnail_preview').css('display','none');
+    
 });    
 
 function readThumbnail(input) {

@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use Illuminate\Http\Request;
-use App\Models\Subject;
 use App\Models\Unit;
 use Auth;
 use App\Models\Board;
+use App\Models\Medium;
+use App\Models\Standard;
+use App\Models\Subject;
 use App\Models\Semester;
+
 
 class BookController extends Controller
 {
@@ -65,7 +68,7 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-
+       // dd($request->all());
         $this->validate($request, [
             'board_id' => 'required',
             'medium_id'  => 'required',
@@ -78,16 +81,28 @@ class BookController extends Controller
             'sub_title' => 'required'
         ]);
 
+        $board_sub_title = board::where(['id' => $request->board_id])->first();
+        $medium_sub_title = Medium::where(['id' => $request->medium_id])->first();
+        $standard_sub_title = Standard::where(['id' => $request->standard_id])->first();
+        $semester_sub_title = Semester::where(['id' => $request->semester_id])->first();
+        $subject_sub_title = Subject::where(['id' => $request->subject_id])->first();
+        $unit_sub_title = Unit::where(['id' => $request->unit_id])->first();
+
         if($request->hidden_id != "0")
         {
             $new_name='';
+
             if($request->thumbnail_file_type == 'Server'){
                 if($request->has('thumbnail'))
                 {
                 
                     $image = $request->file('thumbnail');
-
-                    $url = 'upload/'.$request->board_id.'/'.$request->medium_id.'/'.$request->standard_id.'/'.$request->subject_id.'/'.$request->semester_id.'/'.$request->unit_id.'/book/thumbnail/';
+                    
+                    $url = 'data/'.$request->board_id.'_'.$board_sub_title->sub_title.'/'.$request->medium_id.'_'.
+                    $medium_sub_title->sub_title.'/'.$request->standard_id.'_'.$standard_sub_title->sub_title.'/'.
+                    $request->subject_id.'_'.$subject_sub_title->sub_title.'/'.$request->semester_id.'_'.
+                    $semester_sub_title->sub_title.'/'.$request->unit_id.'_'.$unit_sub_title->sub_title.
+                    '/book/thumbnail/';
                     $originalPath = imagePathCreate($url);
                     $name = time() . mt_rand(10000, 99999);
                     $new_name = $name . '.' . $image->getClientOriginalExtension();
@@ -108,7 +123,12 @@ class BookController extends Controller
                 {
                     
                     $image = $request->file('url');
-                    $url = 'upload/'.$request->board_id.'/'.$request->medium_id.'/'.$request->standard_id.'/'.$request->subject_id.'/'.$request->semester_id.'/'.$request->unit_id.'/book/url/';
+                    //$url = 'upload/'.$request->board_id.'/'.$request->medium_id.'/'.$request->standard_id.'/'.$request->subject_id.'/'.$request->semester_id.'/'.$request->unit_id.'/book/url/';
+                    $url = 'data/'.$request->board_id.'_'.$board_sub_title->sub_title.'/'.$request->medium_id.'_'.
+                    $medium_sub_title->sub_title.'/'.$request->standard_id.'_'.$standard_sub_title->sub_title.'/'.
+                    $request->subject_id.'_'.$subject_sub_title->sub_title.'/'.$request->semester_id.'_'.
+                    $semester_sub_title->sub_title.'/'.$request->unit_id.'_'.$unit_sub_title->sub_title.
+                    '/book/url/';
                     $originalPath = imagePathCreate($url);
                     $name = time() . mt_rand(10000, 99999);
                     $url_file = $name . '.' . $image->getClientOriginalExtension();
@@ -152,7 +172,12 @@ class BookController extends Controller
                 {
                 
                     $image = $request->file('thumbnail');
-                    $url = 'upload/'.$request->board_id.'/'.$request->medium_id.'/'.$request->standard_id.'/'.$request->subject_id.'/'.$request->semester_id.'/'.$request->unit_id.'/book/thumbnail/';
+                    //$url = 'upload/'.$request->board_id.'/'.$request->medium_id.'/'.$request->standard_id.'/'.$request->subject_id.'/'.$request->semester_id.'/'.$request->unit_id.'/book/thumbnail/';
+                    $url = 'data/'.$request->board_id.'_'.$board_sub_title->sub_title.'/'.$request->medium_id.'_'.
+                    $medium_sub_title->sub_title.'/'.$request->standard_id.'_'.$standard_sub_title->sub_title.'/'.
+                    $request->subject_id.'_'.$subject_sub_title->sub_title.'/'.$request->semester_id.'_'.
+                    $semester_sub_title->sub_title.'/'.$request->unit_id.'_'.$unit_sub_title->sub_title.
+                    '/book/thumbnail/';
                     $originalPath = imagePathCreate($url);
                     $name = time() . mt_rand(10000, 99999);
                     $new_name = $name . '.' . $image->getClientOriginalExtension();
@@ -168,7 +193,12 @@ class BookController extends Controller
                 if($request->file('url'))
                 {
                     $image = $request->file('url');
-                    $url = 'upload/'.$request->board_id.'/'.$request->medium_id.'/'.$request->standard_id.'/'.$request->subject_id.'/'.$request->semester_id.'/'.$request->unit_id.'/book/url/';
+                    //$url = 'upload/'.$request->board_id.'/'.$request->medium_id.'/'.$request->standard_id.'/'.$request->subject_id.'/'.$request->semester_id.'/'.$request->unit_id.'/book/url/';
+                    $url = 'data/'.$request->board_id.'_'.$board_sub_title->sub_title.'/'.$request->medium_id.'_'.
+                    $medium_sub_title->sub_title.'/'.$request->standard_id.'_'.$standard_sub_title->sub_title.'/'.
+                    $request->subject_id.'_'.$subject_sub_title->sub_title.'/'.$request->semester_id.'_'.
+                    $semester_sub_title->sub_title.'/'.$request->unit_id.'_'.$unit_sub_title->sub_title.
+                    '/book/url/';
                     $originalPath = imagePathCreate($url);
                     $name = time() . mt_rand(10000, 99999);
                     $url_file = $name . '.' . $image->getClientOriginalExtension();
@@ -220,6 +250,7 @@ class BookController extends Controller
 
 
         $book_details = Book::where(['semester_id' => $request->semester_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+
         $html = view('book.dynamic_table',compact('book_details'))->render();
         $data = ['html' => $html,'message' => $msg];
         return response()->json($data);        
@@ -252,7 +283,17 @@ class BookController extends Controller
         //$units = Unit::where('status','Active')->get();
         //$boards = Board::where('status','Active')->get();
         $bookdata = Book::where('id',$request->id)->first();
-        return $bookdata;
+        $board_sub_title = board::where(['id' => $bookdata->board_id])->first();
+        $medium_sub_title = Medium::where(['id' => $bookdata->medium_id])->first();
+        $standard_sub_title = Standard::where(['id' => $bookdata->standard_id])->first();
+        $semester_sub_title = Semester::where(['id' => $bookdata->semester_id])->first();
+        $subject_sub_title = Subject::where(['id' => $bookdata->subject_id])->first();
+        $unit_sub_title = Unit::where(['id' => $bookdata->unit_id])->first();
+        $sub_title = ['board_sub_title' => $board_sub_title,'medium_sub_title' => $medium_sub_title,
+        'standard_sub_title' => $standard_sub_title,'semester_sub_title' => $semester_sub_title,
+        'subject_sub_title' => $subject_sub_title,'unit_sub_title' => $unit_sub_title];
+        $data = ['bookdetails' => $bookdata,'sub_title' => $sub_title,'board_sub_title' => $board_sub_title];
+        return $data;
         //return view('book.edit',compact('bookdata','units','boards'));
     }
 
