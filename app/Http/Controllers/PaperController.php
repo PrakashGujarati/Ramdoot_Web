@@ -9,6 +9,9 @@ use Auth;
 use App\Models\Board;
 use App\Models\Subject;
 use App\Models\Semester;
+use App\Models\Standard;
+use App\Models\Medium;
+
 
 class PaperController extends Controller
 {
@@ -84,9 +87,11 @@ class PaperController extends Controller
                 {
                 
                     $image = $request->file('thumbnail');
-                    $new_name = rand() . '.' . $image->getClientOriginalExtension();
-                    $destinationPath = public_path('upload/paper/thumbnail/');
-                    $image->move($destinationPath, $new_name);
+                    $url = get_subtitle($request->unit_id).'/paper/thumbnail/';
+                    $originalPath = imagePathCreate($url);
+                    $name = time() . mt_rand(10000, 99999);
+                    $new_name = $name . '.' . $image->getClientOriginalExtension();
+                    $image->move($originalPath, $new_name);
                 }
                 else{
                     $new_name = $request->hidden_thumbnail;
@@ -101,9 +106,11 @@ class PaperController extends Controller
                 if($request->file('url'))
                 {
                     $image = $request->file('url');
-                    $url_file = time().'.'.$image->getClientOriginalExtension();
-                    $destinationPath = public_path('upload/paper/url/');
-                    $image->move($destinationPath, $url_file);
+                    $url = get_subtitle($request->unit_id).'/paper/url/';
+                    $originalPath = imagePathCreate($url);
+                    $name = time() . mt_rand(10000, 99999);
+                    $url_file = $name . '.' . $image->getClientOriginalExtension();
+                    $image->move($originalPath, $url_file);
                 }
                 else{
                     $url_file = $request->hidden_url;
@@ -144,9 +151,11 @@ class PaperController extends Controller
                 {
                 
                     $image = $request->file('thumbnail');
-                    $new_name = rand() . '.' . $image->getClientOriginalExtension();
-                    $destinationPath = public_path('upload/paper/thumbnail/');
-                    $image->move($destinationPath, $new_name);
+                    $url = get_subtitle($request->unit_id).'/paper/thumbnail/';
+                    $originalPath = imagePathCreate($url);
+                    $name = time() . mt_rand(10000, 99999);
+                    $new_name = $name . '.' . $image->getClientOriginalExtension();
+                    $image->move($originalPath, $new_name);
                 }
             }
             else{
@@ -158,9 +167,11 @@ class PaperController extends Controller
                 if($request->file('url'))
                 {
                     $image = $request->file('url');
-                    $url_file = time().'.'.$image->getClientOriginalExtension();
-                    $destinationPath = public_path('upload/paper/url/');
-                    $image->move($destinationPath, $url_file);
+                    $url = get_subtitle($request->unit_id).'/paper/url/';
+                    $originalPath = imagePathCreate($url);
+                    $name = time() . mt_rand(10000, 99999);
+                    $url_file = $name . '.' . $image->getClientOriginalExtension();
+                    $image->move($originalPath, $url_file);
                 }
             }else{
                 $url_file = $request->url;
@@ -235,7 +246,20 @@ class PaperController extends Controller
     {
         //$units = Unit::where('status','Active')->get();
         $paperdata = Paper::where('id',$request->id)->first();
-        return $paperdata;
+        $board_sub_title = board::where(['id' => $paperdata->board_id])->first();
+        $medium_sub_title = Medium::where(['id' => $paperdata->medium_id])->first();
+        $standard_sub_title = Standard::where(['id' => $paperdata->standard_id])->first();
+        $semester_sub_title = Semester::where(['id' => $paperdata->semester_id])->first();
+        $subject_sub_title = Subject::where(['id' => $paperdata->subject_id])->first();
+        $unit_sub_title = Unit::where(['id' => $paperdata->unit_id])->first();
+        $sub_title = ['board_sub_title' => $board_sub_title,'medium_sub_title' => $medium_sub_title,
+        'standard_sub_title' => $standard_sub_title,'semester_sub_title' => $semester_sub_title,
+        'subject_sub_title' => $subject_sub_title,'unit_sub_title' => $unit_sub_title];
+        $data = ['paperdata' => $paperdata,'sub_title' => $sub_title];
+        return $data;
+
+        
+        //return $paperdata;
         //$boards = Board::where('status','Active')->get();
         //return view('paper.edit',compact('paperdata','units','boards'));
     }

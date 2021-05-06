@@ -652,31 +652,31 @@ $(document).on('click','.edit-btn',function(){
               'id':id
         },
         success: function(result) {
-            $('#board_id').val(result.board_id);
+            $('#board_id').val(result.solutiondata.board_id);
             var board_id = $('#board_id').val();
-            var medium_id = result.medium_id;
-            var standard_id = result.standard_id;
-            var semester_id = result.semester_id;
-            var subject_id = result.subject_id;
-            var unit_id = result.unit_id;
+            var medium_id = result.solutiondata.medium_id;
+            var standard_id = result.solutiondata.standard_id;
+            var semester_id = result.solutiondata.semester_id;
+            var subject_id = result.solutiondata.subject_id;
+            var unit_id = result.solutiondata.unit_id;
             getMediumEdit(board_id,medium_id);
             getStandardEdit(board_id,medium_id,standard_id);
             getSubjectEdit(board_id,medium_id,standard_id,subject_id);
             getSemesterEdit(board_id,medium_id,standard_id,subject_id,semester_id);
             getUnitEdit(board_id,medium_id,standard_id,semester_id,subject_id,unit_id);
 
-            $('#question').val(result.question);
-            $('#marks').val(result.marks);
-            $('#answer').val(result.answer);
-            $('#label').val(result.label);
-            $('#question_type').val(result.question_type);
-            $('#level').val(result.level);
+            $('#question').val(result.solutiondata.question);
+            $('#marks').val(result.solutiondata.marks);
+            $('#answer').val(result.solutiondata.answer);
+            $('#label').val(result.solutiondata.label);
+            $('#question_type').val(result.solutiondata.question_type);
+            $('#level').val(result.solutiondata.level);
 
-            if(result.image_file_type == 'Drive'){
+            if(result.solutiondata.image_file_type == 'Drive'){
 
                 $('.imagechk').prop("checked",false);
-                $('#hidden_image').val(result.image);
-                $('#image').val(result.image);
+                $('#hidden_image').val(result.solutiondata.image);
+                $('#image').val(result.solutiondata.image);
                 $('#image_preview').css('display','none');
                 $("#image").attr('type', 'text');
                 $('#image_file_type').val('Drive');
@@ -684,11 +684,14 @@ $(document).on('click','.edit-btn',function(){
             }
             else{
                 $('.imagechk').prop("checked",true);
-                $('#hidden_image').val(result.image);
+                $('#hidden_image').val(result.solutiondata.image);
                 $('#image_preview').css('display','block');
                 $("#image").attr('type', 'file');
                 $('#image_file_type').val('Server');                
-                var image_path = "{{ env('APP_URL') }}"+"/upload/solution/thumbnail/"+result.image;
+                var image_path = "{{ env('APP_URL') }}"+"/data/"+board_id+'_'+result.sub_title.board_sub_title.sub_title+"/"+medium_id+'_'+result.sub_title.medium_sub_title.sub_title+"/"+standard_id+'_'+
+                result.sub_title.standard_sub_title.sub_title
+                +"/"+subject_id+'_'+result.sub_title.subject_sub_title.sub_title+"/"+semester_id+'_'+
+                result.sub_title.semester_sub_title.sub_title+"/"+unit_id+'_'+result.sub_title.unit_sub_title.sub_title+"/solution/thumbnail/"+result.solutiondata.image;
                 $('#image_preview').attr('src', image_path);
             }
 
@@ -696,7 +699,7 @@ $(document).on('click','.edit-btn',function(){
             //$('#image_preview').css('display','block');
             
             
-            $('#hidden_id').val(result.id);
+            $('#hidden_id').val(result.solutiondata.id);
             //$('#thumbnail').val('');
         }            
     });

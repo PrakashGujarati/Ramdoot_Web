@@ -62,19 +62,10 @@
                         <td>{{ $data->title }}</td>
                         <td>{{ $data->sub_title }}</td>
                         <td>
+                            @php $path = get_subtitle($data->unit_id);  @endphp
                             @if($data->url_type == 'Server')
                             @if($data->url)
-                            @php
-                                $board_sub_title = App\Models\board::where(['id' => $data->board_id])->first();
-                                $medium_sub_title = App\Models\Medium::where(['id' => $data->medium_id])->first();
-                                $standard_sub_title = App\Models\Standard::where(['id' => $data->standard_id])->first();
-                                $semester_sub_title = App\Models\Semester::where(['id' => $data->semester_id])->first();
-                                $subject_sub_title = App\Models\Subject::where(['id' => $data->subject_id])->first();
-                                $unit_sub_title = App\Models\Unit::where(['id' => $data->unit_id])->first();
-                            @endphp
-                            <a href="{{ asset('data/'.$data->board_id.'_'.$board_sub_title->sub_title.'/'.$data->medium_id.'_'.$medium_sub_title->sub_title.'/'.$data->standard_id.'_'.
-                                $standard_sub_title->sub_title.'/'.$data->subject_id.'_'.$subject_sub_title->sub_title.'/'.$data->semester_id.'_'.$semester_sub_title->sub_title.'/'.$data->unit_id.'_'.
-                                $unit_sub_title->sub_title.'/book/url/'.$data->url) }}">{{$data->unit->title}}</a>
+                            <a href="{{ asset($path.'/book/url/'.$data->url) }}">{{$data->unit->title}}</a>
                             @endif
                             @else
                             {{ $data->url }}
@@ -83,10 +74,7 @@
                         <td>
                             @if($data->thumbnail_file_type == 'Server')
                             @if($data->thumbnail)
-                            <img src="{{ asset('data/'.$data->board_id.'_'.$board_sub_title->sub_title.'/'.
-                                $data->medium_id.'_'.$medium_sub_title->sub_title.'/'.$data->standard_id.'_'.
-                                $standard_sub_title->sub_title.'/'.$data->subject_id.'_'.$subject_sub_title->sub_title.'/'.$data->semester_id.'_'.$semester_sub_title->sub_title.'/'.$data->unit_id.'_'.
-                                $unit_sub_title->sub_title.'/book/thumbnail/'.$data->thumbnail) }}" class="thumbnail" height="50" width="50">
+                            <img src="{{ asset($path.'/book/thumbnail/'.$data->thumbnail) }}" class="thumbnail" height="50" width="50">
                             @endif
                             @else
                             {{ $data->thumbnail }}

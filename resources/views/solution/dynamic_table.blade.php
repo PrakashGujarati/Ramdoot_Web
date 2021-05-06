@@ -61,9 +61,10 @@
                         <td>{{ $data->marks }}</td>
                         <td>{{ $data->label }}</td>
                         <td>
+                            @php $path = get_subtitle($data->unit_id);  @endphp
                             @if($data->image_file_type == 'Server')
                             @if($data->image)
-                            <img src="{{ asset('upload/solution/thumbnail/'.$data->image) }}" class="thumbnail" height="50" width="50">
+                            <img src="{{ asset($path.'/solution/thumbnail/'.$data->image) }}" class="thumbnail" height="50" width="50">
                             @endif
                             @else
                             {{ $data->image }}

@@ -52,9 +52,10 @@
                         <td>{{ $data->title }}</td>
                         <td>{{ $data->sub_title }}</td>
                         <td>
+                            @php $path = get_subtitle($data->unit_id);  @endphp
                             @if($data->url_type == 'Server')
                             @if($data->url)
-                            <img src="{{ asset('upload/note/url/'.$data->url) }}" class="thumbnail" height="50" width="50">
+                            <img src="{{ asset($path.'/note/url/'.$data->url) }}" class="thumbnail" height="50" width="50">
                             @endif
                             @else
                             {{ $data->url }}
@@ -63,7 +64,7 @@
                         <td>
                             @if($data->thumbnail_file_type == 'Server')
                             @if($data->thumbnail)
-                            <img src="{{ asset('upload/note/thumbnail/'.$data->thumbnail) }}" class="thumbnail" height="50" width="50">
+                            <img src="{{ asset($path.'/note/thumbnail/'.$data->thumbnail) }}" class="thumbnail" height="50" width="50">
                             @endif
                             @else
                             {{ $data->thumbnail }}

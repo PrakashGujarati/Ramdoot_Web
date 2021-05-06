@@ -771,32 +771,32 @@ $(document).on('click','.edit-btn',function(){
               'id':id
         },
         success: function(result) {
-            $('#board_id').val(result.board_id);
+            $('#board_id').val(result.paperdata.board_id);
             var board_id = $('#board_id').val();
-            var medium_id = result.medium_id;
-            var standard_id = result.standard_id;
-            var semester_id = result.semester_id;
-            var subject_id = result.subject_id;
-            var unit_id = result.unit_id;
+            var medium_id = result.paperdata.medium_id;
+            var standard_id = result.paperdata.standard_id;
+            var semester_id = result.paperdata.semester_id;
+            var subject_id = result.paperdata.subject_id;
+            var unit_id = result.paperdata.unit_id;
             getMediumEdit(board_id,medium_id);
             getStandardEdit(board_id,medium_id,standard_id);
             getSubjectEdit(board_id,medium_id,standard_id,subject_id);
             getSemesterEdit(board_id,medium_id,standard_id,subject_id,semester_id);
             getUnitEdit(board_id,medium_id,standard_id,semester_id,subject_id,unit_id);
 
-            $('#title').val(result.title);
-            $('#sub_title').val(result.sub_title);
-            $('#description').val(result.description);
-            $('#pages').val(result.pages);
-            $('#label').val(result.label);
-            $('#release_date').val(result.release_date);
-            $('#edition').val(result.edition);
+            $('#title').val(result.paperdata.title);
+            $('#sub_title').val(result.paperdata.sub_title);
+            $('#description').val(result.paperdata.description);
+            $('#pages').val(result.paperdata.pages);
+            $('#label').val(result.paperdata.label);
+            $('#release_date').val(result.paperdata.release_date);
+            $('#edition').val(result.paperdata.edition);
 
-            if(result.thumbnail_file_type == 'Drive'){
+            if(result.paperdata.thumbnail_file_type == 'Drive'){
 
                 $('.thumbnailchk').prop("checked",false);
-                $('#hidden_thumbnail').val(result.thumbnail);
-                $('#thumbnail').val(result.thumbnail);
+                $('#hidden_thumbnail').val(result.paperdata.thumbnail);
+                $('#thumbnail').val(result.paperdata.thumbnail);
                 $('#thumbnail_preview').css('display','none');
                 $("#thumbnail").attr('type', 'text');
                 $('#thumbnail_file_type').val('Drive');
@@ -804,33 +804,39 @@ $(document).on('click','.edit-btn',function(){
             }
             else{
                 $('.thumbnailchk').prop("checked",true);
-                $('#hidden_thumbnail').val(result.thumbnail);
+                $('#hidden_thumbnail').val(result.paperdata.thumbnail);
                 $('#thumbnail_preview').css('display','block');
                 $("#thumbnail").attr('type', 'file');
                 $('#thumbnail_file_type').val('Server');  
-                var thumbnail_path = "{{ env('APP_URL') }}"+"/upload/paper/thumbnail/"+result.thumbnail;
+                var thumbnail_path = "{{ env('APP_URL') }}"+"/data/"+board_id+'_'+result.sub_title.board_sub_title.sub_title+"/"+medium_id+'_'+result.sub_title.medium_sub_title.sub_title+"/"+standard_id+'_'+
+                result.sub_title.standard_sub_title.sub_title
+                +"/"+subject_id+'_'+result.sub_title.subject_sub_title.sub_title+"/"+semester_id+'_'+
+                result.sub_title.semester_sub_title.sub_title+"/"+unit_id+'_'+result.sub_title.unit_sub_title.sub_title+"/paper/thumbnail/"+result.paperdata.thumbnail;
                 $('#thumbnail_preview').attr('src', thumbnail_path);              
             }
 
-            if(result.url_type == 'Drive'){
+            if(result.paperdata.url_type == 'Drive'){
 
                 $('.urlchk').prop("checked",false);
-                $('#hidden_url').val(result.url);
-                $("#url").val(result.url);
+                $('#hidden_url').val(result.paperdata.url);
+                $("#url").val(result.paperdata.url);
                 $('#url_preview').css('display','none');
                 $("#url").attr('type', 'text');
                 $('#url_type').val('Drive');   
             }
             else{
                 $('.urlchk').prop("checked",true);
-                $('#hidden_url').val(result.url);
+                $('#hidden_url').val(result.paperdata.url);
                 $('#url_preview').css('display','block');
                 $("#url").attr('type', 'file');
                 $('#url_type').val('Server'); 
                 
                 //var url_path = "{{ env('APP_URL') }}"+"/upload/note/url/"+result.url;
                 //$('#url_preview').attr('src', url_path);   
-                var url_path = "{{ env('APP_URL') }}"+"/upload/paper/url/"+result.url;
+                var url_path = "{{ env('APP_URL') }}"+"/data/"+board_id+'_'+result.sub_title.board_sub_title.sub_title+"/"+medium_id+'_'+result.sub_title.medium_sub_title.sub_title+"/"+standard_id+'_'+
+                result.sub_title.standard_sub_title.sub_title
+                +"/"+subject_id+'_'+result.sub_title.subject_sub_title.sub_title+"/"+semester_id+'_'+
+                result.sub_title.semester_sub_title.sub_title+"/"+unit_id+'_'+result.sub_title.unit_sub_title.sub_title+"/paper/url/"+result.paperdata.url;
                 $('#url_preview').attr('src', url_path);  
             }
 
@@ -849,7 +855,7 @@ $(document).on('click','.edit-btn',function(){
             // }
             
             
-            $('#hidden_id').val(result.id);
+            $('#hidden_id').val(result.paperdata.id);
             //$('#thumbnail').val('');
         }            
     });

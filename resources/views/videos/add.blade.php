@@ -811,59 +811,65 @@ $(document).on('click','.edit-btn',function(){
               'id':id
         },
         success: function(result) {
-            $('#board_id').val(result.board_id);
+            $('#board_id').val(result.videodetails.board_id);
             var board_id = $('#board_id').val();
-            var medium_id = result.medium_id;
-            var standard_id = result.standard_id;
-            var semester_id = result.semester_id;
-            var subject_id = result.subject_id;
-            var unit_id = result.unit_id;
+            var medium_id = result.videodetails.medium_id;
+            var standard_id = result.videodetails.standard_id;
+            var semester_id = result.videodetails.semester_id;
+            var subject_id = result.videodetails.subject_id;
+            var unit_id = result.videodetails.unit_id;
             getMediumEdit(board_id,medium_id);
             getStandardEdit(board_id,medium_id,standard_id);
             getSubjectEdit(board_id,medium_id,standard_id,subject_id);
             getSemesterEdit(board_id,medium_id,standard_id,subject_id,semester_id);
             getUnitEdit(board_id,medium_id,standard_id,semester_id,subject_id,unit_id);
 
-            $('#title').val(result.title);
-            $('#sub_title').val(result.sub_title);
-            $('#description').val(result.description);
-            $('#duration').val(result.duration);
-            $('#label').val(result.label);
-            $('#start_time').val(result.start_time);
-            $('#release_date').val(result.release_date);
-            $('#edition').val(result.edition);
+            $('#title').val(result.videodetails.title);
+            $('#sub_title').val(result.videodetails.sub_title);
+            $('#description').val(result.videodetails.description);
+            $('#duration').val(result.videodetails.duration);
+            $('#label').val(result.videodetails.label);
+            $('#start_time').val(result.videodetails.start_time);
+            $('#release_date').val(result.videodetails.release_date);
+            $('#edition').val(result.videodetails.edition);
 
-            if(result.thumbnail_file_type == 'Drive' || result.thumbnail_file_type == 'Youtube'){
+            if(result.videodetails.thumbnail_file_type == 'Drive' || result.videodetails.thumbnail_file_type == 'Youtube'){
 
-                $('#hidden_thumbnail').val(result.thumbnail);
-                $('#thumbnail').val(result.thumbnail);
+                $('#hidden_thumbnail').val(result.videodetails.thumbnail);
+                $('#thumbnail').val(result.videodetails.thumbnail);
                 $('#thumbnail_preview').css('display','none');
                 $("#thumbnail").attr('type', 'text');
-                $('#thumbnail_file_type').val(result.thumbnail_file_type);
+                $('#thumbnail_file_type').val(result.videodetails.thumbnail_file_type);
         
             }
             else{
-                $('#hidden_thumbnail').val(result.thumbnail);
+                $('#hidden_thumbnail').val(result.videodetails.thumbnail);
                 $('#thumbnail_preview').css('display','block');
                 $("#thumbnail").attr('type', 'file');
                 $('#thumbnail_file_type').val('Server'); 
-                var thumbnail_path = "{{ env('APP_URL') }}"+"/upload/videos/thumbnail/"+result.thumbnail;
+                var thumbnail_path = "{{ env('APP_URL') }}"+"/data/"+board_id+'_'+result.sub_title.board_sub_title.sub_title+"/"+medium_id+'_'+result.sub_title.medium_sub_title.sub_title+"/"+standard_id+'_'+
+                result.sub_title.standard_sub_title.sub_title
+                +"/"+subject_id+'_'+result.sub_title.subject_sub_title.sub_title+"/"+semester_id+'_'+
+                result.sub_title.semester_sub_title.sub_title+"/"+unit_id+'_'+result.sub_title.unit_sub_title.sub_title+"/videos/thumbnail/"+result.videodetails.thumbnail;
                 $('#thumbnail_preview').attr('src', thumbnail_path);               
             }
 
             //alert(result.url_type);
-            if(result.url_type == 'Drive' || result.url_type == 'Youtube'){
+            if(result.videodetails.url_type == 'Drive' || result.videodetails.url_type == 'Youtube'){
                 $("#url").attr('type', 'text');
-                $('#url_type').val(result.url_type);
+                $('#url_type').val(result.videodetails.url_type);
                 $('#url_preview').css('display','none');   
-                $('#url').val(result.url);
+                $('#url').val(result.videodetails.url);
             }
             else{
                 $("#url").attr('type', 'file');
-                $('#hidden_url').val(result.url);
+                $('#hidden_url').val(result.videodetails.url);
                 $('#url_preview').css('display','block');
                 $('#url_type').val('Server');
-                var url_path = "{{ env('APP_URL') }}"+"/upload/videos/url/"+result.url;
+                var url_path = "{{ env('APP_URL') }}"+"/data/"+board_id+'_'+result.sub_title.board_sub_title.sub_title+"/"+medium_id+'_'+result.sub_title.medium_sub_title.sub_title+"/"+standard_id+'_'+
+                result.sub_title.standard_sub_title.sub_title
+                +"/"+subject_id+'_'+result.sub_title.subject_sub_title.sub_title+"/"+semester_id+'_'+
+                result.sub_title.semester_sub_title.sub_title+"/"+unit_id+'_'+result.sub_title.unit_sub_title.sub_title+"/videos/url/"+result.videodetails.url;
                 $('#url_preview').attr('src', url_path);  
             }
 
@@ -871,7 +877,7 @@ $(document).on('click','.edit-btn',function(){
             // $('#thumbnail_preview').css('display','block');
             
             
-            $('#hidden_id').val(result.id);
+            $('#hidden_id').val(result.videodetails.id);
             //$('#thumbnail').val('');
         }            
     });

@@ -10,6 +10,8 @@ use App\Models\Board;
 use App\Models\QuestionType;
 use App\Models\Subject;
 use App\Models\Semester;
+use App\Models\Medium;
+use App\Models\Standard;
 
 class SolutionController extends Controller
 {
@@ -108,20 +110,11 @@ class SolutionController extends Controller
               {
               
                   $image = $request->file('image');
-
-                  $new_name = rand() . '.' . $image->getClientOriginalExtension();
-
-                  $valid_ext = array('png','jpeg','jpg');
-
-                  // Location
-                  $location = public_path('upload/solution/thumbnail/').$new_name;
-
-                  $file_extension = pathinfo($location, PATHINFO_EXTENSION);
-                  $file_extension = strtolower($file_extension);
-
-                  if(in_array($file_extension,$valid_ext)){
-                      $this->compressImage($image->getPathName(),$location,60);
-                  }
+                  $url = get_subtitle($request->unit_id).'/solution/thumbnail/';
+                  $originalPath = imagePathCreate($url);
+                  $name = time() . mt_rand(10000, 99999);
+                  $new_name = $name . '.' . $image->getClientOriginalExtension();
+                  $image->move($originalPath, $new_name);
               }
               else{
                   $new_name = $request->hidden_image;
@@ -161,20 +154,11 @@ class SolutionController extends Controller
             {
             
                 $image = $request->file('image');
-
-                $new_name = rand() . '.' . $image->getClientOriginalExtension();
-
-                $valid_ext = array('png','jpeg','jpg');
-
-                // Location
-                $location = public_path('upload/solution/thumbnail/').$new_name;
-
-                $file_extension = pathinfo($location, PATHINFO_EXTENSION);
-                $file_extension = strtolower($file_extension);
-
-                if(in_array($file_extension,$valid_ext)){
-                    $this->compressImage($image->getPathName(),$location,60);
-                }
+                $url = get_subtitle($request->unit_id).'/solution/thumbnail/';
+                $originalPath = imagePathCreate($url);
+                $name = time() . mt_rand(10000, 99999);
+                $new_name = $name . '.' . $image->getClientOriginalExtension();
+                $image->move($originalPath, $new_name);
             }
           }
           else{
@@ -247,8 +231,18 @@ class SolutionController extends Controller
     public function edit(Request $request)
     {
         // $units = Unit::where('status','Active')->get();
-         $solutiondata = Solution::where('id',$request->id)->first();
-         return $solutiondata;
+        $solutiondata = Solution::where('id',$request->id)->first();
+        $board_sub_title = board::where(['id' => $solutiondata->board_id])->first();
+        $medium_sub_title = Medium::where(['id' => $solutiondata->medium_id])->first();
+        $standard_sub_title = Standard::where(['id' => $solutiondata->standard_id])->first();
+        $semester_sub_title = Semester::where(['id' => $solutiondata->semester_id])->first();
+        $subject_sub_title = Subject::where(['id' => $solutiondata->subject_id])->first();
+        $unit_sub_title = Unit::where(['id' => $solutiondata->unit_id])->first();
+        $sub_title = ['board_sub_title' => $board_sub_title,'medium_sub_title' => $medium_sub_title,
+        'standard_sub_title' => $standard_sub_title,'semester_sub_title' => $semester_sub_title,
+        'subject_sub_title' => $subject_sub_title,'unit_sub_title' => $unit_sub_title];
+        $data = ['solutiondata' => $solutiondata,'sub_title' => $sub_title];
+         return $data;
         // $boards = Board::where('status','Active')->get();
         //$question_type_details = QuestionType::where('status','Active')->get();
         //return view('solution.edit',compact('solutiondata','units','boards','question_type_details'));

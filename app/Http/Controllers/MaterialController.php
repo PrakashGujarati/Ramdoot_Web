@@ -10,6 +10,8 @@ use App\Models\Board;
 use App\Models\QuestionType;
 use App\Models\Subject;
 use App\Models\Semester;
+use App\Models\Medium;
+use App\Models\Standard;
 
 class MaterialController extends Controller
 {
@@ -93,22 +95,14 @@ class MaterialController extends Controller
             {
               if($request->has('image'))
               {
-              
+                  
                   $image = $request->file('image');
+                  $url = get_subtitle($request->unit_id).'/material/thumbnail/';
+                  $originalPath = imagePathCreate($url);
+                  $name = time() . mt_rand(10000, 99999);
+                  $new_name = $name . '.' . $image->getClientOriginalExtension();
+                  $image->move($originalPath, $new_name);
 
-                  $new_name = rand() . '.' . $image->getClientOriginalExtension();
-
-                  $valid_ext = array('png','jpeg','jpg');
-
-                  // Location
-                  $location = public_path('upload/material/thumbnail/').$new_name;
-
-                  $file_extension = pathinfo($location, PATHINFO_EXTENSION);
-                  $file_extension = strtolower($file_extension);
-
-                  if(in_array($file_extension,$valid_ext)){
-                      $this->compressImage($image->getPathName(),$location,60);
-                  }
               }
               else{
                   $new_name = $request->hidden_image;
@@ -148,20 +142,11 @@ class MaterialController extends Controller
             {
             
                 $image = $request->file('image');
-
-                $new_name = rand() . '.' . $image->getClientOriginalExtension();
-
-                $valid_ext = array('png','jpeg','jpg');
-
-                // Location
-                $location = public_path('upload/material/thumbnail/').$new_name;
-
-                $file_extension = pathinfo($location, PATHINFO_EXTENSION);
-                $file_extension = strtolower($file_extension);
-
-                if(in_array($file_extension,$valid_ext)){
-                    $this->compressImage($image->getPathName(),$location,60);
-                }
+                  $url = get_subtitle($request->unit_id).'/material/thumbnail/';
+                  $originalPath = imagePathCreate($url);
+                  $name = time() . mt_rand(10000, 99999);
+                  $new_name = $name . '.' . $image->getClientOriginalExtension();
+                  $image->move($originalPath, $new_name);
             }
           }
           else{
@@ -234,8 +219,20 @@ class MaterialController extends Controller
     public function edit(Request $request)
     {
         //$units = Unit::where('status','Active')->get();
+
         $materialdata = Material::where('id',$request->id)->first();
-        return $materialdata;
+        $board_sub_title = board::where(['id' => $materialdata->board_id])->first();
+        $medium_sub_title = Medium::where(['id' => $materialdata->medium_id])->first();
+        $standard_sub_title = Standard::where(['id' => $materialdata->standard_id])->first();
+        $semester_sub_title = Semester::where(['id' => $materialdata->semester_id])->first();
+        $subject_sub_title = Subject::where(['id' => $materialdata->subject_id])->first();
+        $unit_sub_title = Unit::where(['id' => $materialdata->unit_id])->first();
+        $sub_title = ['board_sub_title' => $board_sub_title,'medium_sub_title' => $medium_sub_title,
+        'standard_sub_title' => $standard_sub_title,'semester_sub_title' => $semester_sub_title,
+        'subject_sub_title' => $subject_sub_title,'unit_sub_title' => $unit_sub_title];
+        $data = ['materialdata' => $materialdata,'sub_title' => $sub_title];
+         return $data;
+        //return $materialdata;
         //$boards = Board::where('status','Active')->get();
         //$question_type_details = QuestionType::where('status','Active')->get();
         //return view('material.edit',compact('materialdata','units','boards','question_type_details'));

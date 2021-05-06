@@ -56,9 +56,10 @@
                         <td>{{ isset($data->unit->title) ? $data->unit->title:'' }}</td>
                         <td>{{ $data->title }}</td>
                         <td>
+                            @php $path = get_subtitle($data->unit_id);  @endphp
                             @if($data->url_type == 'Server')
                             @if($data->url)
-                            <img src="{{ asset('upload/paper/url/'.$data->url) }}" class="thumbnail" height="50" width="50">
+                            <img src="{{ asset($path.'/paper/url/'.$data->url) }}" class="thumbnail" height="50" width="50">
                             @endif
                             @else
                             {{ $data->url }}
