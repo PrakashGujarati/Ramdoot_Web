@@ -73,27 +73,33 @@ class SubjectController extends Controller
         if($request->hidden_id != "0")
         {
             $new_name='';
-            if($request->has('thumbnail'))
-            {
-            
-                $image = $request->file('thumbnail');
+            if($request->thumbnail_file_type == 'Server'){
 
-                $new_name = rand() . '.' . $image->getClientOriginalExtension();
+                if($request->has('thumbnail'))
+                {
+                
+                    $image = $request->file('thumbnail');
 
-                $valid_ext = array('png','jpeg','jpg');
+                    $new_name = rand() . '.' . $image->getClientOriginalExtension();
 
-                // Location
-                $location = public_path('upload/subject/thumbnail/').$new_name;
+                    $valid_ext = array('png','jpeg','jpg');
 
-                $file_extension = pathinfo($location, PATHINFO_EXTENSION);
-                $file_extension = strtolower($file_extension);
+                    // Location
+                    $location = public_path('upload/subject/thumbnail/').$new_name;
 
-                if(in_array($file_extension,$valid_ext)){
-                    $this->compressImage($image->getPathName(),$location,60);
+                    $file_extension = pathinfo($location, PATHINFO_EXTENSION);
+                    $file_extension = strtolower($file_extension);
+
+                    if(in_array($file_extension,$valid_ext)){
+                        $this->compressImage($image->getPathName(),$location,60);
+                    }
+                }
+                else{
+                    $new_name = $request->hidden_thumbnail;
                 }
             }
             else{
-                $new_name = $request->hidden_thumbnail;
+                $new_name = $request->thumbnail;
             }
 
             $add = Subject::find($request->hidden_id);
@@ -105,30 +111,36 @@ class SubjectController extends Controller
             $add->sub_title = $request->sub_title;
             //$add->url = $url_file;
             $add->thumbnail = $new_name;
+            $add->thumbnail_file_type = $request->thumbnail_file_type;
             $add->save();
             
             $msg = "Subject Updated Successfully.";
         }
         else{
             $new_name='';
-            if($request->has('thumbnail'))
-            {
-            
-                $image = $request->file('thumbnail');
+            if($request->thumbnail_file_type == 'Server'){
+                if($request->has('thumbnail'))
+                {
+                
+                    $image = $request->file('thumbnail');
 
-                $new_name = rand() . '.' . $image->getClientOriginalExtension();
+                    $new_name = rand() . '.' . $image->getClientOriginalExtension();
 
-                $valid_ext = array('png','jpeg','jpg');
+                    $valid_ext = array('png','jpeg','jpg');
 
-                // Location
-                $location = public_path('upload/subject/thumbnail/').$new_name;
+                    // Location
+                    $location = public_path('upload/subject/thumbnail/').$new_name;
 
-                $file_extension = pathinfo($location, PATHINFO_EXTENSION);
-                $file_extension = strtolower($file_extension);
+                    $file_extension = pathinfo($location, PATHINFO_EXTENSION);
+                    $file_extension = strtolower($file_extension);
 
-                if(in_array($file_extension,$valid_ext)){
-                    $this->compressImage($image->getPathName(),$location,60);
+                    if(in_array($file_extension,$valid_ext)){
+                        $this->compressImage($image->getPathName(),$location,60);
+                    }
                 }
+            }
+            else{
+                $new_name = $request->thumbnail;
             }
 
             $last_data=Subject::select('*')->where('standard_id',$request->standard_id)->orderBy('order_no','desc')->first();
@@ -149,6 +161,7 @@ class SubjectController extends Controller
             $add->sub_title = $request->sub_title;
             $add->order_no=$last_no;            
             $add->thumbnail = $new_name;
+            $add->thumbnail_file_type = $request->thumbnail_file_type;
             $add->save();
 
             $msg = "Subject Added Successfully.";

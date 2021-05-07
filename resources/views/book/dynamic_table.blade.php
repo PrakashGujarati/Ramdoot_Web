@@ -62,17 +62,22 @@
                         <td>{{ $data->title }}</td>
                         <td>{{ $data->sub_title }}</td>
                         <td>
-                            @if($data->url_type == 'file')
+                            @php $path = get_subtitle($data->unit_id);  @endphp
+                            @if($data->url_type == 'Server')
                             @if($data->url)
-                            <a href="{{ asset('upload/'.$data->board_id.'/'.$data->medium_id.'/'.$data->standard_id.'/'.$data->subject_id.'/'.$data->semester_id.'/'.$data->unit_id.'/book/url/'.$data->url) }}">{{$data->unit->title}}</a>
+                            <a href="{{ asset($path.'/book/url/'.$data->url) }}">{{$data->unit->title}}</a>
                             @endif
                             @else
                             {{ $data->url }}
                             @endif
                         </td>
                         <td>
+                            @if($data->thumbnail_file_type == 'Server')
                             @if($data->thumbnail)
-                            <img src="{{ asset('upload/'.$data->board_id.'/'.$data->medium_id.'/'.$data->standard_id.'/'.$data->subject_id.'/'.$data->semester_id.'/'.$data->unit_id.'/book/thumbnail/'.$data->thumbnail) }}" class="thumbnail" height="50" width="50">
+                            <img src="{{ asset($path.'/book/thumbnail/'.$data->thumbnail) }}" class="thumbnail" height="50" width="50">
+                            @endif
+                            @else
+                            {{ $data->thumbnail }}
                             @endif
                         </td>
                         <td>{{ $data->pages }}</td>

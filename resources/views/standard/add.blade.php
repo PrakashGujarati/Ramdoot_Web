@@ -95,6 +95,33 @@ td{
                                 </div>
                             </div>
                             <div class="form-group col-lg-3">
+                                <div class="row">
+                                    <input type="hidden" name="thumbnail_file_type" class="thumbnail_file_type" id="thumbnail_file_type" value="Drive">
+                                    <div class="col-lg-6"><label class="form-label">Thumbnail</label></div>
+                                    <div class="col-lg-6 text-right"><div class="g">
+                                        <div class="custom-control custom-control-sm custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input thumbnailchk" name="thumbnail_result" value="1" id="thumbnail_result">
+                                            <label class="custom-control-label" for="thumbnail_result"></label>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" id="thumbnail" name="thumbnail" value="">
+                                    <input type="hidden" id="hidden_thumbnail" name="hidden_thumbnail" value="">
+                                    
+                                    @error('thumbnail')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-3">
+                                <img id="thumbnail_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" width="100" />
+                            </div>
+                            <!-- <div class="form-group col-lg-3">
                                 <label class="form-label">Thumbnail</label>
                                 <div class="form-control-wrap">
                                     <input type="file" class="form-control" id="thumbnail" name="thumbnail" value="">
@@ -109,7 +136,7 @@ td{
                             </div>
                             <div class="form-group col-lg-3">
                                 <img id="thumbnail_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" width="100" />
-                            </div>
+                            </div> -->
                         </div>                        
                         <div class="form-group">
                             <button type="submit" class="btn btn-lg btn-primary">Submit</button>
@@ -227,8 +254,14 @@ function readThumbnail(input) {
 }
 
 $("#thumbnail").change(function() {
-    $('#thumbnail_preview').css('display','block');
-  readThumbnail(this);
+    //$('#thumbnail_preview').css('display','block');
+    if($('.thumbnailchk').prop("checked") == true){
+        $('#thumbnail_preview').css('display','block');
+    }
+    else if($('.thumbnailchk').prop("checked") == false){
+        $('#thumbnail_preview').css('display','none');
+    }
+    readThumbnail(this);
 });    
 
 $(document).on('change','.board_id',function(){
@@ -306,8 +339,12 @@ $(document).ready(function () {
                     $('#section').val('');
                     $('#thumbnail').val('');
                     $('#hidden_thumbnail').val('');
+                    $('#hidden_id').val('0');        
                     $('#thumbnail_preview').css('display','none');
-                    $('#hidden_id').val('0');                    
+                    $('.thumbnailchk').prop("checked",false);
+                    $("#thumbnail").attr('type', 'text');
+                    $('#thumbnail_file_type').val('Drive');
+                    $('#thumbnail').val('');            
                     
                     $('.dyamictable').empty();
                     $('.dyamictable').html(data.html);
@@ -350,8 +387,27 @@ $(document).on('click','.edit-btn',function(){
             $('#sub_title').val(result.sub_title);
             //$('#sub_title').prop("readonly", true);   
             $('#section').val(result.section);
-            $('#hidden_thumbnail').val(result.thumbnail);
-            $('#thumbnail_preview').css('display','block');
+            // $('#hidden_thumbnail').val(result.thumbnail);
+            // $('#thumbnail_preview').css('display','block');
+
+            if(result.thumbnail_file_type == 'Drive'){
+
+                $('.thumbnailchk').prop("checked",false);
+                $('#hidden_thumbnail').val(result.thumbnail);
+                $('#thumbnail').val(result.thumbnail);
+                $('#thumbnail_preview').css('display','none');
+                $("#thumbnail").attr('type', 'text');
+                $('#thumbnail_file_type').val('Drive');
+        
+            }
+            else{
+                $('.thumbnailchk').prop("checked",true);
+                $('#hidden_thumbnail').val(result.thumbnail);
+                $('#thumbnail_preview').css('display','block');
+                $("#thumbnail").attr('type', 'file');
+                $('#thumbnail_file_type').val('Server');                
+            }
+
             var url_path = "{{ env('APP_URL') }}"+"/upload/standard/thumbnail/"+result.thumbnail;
             $('#thumbnail_preview').attr('src', url_path);
             $('#hidden_id').val(result.id);
@@ -454,6 +510,20 @@ $(document).on('click','.status_change', function() {
         }            
     });
 
+});
+
+$(document).on('change','.thumbnailchk',function(){
+    if($(this).prop("checked") == true){
+        $("#thumbnail").attr('type', 'file');
+        $('#thumbnail_file_type').val('Server');
+        $('#thumbnail').val('');
+    }
+    else if($(this).prop("checked") == false){
+        $("#thumbnail").attr('type', 'text');
+        $('#thumbnail_file_type').val('Drive');
+        $('#thumbnail').val('');
+        $('#thumbnail_preview').css('display','none');
+    }
 });
 
 

@@ -9,6 +9,8 @@ use Auth;
 use App\Models\Board;
 use App\Models\Subject;
 use App\Models\Semester;
+use App\Models\Medium;
+use App\Models\Standard;
 
 class VideosController extends Controller
 {
@@ -81,44 +83,43 @@ class VideosController extends Controller
             // 'release_date' => 'required',    
         ]);
 
-        //       dd($request->all());
 
         if($request->hidden_id != "0")
         {
 
             $new_name='';
-            if($request->has('thumbnail'))
-            {
-            
-                $image = $request->file('thumbnail');
+            if($request->thumbnail_file_type == 'Server'){
+                if($request->has('thumbnail'))
+                {
+                
+                    $image = $request->file('thumbnail');
 
-                $new_name = rand() . '.' . $image->getClientOriginalExtension();
-
-                $valid_ext = array('png','jpeg','jpg');
-
-                // Location
-                $location = public_path('upload/videos/thumbnail/').$new_name;
-
-                $file_extension = pathinfo($location, PATHINFO_EXTENSION);
-                $file_extension = strtolower($file_extension);
-
-                if(in_array($file_extension,$valid_ext)){
-                    $this->compressImage($image->getPathName(),$location,60);
+                    $url = get_subtitle($request->unit_id).'/videos/thumbnail/';
+                    $originalPath = imagePathCreate($url);
+                    $name = time() . mt_rand(10000, 99999);
+                    $new_name = $name . '.' . $image->getClientOriginalExtension();
+                    $image->move($originalPath, $new_name);
+                }
+                else{
+                    $new_name = $request->hidden_thumbnail;
                 }
             }
             else{
-                $new_name = $request->hidden_thumbnail;
+                $new_name = $request->thumbnail;
             }
 
 
-            if($request->url_type == "file"){
+            if($request->url_type == "Server"){
                 $url_file='';
                 if($request->has('url'))
                 {
                     $image = $request->file('url');
-                    $url_file = time().'.'.$image->getClientOriginalExtension();
-                    $destinationPath = public_path('upload/videos/url/');
-                    $image->move($destinationPath, $url_file);
+
+                    $url = get_subtitle($request->unit_id).'/videos/url/';
+                    $originalPath = imagePathCreate($url);
+                    $name = time() . mt_rand(10000, 99999);
+                    $url_file = $name . '.' . $image->getClientOriginalExtension();
+                    $image->move($originalPath, $url_file);
                 }    
                 else{
                     $url_file = $request->hidden_url;
@@ -142,6 +143,7 @@ class VideosController extends Controller
             $add->url_type = $request->url_type;
             $add->url = $url_file;
             $add->thumbnail = $new_name;
+            $add->thumbnail_file_type = $request->thumbnail_file_type;
             $add->duration = $request->duration;
             $add->description = isset($request->description) ? $request->description:'';
             $add->label = $request->label;
@@ -155,35 +157,33 @@ class VideosController extends Controller
         else{
 
             $new_name='';
-            if($request->has('thumbnail'))
-            {
-            
-                $image = $request->file('thumbnail');
-
-                $new_name = rand() . '.' . $image->getClientOriginalExtension();
-
-                $valid_ext = array('png','jpeg','jpg');
-
-                // Location
-                $location = public_path('upload/videos/thumbnail/').$new_name;
-
-                $file_extension = pathinfo($location, PATHINFO_EXTENSION);
-                $file_extension = strtolower($file_extension);
-
-                if(in_array($file_extension,$valid_ext)){
-                    $this->compressImage($image->getPathName(),$location,60);
+            if($request->thumbnail_file_type == 'Server'){
+                if($request->has('thumbnail'))
+                {
+                
+                    $image = $request->file('thumbnail');
+                    $url = get_subtitle($request->unit_id).'/videos/thumbnail/';
+                    $originalPath = imagePathCreate($url);
+                    $name = time() . mt_rand(10000, 99999);
+                    $new_name = $name . '.' . $image->getClientOriginalExtension();
+                    $image->move($originalPath, $new_name);
                 }
+            }
+            else{
+                $new_name = $request->thumbnail;
             }
 
 
-            if($request->url_type == "file"){
+            if($request->url_type == "Server"){
                 $url_file='';
                 if($request->has('url'))
                 {
                     $image = $request->file('url');
-                    $url_file = time().'.'.$image->getClientOriginalExtension();
-                    $destinationPath = public_path('upload/videos/url/');
-                    $image->move($destinationPath, $url_file);
+                    $url = get_subtitle($request->unit_id).'/videos/url/';
+                    $originalPath = imagePathCreate($url);
+                    $name = time() . mt_rand(10000, 99999);
+                    $url_file = $name . '.' . $image->getClientOriginalExtension();
+                    $image->move($originalPath, $url_file);
                 }    
             }
             else{
@@ -213,6 +213,7 @@ class VideosController extends Controller
             $add->url_type = $request->url_type;
             $add->url = $url_file;
             $add->thumbnail = $new_name;
+            $add->thumbnail_file_type = $request->thumbnail_file_type;
             $add->duration = $request->duration;
             $add->description = isset($request->description) ? $request->description:'';
             $add->label = $request->label;
@@ -259,7 +260,18 @@ class VideosController extends Controller
     {
        // $units = Unit::where('status','Active')->get();
         $videodata = videos::where('id',$request->id)->first();
-        return $videodata;
+        $board_sub_title = board::where(['id' => $videodata->board_id])->first();
+        $medium_sub_title = Medium::where(['id' => $videodata->medium_id])->first();
+        $standard_sub_title = Standard::where(['id' => $videodata->standard_id])->first();
+        $semester_sub_title = Semester::where(['id' => $videodata->semester_id])->first();
+        $subject_sub_title = Subject::where(['id' => $videodata->subject_id])->first();
+        $unit_sub_title = Unit::where(['id' => $videodata->unit_id])->first();
+        $sub_title = ['board_sub_title' => $board_sub_title,'medium_sub_title' => $medium_sub_title,
+        'standard_sub_title' => $standard_sub_title,'semester_sub_title' => $semester_sub_title,
+        'subject_sub_title' => $subject_sub_title,'unit_sub_title' => $unit_sub_title];
+        $data = ['videodetails' => $videodata,'sub_title' => $sub_title];
+        return $data;
+        //return $videodata;
       //  $boards = Board::where('status','Active')->get();
         //return view('videos.edit',compact('videodata','units','boards'));
     }

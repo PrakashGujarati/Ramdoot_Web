@@ -21,8 +21,8 @@ class SubjectImport implements ToModel,WithHeadingRow
             'standard_id' => $row['standard_id'],
             'subject_name' => $row['subject_name'],
             'sub_title' => $row['sub_title'],
-            'url' => $row['url'],
             'thumbnail' => $row['thumbnail'],
+            'thumbnail_file_type' => $row['thumbnail_file_type'],
             'status' => $row['status'],
             'order_no' => $row['order_no']
         ]);

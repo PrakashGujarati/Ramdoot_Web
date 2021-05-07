@@ -60,17 +60,22 @@
                         <td>{{ isset($data->unit->title) ? $data->unit->title:'' }}</td>
                         <td>{{ $data->title }}</td>
                         <td>
+                            @php $path = get_subtitle($data->unit_id);  @endphp
                             @if($data->url_type == 'file')
                             @if($data->url_type)
-                            <img src="{{ asset('upload/videos/url/'.$data->url) }}" class="thumbnail" height="50" width="50">
+                            <img src="{{ asset($path.'/videos/url/'.$data->url) }}" class="thumbnail" height="50" width="50">
                             @endif
                             @else
                             {{ $data->url_type }}
                             @endif
                         </td>
                         <td>
+                            @if($data->thumbnail_file_type == 'Server')
                             @if($data->thumbnail)
-                            <img src="{{ asset('upload/videos/thumbnail/'.$data->thumbnail) }}" class="thumbnail" height="50" width="50">
+                            <img src="{{ asset($path.'/videos/thumbnail/'.$data->thumbnail) }}" class="thumbnail" height="50" width="50">
+                            @endif
+                            @else
+                            {{ $data->thumbnail }}
                             @endif
                         </td>
                         <td>{{ $data->duration }}</td>

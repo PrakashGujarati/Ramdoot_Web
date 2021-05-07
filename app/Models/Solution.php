@@ -10,7 +10,7 @@ class Solution extends Model
     use HasFactory;
     protected $table = 'solutions';
     protected $fillable = ['board_id','medium_id','standard_id','subject_id','semester_id','unit_id','user_id',
-    'question','answer','marks','image','label','question_type','level','status','order_no'];
+    'question','answer','marks','image_file_type','image','label','question_type','level','status','order_no'];
 
     public function board()
 	{

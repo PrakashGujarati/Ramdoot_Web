@@ -9,6 +9,8 @@ use Auth;
 use App\Models\Board;
 use App\Models\Subject;
 use App\Models\Semester;
+use App\Models\Standard;
+use App\Models\Medium;
 
 class WorksheetController extends Controller
 {
@@ -78,26 +80,35 @@ class WorksheetController extends Controller
         if($request->hidden_id != "0")
         {
             $new_name='';
-            if($request->has('thumbnail'))
-            {
-            
-                $image = $request->file('thumbnail');
-                $new_name = rand() . '.' . $image->getClientOriginalExtension();
-                $destinationPath = public_path('upload/worksheet/thumbnail/');
-                $image->move($destinationPath, $new_name);
+            if($request->thumbnail_file_type == 'Server'){
+                if($request->has('thumbnail'))
+                {
+                
+                    $image = $request->file('thumbnail');
+                    $url = get_subtitle($request->unit_id).'/worksheet/thumbnail/';
+                    $originalPath = imagePathCreate($url);
+                    $name = time() . mt_rand(10000, 99999);
+                    $new_name = $name . '.' . $image->getClientOriginalExtension();
+                    $image->move($originalPath, $new_name);
+                }
+                else{
+                    $new_name = $request->hidden_thumbnail;
+                }
             }
             else{
-                $new_name = $request->hidden_thumbnail;
+                $new_name = $request->thumbnail;
             }
 
             $url_file='';
-            if($request->url_type == 'file'){
+            if($request->url_type == 'Server'){
                 if($request->file('url'))
                 {
                     $image = $request->file('url');
-                    $url_file = time().'.'.$image->getClientOriginalExtension();
-                    $destinationPath = public_path('upload/worksheet/url/');
-                    $image->move($destinationPath, $url_file);
+                    $url = get_subtitle($request->unit_id).'/worksheet/url/';
+                    $originalPath = imagePathCreate($url);
+                    $name = time() . mt_rand(10000, 99999);
+                    $url_file = $name . '.' . $image->getClientOriginalExtension();
+                    $image->move($originalPath, $url_file);
                 }
                 else{
                     $url_file = $request->hidden_url;
@@ -121,6 +132,7 @@ class WorksheetController extends Controller
             $add->url = $url_file;
             $add->label = $request->label;
             $add->thumbnail = $new_name;
+            $add->thumbnail_file_type = $request->thumbnail_file_type;
             $add->description = isset($request->description) ? $request->description:'';
             $add->release_date = $request->release_date;
             $add->edition = $request->edition;
@@ -132,24 +144,33 @@ class WorksheetController extends Controller
         else{
 
             $new_name='';
-            if($request->has('thumbnail'))
-            {
-            
-                $image = $request->file('thumbnail');
-                $new_name = rand() . '.' . $image->getClientOriginalExtension();
-                $destinationPath = public_path('upload/worksheet/thumbnail/');
-                $image->move($destinationPath, $new_name);
+            if($request->thumbnail_file_type == 'Server'){
+                if($request->has('thumbnail'))
+                {
+                
+                    $image = $request->file('thumbnail');
+                    $url = get_subtitle($request->unit_id).'/worksheet/thumbnail/';
+                    $originalPath = imagePathCreate($url);
+                    $name = time() . mt_rand(10000, 99999);
+                    $new_name = $name . '.' . $image->getClientOriginalExtension();
+                    $image->move($originalPath, $new_name);
+                }
+            }
+            else{
+                $new_name = $request->thumbnail;
             }
             
 
             $url_file='';
-            if($request->url_type == 'file'){
+            if($request->url_type == 'Server'){
                 if($request->file('url'))
                 {
                     $image = $request->file('url');
-                    $url_file = time().'.'.$image->getClientOriginalExtension();
-                    $destinationPath = public_path('upload/worksheet/url/');
-                    $image->move($destinationPath, $url_file);
+                    $url = get_subtitle($request->unit_id).'/worksheet/url/';
+                    $originalPath = imagePathCreate($url);
+                    $name = time() . mt_rand(10000, 99999);
+                    $url_file = $name . '.' . $image->getClientOriginalExtension();
+                    $image->move($originalPath, $url_file);
                 }    
             }else{
                 $url_file = $request->url;
@@ -179,6 +200,7 @@ class WorksheetController extends Controller
             $add->url = $url_file;
             $add->label = $request->label;
             $add->thumbnail = $new_name;
+            $add->thumbnail_file_type = $request->thumbnail_file_type;
             $add->description = isset($request->description) ? $request->description:'';
             $add->release_date = $request->release_date;
             $add->edition = $request->edition;
@@ -222,7 +244,19 @@ class WorksheetController extends Controller
     {
         //$units = Unit::where('status','Active')->get();
         $worksheetdata = Worksheet::where('id',$request->id)->first();
-        return $worksheetdata;
+        $board_sub_title = board::where(['id' => $worksheetdata->board_id])->first();
+        $medium_sub_title = Medium::where(['id' => $worksheetdata->medium_id])->first();
+        $standard_sub_title = Standard::where(['id' => $worksheetdata->standard_id])->first();
+        $semester_sub_title = Semester::where(['id' => $worksheetdata->semester_id])->first();
+        $subject_sub_title = Subject::where(['id' => $worksheetdata->subject_id])->first();
+        $unit_sub_title = Unit::where(['id' => $worksheetdata->unit_id])->first();
+        $sub_title = ['board_sub_title' => $board_sub_title,'medium_sub_title' => $medium_sub_title,
+        'standard_sub_title' => $standard_sub_title,'semester_sub_title' => $semester_sub_title,
+        'subject_sub_title' => $subject_sub_title,'unit_sub_title' => $unit_sub_title];
+        $data = ['worksheetdata' => $worksheetdata,'sub_title' => $sub_title];
+        return $data;
+
+        //return $worksheetdata;
 
         //$boards = Board::where('status','Active')->get();
         //return view('worksheet.edit',compact('worksheetdata','units','boards'));

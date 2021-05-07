@@ -24,8 +24,12 @@
                         <td>{{ $data->name }}</td>
                         <td>{{ $data->abbreviation }}</td>
                         <td style="width:100px;">
+                            @if($data->thumbnail_file_type == 'Server')
                             @if($data->thumbnail)
                             <img src="{{ asset('upload/board/thumbnail/'.$data->thumbnail) }}" class="thumbnail" height="50" width="50">
+                            @endif
+                            @else
+                            {{ $data->thumbnail }}
                             @endif
                         </td>
                         <td style="width:130px;">

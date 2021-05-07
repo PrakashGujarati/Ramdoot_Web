@@ -46,6 +46,7 @@ class BoardController extends Controller
      */
     public function store(Request $request)
     {
+
         $this->validate($request, [
             'name'     => 'required',
             'sub_title'  => 'required',
@@ -56,32 +57,40 @@ class BoardController extends Controller
         if($request->hidden_id != "0"){
 
             $new_name='';
-            if($request->has('thumbnail'))
-            {
-            
-                $image = $request->file('thumbnail');
-                $new_name = rand() . '.' . $image->getClientOriginalExtension();
-                $valid_ext = array('png','jpeg','jpg');
+            if($request->thumbnail_file_type == 'Server'){
+                if($request->has('thumbnail'))
+                {
+                
+                    $image = $request->file('thumbnail');
+                    $new_name = rand() . '.' . $image->getClientOriginalExtension();
+                    $valid_ext = array('png','jpeg','jpg');
 
-                // Location
-                $location = public_path('upload/board/thumbnail/').$new_name;
+                    // Location
+                    $location = public_path('upload/board/thumbnail/').$new_name;
 
-                $file_extension = pathinfo($location, PATHINFO_EXTENSION);
-                $file_extension = strtolower($file_extension);
+                    $file_extension = pathinfo($location, PATHINFO_EXTENSION);
+                    $file_extension = strtolower($file_extension);
 
-                if(in_array($file_extension,$valid_ext)){
-                    $this->compressImage($image->getPathName(),$location,60);
+                    if(in_array($file_extension,$valid_ext)){
+                        $this->compressImage($image->getPathName(),$location,60);
+                    }
+                }
+                else{
+                    $new_name = $request->hidden_thumbnail;
                 }
             }
             else{
-                $new_name = $request->hidden_thumbnail;
+              $new_name = $request->thumbnail;
+              //Drive
             }
-
+            
+            
             $update = Board::find($request->hidden_id);
             $update->name = $request->name;            
             $update->abbreviation = $request->abbreviation;
             $update->sub_title = $request->sub_title;
             $update->thumbnail = $new_name;
+            $update->thumbnail_file_type = $request->thumbnail_file_type;
             $update->save();
 
             $msg = "Board Updated Successfully.";
@@ -89,25 +98,32 @@ class BoardController extends Controller
         }else{
 
             $new_name='';
-            if($request->has('thumbnail'))
-            {
-            
-                $image = $request->file('thumbnail');
+            if($request->thumbnail_file_type == 'Server'){
 
-                $new_name = rand() . '.' . $image->getClientOriginalExtension();
+              if($request->has('thumbnail'))
+              {
+              
+                  $image = $request->file('thumbnail');
 
-                $valid_ext = array('png','jpeg','jpg');
+                  $new_name = rand() . '.' . $image->getClientOriginalExtension();
 
-                // Location
-                $location = public_path('upload/board/thumbnail/').$new_name;
+                  $valid_ext = array('png','jpeg','jpg');
 
-                $file_extension = pathinfo($location, PATHINFO_EXTENSION);
-                $file_extension = strtolower($file_extension);
+                  // Location
+                  $location = public_path('upload/board/thumbnail/').$new_name;
 
-                if(in_array($file_extension,$valid_ext)){
-                    $this->compressImage($image->getPathName(),$location,60);
-                }
+                  $file_extension = pathinfo($location, PATHINFO_EXTENSION);
+                  $file_extension = strtolower($file_extension);
+
+                  if(in_array($file_extension,$valid_ext)){
+                      $this->compressImage($image->getPathName(),$location,60);
+                  }
+              }
+            }else{
+              $new_name = $request->thumbnail;
             }
+
+
             $last_board=Board::select('*')->orderBy('order_no','desc')->first();
             if($last_board)
             {
@@ -121,6 +137,7 @@ class BoardController extends Controller
             $add->name = $request->name;
             $add->abbreviation = $request->abbreviation;
             $add->sub_title = $request->sub_title;
+            $add->thumbnail_file_type = $request->thumbnail_file_type;
             $add->thumbnail = $new_name;
             $add->order_no=$last_number;
             $add->save();

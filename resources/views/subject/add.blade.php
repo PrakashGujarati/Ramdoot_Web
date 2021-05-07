@@ -102,21 +102,35 @@ td{
                                     @enderror
                                 </div>
                             </div>
+
                             <div class="form-group col-lg-3">
-                            <label class="form-label">Thumbnail</label>
-                            <div class="form-control-wrap">
-                                <input type="file" class="form-control" id="thumbnail" name="thumbnail" value="">
-                                <input type="hidden" id="hidden_thumbnail" name="hidden_thumbnail" value="">
-                                @error('thumbnail')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                                <div class="row">
+                                    <input type="hidden" name="thumbnail_file_type" class="thumbnail_file_type" id="thumbnail_file_type" value="Drive">
+                                    <div class="col-lg-6"><label class="form-label">Thumbnail</label></div>
+                                    <div class="col-lg-6 text-right"><div class="g">
+                                        <div class="custom-control custom-control-sm custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input thumbnailchk" name="thumbnail_result" value="1" id="thumbnail_result">
+                                            <label class="custom-control-label" for="thumbnail_result"></label>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" id="thumbnail" name="thumbnail" value="">
+                                    <input type="hidden" id="hidden_thumbnail" name="hidden_thumbnail" value="">
+                                    
+                                    @error('thumbnail')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group col-lg-3">
-                            <img id="thumbnail_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" width="100" />
-                        </div>
+                            
+                            <div class="form-group col-lg-3">
+                                <img id="thumbnail_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" width="100" />
+                            </div>
                         </div>
 
                         <div class="row">
@@ -244,8 +258,14 @@ function readThumbnail(input) {
 }
 
 $("#thumbnail").change(function() {
-    $('#thumbnail_preview').css('display','block');
-  readThumbnail(this);
+    if($('.thumbnailchk').prop("checked") == true){
+        $('#thumbnail_preview').css('display','block');
+    }
+    else if($('.thumbnailchk').prop("checked") == false){
+        $('#thumbnail_preview').css('display','none');
+    }
+    //$('#thumbnail_preview').css('display','block');
+    readThumbnail(this);
 });
 
 
@@ -328,8 +348,12 @@ $(document).ready(function () {
                     $('#sub_title').val('');
                     $('#thumbnail').val();
                     $('#hidden_thumbnail').val('');
-                    $('#thumbnail_preview').css('display','none');
                     $('#hidden_id').val('0');
+                    $('#thumbnail_preview').css('display','none');
+                    $('.thumbnailchk').prop("checked",false);
+                    $("#thumbnail").attr('type', 'text');
+                    $('#thumbnail_file_type').val('Drive');
+                    $('#thumbnail').val('');
                     
                     $('.dyamictable').empty();
                     $('.dyamictable').html(data.html);
@@ -371,9 +395,27 @@ $(document).on('click','.edit-btn',function(){
             getMediumEdit(board_id,medium_id);
             getStandardEdit(board_id,medium_id,standard_id);
             $('#subject_name').val(result.subject_details.subject_name);
-            $('#sub_title').val(result.subject_details.sub_title);            
-            $('#hidden_thumbnail').val(result.subject_details.thumbnail);
-            $('#thumbnail_preview').css('display','block');
+            $('#sub_title').val(result.subject_details.sub_title);
+            //alert(result.subject_details.thumbnail_file_type);
+            if(result.subject_details.thumbnail_file_type == 'Drive'){
+
+                $('.thumbnailchk').prop("checked",false);
+                $('#hidden_thumbnail').val(result.subject_details.thumbnail);
+                $('#thumbnail').val(result.subject_details.thumbnail);
+                $('#thumbnail_preview').css('display','none');
+                $("#thumbnail").attr('type', 'text');
+                $('#thumbnail_file_type').val('Drive');
+        
+            }
+            else{
+                $('.thumbnailchk').prop("checked",true);
+                $('#hidden_thumbnail').val(result.subject_details.thumbnail);
+                $('#thumbnail_preview').css('display','block');
+                $("#thumbnail").attr('type', 'file');
+                $('#thumbnail_file_type').val('Server');                
+            }
+            //$('#hidden_thumbnail').val(result.subject_details.thumbnail);
+            //$('#thumbnail_preview').css('display','block');
             var url_path = "{{ env('APP_URL') }}"+"/upload/subject/thumbnail/"+result.subject_details.thumbnail;
             $('#thumbnail_preview').attr('src', url_path);
             $('#hidden_id').val(result.subject_details.id);            
@@ -487,6 +529,20 @@ $(document).on('click','.status_change', function() {
         }            
     });
 
+});
+
+$(document).on('change','.thumbnailchk',function(){
+    if($(this).prop("checked") == true){
+        $("#thumbnail").attr('type', 'file');
+        $('#thumbnail_file_type').val('Server');
+        $('#thumbnail').val('');
+    }
+    else if($(this).prop("checked") == false){
+        $("#thumbnail").attr('type', 'text');
+        $('#thumbnail_file_type').val('Drive');
+        $('#thumbnail').val('');
+        $('#thumbnail_preview').css('display','none');
+    }
 });
 
 </script>

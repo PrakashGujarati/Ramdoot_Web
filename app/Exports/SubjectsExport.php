@@ -36,7 +36,7 @@ class SubjectsExport implements FromCollection,WithHeadings,ShouldAutoSize, With
                 'standard' => isset($value->standard->standard) ? $value->standard->standard:'',
                 'subject_name' => isset($value->subject_name) ? $value->subject_name:'',
                 'sub_title' => isset($value->sub_title) ? $value->sub_title:'',
-                'url' => isset($value->url) ? $value->url:'',
+                'thumbnail_file_type' => $value->thumbnail_file_type,
                 'thumbnail' => isset($value->thumbnail) ? $value->thumbnail:'',
                 'status' => $value->status,
                 'order_no' => $value->order_no
@@ -60,7 +60,7 @@ class SubjectsExport implements FromCollection,WithHeadings,ShouldAutoSize, With
             "Standard Name",
 	    	"Subject Name",
 	    	"Sub Title",
-	    	"URL",
+            "Thumbnail File Type",
 	    	"Thumbnail",
 	        "Status",
 	        "Order No",

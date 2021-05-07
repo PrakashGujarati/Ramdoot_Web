@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Board extends Model
 {
     use HasFactory;
-    protected $fillable = ['name','sub_title','abbreviation','thumbnail','status','order_no'];
+    protected $fillable = ['name','sub_title','abbreviation','thumbnail_file_type','thumbnail','status','order_no'];
 }
