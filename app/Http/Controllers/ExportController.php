@@ -12,13 +12,19 @@ use App\Exports\SubjectsExport;
 use App\Exports\UnitsExport;
 use App\Exports\BooksExport;
 use App\Exports\VideosExport;
+use App\Exports\NotesExport;
 use App\Exports\SolutionsExport;
+use App\Exports\MaterialsExport;
+use App\Exports\PapersExport;
+use App\Exports\WorksheetsExport;
+
 
 use App\Exports\BoardSampleExport;
 use App\Exports\MediumSampleExport;
 use App\Exports\StandardSampleExport;
 use App\Exports\SubjectSampleExport;
 use App\Exports\SemesterSampleExport;
+use App\Exports\SolutionSampleExport;
 
 
 
@@ -31,6 +37,12 @@ use App\Models\Book;
 use App\Models\Videos;
 use App\Models\Board;
 use App\Models\Solution;
+use App\Models\Note;
+use App\Models\Material;
+use App\Models\Paper;
+use App\Models\Worksheet;
+
+
 
 class ExportController extends Controller
 {
@@ -72,6 +84,26 @@ class ExportController extends Controller
     		$data = Videos::where(['status' => 'Active'])->get();
     		return Excel::download(new VideosExport($data), 'Videos.xlsx');
     	}
+        elseif($request->module == "Note"){
+            $data = Note::where(['status' => 'Active'])->get();
+            return Excel::download(new NotesExport($data), 'Notes.xlsx');
+        }
+        elseif($request->module == "Solution"){
+            $data = Solution::where(['status' => 'Active'])->get();
+            return Excel::download(new SolutionsExport($data), 'Solutions.xlsx');
+        }
+        elseif($request->module == "Material"){
+            $data = Material::where(['status' => 'Active'])->get();
+            return Excel::download(new MaterialsExport($data), 'Materials.xlsx');
+        }
+        elseif($request->module == "Paper"){
+            $data = Paper::where(['status' => 'Active'])->get();
+            return Excel::download(new PapersExport($data), 'Papers.xlsx');
+        }
+        elseif($request->module == "Worksheet"){
+            $data = Worksheet::where(['status' => 'Active'])->get();
+            return Excel::download(new WorksheetsExport($data), 'Worksheets.xlsx');
+        }
     }
 
     public function generateExcel(){
@@ -210,7 +242,7 @@ class ExportController extends Controller
                     'standard_id' => $request->standard_id,'subject_id' => $request->subject_id,
                     'semester_id' => $request->semester_id,'unit_id' => $request->unit_id,'status' => 'Active'])->get();                    
                 }
-                return Excel::download(new SolutionsExport($data), 'Solutions.xlsx');
+                return Excel::download(new SolutionSampleExport($data), 'Solutions.xlsx');
             }
 
 
@@ -336,7 +368,7 @@ class ExportController extends Controller
                         'standard_id' => $request->standard_id,'subject_id' => $request->subject_id,
                         'semester_id' => $request->semester_id,'unit_id' => $request->unit_id,'status' => 'Active'])->get();                    
                     }
-                    return Excel::download(new SolutionsExport($data), 'Solutions.xlsx');
+                    return Excel::download(new SolutionSampleExport($data), 'Solutions.xlsx');
                 }
         }
     }

@@ -8,14 +8,17 @@ use App\Models\Slider;
 
 class SliderController extends Controller
 {
-    public function slider(){
-    	$getdata = Slider::where(['status' => 'Active'])->orderBy('order', 'ASC')->get();
+    public function slider(Request $request){
+		$this->validate($request, [            
+            'area' => 'required',            
+        ]);
+    	$getdata = Slider::where(['area' => $request->area,'status' => 'Active'])->orderBy('order', 'ASC')->get();
 
     	if(count($getdata) > 0){
     		$data=[];
     		foreach ($getdata as $value) {
-    			$image = env('APP_URL')."/upload/slider/".$value->image;
-    			$data[] = ['id' => $value->id,'title' => $value->area,'short_desc' => $value->text,'image' => $image,'url' => $value->url];
+    			$image = $value->image;
+    			$data[] = ['id' => $value->id,'area' => $value->area,'title' => $value->title,'short_desc' => $value->text,'image' => $image,'url' => $value->url];
     		}
 
     		return response()->json([

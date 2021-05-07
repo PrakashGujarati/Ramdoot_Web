@@ -52,8 +52,8 @@ class VideosExport implements FromCollection,WithHeadings,ShouldAutoSize, WithEv
                 'edition' => $value->edition,
                 'label' => $value->label,
                 'release_date' => $value->release_date,
-                'status' => $value->status,
                 'start_time' => $value->start_time,
+                'status' => $value->status,
                 'order_no' => $value->order_no
             );
         }

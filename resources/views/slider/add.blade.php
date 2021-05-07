@@ -19,7 +19,10 @@
                         <div class="form-group">
                             <label class="form-label">Area</label>
                             <div class="form-control-wrap">
-                                <input type="text" class="form-control" id="area" name="area" value="{{ old('area') }}">
+                                <select class="form-control" id="area" name="area">
+                                <option>BoardScreen</option>
+                                <option>MainScreen</option>
+                                </select>                            
                                 @error('area')
                                     <span class="text-danger" role="alert">
                                         <strong>{{ $message }}</strong>

@@ -26,10 +26,10 @@ class BoardController extends Controller
                     $mediumSortName = explode(" ",$sub_value->medium_name);
                     $first = substr($mediumSortName[0], 0,1);
                     $last = substr(isset($mediumSortName[1]) ? $mediumSortName[1]:'', 0,1);
-                    $mediumArray[] = ['id' => $sub_value->id,'medium_name' => $sub_value->medium_name,'sort_name' => $first.$last];
+                    $mediumArray[] = ['id' => $sub_value->id,'medium_name' => $sub_value->medium_name,'sub_title' => $sub_value->sub_title,'sort_name' => $first.$last];
                 }
-                $thumbnail = env('APP_URL')."/upload/board/thumbnail/".$value->thumbnail;
-    			$data[] = ['id' => $value->id,'board_name' => $value->name,'sort_name' => trim($sortname[0]),'abbreviation' => $value->abbreviation,'url' => $value->url,'thumbnail' => $thumbnail,'medium' => $mediumArray];
+                $thumbnail = $value->thumbnail;
+    			$data[] = ['id' => $value->id,'board_name' => $value->name,'sub_title' => $value->sub_title,'sort_name' => trim($sortname[0]),'abbreviation' => $value->abbreviation,'url' => $value->url,'thumbnail' => $thumbnail,'medium' => $mediumArray];
     		}
 
     		return response()->json([

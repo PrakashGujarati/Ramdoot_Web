@@ -80,11 +80,11 @@ class VideosController extends Controller
 	    			foreach ($getdata as $value1) {
 
                         $url='';$video_type='';$is_read=0;
-                        if($value1->url_type == "file"){
+                        if($value1->url_type == "Server"){
                             $url = env('APP_URL')."/upload/videos/url/".$value1->url;
                             $video_type = "Server";
                         }
-                        elseif ($value1->url_type == "text") {
+                        elseif ($value1->url_type == "Youtube") {
                             $url = $value1->url;
                             $video_type = "Youtube";
                         }
@@ -96,7 +96,7 @@ class VideosController extends Controller
                         }
                         
 
-	    				$thumbnail = env('APP_URL')."/upload/videos/thumbnail/".$value1->thumbnail;
+	    				$thumbnail = $value1->thumbnail;
                         $start_time='';
                         if(!empty($value1->start_time)){
                             $start_time = $value1->start_time;
@@ -104,7 +104,7 @@ class VideosController extends Controller
 	    				$videodata[] = ['id' => $value1->id,'title' => $value1->title,'url' => $url,'video_type' => $video_type,'thumbnail' => $thumbnail,'duration' => $value1->duration,'description' => $value1->description,'label' => $value1->label,'release_date' => $value1->release_date,'is_read' => $is_read,'start_time' => $start_time];
 	    			}
 
-	    			$data[] = ['id' => $value->id,'unit_title' =>$value->title,'video' => $videodata,'sub_title'=>$value->description];
+	    			$data[] = ['id' => $value->id,'unit_title' =>$value->title,'sub_title'=>$value->sub_title,'video' => $videodata];
 	    		}
 	    		
 	    		return response()->json([

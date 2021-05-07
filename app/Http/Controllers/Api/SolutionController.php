@@ -58,7 +58,7 @@ class SolutionController extends Controller
 	    				$solutiondata=[];
 	    				foreach ($getdata_solution as $value_sub) {
 
-	    					$image = env('APP_URL')."/upload/solution/thumbnail/".$value_sub->image;
+	    					$image = $value_sub->image;
 							$title = $value_sub->label;
 		    				$solutiondata[] = ['id' => $value_sub->id,'question' => $value_sub->question,'answer' => $value_sub->answer,'marks' => $value_sub->marks,'image' => $image,'label' => $value_sub->label];
 	    				}
@@ -66,7 +66,7 @@ class SolutionController extends Controller
 	    				$sub_title = Unit::where(['id' => $request->unit_id,'status' => 'Active'])->first();
 		    			if($sub_title)
 		    			{
-		    				$sub_title=$sub_title->description;
+		    				$sub_title=$sub_title->sub_title;
 		    			}
 		    			else
 		    			{

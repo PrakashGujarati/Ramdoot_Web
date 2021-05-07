@@ -28,19 +28,15 @@ class StandardController extends Controller
 
         $chkmedium = Medium::where(['id' => $request->medium_id,'status' => 'Active'])->first();
         if($chkmedium){
-        	$getboard_details = Standard::where(['medium_id' => $request->medium_id,'status' => 'Active'])->select('id','section')->groupBy('section')->get();
+        	$getstandard_details = Standard::where(['medium_id' => $request->medium_id,'status' => 'Active'])->select('id','section')->groupBy('section')->get();
 
-	    	if(count($getboard_details) > 0){
+	    	if(count($getstandard_details) > 0){
 
 	    		$data=[];$getdata=[];
-	    		foreach ($getboard_details as $value) {                    
+	    		foreach ($getstandard_details as $value) {                    
 	    			$getdata = Standard::select('id','standard','thumbnail')->where(['medium_id' => $request->medium_id,'section' => $value->section])->orderBy('order_no','asc')->get();
-	    			/*foreach ($getdata as $key => $std_value) 
-                    {
-                       $thumbnail = env('APP_URL')."/upload/standard/thumbnail/".$std_value->thumbnail;
-                       $stdArray[] = ['id' => $std_value->id,'standard' => $std_value->standard,'thumbnail' => $thumbnail];
-                    }*/
-                    $data[] = ['id' => $value->id,'section' => $value->section,'standard' => $getdata];
+	    			
+                    $data[] = ['id' => $value->id,'section' => $value->section,'standard' => $getdata,'sub_title' => $value->sub_title];
 	    		}
 
 	    		return response()->json([

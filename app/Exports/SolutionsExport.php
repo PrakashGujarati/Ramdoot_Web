@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Models\Book;
+use App\Models\Solution;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -47,7 +47,8 @@ class SolutionsExport implements FromCollection,WithHeadings,ShouldAutoSize, Wit
                 "marks" => isset($value->marks) ? $value->marks:'',
                 'image' => isset($value->image) ? $value->image:'',
                 'label' => isset($value->label) ? $value->label:'',
-                'question_type' => isset($value->question_type) ? $value->question_type:'',
+                'question_type_id' => isset($value->question_type) ? $value->question_type:'',
+                'question_type' => isset($value->questionType->question_type) ? $value->questionType->question_type:'',
                 'level' => isset($value->level) ? $value->level:'',                
                 'status' => $value->status,
                 'order_no' => $value->order_no
@@ -82,7 +83,8 @@ class SolutionsExport implements FromCollection,WithHeadings,ShouldAutoSize, Wit
 	        "Marks",
 	        "Image",
 	    	"Label",
-	        "QuestionType",
+	        "QuestionType Id",
+            "QuestionType",
 	        "Level",	        
 	        "Status",
 	        "Order No",
@@ -93,7 +95,7 @@ class SolutionsExport implements FromCollection,WithHeadings,ShouldAutoSize, Wit
     {
         return [
             AfterSheet::class    => function(AfterSheet $event) {
-                $cellRange = 'A1:W1';
+                $cellRange = 'A1:Z1';
                 $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setBold(true)->setSize(14);
             },
         ];

@@ -19,8 +19,7 @@ use App\Http\Controllers\Api\FeatureController;
 use App\Http\Controllers\Api\TextbookController;
 use App\Http\Controllers\Api\McqController;
 use App\Http\Controllers\Api\ExamController;
- 
-
+use App\Http\Controllers\Api\NotificationsController;
 
 
 /*
@@ -35,7 +34,7 @@ use App\Http\Controllers\Api\ExamController;
 */
 Route::group(['middleware'=>'auth:api'], function()
 {
-	Route::get('logout',[RegisterController::class, 'logout']); 
+	Route::post('logout',[RegisterController::class, 'logout']); 
     Route::post('board_medium', [BoardController::class, 'boardMedium']);
     Route::post('slider', [SliderController::class, 'slider']);
     Route::post('standard_list', [StandardController::class, 'standardList']);
@@ -53,8 +52,6 @@ Route::group(['middleware'=>'auth:api'], function()
     Route::post('all_in_one', [FeatureController::class, 'all_in_one']);
     Route::post('mcq_practice', [McqController::class, 'mcqPractice']);
 
-    Route::post('mcq_practice', [McqController::class, 'mcqPractice']);
-
     Route::post('add_bookmark', [TextbookController::class, 'addBookmark']);
     Route::post('view_bookmark', [TextbookController::class, 'viewBookmark']);
 
@@ -70,6 +67,9 @@ Route::group(['middleware'=>'auth:api'], function()
     Route::post('submit_exam', [ExamController::class, 'submitExam']);        
     Route::post('result_exam', [ExamController::class, 'resultExam']);
     Route::post('note_list', [TextbookController::class, 'note_list']);
+
+    Route::post('notification_list', [NotificationsController::class, 'notification_list']);
+
 });
 
 Route::post('register', [RegisterController::class, 'register']);

@@ -48,6 +48,20 @@
 	</div>
 	
 
+	<div class="row mt-4">
+		<div class="col-md-6">
+			<div class="card card-preview">
+				<div class="card-header">
+					<h3>Notification</h3>
+				</div>
+		        <div class="card-inner">
+		        	<ul style="list-style-type:circle">
+		        			<li><strong><a href="{{route('notification.index')}}">Notification</a></strong></li>
+		        	</ul>
+		        </div>
+		    </div>	
+		</div>
+	</div>
     
 
 </div>

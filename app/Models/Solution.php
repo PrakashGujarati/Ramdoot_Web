@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Solution extends Model
 {
     use HasFactory;
+    protected $table = 'solutions';
+    protected $fillable = ['board_id','medium_id','standard_id','subject_id','semester_id','unit_id','user_id',
+    'question','answer','marks','image','label','question_type','level','status','order_no'];
 
     public function board()
 	{
@@ -38,5 +41,10 @@ class Solution extends Model
     public function unit()
     {
     	return $this->belongsTo(Unit::class,'unit_id');
+    }
+
+    public function questionType()
+    {
+    	return $this->belongsTo(QuestionType::class,'question_type');
     }
 }

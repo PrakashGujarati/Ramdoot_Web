@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Subject extends Model
 {
     use HasFactory;
+    protected $fillable = ['board_id','medium_id','standard_id','subject_name','sub_title','url','thumbnail','status','order_no'];
 
     public function board()
     {

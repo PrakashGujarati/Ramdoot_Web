@@ -235,7 +235,7 @@
                     <li class="nk-menu-item @if(\Request::route()->getName() == 'exam_student_question_answer.index' || \Request::route()->getName() == 'exam_student_question_answer.create' || \Request::route()->getName() == 'exam_student_question_answer.edit') active @endif">
                         <a href="{{ route('exam_student_question_answer.index') }}" class="nk-menu-link">
                             <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
-                            <span class="nk-menu-text">Student Question/Answer</span>
+                            <span class="nk-menu-text">Question/Answer</span>
                         </a>
                     </li><!-- .nk-menu-item -->
 
@@ -270,21 +270,13 @@
                             <span class="nk-menu-icon"><em class="icon ni ni-align-right"></em></span>
                             <span class="nk-menu-text">Data ExcelSheet</span>
                         </a>
-                        <ul class="nk-menu-sub">
-                            
+                        <ul class="nk-menu-sub">                            
                             <li class="nk-menu-item @if(\Request::route()->getName() == 'generate.excel.sample') active @endif">
                                 <a href="{{ route('generate.excel.sample') }}" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
                                     <span class="nk-menu-text">Generate Excel</span>
                                 </a>
-                            </li><!-- .nk-menu-item -->
-                           
-                            <li class="nk-menu-item">
-                                <a href="#" class="nk-menu-link">
-                                    <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
-                                    <span class="nk-menu-text">Upload Excel</span>
-                                </a>
-                            </li><!-- .nk-menu-item -->
+                            </li><!-- .nk-menu-item -->                           
                             <li class="nk-menu-item @if(\Request::route()->getName() == 'generate.specific.excel') active @endif">
                                 <a href="{{ route('generate.specific.excel') }}" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
@@ -297,7 +289,12 @@
                                     <span class="nk-menu-text">All Data in Excel</span>
                                 </a>
                             </li><!-- .nk-menu-item -->
-
+                            <li class="nk-menu-item @if(\Request::route()->getName() == 'import_excel.index') active @endif">
+                                <a href="{{ route('import_excel.index') }}" class="nk-menu-link">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
+                                    <span class="nk-menu-text">Upload Excel</span>
+                                </a>
+                            </li><!-- .nk-menu-item -->
                         </ul><!-- .nk-menu-sub -->
                     </li>
                     
