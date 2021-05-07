@@ -12,7 +12,7 @@ class BoardController extends Controller
 {
     public function boardMedium(Request $request){
 
-    	$getboard_details = Board::where(['status' => 'Active'])->select('id','name','thumbnail')->groupBy('name')->get();
+    	$getboard_details = Board::where(['status' => 'Active'])->select('id','name','thumbnail','thumbnail_file_type')->groupBy('name')->get();
 
     	if(count($getboard_details) > 0){
     		$data=[];$getdata=[];
@@ -28,7 +28,16 @@ class BoardController extends Controller
                     $last = substr(isset($mediumSortName[1]) ? $mediumSortName[1]:'', 0,1);
                     $mediumArray[] = ['id' => $sub_value->id,'medium_name' => $sub_value->medium_name,'sub_title' => $sub_value->sub_title,'sort_name' => $first.$last];
                 }
-                $thumbnail = $value->thumbnail;
+                $thumbnail='';
+                if($value->thumbnail){
+                	if($value->thumbnail_file_type == "Server"){
+                		$thumbnail =  env('APP_URL')."/upload/board/thumbnail/".$value->thumbnail;		
+                	}
+                	else{
+                		$thumbnail =  $value->thumbnail;	
+                	}
+                	
+                }
     			$data[] = ['id' => $value->id,'board_name' => $value->name,'sub_title' => $value->sub_title,'sort_name' => trim($sortname[0]),'abbreviation' => $value->abbreviation,'url' => $value->url,'thumbnail' => $thumbnail,'medium' => $mediumArray];
     		}
 

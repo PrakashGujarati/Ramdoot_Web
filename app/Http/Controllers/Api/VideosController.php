@@ -80,14 +80,29 @@ class VideosController extends Controller
 	    			foreach ($getdata as $value1) {
 
                         $url='';$video_type='';$is_read=0;
-                        if($value1->url_type == "Server"){
-                            $url = env('APP_URL')."/upload/videos/url/".$value1->url;
-                            $video_type = "Server";
+                        // if($value1->url_type == "Server"){
+                        //     $url = env('APP_URL')."/upload/videos/url/".$value1->url;
+                        //     $video_type = "Server";
+                        // }
+                        // elseif ($value1->url_type == "Youtube") {
+                        //     $url = $value1->url;
+                        //     $video_type = "Youtube";
+                        // }
+
+                        $url = '';
+                        if($value1->url){
+                            if($value1->url_type == "Server"){
+                               // $url =   env('APP_URL')."/upload/unit/url/".$value->url;
+                               $url = env('APP_URL').'/'.get_subtitle($value1->unit_id).'/videos/url/'.$value1->url;
+                               $video_type = $value1->url_type;
+                            }
+                            else{
+                                $url = $value1->url;    
+                                $video_type = $value1->url_type;
+                            }
                         }
-                        elseif ($value1->url_type == "Youtube") {
-                            $url = $value1->url;
-                            $video_type = "Youtube";
-                        }
+
+                        
 
                         $c = pdf_view::where(['type' => 'Video','type_id' => $value1->id])->count();
                         if($c)
@@ -96,7 +111,18 @@ class VideosController extends Controller
                         }
                         
 
-	    				$thumbnail = $value1->thumbnail;
+	    				//$thumbnail = $value1->thumbnail;
+                        $thumbnail = '';
+                        if($value1->thumbnail){
+                            if($value1->thumbnail_file_type == "Server"){
+                               // $url =   env('APP_URL')."/upload/unit/url/".$value->url;
+                               $thumbnail = env('APP_URL').'/'.get_subtitle($value1->unit_id).'/videos/thumbnail/'.$value1->thumbnail;
+                            }
+                            else{
+                                $thumbnail = $value1->thumbnail;    
+                            }
+                        }
+
                         $start_time='';
                         if(!empty($value1->start_time)){
                             $start_time = $value1->start_time;

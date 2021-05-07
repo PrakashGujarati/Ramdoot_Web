@@ -91,8 +91,21 @@ class SubjectController extends Controller
                 
 	    		foreach ($getdata as $value) {
                     $readcount=0;
+
                     $url = $value->url;
-	    			$thumbnail = $value->thumbnail;
+
+                    $thumbnail='';
+                    if($value->thumbnail){
+                        if($value->thumbnail_file_type == "Server"){
+                            $thumbnail =  env('APP_URL')."/upload/subject/thumbnail/".$value->thumbnail;       
+                        }
+                        else{
+                            $thumbnail = $value->thumbnail;    
+                        }    
+                    }
+                    
+	    			
+
                     if($request->feature_id == 3){
                         $totalcount = Book::where('subject_id',$value->id)->count();
                         $books = Book::where('subject_id',$value->id)->orderBy('order_no','asc')->get();
