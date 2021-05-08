@@ -70,8 +70,30 @@ class NoteController extends Controller
                         {
                             $is_read = 1;
                         }
-                        $url = $value1->url;
-	    				$thumbnail = $value1->thumbnail;
+                        //$url = $value1->url;
+	    				//$thumbnail = $value1->thumbnail;
+                        $url = '';
+                        if($value1->url){
+                            if($value1->url_type == "Server"){
+                               // $url =   env('APP_URL')."/upload/unit/url/".$value->url;
+                               $url = env('APP_URL').'/'.get_subtitle($value1->unit_id).'/note/url/'.$value1->url;
+                            }
+                            else{
+                                $url = $value1->url;    
+                            }
+                        }
+
+                        $thumbnail = '';
+                        if($value1->thumbnail){
+                            if($value1->thumbnail_file_type == "Server"){
+                               // $url =   env('APP_URL')."/upload/unit/url/".$value->url;
+                               $thumbnail = env('APP_URL').'/'.get_subtitle($value1->unit_id).'/note/thumbnail/'.$value1->thumbnail;
+                            }
+                            else{
+                                $thumbnail = $value1->thumbnail;    
+                            }
+                        }
+
 	    				$bookdata[] = ['id' => $value1->id,'title' => $value1->title,'sub_title' => $value1->sub_title,
                         'url' => $url,'thumbnail' => $thumbnail,
                         'pages' => $value1->pages,'description' => $value1->description,'label' => $value1->label,'release_date' => $value1->release_date,'is_read' => $is_read];

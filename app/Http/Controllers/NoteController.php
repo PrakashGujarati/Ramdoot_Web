@@ -8,6 +8,9 @@ use App\Models\Board;
 use Auth;
 use App\Models\Subject;
 use App\Models\Semester;
+use App\Models\Medium;
+use App\Models\Standard;
+use App\Models\Unit;
 
 class NoteController extends Controller
 {
@@ -64,26 +67,42 @@ class NoteController extends Controller
         {   
 
             $new_name='';
-            if($request->has('thumbnail'))
-            {
-            
-                $image = $request->file('thumbnail');
-                $new_name = rand() . '.' . $image->getClientOriginalExtension();
-                $destinationPath = public_path('upload/note/thumbnail/');
-                $image->move($destinationPath, $new_name);
+            if($request->thumbnail_file_type == 'Server'){
+                if($request->has('thumbnail'))
+                {
+                
+                    $image = $request->file('thumbnail');
+
+                    $url = get_subtitle($request->unit_id).'/note/thumbnail/';
+                    $originalPath = imagePathCreate($url);
+                    $name = time() . mt_rand(10000, 99999);
+                    $new_name = $name . '.' . $image->getClientOriginalExtension();
+                    $image->move($originalPath, $new_name);
+
+                }
+                else{
+                    $new_name = $request->hidden_thumbnail;
+                }
             }
             else{
-                $new_name = $request->hidden_thumbnail;
+                $new_name = $request->thumbnail;
             }
 
             $url_file='';
-            if($request->url_type == 'file'){
+            if($request->url_type == 'Server'){
                 if($request->file('url'))
                 {
                     $image = $request->file('url');
-                    $url_file = time().'.'.$image->getClientOriginalExtension();
-                    $destinationPath = public_path('upload/note/url/');
-                    $image->move($destinationPath, $url_file);
+
+                    $url = get_subtitle($request->unit_id).'/note/url/';
+                    $originalPath = imagePathCreate($url);
+                    $name = time() . mt_rand(10000, 99999);
+                    $url_file = $name . '.' . $image->getClientOriginalExtension();
+                    $image->move($originalPath, $url_file);
+
+                    // $url_file = time().'.'.$image->getClientOriginalExtension();
+                    // $destinationPath = public_path('upload/note/url/');
+                    // $image->move($destinationPath, $url_file);
                 }
                 else{
                     $url_file = $request->hidden_url;
@@ -106,6 +125,7 @@ class NoteController extends Controller
             $add->url_type = $request->url_type;
             $add->url = $url_file;
             $add->thumbnail = $new_name;
+            $add->thumbnail_file_type = $request->thumbnail_file_type;
             $add->pages = isset($request->pages) ? $request->pages:'';
             $add->description = isset($request->description) ? $request->description:'';
             $add->label = $request->label;
@@ -119,30 +139,42 @@ class NoteController extends Controller
         else{
 
             $new_name='';
-            if($request->has('thumbnail'))
+            if($request->thumbnail_file_type == 'Server')
             {
-            
-                $image = $request->file('thumbnail');
-                $new_name = rand() . '.' . $image->getClientOriginalExtension();
-                $destinationPath = public_path('upload/note/thumbnail/');
-                $image->move($destinationPath, $new_name);
+                if($request->has('thumbnail'))
+                {
+                    $image = $request->file('thumbnail');
 
-                // $file_extension = pathinfo($location, PATHINFO_EXTENSION);
-                // $file_extension = strtolower($file_extension);
-
-                // if(in_array($file_extension,$valid_ext)){
-                //     $this->compressImage($image->getPathName(),$location,60);
-                // }
+                    $url = get_subtitle($request->unit_id).'/note/thumbnail/';
+                    $originalPath = imagePathCreate($url);
+                    $name = time() . mt_rand(10000, 99999);
+                    $new_name = $name . '.' . $image->getClientOriginalExtension();
+                    $image->move($originalPath, $new_name);
+                
+                    // $image = $request->file('thumbnail');
+                    // $new_name = rand() . '.' . $image->getClientOriginalExtension();
+                    // $destinationPath = public_path('upload/note/thumbnail/');
+                    // $image->move($destinationPath, $new_name);
+                }
+            }
+            else{
+                $new_name = $request->thumbnail;
             }
 
             $url_file='';
-            if($request->url_type == 'file'){
+            if($request->url_type == 'Server'){
                 if($request->file('url'))
                 {
-                    $image = $request->file('url');
-                    $url_file = time().'.'.$image->getClientOriginalExtension();
-                    $destinationPath = public_path('upload/note/url/');
-                    $image->move($destinationPath, $url_file);
+                    $url = get_subtitle($request->unit_id).'/note/url/';
+                    $originalPath = imagePathCreate($url);
+                    $name = time() . mt_rand(10000, 99999);
+                    $url_file = $name . '.' . $image->getClientOriginalExtension();
+                    $image->move($originalPath, $url_file);
+
+                    // $image = $request->file('url');
+                    // $url_file = time().'.'.$image->getClientOriginalExtension();
+                    // $destinationPath = public_path('upload/note/url/');
+                    // $image->move($destinationPath, $url_file);
                 }    
             }else{
                 $url_file = $request->url;
@@ -171,6 +203,7 @@ class NoteController extends Controller
             $add->url_type = $request->url_type;
             $add->url = $url_file;
             $add->thumbnail = $new_name;
+            $add->thumbnail_file_type = $request->thumbnail_file_type;
             $add->pages = isset($request->pages) ? $request->pages:'';
             $add->description = isset($request->description) ? $request->description:'';
             $add->label = $request->label;
@@ -198,7 +231,18 @@ class NoteController extends Controller
     {
         //$boards = Board::where('status','Active')->get();
         $notedata = Note::where('id',$request->id)->first();
-        return $notedata;
+        $board_sub_title = board::where(['id' => $notedata->board_id])->first();
+        $medium_sub_title = Medium::where(['id' => $notedata->medium_id])->first();
+        $standard_sub_title = Standard::where(['id' => $notedata->standard_id])->first();
+        $semester_sub_title = Semester::where(['id' => $notedata->semester_id])->first();
+        $subject_sub_title = Subject::where(['id' => $notedata->subject_id])->first();
+        $unit_sub_title = Unit::where(['id' => $notedata->unit_id])->first();
+        $sub_title = ['board_sub_title' => $board_sub_title,'medium_sub_title' => $medium_sub_title,
+        'standard_sub_title' => $standard_sub_title,'semester_sub_title' => $semester_sub_title,
+        'subject_sub_title' => $subject_sub_title,'unit_sub_title' => $unit_sub_title];
+        $data = ['notedetails' => $notedata,'sub_title' => $sub_title];
+        return $data;
+       // return $notedata;
         //return view('medium.edit',compact('boards','mediumdata'));
     }
 

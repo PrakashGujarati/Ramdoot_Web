@@ -15,7 +15,7 @@ class BoardsExport implements FromCollection,WithHeadings,ShouldAutoSize, WithEv
     
     public function collection()
     {
-        return Board::select('id','name','sub_title','abbreviation','thumbnail','status','order_no')->where(['status' => 'Active'])->get();
+        return Board::select('id','name','sub_title','abbreviation','thumbnail_file_type','thumbnail','status','order_no')->where(['status' => 'Active'])->get();
     }
 
     public function headings(): array
@@ -25,6 +25,7 @@ class BoardsExport implements FromCollection,WithHeadings,ShouldAutoSize, WithEv
             "Name",
             "Sub Title",
 	    	"Full form of Board/Organisation",
+            "Thumbnail File Type",
 	        "Thumbnail",
 	        "Status",
 	        "Order No",

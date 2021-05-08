@@ -219,7 +219,7 @@ td{
 
                         </div>
 
-                        <div class="row mb-4">
+                        <!-- <div class="row mb-4">
                             <div class="form-group col-lg-3">
                                 <label class="form-label">Image</label>
                                 <div class="form-control-wrap">
@@ -236,6 +236,32 @@ td{
                             <div class="form-group col-lg-9">
                                 <img id="image_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" width="100" />
                             </div>
+                        </div> -->
+
+                        <div class="form-group col-lg-3">
+
+                            <div class="row">
+                                <input type="hidden" name="image_file_type" class="image_file_type" id="image_file_type" value="Drive">
+                                <div class="col-lg-6"><label class="form-label">Image</label></div>
+                                <div class="col-lg-6 text-right"><div class="g">
+                                    <div class="custom-control custom-control-sm custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input imagechk" name="thumbnail_result" value="1" id="thumbnail_result">
+                                        <label class="custom-control-label" for="thumbnail_result"></label>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                            <div class="form-control-wrap">
+                                <input type="text" class="form-control" id="image" name="image" value="">
+                                <input type="hidden" id="hidden_thumbnail" name="hidden_thumbnail" value="">
+                                
+                                @error('thumbnail')
+                                    <span class="text-danger" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                            <img id="image_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" />
                         </div>
 
                         <!-- <div class="form-group">
@@ -364,9 +390,19 @@ td{
       }
     }
 
+    // $("#image").change(function() {
+    //     $('#image_preview').css('display','block');
+    //   readThumbnail(this);
+    // });
+
     $("#image").change(function() {
-        $('#image_preview').css('display','block');
-      readThumbnail(this);
+        if($('.imagechk').prop("checked") == true){
+            $('#image_preview').css('display','block');
+        }
+        else if($('.imagechk').prop("checked") == false){
+            $('#image_preview').css('display','none');
+        }
+        readThumbnail(this);
     });
 
 
@@ -656,8 +692,12 @@ td{
                         $('#label').val('');
                         $('#question_type').val('');
                         $('#level').val('');
-                        $('#image').val('');
+
                         $('#image_preview').css('display','none');
+                        $('.imagechk').prop("checked",false);
+                        $("#image").attr('type', 'text');
+                        $('#image_file_type').val('Drive');
+                        $('#image').val('');
                         
                         $('.dyamictable').empty();
                         $('.dyamictable').html(data.html);
@@ -682,32 +722,52 @@ td{
                   'id':id
             },
             success: function(result) {
-                $('#board_id').val(result.board_id);
+                $('#board_id').val(result.materialdata.board_id);
                 var board_id = $('#board_id').val();
-                var medium_id = result.medium_id;
-                var standard_id = result.standard_id;
-                var semester_id = result.semester_id;
-                var subject_id = result.subject_id;
-                var unit_id = result.unit_id;
+                var medium_id = result.materialdata.medium_id;
+                var standard_id = result.materialdata.standard_id;
+                var semester_id = result.materialdata.semester_id;
+                var subject_id = result.materialdata.subject_id;
+                var unit_id = result.materialdata.unit_id;
                 getMediumEdit(board_id,medium_id);
                 getStandardEdit(board_id,medium_id,standard_id);
                 getSubjectEdit(board_id,medium_id,standard_id,subject_id);
                 getSemesterEdit(board_id,medium_id,standard_id,subject_id,semester_id);
                 getUnitEdit(board_id,medium_id,standard_id,semester_id,subject_id,unit_id);
 
-                $('#question').val(result.question);
-                $('#marks').val(result.marks);
-                $('#answer').val(result.answer);
-                $('#label').val(result.label);
-                $('#question_type').val(result.question_type);
-                $('#level').val(result.level);
+                $('#question').val(result.materialdata.question);
+                $('#marks').val(result.materialdata.marks);
+                $('#answer').val(result.materialdata.answer);
+                $('#label').val(result.materialdata.label);
+                $('#question_type').val(result.materialdata.question_type);
+                $('#level').val(result.materialdata.level);
 
-                $('#hidden_image').val(result.image);
-                $('#image_preview').css('display','block');
-                var image_path = "{{ env('APP_URL') }}"+"/upload/material/thumbnail/"+result.image;
-                $('#image_preview').attr('src', image_path);
+                if(result.materialdata.image_file_type == 'Drive'){
+
+                    $('.imagechk').prop("checked",false);
+                    $('#hidden_image').val(result.materialdata.image);
+                    $('#image').val(result.materialdata.image);
+                    $('#image_preview').css('display','none');
+                    $("#image").attr('type', 'text');
+                    $('#image_file_type').val('Drive');
+            
+                }
+                else{
+                    $('.imagechk').prop("checked",true);
+                    $('#hidden_image').val(result.materialdata.image);
+                    $('#image_preview').css('display','block');
+                    $("#image").attr('type', 'file');
+                    $('#image_file_type').val('Server');                
+
+                    var image_path = "{{ env('APP_URL') }}"+"/data/"+board_id+'_'+result.sub_title.board_sub_title.sub_title+"/"+medium_id+'_'+result.sub_title.medium_sub_title.sub_title+"/"+standard_id+'_'+
+                result.sub_title.standard_sub_title.sub_title
+                +"/"+subject_id+'_'+result.sub_title.subject_sub_title.sub_title+"/"+semester_id+'_'+
+                result.sub_title.semester_sub_title.sub_title+"/"+unit_id+'_'+result.sub_title.unit_sub_title.sub_title+"/material/thumbnail/"+result.materialdata.image;
+                    $('#image_preview').attr('src', image_path);
+                }
+
                 
-                $('#hidden_id').val(result.id);
+                $('#hidden_id').val(result.materialdata.id);
                 //$('#thumbnail').val('');
             }            
         });
@@ -789,6 +849,20 @@ $(document).on('click','.status_change', function() {
             $(".datatable-init").DataTable();
         }            
     });
+});
+
+$(document).on('change','.imagechk',function(){
+    if($(this).prop("checked") == true){
+        $("#image").attr('type', 'file');
+        $('#image_file_type').val('Server');
+        $('#image').val('');
+    }
+    else if($(this).prop("checked") == false){
+        $("#image").attr('type', 'text');
+        $('#image_file_type').val('Drive');
+        $('#image').val('');
+        $('#image_preview').css('display','none');
+    }
 });
 
 </script>

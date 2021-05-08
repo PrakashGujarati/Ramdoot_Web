@@ -10,7 +10,7 @@ class Note extends Model
     use HasFactory;
     protected $table = 'notes';
     protected $fillable = ['board_id','medium_id','standard_id','subject_id','semester_id','unit_id','user_id',
-    'title','sub_title','url_type','url','thumbnail','pages','description','edition','label','release_date','status','order_no'];
+    'title','sub_title','url_type','url','thumbnail','thumbnail_file_type','pages','description','edition','label','release_date','status','order_no'];
 
     public function board()
 	{

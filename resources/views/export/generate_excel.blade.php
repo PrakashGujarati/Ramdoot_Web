@@ -21,7 +21,7 @@ td{
 	    	<div class="card h-100">
 	            <div class="card-inner">
 	                <div class="card-head">
-	                    <h5 class="card-title">Generate Excel</h5>
+	                    <h5 class="card-title">Generate Excel dsf</h5>
 	                </div>
 	            
 	            <form action="{{ route('get.generate.specific.excel') }}" method="POST" enctype='multipart/form-data' id="board_form">

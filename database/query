@@ -1,4 +1,39 @@
 
+-----------------------04-05-2021 -------------------
+
+ALTER TABLE `notifications` ADD `image` VARCHAR(255) NULL DEFAULT NULL AFTER `message`;
+
+
+-----------------------03-05-2021 -------------------
+
+ALTER TABLE `videos` ADD `thumbnail_file_type` ENUM('Youtube','Server','Drive') NULL AFTER `url`;
+
+ALTER TABLE `videos` CHANGE `url_type` `url_type` ENUM('Youtube','Server','Drive') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;
+
+-----------------------02-05-2021 -------------------
+
+ALTER TABLE `books` ADD `thumbnail_file_type` ENUM('Server','Drive') NULL AFTER `url`;
+
+ALTER TABLE `notes` ADD `thumbnail_file_type` ENUM('Server','Drive') NULL AFTER `url`;
+
+ALTER TABLE `solutions` ADD `image_file_type` ENUM('Server','Drive') NULL AFTER `marks`;
+
+ALTER TABLE `materials` ADD `image_file_type` ENUM('Server','Drive') NULL AFTER `marks`;
+
+ALTER TABLE `papers` ADD `thumbnail_file_type` ENUM('Server','Drive') NULL AFTER `url`;
+
+ALTER TABLE `worksheets` ADD `thumbnail_file_type` ENUM('Server','Drive') NULL AFTER `url`;
+
+-----------------------01-05-2021 -------------------
+
+ALTER TABLE `boards` ADD `thumbnail_file_type` ENUM('Server','Drive') NULL AFTER `url`;
+
+ALTER TABLE `standards` ADD `thumbnail_file_type` ENUM('Server','Drive') NULL AFTER `semester`;
+
+ALTER TABLE `subjects` ADD `thumbnail_file_type` ENUM('Server','Drive') NULL AFTER `url`;
+
+ALTER TABLE `units` ADD `thumbnail_file_type` ENUM('Server','Drive') NULL AFTER `url`;
+
 -----------------------29-04-2021 -------------------
 
 CREATE TABLE `notifications` (

@@ -91,31 +91,35 @@ class UnitController extends Controller
         if($request->hidden_id != "0")
         {
             $new_name='';
-            if($request->thumbnail)
-            {
-            
-                $image = $request->thumbnail;
+            if($request->thumbnail_file_type == 'Server'){
+                if($request->thumbnail)
+                {
+                
+                    $image = $request->thumbnail;
 
-                $new_name = rand() . '.' . $image->getClientOriginalExtension();
+                    $new_name = rand() . '.' . $image->getClientOriginalExtension();
 
-                $valid_ext = array('png','jpeg','jpg');
+                    $valid_ext = array('png','jpeg','jpg');
 
-                // Location
-                $location = public_path('upload/unit/thumbnail/').$new_name;
+                    // Location
+                    $location = public_path('upload/unit/thumbnail/').$new_name;
 
-                $file_extension = pathinfo($location, PATHINFO_EXTENSION);
-                $file_extension = strtolower($file_extension);
+                    $file_extension = pathinfo($location, PATHINFO_EXTENSION);
+                    $file_extension = strtolower($file_extension);
 
-                if(in_array($file_extension,$valid_ext)){
-                    $this->compressImage($image->getPathName(),$location,60);
+                    if(in_array($file_extension,$valid_ext)){
+                        $this->compressImage($image->getPathName(),$location,60);
+                    }
                 }
-            }
-            else{
-                $new_name = $request->hidden_thumbnail;
+                else{
+                    $new_name = $request->hidden_thumbnail;
+                }
+            }else{
+              $new_name = $request->thumbnail;
             }
 
             $url_file='';
-            if($request->url_type == 'file'){
+            if($request->url_type == 'Server'){
                 if($request->url)
                 {
                     $image = $request->url;
@@ -141,6 +145,7 @@ class UnitController extends Controller
             $add->url_type = $request->url_type;
             $add->url = $url_file;
             $add->thumbnail = $new_name;
+            $add->thumbnail_file_type = $request->thumbnail_file_type;
             $add->pages = isset($request->pages) ? $request->pages:'';
             $add->description = isset($request->description) ? $request->description:'';
             $add->save();
@@ -150,28 +155,33 @@ class UnitController extends Controller
         else{
 
             $new_name='';
-            if($request->thumbnail)
-            {
-            
-                $image = $request->thumbnail;
+            if($request->thumbnail_file_type == 'Server'){
+                if($request->thumbnail)
+                {
+                
+                    $image = $request->thumbnail;
 
-                $new_name = rand() . '.' . $image->getClientOriginalExtension();
+                    $new_name = rand() . '.' . $image->getClientOriginalExtension();
 
-                $valid_ext = array('png','jpeg','jpg');
+                    $valid_ext = array('png','jpeg','jpg');
 
-                // Location
-                $location = public_path('upload/unit/thumbnail/').$new_name;
+                    // Location
+                    $location = public_path('upload/unit/thumbnail/').$new_name;
 
-                $file_extension = pathinfo($location, PATHINFO_EXTENSION);
-                $file_extension = strtolower($file_extension);
+                    $file_extension = pathinfo($location, PATHINFO_EXTENSION);
+                    $file_extension = strtolower($file_extension);
 
-                if(in_array($file_extension,$valid_ext)){
-                    $this->compressImage($image->getPathName(),$location,60);
+                    if(in_array($file_extension,$valid_ext)){
+                        $this->compressImage($image->getPathName(),$location,60);
+                    }
                 }
+            }
+            else{
+              $new_name = $request->thumbnail;
             }
 
             $url_file='';
-            if($request->url_type == 'file'){
+            if($request->url_type == 'Server'){
                 if($request->url)
                 {
                     $image = $request->url;
@@ -204,6 +214,7 @@ class UnitController extends Controller
             $add->url_type = $request->url_type;
             $add->url = $url_file;
             $add->thumbnail = $new_name;
+            $add->thumbnail_file_type = $request->thumbnail_file_type;
             $add->pages = isset($request->pages) ? $request->pages:'';
             $add->description = isset($request->description) ? $request->description:'';
             $add->order_no=$last_no;

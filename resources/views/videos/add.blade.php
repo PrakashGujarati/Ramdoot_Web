@@ -197,20 +197,24 @@ td{
                         </div>
 
                         <div class="row">
-                            <div class="form-group col-lg-4">
+                            <div class="form-group col-lg-2">
+                                <label class="form-label">URL Type</label>
+                                <div class="form-control-wrap">
+                                    <select name="url_type" class="form-control url_type" id="url_type">
+                                        <option value="Youtube">Youtube</option>
+                                        <option value="Drive">Drive</option>
+                                        <option value="Server">Server</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-lg-3">
                                 <div class="row">
-                                    <input type="hidden" name="url_type" class="url_type" id="url_type" value="file">
                                     <div class="col-lg-6"><label class="form-label">Url</label></div>
-                                    <div class="col-lg-6 text-right"><div class="g">
-                                        <div class="custom-control custom-control-sm custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input urlchk" name="instant_result" value="1" id="instant_result">
-                                            <label class="custom-control-label" for="instant_result"></label>
-                                        </div>
-                                    </div>
-                                    </div>
+
                                 </div>
                                 <div class="form-control-wrap">
-                                    <input type="file" class="form-control" id="url" name="url" value="">
+                                    <input type="text" class="form-control" id="url" name="url" value="">
                                     <input type="hidden" id="hidden_url" name="hidden_url" value="">
                                     <img id="url_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" width="100" />
                                     @error('url')
@@ -221,10 +225,21 @@ td{
                                 </div>
                             </div>
 
-                            <div class="form-group col-lg-4">
+                            <div class="form-group col-lg-2">
+                                <label class="form-label">Thumbnail Type</label>
+                                <div class="form-control-wrap">
+                                    <select name="thumbnail_file_type" class="form-control thumbnail_file_type" id="thumbnail_file_type">
+                                        <option value="Youtube">Youtube</option>
+                                        <option value="Drive">Drive</option>
+                                        <option value="Server">Server</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-lg-3">
                                 <label class="form-label">Thumbnail</label>
                                 <div class="form-control-wrap">
-                                    <input type="file" class="form-control" id="thumbnail" name="thumbnail" value="">
+                                    <input type="text" class="form-control" id="thumbnail" name="thumbnail" value="">
                                     <input type="hidden" id="hidden_thumbnail" name="hidden_thumbnail" value="">
                                     <img id="thumbnail_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" width="100" />
                                     @error('thumbnail')
@@ -236,7 +251,7 @@ td{
                             </div>
                             
 
-                            <div class="form-group col-lg-4">
+                            <div class="form-group col-lg-2">
                                 <label class="form-label">Label</label>
                                 <div class="form-control-wrap">
                                     <select class="form-control" id="label" name="label">
@@ -397,10 +412,10 @@ td{
       }
     }
 
-    $("#thumbnail").change(function() {
-        $('#thumbnail_preview').css('display','block');
-      readThumbnail(this);
-    });
+    // $("#thumbnail").change(function() {
+    //     $('#thumbnail_preview').css('display','block');
+    //   (this);
+    // });
 
     function readURL(input) {
       if (input.files && input.files[0]) {
@@ -417,11 +432,28 @@ td{
     $("#url").change(function() {
         var url_type = $('#url_type').val();
 
-        if(url_type == "file"){
+        if(url_type == "Server"){
             $('#url_preview').css('display','block');
             readURL(this);
         }
+        else{
+            $('#url_preview').css('display','none');
+        }
     });
+
+    $("#thumbnail").change(function() {
+        var thumbnail_file_type = $('#thumbnail_file_type').val();
+
+        if(thumbnail_file_type == "Server"){
+            $('#thumbnail_preview').css('display','block');
+            readThumbnail(this);
+        }
+        else{
+            $('#thumbnail_preview').css('display','none');
+        }
+    });
+
+    
 
 
     $( document ).ready(function() {
@@ -731,12 +763,15 @@ $(document).ready(function () {
                     $('#start_time').val('');
                     $('#description').val('');
 
-                    $('#thumbnail').val('');
                     $('#thumbnail_preview').css('display','none');
+                    $("#thumbnail").attr('type', 'text');
+                    $('#thumbnail_file_type').val('Youtube');
+                    $('#thumbnail').val('');
 
-                    $('#url').val('');
                     $('#url_preview').css('display','none');
-                    $('.urlchk').prop("checked",false);
+                    $("#url").attr('type', 'text');
+                    $('#url_type').val('Youtube');
+                    $('#hidden_url').val('');
                     $('#hidden_id').val('0');
                     
                     $('.dyamictable').empty();
@@ -749,19 +784,19 @@ $(document).ready(function () {
     
 });
 
-$(document).on('change','.urlchk',function(){
-    if($(this).prop("checked") == true){
-        $("#url").attr('type', 'text');
-        $('#url_type').val('text');
-        $('#url').val('');
-        $('#url_preview').css('display','none');
-    }
-    else if($(this).prop("checked") == false){
-        $("#url").attr('type', 'file');
-        $('#url_type').val('file');
-        $('#url').val('');
-    }
-});
+// $(document).on('change','.urlchk',function(){
+//     if($(this).prop("checked") == true){
+//         $("#url").attr('type', 'text');
+//         $('#url_type').val('text');
+//         $('#url').val('');
+//         $('#url_preview').css('display','none');
+//     }
+//     else if($(this).prop("checked") == false){
+//         $("#url").attr('type', 'file');
+//         $('#url_type').val('file');
+//         $('#url').val('');
+//     }
+// });
 
 
 $(document).on('click','.edit-btn',function(){
@@ -776,46 +811,73 @@ $(document).on('click','.edit-btn',function(){
               'id':id
         },
         success: function(result) {
-            $('#board_id').val(result.board_id);
+            $('#board_id').val(result.videodetails.board_id);
             var board_id = $('#board_id').val();
-            var medium_id = result.medium_id;
-            var standard_id = result.standard_id;
-            var semester_id = result.semester_id;
-            var subject_id = result.subject_id;
-            var unit_id = result.unit_id;
+            var medium_id = result.videodetails.medium_id;
+            var standard_id = result.videodetails.standard_id;
+            var semester_id = result.videodetails.semester_id;
+            var subject_id = result.videodetails.subject_id;
+            var unit_id = result.videodetails.unit_id;
             getMediumEdit(board_id,medium_id);
             getStandardEdit(board_id,medium_id,standard_id);
             getSubjectEdit(board_id,medium_id,standard_id,subject_id);
             getSemesterEdit(board_id,medium_id,standard_id,subject_id,semester_id);
             getUnitEdit(board_id,medium_id,standard_id,semester_id,subject_id,unit_id);
 
-            $('#title').val(result.title);
-            $('#sub_title').val(result.sub_title);
-            $('#description').val(result.description);
-            $('#duration').val(result.duration);
-            $('#label').val(result.label);
-            $('#start_time').val(result.start_time);
-            $('#release_date').val(result.release_date);
-            $('#edition').val(result.edition);
-            if(result.url_type == 'file'){
-                $('#hidden_url').val(result.url);
-                $('#url_preview').css('display','block');
-                var url_path = "{{ env('APP_URL') }}"+"/upload/videos/url/"+result.url;
-                $('#url_preview').attr('src', url_path);    
+            $('#title').val(result.videodetails.title);
+            $('#sub_title').val(result.videodetails.sub_title);
+            $('#description').val(result.videodetails.description);
+            $('#duration').val(result.videodetails.duration);
+            $('#label').val(result.videodetails.label);
+            $('#start_time').val(result.videodetails.start_time);
+            $('#release_date').val(result.videodetails.release_date);
+            $('#edition').val(result.videodetails.edition);
+
+            if(result.videodetails.thumbnail_file_type == 'Drive' || result.videodetails.thumbnail_file_type == 'Youtube'){
+
+                $('#hidden_thumbnail').val(result.videodetails.thumbnail);
+                $('#thumbnail').val(result.videodetails.thumbnail);
+                $('#thumbnail_preview').css('display','none');
+                $("#thumbnail").attr('type', 'text');
+                $('#thumbnail_file_type').val(result.videodetails.thumbnail_file_type);
+        
             }
             else{
-                $('.urlchk').prop("checked",true);
-                $("#url").attr('type', 'text');
-                $('#url_type').val('text');
-                $('#url_preview').css('display','none');   
-                $('#url').val(result.url);
+                $('#hidden_thumbnail').val(result.videodetails.thumbnail);
+                $('#thumbnail_preview').css('display','block');
+                $("#thumbnail").attr('type', 'file');
+                $('#thumbnail_file_type').val('Server'); 
+                var thumbnail_path = "{{ env('APP_URL') }}"+"/data/"+board_id+'_'+result.sub_title.board_sub_title.sub_title+"/"+medium_id+'_'+result.sub_title.medium_sub_title.sub_title+"/"+standard_id+'_'+
+                result.sub_title.standard_sub_title.sub_title
+                +"/"+subject_id+'_'+result.sub_title.subject_sub_title.sub_title+"/"+semester_id+'_'+
+                result.sub_title.semester_sub_title.sub_title+"/"+unit_id+'_'+result.sub_title.unit_sub_title.sub_title+"/videos/thumbnail/"+result.videodetails.thumbnail;
+                $('#thumbnail_preview').attr('src', thumbnail_path);               
             }
-            $('#hidden_thumbnail').val(result.thumbnail);
-            $('#thumbnail_preview').css('display','block');
-            var thumbnail_path = "{{ env('APP_URL') }}"+"/upload/videos/thumbnail/"+result.thumbnail;
-            $('#thumbnail_preview').attr('src', thumbnail_path);
+
+            //alert(result.url_type);
+            if(result.videodetails.url_type == 'Drive' || result.videodetails.url_type == 'Youtube'){
+                $("#url").attr('type', 'text');
+                $('#url_type').val(result.videodetails.url_type);
+                $('#url_preview').css('display','none');   
+                $('#url').val(result.videodetails.url);
+            }
+            else{
+                $("#url").attr('type', 'file');
+                $('#hidden_url').val(result.videodetails.url);
+                $('#url_preview').css('display','block');
+                $('#url_type').val('Server');
+                var url_path = "{{ env('APP_URL') }}"+"/data/"+board_id+'_'+result.sub_title.board_sub_title.sub_title+"/"+medium_id+'_'+result.sub_title.medium_sub_title.sub_title+"/"+standard_id+'_'+
+                result.sub_title.standard_sub_title.sub_title
+                +"/"+subject_id+'_'+result.sub_title.subject_sub_title.sub_title+"/"+semester_id+'_'+
+                result.sub_title.semester_sub_title.sub_title+"/"+unit_id+'_'+result.sub_title.unit_sub_title.sub_title+"/videos/url/"+result.videodetails.url;
+                $('#url_preview').attr('src', url_path);  
+            }
+
+            // $('#hidden_thumbnail').val(result.thumbnail);
+            // $('#thumbnail_preview').css('display','block');
             
-            $('#hidden_id').val(result.id);
+            
+            $('#hidden_id').val(result.videodetails.id);
             //$('#thumbnail').val('');
         }            
     });
@@ -907,6 +969,36 @@ $(document).on('click','.status_change', function() {
         }            
     });
 });
+
+
+$(document).on('change','#thumbnail_file_type',function(){
+    var getval = $(this).val();
+    if(getval == "Server"){
+        $("#thumbnail").attr('type', 'file');
+        $('#thumbnail_file_type').val('Server');
+        $('#thumbnail').val('');
+    } 
+    else{
+        $("#thumbnail").attr('type', 'text');
+        $('#thumbnail').val('');
+        $('#thumbnail_preview').css('display','none'); 
+    }
+});
+
+$(document).on('change','#url_type',function(){
+    var getval = $(this).val();
+    if(getval == "Server"){
+        $("#url").attr('type', 'file');
+        $('#url_type').val('Server');
+        $('#url').val('');
+    } 
+    else{
+        $("#url").attr('type', 'text');
+        $('#url').val('');
+        $('#url_preview').css('display','none'); 
+    }
+});
+
 
 </script>
 

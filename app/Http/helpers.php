@@ -5,6 +5,12 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\UserDataLog;
 use App\Models\UserDataReview;
 use Illuminate\Support\Facades\DB;
+use App\Models\Unit;
+use App\Models\board;
+use App\Models\Medium;
+use App\Models\Standard;
+use App\Models\Semester;
+use App\Models\Subject;
 
 function storeLog($type,$type_id,$upload_time,$operation)
 {
@@ -140,6 +146,20 @@ function imagePathCreate($imagePath = ''){
         return $originalPath."/";
     }
     return public_path()."/upload/";
+}
+
+function get_subtitle($unit_id){
+    $unit = Unit::where(['id' => $unit_id])->first();
+    $board_sub_title = board::select('sub_title')->where(['id' => $unit->board_id])->first();
+    $medium_sub_title = Medium::select('sub_title')->where(['id' => $unit->medium_id])->first();
+    $standard_sub_title = Standard::select('sub_title')->where(['id' => $unit->standard_id])->first();
+    $semester_sub_title = Semester::select('sub_title')->where(['id' => $unit->semester_id])->first();
+    $subject_sub_title = Subject::select('sub_title')->where(['id' => $unit->subject_id])->first();
+
+    return $url = 'data/'.$unit->board_id.'_'.$board_sub_title->sub_title.'/'.$unit->medium_id.'_'.
+                    $medium_sub_title->sub_title.'/'.$unit->standard_id.'_'.$standard_sub_title->sub_title.'/'.
+                    $unit->subject_id.'_'.$subject_sub_title->sub_title.'/'.
+                    $unit->semester_id.'_'.$semester_sub_title->sub_title.'/'.$unit->id.'_'.$unit->sub_title;
 }
 
 
