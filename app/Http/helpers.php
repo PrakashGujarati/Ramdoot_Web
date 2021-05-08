@@ -6,7 +6,7 @@ use App\Models\UserDataLog;
 use App\Models\UserDataReview;
 use Illuminate\Support\Facades\DB;
 use App\Models\Unit;
-use App\Models\board;
+use App\Models\Board;
 use App\Models\Medium;
 use App\Models\Standard;
 use App\Models\Semester;
