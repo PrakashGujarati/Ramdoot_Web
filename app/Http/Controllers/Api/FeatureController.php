@@ -111,7 +111,7 @@ class FeatureController extends Controller
                         }
                     }
                     
-                    $data[] = ['id' => $value->id,'unit_title' =>$value->title,'page_no' => $value->pages,'features' => $featuredata,'sub_title'=>$value->description,'totalQuestionCount' =>$totalQuestionCount];
+                    $data[] = ['id' => $value->id,'unit_title' =>$value->title,'page_no' => $value->pages,'features' => $featuredata,'sub_title'=>$value->sub_title,'totalQuestionCount' =>$totalQuestionCount];
                 }
                 
                 return response()->json([

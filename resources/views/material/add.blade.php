@@ -10,6 +10,9 @@ td{
     text-overflow: ellipsis;
     white-space: normal !important;
 }
+#cke_1_contents{
+    height: 120px!important;
+}
 </style>
 
 @endsection
@@ -127,7 +130,8 @@ td{
                         <div class="form-group">
                             <label class="form-label">Question</label>
                             <div class="form-control-wrap">
-                                <input type="text" class="form-control" id="question" name="question" value="{{ old('question') }}">
+                                <textarea name="question" id="question">{{ old('question') }}</textarea>
+                                <!-- <input type="text" class="form-control" id="question" name="question" value="{{ old('question') }}"> -->
                                 @error('question')
                                     <span class="text-danger" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -139,7 +143,8 @@ td{
                         <div class="form-group">
                             <label class="form-label">Answer</label>
                             <div class="form-control-wrap">
-                                <input type="text" class="form-control" id="answer" name="answer" value="{{ old('answer') }}">
+                                <textarea name="answer" id="answer">{{ old('answer') }}</textarea>
+                                <!-- <input type="text" class="form-control" id="answer" name="answer" value="{{ old('answer') }}"> -->
                                 @error('answer')
                                     <span class="text-danger" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -183,12 +188,13 @@ td{
                             <div class="form-group col-lg-3">
                                 <label class="form-label">Question Type</label>
                                 <div class="form-control-wrap">
-                                    <select class="form-control" id="question_type" name="question_type">
+                                    <input type="text" class="form-control" id="question_type" name="question_type" value="{{ old('question_type') }}">
+                                    {{--<select class="form-control" id="question_type" name="question_type">
                                         <option value="">--Select Question Type--</option>
                                         @foreach($question_type_details as $question_type)
                                             <option value="{{ $question_type->id }}">{{ $question_type->question_type }}</option>
                                         @endforeach
-                                    </select>
+                                    </select>--}}
                                     @error('question_type')
                                         <span class="text-danger" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -253,7 +259,7 @@ td{
                             </div>
                             <div class="form-control-wrap">
                                 <input type="text" class="form-control" id="image" name="image" value="">
-                                <input type="hidden" id="hidden_thumbnail" name="hidden_thumbnail" value="">
+                                <input type="hidden" id="hidden_image" name="hidden_image" value="">
                                 
                                 @error('thumbnail')
                                     <span class="text-danger" role="alert">
@@ -338,8 +344,25 @@ td{
 @endsection
 
 @section('scripts')
+<script src="https://cdn.ckeditor.com/4.16.0/standard/ckeditor.js"></script>
 
 <script type="text/javascript">
+
+    $(function(){
+        var $ckfield = CKEDITOR.replace( 'question' );
+
+        $ckfield.on('change', function() {
+          $ckfield.updateElement();         
+        });
+    });
+
+    $(function(){
+        var $ckfield1 = CKEDITOR.replace( 'answer' );
+
+        $ckfield1.on('change', function() {
+          $ckfield1.updateElement();         
+        });
+    });
 
     $(document).on('click','.above_order', function() {
         var order_no=$(this).data('order_no');
@@ -593,6 +616,12 @@ td{
         var semester_id = $('.semester_id').val();
         var subject_id = $('.subject_id').val();
         getSemester(board_id,medium_id,standard_id,subject_id);
+        $('#question_type').autocomplete({
+            serviceUrl: '{{url("load_autocomplete/material/question_type")}}/'+board_id+'/'+medium_id+'/'+standard_id+'/'+subject_id,
+            onSelect: function (suggestion) {
+                    $(this).val(suggestion.data);
+            }
+        });
         //getUnit(board_id,medium_id,standard_id,semester_id,subject_id);
     });
 
@@ -692,6 +721,9 @@ td{
                         $('#label').val('');
                         $('#question_type').val('');
                         $('#level').val('');
+                        var blank = '';
+                        CKEDITOR.instances['question'].setData(blank);
+                        CKEDITOR.instances['answer'].setData(blank);
 
                         $('#image_preview').css('display','none');
                         $('.imagechk').prop("checked",false);
@@ -735,9 +767,11 @@ td{
                 getSemesterEdit(board_id,medium_id,standard_id,subject_id,semester_id);
                 getUnitEdit(board_id,medium_id,standard_id,semester_id,subject_id,unit_id);
 
-                $('#question').val(result.materialdata.question);
+                CKEDITOR.instances['question'].setData(result.materialdata.question);
+                CKEDITOR.instances['answer'].setData(result.materialdata.answer);
+                //$('#question').val(result.materialdata.question);
                 $('#marks').val(result.materialdata.marks);
-                $('#answer').val(result.materialdata.answer);
+                //$('#answer').val(result.materialdata.answer);
                 $('#label').val(result.materialdata.label);
                 $('#question_type').val(result.materialdata.question_type);
                 $('#level').val(result.materialdata.level);
@@ -811,6 +845,9 @@ td{
                             $('#label').val('');
                             $('#question_type').val('');
                             $('#level').val('');
+                            var blank = '';
+                            CKEDITOR.instances['question'].setData(blank);
+                            CKEDITOR.instances['answer'].setData(blank);
 
                             $('#image').val('');
                             $('#image_preview').css('display','none');
@@ -863,6 +900,34 @@ $(document).on('change','.imagechk',function(){
         $('#image').val('');
         $('#image_preview').css('display','none');
     }
+});
+
+$(document).ready(function(){
+
+    var board_id = $('.board_id').val();
+    var medium_id = $('.medium_id').val();
+    var standard_id = $('.standard_id').val();
+    var subject_id = $('.subject_id').val();
+    if(board_id == '');{
+        board_id = 0;
+    }
+    if(medium_id == '');{
+        medium_id = 0;
+    }
+    if(standard_id == '');{
+        standard_id = 0;
+    }
+    if(subject_id == '');{
+        subject_id = 0;
+    }
+
+    $('#question_type').autocomplete({
+        serviceUrl: '{{url("load_autocomplete/material/question_type")}}/'+board_id+'/'+medium_id+'/'+standard_id+'/'+subject_id,
+        onSelect: function (suggestion) {
+                $(this).val(suggestion.data);
+        }
+    });
+
 });
 
 </script>

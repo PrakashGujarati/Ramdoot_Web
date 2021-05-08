@@ -168,6 +168,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::post('solution/{id}/update', [SolutionController::class, 'update'])->name('solution.update');
 	Route::get('solution/delete', [SolutionController::class, 'distroy'])->name('solution.distroy');
 
+	Route::get('load_autocomplete/solution/question_type/{board_id}/{medium_id}/{standard_id}/{subject_id}',[SolutionController::class,'load_autocomplete_solution'])->name('load_autocomplete.solution.question_type');
 
 	/*materials*/
 	Route::get('material', [MaterialController::class, 'index'])->name('material.index');
@@ -176,6 +177,8 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('material/edit', [MaterialController::class, 'edit'])->name('material.edit');
 	Route::post('material/{id}/update', [MaterialController::class, 'update'])->name('material.update');
 	Route::get('material/delete', [MaterialController::class, 'distroy'])->name('material.distroy');
+
+	Route::get('load_autocomplete/material/question_type/{board_id}/{medium_id}/{standard_id}/{subject_id}',[MaterialController::class,'load_autocomplete_material'])->name('load_autocomplete.material.question_type');
 
 	/*papers*/
 	Route::get('paper', [PaperController::class, 'index'])->name('paper.index');
