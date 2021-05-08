@@ -56,8 +56,8 @@
                         <td>{{ isset($data->semester->semester) ? $data->semester->semester:'' }}</td>
                         <td>{{ isset($data->subject->subject_name) ? $data->subject->subject_name:'' }}</td>--}}
                         <td>{{ isset($data->unit->title) ? $data->unit->title:'' }}</td>
-                        <td>{{ $data->question }}</td>
-                        <td>{{ $data->answer }}</td>
+                        <td>{!! $data->question !!}</td>
+                        <td>{!! $data->answer !!}</td>
                         <td>{{ $data->marks }}</td>
                         <td>{{ $data->label }}</td>
                         <td>

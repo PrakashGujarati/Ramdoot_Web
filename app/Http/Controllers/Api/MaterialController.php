@@ -59,8 +59,21 @@ class MaterialController extends Controller
                     $materialdata=[];
                     foreach ($getdata_material as $value_sub) {
 
-                        $image = $value_sub->image;
-                        $materialdata[] = ['id' => $value_sub->id,'question' => $value_sub->question,'sub_title'=>$value->sub_title,'answer' => $value_sub->answer,'marks' => $value_sub->marks,'image' => $image,'label' => $value_sub->label];
+                        //$image = $value_sub->image;
+                        $image = '';
+                        if($value_sub->image){
+                            if($value_sub->image_file_type == "Server"){
+                               // $url =   env('APP_URL')."/upload/unit/url/".$value->url;
+                               $image = env('APP_URL').'/'.get_subtitle($value_sub->unit_id).'/material/thumbnail/'.
+                               $value_sub->image;
+                            }
+                            else{
+                                $image = $value_sub->image;
+                            }
+                        }
+
+                        $materialdata[] = ['id' => $value_sub->id,'question' => $value_sub->question,'sub_title'=>
+                        isset($value->sub_title) ? $value->sub_title:'','answer' => $value_sub->answer,'marks' => $value_sub->marks,'image' => $image,'label' => $value_sub->label];
                     }    
 
                     $getquestion_type_details = QuestionType::where(['id' => $value1->question_type])->first();

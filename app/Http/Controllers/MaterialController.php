@@ -368,4 +368,25 @@ class MaterialController extends Controller
         $data = ['html' => $html];
         return response()->json($data);    
     }
+
+    public function load_autocomplete_material(request $request,$board_id,$medium_id,$standard_id,$subject_id)
+    {
+        //dd($request->all(),$board_id,$medium_id,$standard_id,$subject_id);
+        $response=[];
+        
+        $lead_detail=Material::where('question_type', 'like', '%' . $request['query'] . '%')
+        ->where('status','!=','Deleted')->where(['board_id' => isset($board_id) ? $board_id:0,'medium_id' => 
+          isset($medium_id) ? $medium_id:0,'standard_id' => isset($standard_id) ? $standard_id:0,'subject_id' => 
+          isset($subject_id) ? $subject_id:0])->groupBy('question_type')->get();
+        
+
+        if(count($lead_detail) > 0)
+        {
+            foreach ($lead_detail as $value) {
+                $response[] = array("value"=>$value->question_type,"data"=>$value->question_type);
+            }   
+        }
+        return json_encode(array("suggestions" => $response));
+    }
+    
 }

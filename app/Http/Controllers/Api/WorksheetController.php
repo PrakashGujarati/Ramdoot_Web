@@ -78,7 +78,16 @@ class WorksheetController extends Controller
                             $is_read = 1;
                         }   
 
-                        $url = $value1->url;
+                        if($value1->url){
+                            if($value1->url_type == "Server"){
+                               // $url =   env('APP_URL')."/upload/unit/url/".$value->url;
+                               $url = env('APP_URL').'/'.get_subtitle($value1->unit_id).'/worksheet/url/'.$value1->url;
+                            }
+                            else{
+                                $url = $value1->url;    
+                            }
+                        }
+                        //$url = $value1->url;
 	    				$worksheetdata[] = ['id' => $value1->id,'title' => $value1->title,'url' => $url,'type' => $value1->type,'sub_title'=>$value->sub_title,'description' => $value1->description,'label' => $value1->label,'is_read' => $is_read];
 	    			}
 

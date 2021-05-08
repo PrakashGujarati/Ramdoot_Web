@@ -1,4 +1,10 @@
 
+-----------------------08-05-2021 -------------------
+
+ALTER TABLE `solutions` CHANGE `question_type` `question_type` VARCHAR(255) NULL DEFAULT NULL;
+
+ALTER TABLE `materials` CHANGE `question_type` `question_type` VARCHAR(255) NULL DEFAULT NULL;
+
 -----------------------04-05-2021 -------------------
 
 ALTER TABLE `notifications` ADD `image` VARCHAR(255) NULL DEFAULT NULL AFTER `message`;

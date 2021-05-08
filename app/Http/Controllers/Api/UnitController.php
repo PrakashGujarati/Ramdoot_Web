@@ -76,8 +76,28 @@ class UnitController extends Controller
                     $data=[];$totalcount=0;
                     foreach ($getdata as $value) {
                         $readcount=0;
-                        $url = $value->url;
-                        $thumbnail = $value->thumbnail;
+
+                        //$url = $value->url;
+                        $url = '';
+                        if($value->url){
+                            if($value->url_type == "Server"){
+                                $url =  env('APP_URL')."/upload/unit/url/".$value->url;       
+                            }
+                            else{
+                                $url = $value->url;    
+                            }
+                        }
+
+
+                        $thumbnail='';
+                        if($value->thumbnail){
+                            if($value->thumbnail_file_type == "Server"){
+                                $thumbnail =  env('APP_URL')."/upload/unit/thumbnail/".$value->thumbnail;       
+                            }
+                            else{
+                                $thumbnail = $value->thumbnail;    
+                            }    
+                        }
 
                         if($request->feature_id != 0){
 

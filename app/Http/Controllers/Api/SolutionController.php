@@ -58,7 +58,17 @@ class SolutionController extends Controller
 	    				$solutiondata=[];
 	    				foreach ($getdata_solution as $value_sub) {
 
-	    					$image = $value_sub->image;
+	    					$image = '';
+	                        if($value_sub->image){
+	                            if($value_sub->image_file_type == "Server"){
+	                               // $url =   env('APP_URL')."/upload/unit/url/".$value->url;
+	                               $image = env('APP_URL').'/'.get_subtitle($value_sub->unit_id).'/solution/thumbnail/'.$value_sub->image;
+	                            }
+	                            else{
+	                                $image = $value_sub->image;
+	                            }
+	                        }
+
 							$title = $value_sub->label;
 		    				$solutiondata[] = ['id' => $value_sub->id,'question' => $value_sub->question,'answer' => $value_sub->answer,'marks' => $value_sub->marks,'image' => $image,'label' => $value_sub->label];
 	    				}
