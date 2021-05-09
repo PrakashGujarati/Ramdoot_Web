@@ -37,7 +37,23 @@ class StandardController extends Controller
 	    		foreach ($getstandard_details as $value) {                    
 	    			$getdata = Standard::select('id','standard','thumbnail','thumbnail_file_type')->where(['medium_id' => $request->medium_id,'section' => $value->section])->orderBy('order_no','asc')->get();
 
-	    			
+					/*
+	    			foreach ($getdata as $sub_key => $sub_value) 
+	                {
+	                	$thumbnail='';
+	                	if($sub_value->thumbnail){
+	                		if($sub_value->thumbnail_file_type == "Server"){
+		                		$thumbnail =  env('APP_URL')."/upload/standard/thumbnail/".$sub_value->thumbnail;		
+		                	}
+		                	else{
+		                		$thumbnail =  $sub_value->thumbnail;	
+		                	}	
+	                	}                	
+	                	
+		    		}*/
+
+					$standard_data[] = ['id' => $sub_value->id,'standard' => $sub_value->standard,'thumbnail' => $thumbnail];	
+
 		    		$data[] = ['id' => $value->id,'section' => $value->section,'standard' => $standard_data,'sub_title' => $value->sub_title];
 
 		    		return response()->json([
