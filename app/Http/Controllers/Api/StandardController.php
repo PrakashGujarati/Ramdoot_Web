@@ -48,13 +48,12 @@ class StandardController extends Controller
 		                	else{
 		                		$thumbnail =  $sub_value->thumbnail;	
 		                	}	
-	                	}                	
+	                	}
 	                	
+	                	$standard_data[] = ['id' => $sub_value->id,'standard' => $sub_value->standard,'thumbnail' => $thumbnail];	
 		    		}*/
 
-					$standard_data[] = ['id' => $sub_value->id,'standard' => $sub_value->standard,'thumbnail' => $thumbnail];	
-
-		    		$data[] = ['id' => $value->id,'section' => $value->section,'standard' => $standard_data,'sub_title' => $value->sub_title];
+		    		$data[] = ['id' => $value->id,'section' => $value->section,'standard' => $getdata,'sub_title' => $value->sub_title];
 
 		    		return response()->json([
 		    			"code" => 200,
