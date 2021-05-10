@@ -110,6 +110,7 @@ class StandardController extends Controller
 	    			/*
 					foreach ($getdata as $sub_key => $sub_value) 
 	                {
+	                	
 	                	$thumbnail='';
 	                	if($sub_value->thumbnail){
 	                		if($sub_value->thumbnail_file_type == "Server"){

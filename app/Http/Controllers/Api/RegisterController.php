@@ -155,6 +155,7 @@ class RegisterController extends Controller
             if($update->profile_photo_path){
                 $image = env('APP_URL')."/upload/profile/".$update->profile_photo_path;    
             }
+            
 
             $data = ['name' => $update->name,'mobile' => $update->mobile,'email' => $update->email,'address' => $update->address,'pin_code' => $update->pin_code,'city' => $update->city,'birth_date' => $update->birth_date,'user_type' => $update->user_type,'gender' => $update->gender,'profile_photo' => $image,'username' => $update->username,'user_id'=>$checkuser->id];
 
