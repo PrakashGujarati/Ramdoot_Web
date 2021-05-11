@@ -81,7 +81,7 @@ class VideosController extends Controller
 
                         $url='';$video_type='';$is_read=0;
                         // if($value1->url_type == "Server"){
-                        //     $url = env('APP_URL')."/upload/videos/url/".$value1->url;
+                        //     $url = config('ramdoot.appurl')."/upload/videos/url/".$value1->url;
                         //     $video_type = "Server";
                         // }
                         // elseif ($value1->url_type == "Youtube") {
@@ -92,8 +92,8 @@ class VideosController extends Controller
                         $url = '';
                         if($value1->url){
                             if($value1->url_type == "Server"){
-                               // $url =   env('APP_URL')."/upload/unit/url/".$value->url;
-                               $url = env('APP_URL').'/'.get_subtitle($value1->unit_id).'/videos/url/'.$value1->url;
+                               // $url =   config('ramdoot.appurl')."/upload/unit/url/".$value->url;
+                               $url = config('ramdoot.appurl').'/'.get_subtitle($value1->unit_id).'/videos/url/'.$value1->url;
                                $video_type = $value1->url_type;
                             }
                             else{
@@ -115,8 +115,8 @@ class VideosController extends Controller
                         $thumbnail = '';
                         if($value1->thumbnail){
                             if($value1->thumbnail_file_type == "Server"){
-                               // $url =   env('APP_URL')."/upload/unit/url/".$value->url;
-                               $thumbnail = env('APP_URL').'/'.get_subtitle($value1->unit_id).'/videos/thumbnail/'.$value1->thumbnail;
+                               // $url =   config('ramdoot.appurl')."/upload/unit/url/".$value->url;
+                               $thumbnail = config('ramdoot.appurl').'/'.get_subtitle($value1->unit_id).'/videos/thumbnail/'.$value1->thumbnail;
                             }
                             else{
                                 $thumbnail = $value1->thumbnail;    
