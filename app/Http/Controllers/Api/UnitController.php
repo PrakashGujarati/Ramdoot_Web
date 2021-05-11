@@ -81,7 +81,7 @@ class UnitController extends Controller
                         $url = '';
                         if($value->url){
                             if($value->url_type == "Server"){
-                                $url =  env('APP_URL')."/upload/unit/url/".$value->url;       
+                                $url =  config('ramdoot.appurl')."/upload/unit/url/".$value->url;       
                             }
                             else{
                                 $url = $value->url;    
@@ -92,7 +92,7 @@ class UnitController extends Controller
                         $thumbnail='';
                         if($value->thumbnail){
                             if($value->thumbnail_file_type == "Server"){
-                                $thumbnail =  env('APP_URL')."/upload/unit/thumbnail/".$value->thumbnail;       
+                                $thumbnail =  config('ramdoot.appurl')."/upload/unit/thumbnail/".$value->thumbnail;       
                             }
                             else{
                                 $thumbnail = $value->thumbnail;    

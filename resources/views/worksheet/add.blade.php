@@ -803,7 +803,7 @@ $(document).on('click','.edit-btn',function(){
                 $('#thumbnail_preview').css('display','block');
                 $("#thumbnail").attr('type', 'file');
                 $('#thumbnail_file_type').val('Server');     
-                var thumbnail_path = "{{ env('APP_URL') }}"+"/data/"+board_id+'_'+result.sub_title.board_sub_title.sub_title+"/"+medium_id+'_'+result.sub_title.medium_sub_title.sub_title+"/"+standard_id+'_'+
+                var thumbnail_path = "{{ config('ramdoot.appurl') }}"+"/data/"+board_id+'_'+result.sub_title.board_sub_title.sub_title+"/"+medium_id+'_'+result.sub_title.medium_sub_title.sub_title+"/"+standard_id+'_'+
                 result.sub_title.standard_sub_title.sub_title
                 +"/"+subject_id+'_'+result.sub_title.subject_sub_title.sub_title+"/"+semester_id+'_'+
                 result.sub_title.semester_sub_title.sub_title+"/"+unit_id+'_'+result.sub_title.unit_sub_title.sub_title+"/worksheet/thumbnail/"+result.worksheetdata.thumbnail;
@@ -826,9 +826,9 @@ $(document).on('click','.edit-btn',function(){
                 $("#url").attr('type', 'file');
                 $('#url_type').val('Server'); 
                 
-                //var url_path = "{{ env('APP_URL') }}"+"/upload/note/url/"+result.url;
+                //var url_path = "{{ config('ramdoot.appurl') }}"+"/upload/note/url/"+result.url;
                 //$('#url_preview').attr('src', url_path);   
-                var url_path = "{{ env('APP_URL') }}"+"/data/"+board_id+'_'+result.sub_title.board_sub_title.sub_title+"/"+medium_id+'_'+result.sub_title.medium_sub_title.sub_title+"/"+standard_id+'_'+
+                var url_path = "{{ config('ramdoot.appurl') }}"+"/data/"+board_id+'_'+result.sub_title.board_sub_title.sub_title+"/"+medium_id+'_'+result.sub_title.medium_sub_title.sub_title+"/"+standard_id+'_'+
                 result.sub_title.standard_sub_title.sub_title
                 +"/"+subject_id+'_'+result.sub_title.subject_sub_title.sub_title+"/"+semester_id+'_'+
                 result.sub_title.semester_sub_title.sub_title+"/"+unit_id+'_'+result.sub_title.unit_sub_title.sub_title+"/worksheet/url/"+result.worksheetdata.url;
@@ -838,7 +838,7 @@ $(document).on('click','.edit-btn',function(){
             // if(result.url_type == 'file'){
             //     $('#hidden_url').val(result.url);
             //     $('#url_preview').css('display','block');
-            //     var url_path = "{{ env('APP_URL') }}"+"/upload/worksheet/url/"+result.url;
+            //     var url_path = "{{ config('ramdoot.appurl') }}"+"/upload/worksheet/url/"+result.url;
             //     $('#url_preview').attr('src', url_path);    
             // }
             // else{

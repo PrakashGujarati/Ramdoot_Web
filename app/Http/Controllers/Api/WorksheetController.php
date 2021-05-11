@@ -80,8 +80,8 @@ class WorksheetController extends Controller
 
                         if($value1->url){
                             if($value1->url_type == "Server"){
-                               // $url =   env('APP_URL')."/upload/unit/url/".$value->url;
-                               $url = env('APP_URL').'/'.get_subtitle($value1->unit_id).'/worksheet/url/'.$value1->url;
+                               // $url =   config('ramdoot.appurl')."/upload/unit/url/".$value->url;
+                               $url = config('ramdoot.appurl').'/'.get_subtitle($value1->unit_id).'/worksheet/url/'.$value1->url;
                             }
                             else{
                                 $url = $value1->url;    

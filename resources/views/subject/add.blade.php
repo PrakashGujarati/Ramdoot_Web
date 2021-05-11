@@ -416,7 +416,7 @@ $(document).on('click','.edit-btn',function(){
             }
             //$('#hidden_thumbnail').val(result.subject_details.thumbnail);
             //$('#thumbnail_preview').css('display','block');
-            var url_path = "{{ env('APP_URL') }}"+"/upload/subject/thumbnail/"+result.subject_details.thumbnail;
+            var url_path = "{{ config('ramdoot.appurl') }}"+"/upload/subject/thumbnail/"+result.subject_details.thumbnail;
             $('#thumbnail_preview').attr('src', url_path);
             $('#hidden_id').val(result.subject_details.id);            
         }            

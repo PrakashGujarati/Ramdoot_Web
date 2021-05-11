@@ -63,8 +63,8 @@ class MaterialController extends Controller
                         $image = '';
                         if($value_sub->image){
                             if($value_sub->image_file_type == "Server"){
-                               // $url =   env('APP_URL')."/upload/unit/url/".$value->url;
-                               $image = env('APP_URL').'/'.get_subtitle($value_sub->unit_id).'/material/thumbnail/'.
+                               // $url =   config('ramdoot.appurl')."/upload/unit/url/".$value->url;
+                               $image = config('ramdoot.appurl').'/'.get_subtitle($value_sub->unit_id).'/material/thumbnail/'.
                                $value_sub->image;
                             }
                             else{

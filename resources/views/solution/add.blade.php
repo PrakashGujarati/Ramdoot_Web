@@ -727,7 +727,7 @@ $(document).on('click','.edit-btn',function(){
                 $('#image_preview').css('display','block');
                 $("#image").attr('type', 'file');
                 $('#image_file_type').val('Server');                
-                var image_path = "{{ env('APP_URL') }}"+"/data/"+board_id+'_'+result.sub_title.board_sub_title.sub_title+"/"+medium_id+'_'+result.sub_title.medium_sub_title.sub_title+"/"+standard_id+'_'+
+                var image_path = "{{ config('ramdoot.appurl') }}"+"/data/"+board_id+'_'+result.sub_title.board_sub_title.sub_title+"/"+medium_id+'_'+result.sub_title.medium_sub_title.sub_title+"/"+standard_id+'_'+
                 result.sub_title.standard_sub_title.sub_title
                 +"/"+subject_id+'_'+result.sub_title.subject_sub_title.sub_title+"/"+semester_id+'_'+
                 result.sub_title.semester_sub_title.sub_title+"/"+unit_id+'_'+result.sub_title.unit_sub_title.sub_title+"/solution/thumbnail/"+result.solutiondata.image;

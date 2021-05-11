@@ -31,7 +31,7 @@ class BoardController extends Controller
                 $thumbnail='';
                 if($value->thumbnail){
                 	if($value->thumbnail_file_type == "Server"){
-                		$thumbnail =  env('APP_URL')."/upload/board/thumbnail/".$value->thumbnail;		
+                		$thumbnail =  config('ramdoot.appurl')."/upload/board/thumbnail/".$value->thumbnail;		
                 	}
                 	else{
                 		$thumbnail =  $value->thumbnail;	

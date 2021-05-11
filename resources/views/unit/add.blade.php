@@ -684,7 +684,7 @@ $(document).on('click','.edit-btn',function(){
                 $('#thumbnail_preview').css('display','block');
                 $("#thumbnail").attr('type', 'file');
                 $('#thumbnail_file_type').val('Server');   
-                var thumbnail_path = "{{ env('APP_URL') }}"+"/upload/unit/thumbnail/"+result.thumbnail;
+                var thumbnail_path = "{{ config('ramdoot.appurl') }}"+"/upload/unit/thumbnail/"+result.thumbnail;
                 $('#thumbnail_preview').attr('src', thumbnail_path);             
             }
 
@@ -704,7 +704,7 @@ $(document).on('click','.edit-btn',function(){
                 $("#url").attr('type', 'file');
                 $('#url_type').val('Server'); 
 
-                var url_path = "{{ env('APP_URL') }}"+"/upload/unit/url/"+result.url;
+                var url_path = "{{ config('ramdoot.appurl') }}"+"/upload/unit/url/"+result.url;
                 $('#url_preview').attr('src', url_path);    
             }
             // $('#hidden_thumbnail').val(result.thumbnail);

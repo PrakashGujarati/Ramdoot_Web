@@ -84,8 +84,8 @@ class TextbookController extends Controller
                         $url = '';
                         if($value1->url){
                             if($value1->url_type == "Server"){
-                               // $url =   env('APP_URL')."/upload/unit/url/".$value->url;
-                               $url = env('APP_URL').'/'.get_subtitle($value1->unit_id).'/book/url/'.$value1->url;
+                               // $url =   config('ramdoot.appurl')."/upload/unit/url/".$value->url;
+                               $url = config('ramdoot.appurl').'/'.get_subtitle($value1->unit_id).'/book/url/'.$value1->url;
                             }
                             else{
                                 $url = $value1->url;    
@@ -95,8 +95,8 @@ class TextbookController extends Controller
 	    				$thumbnail = '';
                         if($value1->thumbnail){
                             if($value1->url_type == "Server"){
-                               // $url =   env('APP_URL')."/upload/unit/url/".$value->url;
-                               $thumbnail = env('APP_URL').'/'.get_subtitle($value1->unit_id).'/book/thumbnail/'.$value1->thumbnail;
+                               // $url =   config('ramdoot.appurl')."/upload/unit/url/".$value->url;
+                               $thumbnail = config('ramdoot.appurl').'/'.get_subtitle($value1->unit_id).'/book/thumbnail/'.$value1->thumbnail;
                             }
                             else{
                                 $thumbnail = $value1->thumbnail;    
@@ -351,8 +351,8 @@ class TextbookController extends Controller
                         $url = '';
                         if($value1->url){
                             if($value1->url_type == "Server"){
-                               // $url =   env('APP_URL')."/upload/unit/url/".$value->url;
-                               $url = env('APP_URL').'/'.get_subtitle($value1->unit_id).'/note/url/'.$value1->url;
+                               // $url =   config('ramdoot.appurl')."/upload/unit/url/".$value->url;
+                               $url = config('ramdoot.appurl').'/'.get_subtitle($value1->unit_id).'/note/url/'.$value1->url;
                             }
                             else{
                                 $url = $value1->url;    
@@ -362,8 +362,8 @@ class TextbookController extends Controller
                         $thumbnail = '';
                         if($value1->thumbnail){
                             if($value1->thumbnail_file_type == "Server"){
-                               // $url =   env('APP_URL')."/upload/unit/url/".$value->url;
-                               $thumbnail = env('APP_URL').'/'.get_subtitle($value1->unit_id).'/note/thumbnail/'.$value1->thumbnail;
+                               // $url =   config('ramdoot.appurl')."/upload/unit/url/".$value->url;
+                               $thumbnail = config('ramdoot.appurl').'/'.get_subtitle($value1->unit_id).'/note/thumbnail/'.$value1->thumbnail;
                             }
                             else{
                                 $thumbnail = $value1->thumbnail;    

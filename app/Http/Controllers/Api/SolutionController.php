@@ -61,8 +61,8 @@ class SolutionController extends Controller
 	    					$image = '';
 	                        if($value_sub->image){
 	                            if($value_sub->image_file_type == "Server"){
-	                               // $url =   env('APP_URL')."/upload/unit/url/".$value->url;
-	                               $image = env('APP_URL').'/'.get_subtitle($value_sub->unit_id).'/solution/thumbnail/'.$value_sub->image;
+	                               // $url =   config('ramdoot.appurl')."/upload/unit/url/".$value->url;
+	                               $image = config('ramdoot.appurl').'/'.get_subtitle($value_sub->unit_id).'/solution/thumbnail/'.$value_sub->image;
 	                            }
 	                            else{
 	                                $image = $value_sub->image;
@@ -159,7 +159,7 @@ class SolutionController extends Controller
 	    			$getdata = Solution::where(['unit_id' => $value->id,'status' => 'Active'])->get();
 	    			$solutiondata=[];
 	    			foreach ($getdata as $value1) {
-	    				$image = env('APP_URL')."/upload/solution/".$value1->image;
+	    				$image = config('ramdoot.appurl')."/upload/solution/".$value1->image;
 	    				$solutiondata[] = ['id' => $value1->id,'question' => $value1->question,'answer' => $value1->answer,'marks' => $value1->marks,'image' => $image,'label' => $value1->label];
 	    			}
 

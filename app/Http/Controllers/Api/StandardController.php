@@ -42,7 +42,7 @@ class StandardController extends Controller
 	                	$thumbnail='';
 	                	if($sub_value->thumbnail){
 	                		if($sub_value->thumbnail_file_type == "Server"){
-		                		$thumbnail =  env('APP_URL')."/upload/standard/thumbnail/".$sub_value->thumbnail;		
+		                		$thumbnail =  config('ramdoot.appurl')."/upload/standard/thumbnail/".$sub_value->thumbnail;		
 		                	}
 		                	else{
 		                		$thumbnail =  $sub_value->thumbnail;	
@@ -113,7 +113,7 @@ class StandardController extends Controller
 	                	$thumbnail='';
 	                	if($sub_value->thumbnail){
 	                		if($sub_value->thumbnail_file_type == "Server"){
-		                		$thumbnail =  env('APP_URL')."/upload/standard/thumbnail/".$sub_value->thumbnail;		
+		                		$thumbnail =  config('ramdoot.appurl')."/upload/standard/thumbnail/".$sub_value->thumbnail;		
 		                	}
 		                	else{
 		                		$thumbnail =  $sub_value->thumbnail;	

@@ -299,7 +299,7 @@ $(document).on('click','.edit-btn',function(){
                 $('#thumbnail_file_type').val('Server');                
             }
 
-            var url_path = "{{ env('APP_URL') }}"+"/upload/board/thumbnail/"+result.thumbnail;
+            var url_path = "{{ config('ramdoot.appurl') }}"+"/upload/board/thumbnail/"+result.thumbnail;
             $('#thumbnail_preview').attr('src', url_path);
             $('#hidden_id').val(result.id);
             //$('#thumbnail').val('');

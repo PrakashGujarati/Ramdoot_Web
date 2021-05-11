@@ -22,7 +22,7 @@ class FeatureController extends Controller
 
             $data=[];
             foreach ($feature_details as $feature) {
-                $image = env('APP_URL')."/upload/feature/".$feature->image;
+                $image = config('ramdoot.appurl')."/upload/feature/".$feature->image;
                 $data[] = ['id' => $feature->id,'title' => $feature->title,'image' => $image,"flag"=> isset($feature->flag) ? $feature->flag:"0"];
             }
 
@@ -104,7 +104,7 @@ class FeatureController extends Controller
                     $getdata = Feature::where(['status' => 'Active'])->get();
                     $featuredata = [];
                     foreach ($getdata as $value1) {
-                        $image = env('APP_URL')."/upload/feature/".$value1->image;
+                        $image = config('ramdoot.appurl')."/upload/feature/".$value1->image;
                         $featuredata[] = ['id' => $value1->id,'title' => $value1->title,'image' => $image,"flag"=>$value1->flag];
                         if($value1->id == 8){
                             $totalQuestionCount = Question::where('unit_id',$value->id)->count();

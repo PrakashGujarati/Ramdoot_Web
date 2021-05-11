@@ -28,7 +28,7 @@ class RegisterController extends Controller
             $token = $user->createToken('Ramdoot')->accessToken;
             $image="";
             if($user->profile_photo_path){
-                $image = env('APP_URL')."/upload/profile/".$user->profile_photo_path;    
+                $image = config('ramdoot.appurl')."/upload/profile/".$user->profile_photo_path;    
             }
             $data = ['id' => $user->id,'name' => $user->name,'mobile' => $user->mobile,'email' => $user->email,'address' => $user->address,'pin_code' => $user->pin_code,'city' => $user->city,'birth_date' => $user->birth_date,'user_type' => $user->user_type,'gender' => $user->gender,'profile_photo' => $image,'username' => $user->username,'token' => $token];
             return response()->json([
@@ -45,7 +45,7 @@ class RegisterController extends Controller
             $token = $user->createToken('Ramdoot')->accessToken;
             $image="";
             if($user->profile_photo_path){
-                $image = env('APP_URL')."/upload/profile/".$user->profile_photo_path;    
+                $image = config('ramdoot.appurl')."/upload/profile/".$user->profile_photo_path;    
             }
             $data = ['id' => $user->id,'name' => $user->name,'mobile' => $user->mobile,'email' => $user->email,'address' => $user->address,'pin_code' => $user->pin_code,'city' => $user->city,'birth_date' => $user->birth_date,'user_type' => $user->user_type,'gender' => $user->gender,'profile_photo' => $image,'username' => $user->username,'token' => $token];
             return response()->json([
@@ -153,7 +153,7 @@ class RegisterController extends Controller
 
             $image="";
             if($update->profile_photo_path){
-                $image = env('APP_URL')."/upload/profile/".$update->profile_photo_path;    
+                $image = config('ramdoot.appurl')."/upload/profile/".$update->profile_photo_path;    
             }
 
             $data = ['name' => $update->name,'mobile' => $update->mobile,'email' => $update->email,'address' => $update->address,'pin_code' => $update->pin_code,'city' => $update->city,'birth_date' => $update->birth_date,'user_type' => $update->user_type,'gender' => $update->gender,'profile_photo' => $image,'username' => $update->username,'user_id'=>$checkuser->id];
