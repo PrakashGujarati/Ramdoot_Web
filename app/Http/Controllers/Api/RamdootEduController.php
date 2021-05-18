@@ -26,7 +26,7 @@ class RamdootEduController extends Controller
             'medium_id' => 'required',
     		'standard_id' => 'required',
     		'subject_id' => 'required',
-            'semester_id' => 'required',
+           // 'semester_id' => 'required',
             'division' => 'required',
             'strenth' => 'required',
             'type' => 'required',
@@ -37,7 +37,7 @@ class RamdootEduController extends Controller
             'medium_id.required' => 'Please enter medium id.',
         	'standard_id.required' => 'Please enter standard id.',
         	'subject_id.required' => 'Please enter subject id.',
-            'semester_id.required' => 'Please enter semester id.',
+           // 'semester_id.required' => 'Please enter semester id.',
             'division.required' => 'Please enter division.',
             'strenth.required' => 'required enter strenth.',
             'type.required' => 'required enter type',
@@ -92,13 +92,13 @@ class RamdootEduController extends Controller
 			  	"data" => [],
 	        ]);
         }
-        elseif (empty($chksemester)) {
-        	return response()->json([
-    			"code" => 400,
-			  	"message" => "Semester not found.",
-			  	"data" => [],
-	        ]);
-        }
+      //   elseif (empty($chksemester)) {
+      //   	return response()->json([
+    		// 	"code" => 400,
+			  	// "message" => "Semester not found.",
+			  	// "data" => [],
+	     //    ]);
+      //   }
         else{
 
         	$add = new Classroom;
@@ -107,7 +107,7 @@ class RamdootEduController extends Controller
 	    	$add->medium_id = $request->medium_id;
 	    	$add->standard_id = $request->standard_id;
 	    	$add->subject_id = $request->subject_id;
-	    	$add->semester_id = $request->semester_id;
+	    	$add->semester_id = isset($request->semester_id) ? $request->semester_id:0;
 	    	$add->division = $request->division;
 	    	$add->strenth = $request->strenth;
 	    	$add->classroom_id  = $unique_string;
