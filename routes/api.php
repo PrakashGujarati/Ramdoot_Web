@@ -20,7 +20,7 @@ use App\Http\Controllers\Api\TextbookController;
 use App\Http\Controllers\Api\McqController;
 use App\Http\Controllers\Api\ExamController;
 use App\Http\Controllers\Api\NotificationsController;
-
+use App\Http\Controllers\Api\RamdootEduController;
 
 /*
 |--------------------------------------------------------------------------
@@ -69,6 +69,13 @@ Route::group(['middleware'=>'auth:api'], function()
     Route::post('note_list', [TextbookController::class, 'note_list']);
 
     Route::post('notification_list', [NotificationsController::class, 'notification_list']);
+
+
+    //ramdoot
+    Route::post('create_class', [RamdootEduController::class, 'create_class']);
+    Route::post('view_class', [RamdootEduController::class, 'view_class']);
+    Route::post('update_request', [RamdootEduController::class, 'update_request']);
+    Route::post('join_class', [RamdootEduController::class, 'join_class']);
 
 });
 
