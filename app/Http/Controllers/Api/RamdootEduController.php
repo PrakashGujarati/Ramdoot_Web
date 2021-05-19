@@ -58,11 +58,11 @@ class RamdootEduController extends Controller
 
         function random_strings($length_of_string)
 		{
-		    $str_result = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+		    $str_result = '0123456789';
 		  
 		    return substr(str_shuffle($str_result),0, $length_of_string);
 		}
-		$unique_string = random_strings(10);
+		$unique_string = random_strings(9);
 
     	if(empty($chkboard)){
         	return response()->json([
@@ -145,15 +145,30 @@ class RamdootEduController extends Controller
         if($usercheck){
         	$getrole = Role::where(['id' => $usercheck->role_id])->first();
         	if($getrole->slug == "Teacher"){
-        		$classrooms = Classroom::where(['user_id' => $request->user_id,'status' => 'Active'])->get();
+        		$classrooms_arr = Classroom::where(['user_id' => $request->user_id,'status' => 'Active'])->get();
+                foreach ($classrooms_arr as $key_class => $value_class) {
+                    //dd($value_class);
+                    $classrooms[] = ['id' => $value_class->id,
+                        'user_id' => $value_class->user_id,'board_id' => $value_class->board_id,'board' => $value_class->board->name,'medium_id' => $value_class->medium_id,
+                        'medium' => isset($value_class->medium->medium_name) ? $value_class->medium->medium_name:'','standard_id' => $value_class->standard_id,'standard' => isset($value_class->standard->standard) ? $value_class->standard->standard:'','subject_id' => $value_class->subject_id,'subject' => $value_class->subject->subject_name,'semester_id' => $value_class->semester_id,'semester' => 
+                        isset($value_class->semester->semester) ? $value_class->semester->semester:'','division' => $value_class->division,'strenth' => $value_class->strenth,'classroom_id' => $value_class->classroom_id,'type'=> $value_class->type,'status' => $value_class->status];
+                }
+
         	}
         	elseif ($getrole->slug == "Student") {
         		$classroom_details = ClassStudent::where(['user_id' => $request->user_id,'status' => 'aprove'])->get();
         		$classrooms=[];
         		if(count($classroom_details) > 0){
         			foreach ($classroom_details as $key => $value) {
+                        $aprove = 0;
+                        if($value->status == "aprove"){
+                            $aprove = 1;
+                        }
         				$classdetails = Classroom::where(['id' => $value->class_id])->first();
-        				$classrooms[] = $classdetails;
+        				$classrooms[] = ['id' => $classdetails->id,
+                        'user_id' => $classdetails->user_id,'board_id' => $classdetails->board_id,'board' => $classdetails->board->name,'medium_id' => $classdetails->medium_id,
+                        'medium' => isset($classdetails->medium->medium_name) ? $classdetails->medium->medium_name:'','standard_id' => $classdetails->standard_id,'standard' => isset($classdetails->standard->standard) ? $classdetails->standard->standard:'','subject_id' => $classdetails->subject_id,'subject' => $classdetails->subject->subject_name,'semester_id' => $classdetails->semester_id,'semester' => 
+                        isset($classdetails->semester->semester) ? $classdetails->semester->semester:'','division' => $classdetails->division,'strenth' => $classdetails->strenth,'classroom_id' => $classdetails->classroom_id,'type'=> $classdetails->type,'status' => $classdetails->status,'is_aprove' => $aprove];
         			}
         		}
         	}
@@ -178,11 +193,13 @@ class RamdootEduController extends Controller
     public function update_request(Request $request){
     		
     	$rules = array(
-    		'class_student_id' => 'required',
+    		'class_id' => 'required',
+            'user_id' => 'required',
     		'status' => 'required',
         );
         $messages = array(
-        	'class_student_id.required' => 'Please enter student class id.',
+        	'class_id.required' => 'Please enter student class id.',
+            'user_id' => 'Please enter user id.',
         	'status.required' => 'Please enter status.',
         );
 
@@ -193,7 +210,7 @@ class RamdootEduController extends Controller
             return ['status' => "false",'msg' => $msg];
         }
 
-        $check_classstudent = ClassStudent::where(['id' => $request->class_student_id])->first();
+        $check_classstudent = ClassStudent::where(['class_id' => $request->class_id,'user_id' => $request->user_id])->first();
 
         if($check_classstudent){
         	ClassStudent::where(['id' => $check_classstudent->id])->update(['status' => $request->status]);	
@@ -205,7 +222,7 @@ class RamdootEduController extends Controller
         else{
         	return response()->json([
     			"code" => 400,
-			  	"message" => "Class Student id not found.",
+			  	"message" => "Request not found.",
 	        ]);
         }
 
@@ -231,16 +248,28 @@ class RamdootEduController extends Controller
             return ['status' => "false",'msg' => $msg];
         }	
 
-        $add = new ClassStudent;
-    	$add->user_id = $request->class_id;
-    	$add->class_id = $request->user_id;
-    	$add->status = 'pending';
-    	$add->save();
+        $classrooms_arr = Classroom::where(['classroom_id' => $request->class_id,'status' => 'Active'])->first();
 
-    	return response()->json([
-			"code" => 200,
-		  	"message" => "success",
-        ]);
+        if($classrooms_arr){
+            $add = new ClassStudent;
+            $add->user_id = $request->user_id;
+            $add->class_id = $classrooms_arr->id;
+            $add->status = 'pending';
+            $add->save();
+
+            return response()->json([
+                "code" => 200,
+                "message" => "success",
+            ]);
+        }
+        else{
+            return response()->json([
+                "code" => 400,
+                "message" => "Class not found.",
+            ]);
+        }
+
+        
 
     }
 }
