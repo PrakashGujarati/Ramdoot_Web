@@ -150,9 +150,10 @@ class RamdootEduController extends Controller
                 foreach ($classrooms_arr as $key_class => $value_class) {
                     //dd($value_class);
                     $classrooms[] = ['id' => $value_class->id,
-                        'user_id' => $value_class->user_id,'board_id' => $value_class->board_id,'board' => $value_class->board->name,'medium_id' => $value_class->medium_id,
-                        'medium' => isset($value_class->medium->medium_name) ? $value_class->medium->medium_name:'','standard_id' => $value_class->standard_id,'standard' => isset($value_class->standard->standard) ? $value_class->standard->standard:'','subject_id' => $value_class->subject_id,'subject' => 
-                        isset($value_class->subject->subject_name) ? 
+                        'user_id' => $value_class->user_id,'board_id' => $value_class->board_id,'board' => 
+                        isset($value_class->board->sub_title) ? $value_class->board->sub_title:'','medium_id' => $value_class->medium_id,
+                        'medium' => isset($value_class->medium->sub_title) ? $value_class->medium->sub_title:'','standard_id' => $value_class->standard_id,'standard' => isset($value_class->standard->standard) ? $value_class->standard->standard:'','subject_id' => $value_class->sub_title,'subject' => 
+                        isset($value_class->subject->sub_title) ? 
                         $value_class->subject->subject_name:'','semester_id' => $value_class->semester_id,'semester' => 
                         isset($value_class->semester->semester) ? $value_class->semester->semester:'','division' => $value_class->division,'strenth' => $value_class->strenth,'classroom_id' => $value_class->classroom_id,'type'=> $value_class->type,'status' => $value_class->status];
                 }
@@ -170,8 +171,9 @@ class RamdootEduController extends Controller
                         }
         				$classdetails = Classroom::where(['id' => $value->class_id])->first();
         				$classrooms[] = ['id' => $classdetails->id,
-                        'user_id' => $classdetails->user_id,'board_id' => $classdetails->board_id,'board' => $classdetails->board->name,'medium_id' => $classdetails->medium_id,
-                        'medium' => isset($classdetails->medium->medium_name) ? $classdetails->medium->medium_name:'','standard_id' => $classdetails->standard_id,'standard' => isset($classdetails->standard->standard) ? $classdetails->standard->standard:'','subject_id' => $classdetails->subject_id,'subject' => $classdetails->subject->subject_name,'semester_id' => $classdetails->semester_id,'semester' => 
+                        'user_id' => $classdetails->user_id,'board_id' => $classdetails->board_id,'board' => 
+                        isset($classdetails->board->sub_title) ? $classdetails->board->sub_title:'','medium_id' => $classdetails->medium_id,
+                        'medium' => isset($classdetails->medium->sub_title) ? $classdetails->medium->sub_title:'','standard_id' => $classdetails->standard_id,'standard' => isset($classdetails->standard->standard) ? $classdetails->standard->standard:'','subject_id' => $classdetails->subject_id,'subject' => $classdetails->subject->sub_title,'semester_id' => $classdetails->semester_id,'semester' => 
                         isset($classdetails->semester->semester) ? $classdetails->semester->semester:'','division' => $classdetails->division,'strenth' => $classdetails->strenth,'classroom_id' => $classdetails->classroom_id,'type'=> $classdetails->type,'status' => $classdetails->status,'is_aprove' => $aprove];
         			}
         		}
