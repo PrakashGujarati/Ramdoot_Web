@@ -255,16 +255,29 @@ class RamdootEduController extends Controller
         $classrooms_arr = Classroom::where(['classroom_id' => $request->class_id,'status' => 'Active'])->first();
 
         if($classrooms_arr){
-            $add = new ClassStudent;
-            $add->user_id = $request->user_id;
-            $add->class_id = $classrooms_arr->id;
-            $add->status = 'pending';
-            $add->save();
 
-            return response()->json([
-                "code" => 200,
-                "message" => "success",
-            ]);
+            $check_class = ClassStudent::where(['user_id' => $request->user_id,'class_id' => $classrooms_arr->id])->first();
+
+            if($check_class){
+                $add = new ClassStudent;
+                $add->user_id = $request->user_id;
+                $add->class_id = $classrooms_arr->id;
+                $add->status = 'pending';
+                $add->save();
+
+                return response()->json([
+                    "code" => 200,
+                    "message" => "success",
+                ]);
+            }
+            else{
+                return response()->json([
+                    "code" => 400,
+                    "message" => "You have already join this class.",
+                ]);
+            }
+
+            
         }
         else{
             return response()->json([
@@ -272,6 +285,10 @@ class RamdootEduController extends Controller
                 "message" => "Class not found.",
             ]);
         }
+
+        
+
+        
 
         
 
