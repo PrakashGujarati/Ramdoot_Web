@@ -256,9 +256,15 @@ class RamdootEduController extends Controller
 
         if($classrooms_arr){
 
-            $check_class = ClassStudent::where(['user_id' => $request->user_id,'class_id' => $classrooms_arr->id])->first();
+            $check_class = ClassStudent::where(['user_id' => $request->user_id,'class_id' => $classrooms_arr->id])->where('status','!=','reject')->first();
 
             if($check_class){
+                return response()->json([
+                    "code" => 400,
+                    "message" => "You have already join this class.",
+                ]);
+            }
+            else{
                 $add = new ClassStudent;
                 $add->user_id = $request->user_id;
                 $add->class_id = $classrooms_arr->id;
@@ -270,14 +276,6 @@ class RamdootEduController extends Controller
                     "message" => "success",
                 ]);
             }
-            else{
-                return response()->json([
-                    "code" => 400,
-                    "message" => "You have already join this class.",
-                ]);
-            }
-
-            
         }
         else{
             return response()->json([
