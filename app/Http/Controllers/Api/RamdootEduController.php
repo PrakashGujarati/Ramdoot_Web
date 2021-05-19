@@ -146,6 +146,7 @@ class RamdootEduController extends Controller
         	$getrole = Role::where(['id' => $usercheck->role_id])->first();
         	if($getrole->slug == "Teacher"){
         		$classrooms_arr = Classroom::where(['user_id' => $request->user_id,'status' => 'Active'])->get();
+                $classrooms=[];
                 foreach ($classrooms_arr as $key_class => $value_class) {
                     //dd($value_class);
                     $classrooms[] = ['id' => $value_class->id,
@@ -161,6 +162,7 @@ class RamdootEduController extends Controller
         		$classroom_details = ClassStudent::where(['user_id' => $request->user_id,'status' => 'aprove'])->get();
         		$classrooms=[];
         		if(count($classroom_details) > 0){
+                    $classrooms=[];
         			foreach ($classroom_details as $key => $value) {
                         $aprove = 0;
                         if($value->status == "aprove"){
