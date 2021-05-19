@@ -150,7 +150,8 @@ class RamdootEduController extends Controller
                     //dd($value_class);
                     $classrooms[] = ['id' => $value_class->id,
                         'user_id' => $value_class->user_id,'board_id' => $value_class->board_id,'board' => $value_class->board->name,'medium_id' => $value_class->medium_id,
-                        'medium' => isset($value_class->medium->medium_name) ? $value_class->medium->medium_name:'','standard_id' => $value_class->standard_id,'standard' => isset($value_class->standard->standard) ? $value_class->standard->standard:'','subject_id' => $value_class->subject_id,'subject' => $value_class->subject->subject_name,'semester_id' => $value_class->semester_id,'semester' => 
+                        'medium' => isset($value_class->medium->medium_name) ? $value_class->medium->medium_name:'','standard_id' => $value_class->standard_id,'standard' => isset($value_class->standard->standard) ? $value_class->standard->standard:'','subject_id' => $value_class->subject_id,'subject' => 
+                        isset($value_class->subject->subject_name) ? $value_class->subject->subject_name:'','semester_id' => $value_class->semester_id,'semester' => 
                         isset($value_class->semester->semester) ? $value_class->semester->semester:'','division' => $value_class->division,'strenth' => $value_class->strenth,'classroom_id' => $value_class->classroom_id,'type'=> $value_class->type,'status' => $value_class->status];
                 }
 
