@@ -159,7 +159,7 @@ class RamdootEduController extends Controller
 
         	}
         	elseif ($getrole->slug == "Student") {
-        		$classroom_details = ClassStudent::where(['user_id' => $request->user_id,'status' => 'aprove'])->get();
+        		$classroom_details = ClassStudent::where(['user_id' => $request->user_id])->get();
         		$classrooms=[];
         		if(count($classroom_details) > 0){
                     $classrooms=[];
