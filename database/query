@@ -1,4 +1,24 @@
 
+-----------------------20-05-2021-------------------
+
+CREATE TABLE `virtual_assignment_questions` (
+  `id` int(11) NOT NULL,
+  `class_id` int(11) NOT NULL DEFAULT 0,
+  `assignment_type` varchar(255) DEFAULT NULL,
+  `question_id` int(11) NOT NULL DEFAULT 0,
+  `question_type` int(11) NOT NULL DEFAULT 0,
+  `is_mcq` tinyint(4) NOT NULL DEFAULT 0,
+  `marks` int(11) NOT NULL DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT NULL
+);
+
+ALTER TABLE `virtual_assignment_questions`
+  ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `virtual_assignment_questions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 -----------------------08-05-2021 -------------------
 
 ALTER TABLE `solutions` CHANGE `question_type` `question_type` VARCHAR(255) NULL DEFAULT NULL;

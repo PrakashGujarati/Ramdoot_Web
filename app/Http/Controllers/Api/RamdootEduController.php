@@ -15,6 +15,12 @@ use App\Models\Classroom;
 use App\Models\ClassStudent;
 use App\Models\User;
 use App\Models\Role;
+use App\Models\Unit;
+use App\Models\Solution;
+use App\Models\Question;
+use App\Models\QuestionType;
+use App\Models\VirtualAssignmentQuestions;
+
 
 class RamdootEduController extends Controller
 {
@@ -364,27 +370,289 @@ class RamdootEduController extends Controller
         if ($validator->fails()) {
             $msg = $validator->messages();
             return ['status' => "false",'msg' => $msg];
-        }      
+        }
+
+        $check_class = Classroom::where(['id' => $request->class_id,'status' => 'Active'])->first();
+
+        if($check_class){
+
+            $getsemester = Semester::where(['subject_id' => $check_class->subject_id])->get();
+            if(count($getsemester) > 0){
+                return response()->json([
+                    "code" => 200,
+                    "message" => "success",
+                    "data" => $getsemester,
+                ]);
+                
+            }else{
+                return response()->json([
+                    "code" => 400,
+                    "message" => "Class not found.",
+                ]);
+            }
+        }
+        else{
+            return response()->json([
+                "code" => 400,
+                "message" => "Class not found.",
+            ]);
+        }
     }
 
-    public function viewUnits(){
+    public function viewUnits(Request $request){
+        $rules = array(
+            'class_id' => 'required',
+            'semester_id' => 'required',
+        );
+        $messages = array(
+            'class_id' => 'Please enter class id.',
+            'semester_id' => 'Please enter semester id'
+        );
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            $msg = $validator->messages();
+            return ['status' => "false",'msg' => $msg];
+        }
+
+        $chkclass = Classroom::where(['id' => $request->class_id,'status' => 'Active'])->first();
+        $chksemester = Semester::where(['id' => $request->semester_id,'status' => 'Active'])->first();
+
+        if(empty($chkclass)){
+            return response()->json([
+                "code" => 400,
+                "message" => "Class not found.",
+                "data" => [],
+            ]);
+        }
+        elseif (empty($chksemester)) {
+            return response()->json([
+                "code" => 400,
+                "message" => "Semester not found.",
+                "data" => [],
+            ]);
+        }
+        else{
+            $get_unit = Unit::where(['semester_id' => $request->semester_id])->get();
+
+            if(count($get_unit) > 0){
+                return response()->json([
+                    "code" => 200,
+                    "message" => "success",
+                    "data" => $get_unit,
+                ]);
+                
+            }else{
+                return response()->json([
+                    "code" => 400,
+                    "message" => "Unit not found.",
+                ]);
+            }
+        }   
+    }
+
+    public function viewQuestionCategories(Request $request){
+        $rules = array(
+            'semester_id' => 'required',
+            'unit_id' => 'required',
+        );
+        $messages = array(
+            'semester_id' => 'Please enter semester id.',
+            'unit_id' => 'Please enter unit id.'
+        );
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            $msg = $validator->messages();
+            return ['status' => "false",'msg' => $msg];
+        }
+
+        $chksemester = Semester::where(['id' => $request->semester_id,'status' => 'Active'])->first();
+        $chkunit = Unit::where(['id' => $request->unit_id,'status' => 'Active'])->first();
+
+        if(empty($chksemester)){
+            return response()->json([
+                "code" => 400,
+                "message" => "Semester not found.",
+                "data" => [],
+            ]);
+        }
+        elseif (empty($chkunit)) {
+            return response()->json([
+                "code" => 400,
+                "message" => "Unit not found.",
+                "data" => [],
+            ]);
+        }
+        else{
+            $get_unit = Solution::where(['semester_id' => $request->semester_id,'unit_id' => $request->unit_id])->groupby('question_type')->get();
+            
+            $get_question_type=[];
+            foreach ($get_unit as $key => $value) {
+                $getquestion_details = QuestionType::select('id','question_type')->where(['id' => $value->question_type])->first();
+                $get_question_type[] = $getquestion_details;
+            }
+            $mcqdetails = ['id' => 0,'question_type' => "MCQ"];
+            array_push($get_question_type,$mcqdetails);
+
+            return response()->json([
+                "code" => 200,
+                "message" => "success",
+                "data" => $get_question_type,
+            ]);
+        }
+    }
+
+    public function viewQuestions(Request $request){
+        $rules = array(
+            'unit_id' => 'required',
+            'category_id' => 'required',
+        );
+        $messages = array(
+            'unit_id' => 'Please enter unit id.',
+            'category_id' => 'Please enter category_id.',
+        );
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            $msg = $validator->messages();
+            return ['status' => "false",'msg' => $msg];
+        }
+
+        $chkunit = Unit::where(['id' => $request->unit_id,'status' => 'Active'])->first();
+
+        if($request->category_id != 0){
+            $chkquestiontype = QuestionType::where(['id' => $request->category_id,'status' => 'Active'])->first();    
+        }
+        
+
+        if(empty($chkunit)){
+            return response()->json([
+                "code" => 400,
+                "message" => "Unit not found.",
+                "data" => [],
+            ]);
+        }
+        else{
+
+            if($request->category_id != 0){
+
+                if(empty($chkquestiontype)){
+                    return response()->json([
+                        "code" => 400,
+                        "message" => "Category not found.",
+                        "data" => [],
+                    ]);    
+                }
+                else{
+                    $get_question = Solution::where(['unit_id' => $request->unit_id,'question_type' => $request->category_id])->get();
+                    return response()->json([
+                        "code" => 200,
+                        "message" => "success",
+                        "data" => $get_question,
+                    ]);
+                }
+            }
+            else{
+                $get_question = Question::where(['unit_id' => $request->unit_id])->get();
+                return response()->json([
+                    "code" => 200,
+                    "message" => "success",
+                    "data" => $get_question,
+                ]);
+                
+            }
+        }
+    }
+
+    public function addQuestions(Request $request){
+
+        $rules = array(
+            'class_id' => 'required',
+            'assignment_type' => 'required',
+            'question_ids' => 'required',
+            'question_type' => 'required',
+            'mark_ids' => 'required',
+            'is_mcq' => 'required'
+        );
+        $messages = array(
+            'class_id' => 'Please enter class id.',
+            'assignment_type' => 'Please enter assignment type.',
+            'question_ids' => 'Please enter question ids.',
+            'question_type' => 'Please enter question type.',
+            'mark_ids' => 'Please enter mark ids.',
+            'is_mcq' => 'Please enter mcq status.'
+        );
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            $msg = $validator->messages();
+            return ['status' => "false",'msg' => $msg];
+        }
+
+        $get_question_arr = explode(',',$request->question_ids);
+        $get_mark_arr = explode(',',$request->mark_ids);
+        
+        for ($i=0; $i < count($get_question_arr); $i++) { 
+            
+            $add = new VirtualAssignmentQuestions;
+            $add->class_id = $request->class_id;
+            $add->assignment_type = $request->assignment_type;
+            $add->question_id = $get_question_arr[$i];
+            $add->question_type = $request->question_type;
+            $add->is_mcq = $request->is_mcq;
+            $add->marks = $get_mark_arr[$i];
+            $add->save();
+        }
+
+        return response()->json([
+            "code" => 200,
+            "message" => "success",
+        ]);
+        
 
     }
 
-    public function viewQuestionCategories(){
+    public function questionCounter(Request $request){
 
-    }
+        $rules = array(
+            'class_id' => 'required',
+            'assignment_type' => 'required',
+        );
+        $messages = array(
+            'class_id' => 'Please enter class id.',
+            'assignment_type' => 'Please enter assignment id.',
+        );
+        $validator = Validator::make($request->all(), $rules, $messages);
 
-    public function viewQuestions(){
+        if ($validator->fails()) {
+            $msg = $validator->messages();
+            return ['status' => "false",'msg' => $msg];
+        }
 
-    }
+        $get_question_details = VirtualAssignmentQuestions::where(['class_id' => $request->class_id,'assignment_type' => $request->assignment_type])->groupby('marks')->get();
 
-    public function addQuestions(){
-
-    }
-
-    public function questionCounter(){
-
+        if(count($get_question_details) > 0){
+            $counter_array=[];
+            foreach ($get_question_details as $key => $value) {
+               $getcount = VirtualAssignmentQuestions::where(['marks' => $value->marks,'assignment_type' => $value->assignment_type])->count('id');
+               $counter_array[] = ['marks' => $value->marks,'count' => $getcount];
+            }
+            return response()->json([
+                "code" => 200,
+                "message" => "success",
+                "data" => $counter_array,
+            ]);
+        }
+        else{
+            return response()->json([
+                "code" => 400,
+                "message" => "count not found.",
+                "data" => [],
+            ]);
+        }
+        
+        
     }
 
 }
