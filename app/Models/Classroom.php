@@ -11,6 +11,11 @@ class Classroom extends Model
     protected $table = "classes";
     // protected $fillable = ['board_id','medium_id','standard_id','subject_name','sub_title','thumbnail_file_type','thumbnail','status','order_no'];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class,'user_id');
+    }
+
     public function board()
     {
     	return $this->belongsTo(Board::class,'board_id');

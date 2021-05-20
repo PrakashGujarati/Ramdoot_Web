@@ -152,9 +152,9 @@ class RamdootEduController extends Controller
                     $classrooms[] = ['id' => $value_class->id,
                         'user_id' => $value_class->user_id,'board_id' => $value_class->board_id,'board' => 
                         isset($value_class->board->sub_title) ? $value_class->board->sub_title:'','medium_id' => $value_class->medium_id,
-                        'medium' => isset($value_class->medium->sub_title) ? $value_class->medium->sub_title:'','standard_id' => $value_class->standard_id,'standard' => isset($value_class->standard->standard) ? $value_class->standard->standard:'','subject_id' => $value_class->sub_title,'subject' => 
-                        isset($value_class->subject->sub_title) ? 
-                        $value_class->subject->subject_name:'','semester_id' => $value_class->semester_id,'semester' => 
+                        'medium' => isset($value_class->medium->sub_title) ? $value_class->medium->sub_title:'','standard_id' => $value_class->standard_id,'standard' => isset($value_class->standard->standard) ? $value_class->standard->standard:'','subject_id' => $value_class->subject_id,'subject' => 
+                        isset($value_class->subject->sub_title) ? $value_class->subject->sub_title:'',
+                        'semester_id' => $value_class->semester_id,'semester' => 
                         isset($value_class->semester->semester) ? $value_class->semester->semester:'','division' => $value_class->division,'strenth' => $value_class->strenth,'classroom_id' => $value_class->classroom_id,'type'=> $value_class->type,'status' => $value_class->status];
                 }
 
@@ -285,12 +285,92 @@ class RamdootEduController extends Controller
                 "message" => "Class not found.",
             ]);
         }
+    }
 
-        
+    public function teacher_request_list(Request $request){
+        $rules = array(
+            'class_id' => 'required'
+        );
+        $messages = array(
+            'class_id' => 'Please enter class id.'
+        );
 
-        
+        $validator = Validator::make($request->all(), $rules, $messages);
 
+        if ($validator->fails()) {
+            $msg = $validator->messages();
+            return ['status' => "false",'msg' => $msg];
+        }
+
+        //$usercheck = User::where(['id' => $request->user_id])->first();
+
+        // if($usercheck){
+            $classroom_details = ClassStudent::where(['class_id' => $request->class_id])
+                                ->where('status','!=','reject')->get();
+
+            $classrooms=[];
+            if(count($classroom_details) > 0){
+                $classrooms=[];
+                foreach ($classroom_details as $key => $value) {
+                    $aprove = 0;
+                    if($value->status == "aprove"){
+                        $aprove = 1;
+                    }
+                    $classdetails = Classroom::where(['id' => $value->class_id])->first();
+                    $classrooms[] = ['id' => $classdetails->id,
+                    'user_id' => $classdetails->user_id,'user_name' => 
+                    isset($classdetails->user->name) ? $classdetails->user->name:'','board_id' => $classdetails->board_id,'board' => 
+                    isset($classdetails->board->sub_title) ? $classdetails->board->sub_title:'','medium_id' => $classdetails->medium_id,
+                    'medium' => isset($classdetails->medium->sub_title) ? $classdetails->medium->sub_title:'','standard_id' => $classdetails->standard_id,'standard' => isset($classdetails->standard->standard) ? $classdetails->standard->standard:'','subject_id' => $classdetails->subject_id,'subject' => isset($classdetails->subject->sub_title) ? $classdetails->subject->sub_title:'','semester_id' => $classdetails->semester_id,'semester' => 
+                    isset($classdetails->semester->semester) ? $classdetails->semester->semester:'','division' => $classdetails->division,'strenth' => $classdetails->strenth,'classroom_id' => $classdetails->classroom_id,'type'=> $classdetails->type,'status' => $classdetails->status,'is_aprove' => $aprove];
+                }
+            }
+
+            return response()->json([
+                "code" => 200,
+                "message" => "success",
+                "data" => $classrooms,
+            ]);
         
+        // else{
+        //     return response()->json([
+        //         "code" => 400,
+        //         "message" => "User not found.",
+        //         "data" => [],
+        //     ]);
+        // }
+
+
+
+
+
 
     }
+
+
+    public function viewSemesters(){
+
+    }
+
+    public function viewUnits(){
+
+    }
+
+    public function viewQuestionCategories(){
+
+    }
+
+    public function viewQuestions(){
+
+    }
+
+    public function addQuestions(){
+
+    }
+
+    public function questionCounter(){
+
+    }
+
 }
+
