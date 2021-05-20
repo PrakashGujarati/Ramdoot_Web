@@ -317,9 +317,16 @@ class RamdootEduController extends Controller
                         $aprove = 1;
                     }
                     $classdetails = Classroom::where(['id' => $value->class_id])->first();
+
+                    $profile_path='';
+                    if($classdetails->user->profile_photo_path){
+                      $profile_path =   config('ramdoot.appurl')."/upload/profile/".$classdetails->user->profile_photo_path;
+                    }
+
                     $classrooms[] = ['id' => $classdetails->id,
                     'user_id' => $classdetails->user_id,'user_name' => 
-                    isset($classdetails->user->name) ? $classdetails->user->name:'','board_id' => $classdetails->board_id,'board' => 
+                    isset($classdetails->user->name) ? $classdetails->user->name:'','mobile' => 
+                    isset($classdetails->user->mobile) ? $classdetails->user->mobile:'','profile' => $profile_path,'board_id' => $classdetails->board_id,'board' => 
                     isset($classdetails->board->sub_title) ? $classdetails->board->sub_title:'','medium_id' => $classdetails->medium_id,
                     'medium' => isset($classdetails->medium->sub_title) ? $classdetails->medium->sub_title:'','standard_id' => $classdetails->standard_id,'standard' => isset($classdetails->standard->standard) ? $classdetails->standard->standard:'','subject_id' => $classdetails->subject_id,'subject' => isset($classdetails->subject->sub_title) ? $classdetails->subject->sub_title:'','semester_id' => $classdetails->semester_id,'semester' => 
                     isset($classdetails->semester->semester) ? $classdetails->semester->semester:'','division' => $classdetails->division,'strenth' => $classdetails->strenth,'classroom_id' => $classdetails->classroom_id,'type'=> $classdetails->type,'status' => $classdetails->status,'is_aprove' => $aprove];
