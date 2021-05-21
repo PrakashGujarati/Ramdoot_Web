@@ -280,7 +280,7 @@ class RamdootEduController extends Controller
                     $add = new ClassStudent;
                     $add->user_id = $request->user_id;
                     $add->class_id = $classrooms_arr->id;
-                    $add->status = 'aprove';
+                    $add->status = 'pending';
                     $add->save();    
                 }
                 else{
