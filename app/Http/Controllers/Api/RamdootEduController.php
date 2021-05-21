@@ -274,9 +274,9 @@ class RamdootEduController extends Controller
             }
             else{
 
-                $checkclass = ClassStudent::where(['user_id' => $request->user_id,'class_id' => $classrooms_arr->id])->first();
+                $checkclasses = ClassStudent::where(['user_id' => $request->user_id,'class_id' => $classrooms_arr->id])->first();
 
-                if($checkclass){
+                if($checkclasses){
                     $add = new ClassStudent;
                     $add->user_id = $request->user_id;
                     $add->class_id = $classrooms_arr->id;
