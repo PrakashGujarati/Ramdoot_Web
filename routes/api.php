@@ -84,7 +84,7 @@ Route::group(['middleware'=>'auth:api'], function()
     Route::post('view_questions', [RamdootEduController::class, 'viewQuestions']);
     Route::post('add_questions', [RamdootEduController::class, 'addQuestions']);
     Route::post('question_counter', [RamdootEduController::class, 'questionCounter']);
-    
+    Route::post('review_questions', [RamdootEduController::class, 'reviewQuestions']);   
 
 });
 

@@ -273,11 +273,25 @@ class RamdootEduController extends Controller
                 ]);
             }
             else{
-                $add = new ClassStudent;
-                $add->user_id = $request->user_id;
-                $add->class_id = $classrooms_arr->id;
-                $add->status = 'pending';
-                $add->save();
+
+                $checkclass = ClassStudent::where(['user_id' => $request->user_id,'class_id' => $classrooms_arr->id])->first();
+
+                if($checkclass){
+                    $add = new ClassStudent;
+                    $add->user_id = $request->user_id;
+                    $add->class_id = $classrooms_arr->id;
+                    $add->status = 'aprove';
+                    $add->save();    
+                }
+                else{
+                    $add = new ClassStudent;
+                    $add->user_id = $request->user_id;
+                    $add->class_id = $classrooms_arr->id;
+                    $add->status = 'pending';
+                    $add->save();
+                }
+
+                
 
                 return response()->json([
                     "code" => 200,
@@ -650,10 +664,53 @@ class RamdootEduController extends Controller
                 "message" => "count not found.",
                 "data" => [],
             ]);
-        }
-        
-        
+        }   
     }
 
+    public function reviewQuestions(Request $request){
+        $rules = array(
+            'class_id' => 'required',
+            'assignment_type' => 'required',
+        );
+        $messages = array(
+            'class_id' => 'Please enter class id.',
+            'assignment_type' => 'Please enter assignment id.',
+        );
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            $msg = $validator->messages();
+            return ['status' => "false",'msg' => $msg];
+        }
+
+        $get_question_details = VirtualAssignmentQuestions::where(['class_id' => $request->class_id,'assignment_type' => $request->assignment_type])->groupby('marks')->get();
+
+        if(count($get_question_details) > 0){
+            $counter_array=[];
+            foreach ($get_question_details as $key => $value) {
+                if($value->question_type != 0){
+                    $counter_array[] = VirtualAssignmentQuestions::with('question_solution')->where(['marks' => $value->marks,'assignment_type' => $value->assignment_type])->first();     
+                } 
+                else{
+                    $counter_array[] = VirtualAssignmentQuestions::with('question')->where(['marks' => $value->marks,'assignment_type' => $value->assignment_type])->first();
+                }
+               
+               //$counter_array[] = ['marks' => $value->marks,'count' => $getcount];
+            }
+            return response()->json([
+                "code" => 200,
+                "message" => "success",
+                "data" => $counter_array,
+            ]);
+        }
+        else{
+            return response()->json([
+                "code" => 400,
+                "message" => "count not found.",
+                "data" => [],
+            ]);
+        }
+
+    }
 }
 
