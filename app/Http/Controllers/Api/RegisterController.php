@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Validator;
+use App\Models\Role;
 
 class RegisterController extends Controller
 {
@@ -30,7 +31,18 @@ class RegisterController extends Controller
             if($user->profile_photo_path){
                 $image = config('ramdoot.appurl')."/upload/profile/".$user->profile_photo_path;    
             }
-            $data = ['id' => $user->id,'name' => $user->name,'mobile' => $user->mobile,'email' => $user->email,'address' => $user->address,'pin_code' => $user->pin_code,'city' => $user->city,'birth_date' => $user->birth_date,'user_type' => $user->user_type,'gender' => $user->gender,'profile_photo' => $image,'username' => $user->username,'token' => $token];
+
+            $role_id = 0;
+            if($user->user_type == "Teacher / Faculty"){
+                $getrole = Role::where(['name' => 'teacher'])->first();
+                $role_id = $getrole->id;
+            }
+            elseif ($user->user_type == "Student"){
+                $getrole = Role::where(['name' => 'student'])->first();
+                $role_id = $getrole->id;
+            }
+
+            $data = ['id' => $user->id,'role_id' => $role_id,'name' => $user->name,'mobile' => $user->mobile,'email' => $user->email,'address' => $user->address,'pin_code' => $user->pin_code,'city' => $user->city,'birth_date' => $user->birth_date,'user_type' => $user->user_type,'gender' => $user->gender,'profile_photo' => $image,'username' => $user->username,'token' => $token];
             return response()->json([
                 "code" => 200,
                 "message" => "success",
