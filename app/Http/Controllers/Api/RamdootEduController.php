@@ -372,6 +372,7 @@ class RamdootEduController extends Controller
 
 
     public function viewSemesters(Request $request){
+        
         $rules = array(
             'class_id' => 'required'
         );

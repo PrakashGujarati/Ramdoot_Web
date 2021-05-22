@@ -78,7 +78,7 @@ Route::group(['middleware'=>'auth:api'], function()
     Route::post('join_class', [RamdootEduController::class, 'join_class']);
 
     Route::post('teacher_request_list', [RamdootEduController::class, 'teacher_request_list']);
-    Route::post('view_semesters', [RamdootEduController::class, 'viewSemesters']);
+    
     Route::post('view_units', [RamdootEduController::class, 'viewUnits']);
     Route::post('view_question_categories', [RamdootEduController::class, 'viewQuestionCategories']);
     Route::post('view_questions', [RamdootEduController::class, 'viewQuestions']);
@@ -87,6 +87,8 @@ Route::group(['middleware'=>'auth:api'], function()
     Route::post('review_questions', [RamdootEduController::class, 'reviewQuestions']);   
 
 });
+
+Route::post('view_semesters_web', [RamdootEduController::class, 'viewSemesters']);
 
 Route::post('register', [RegisterController::class, 'register']);
 Route::post('login', [RegisterController::class, 'login']);
