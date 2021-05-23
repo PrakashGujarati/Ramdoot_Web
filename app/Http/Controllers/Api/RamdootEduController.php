@@ -690,10 +690,10 @@ class RamdootEduController extends Controller
             $counter_array=[];
             foreach ($get_question_details as $key => $value) {
                 if($value->question_type != 0){
-                    $question_array[] = VirtualAssignmentQuestions::with('questionType:id,question_type','question_solution')->where(['class_id' => $value->class_id,'marks' => $value->marks,'assignment_type' => $value->assignment_type])->get();     
+                    $question_array[] = VirtualAssignmentQuestions::with('questionType:id,question_type','question_solution')->where(['class_id' => $value->class_id,'marks' => $value->marks,'assignment_type' => $value->assignment_type])->first();     
                 } 
                 else{
-                    $question_array[] = VirtualAssignmentQuestions::with('question')->where(['class_id' => $value->class_id,'marks' => $value->marks,'assignment_type' => $value->assignment_type])->get();
+                    $question_array[] = VirtualAssignmentQuestions::with('question')->where(['class_id' => $value->class_id,'marks' => $value->marks,'assignment_type' => $value->assignment_type])->first();
                 }
             }
             return response()->json([
