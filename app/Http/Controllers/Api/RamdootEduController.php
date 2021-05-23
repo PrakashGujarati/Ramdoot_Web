@@ -697,7 +697,7 @@ class RamdootEduController extends Controller
                     $vmquestions = VirtualAssignmentQuestions::with('question')->where(['class_id' => $value->class_id,'marks' => $value->marks,'assignment_type' => $value->assignment_type])->pluck('question_id')->toArray();
                     $questions = Solution::whereIn('id',$vmquestions)->get();
                 }                                
-                $question_array[] = ['id' => $value->id,'class_id' => $value->class_id,'assignment_type' => $value->assignment_type,'question_type_id' => $value->questionType->id,'question_type' => $value->questionType->question_type,'is_mcq' => $value->is_mcq,'marks' => $value->marks,'questions' => $questions];
+                $question_array[] = ['id' => $value->id,'class_id' => $value->class_id,'assignment_type' => $value->assignment_type,'question_type_id' => $value->questionType->id,'question_type' => $value->questionType->question_type,'is_mcq' => $value->is_mcq,'marks' => $value->marks,'question_solution' => $questions];
             }
             
             return response()->json([
