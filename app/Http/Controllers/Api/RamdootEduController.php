@@ -689,12 +689,21 @@ class RamdootEduController extends Controller
         if(count($get_question_details) > 0){
             $counter_array=[];
             foreach ($get_question_details as $key => $value) {
-                if($value->question_type != 0){
-                    $question_array[] = VirtualAssignmentQuestions::with('questionType:id,question_type','question_solution')->where(['class_id' => $value->class_id,'marks' => $value->marks,'assignment_type' => $value->assignment_type])->first();     
+                if($value->question_type != 0 || $value->is_mcq == 0){
+                     $vquestions = VirtualAssignmentQuestions::where(['class_id' => $value->class_id,'marks' => $value->marks,'assignment_type' => $value->assignment_type])->get();     
+                    foreach($vquestions as $vque)
+                    {
+                        $questions[] = Solution::where(['id'=>$vque->question_id])->first(); //,'question_type'=>$vque->question_type
+                    }
                 } 
                 else{
-                    $question_array[] = VirtualAssignmentQuestions::with('question')->where(['class_id' => $value->class_id,'marks' => $value->marks,'assignment_type' => $value->assignment_type])->first();
-                }
+                    $vmquestions = VirtualAssignmentQuestions::with('question')->where(['class_id' => $value->class_id,'marks' => $value->marks,'assignment_type' => $value->assignment_type])->get();
+                    foreach($vmquestions as $vmque)
+                    {
+                        $questions[] = Question::where(['id',$vmque->question_id])->first();
+                    }
+                }                
+                $question_array[] = ['id' => $value->id,'class_id' => $value->class_id,'assignment_type' => $value->assignment_type,'question_type_id' => $value->questionType->id,'question_type' => $value->questionType->question_type,'is_mcq' => $value->is_mcq,'marks' => $value->marks,'questions' => $questions];
             }
             return response()->json([
                 "code" => 200,
