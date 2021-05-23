@@ -71,7 +71,12 @@ class FeatureController extends Controller
                 $this->compressImage($image->getPathName(),$location,60);
             }
         }
-
+        /*
+        $last_data=Feature::orderBy('id','desc')->first();
+        if($last_data)
+        {
+          $last_no=intval($last_data->order_no)+1;
+        }*/ 
         $add = new Feature;
         $add->title = $request->title;
         $add->image = $new_name;

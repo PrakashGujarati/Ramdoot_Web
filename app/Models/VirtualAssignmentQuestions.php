@@ -19,4 +19,9 @@ class VirtualAssignmentQuestions extends Model
     {
     	return $this->hasMany(Question::class,'id','question_id');
     }
+
+    public function questionType()
+    {
+    	return $this->hasOne(QuestionType::class,'id','question_type','id');
+    }
 }

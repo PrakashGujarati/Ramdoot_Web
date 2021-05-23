@@ -650,7 +650,7 @@ class RamdootEduController extends Controller
         if(count($get_question_details) > 0){
             $counter_array=[];
             foreach ($get_question_details as $key => $value) {
-               $getcount = VirtualAssignmentQuestions::where(['marks' => $value->marks,'assignment_type' => $value->assignment_type])->count('id');
+               $getcount = VirtualAssignmentQuestions::where(['class_id' => $value->class_id,'marks' => $value->marks,'assignment_type' => $value->assignment_type])->count('id');
                $counter_array[] = ['marks' => $value->marks,'count' => $getcount];
             }
             return response()->json([
@@ -684,24 +684,22 @@ class RamdootEduController extends Controller
             return ['status' => "false",'msg' => $msg];
         }
 
-        $get_question_details = VirtualAssignmentQuestions::where(['class_id' => $request->class_id,'assignment_type' => $request->assignment_type])->groupby('marks')->get();
+        $get_question_details = VirtualAssignmentQuestions::with('questionType')->where(['class_id' => $request->class_id,'assignment_type' => $request->assignment_type])->groupby('marks')->get();
 
         if(count($get_question_details) > 0){
             $counter_array=[];
             foreach ($get_question_details as $key => $value) {
                 if($value->question_type != 0){
-                    $counter_array[] = VirtualAssignmentQuestions::with('question_solution')->where(['marks' => $value->marks,'assignment_type' => $value->assignment_type])->first();     
+                    $question_array[] = VirtualAssignmentQuestions::with('questionType:id,question_type','question_solution')->where(['class_id' => $value->class_id,'marks' => $value->marks,'assignment_type' => $value->assignment_type])->get();     
                 } 
                 else{
-                    $counter_array[] = VirtualAssignmentQuestions::with('question')->where(['marks' => $value->marks,'assignment_type' => $value->assignment_type])->first();
+                    $question_array[] = VirtualAssignmentQuestions::with('question')->where(['class_id' => $value->class_id,'marks' => $value->marks,'assignment_type' => $value->assignment_type])->get();
                 }
-               
-               //$counter_array[] = ['marks' => $value->marks,'count' => $getcount];
             }
             return response()->json([
                 "code" => 200,
                 "message" => "success",
-                "data" => $counter_array,
+                "data" => $question_array,
             ]);
         }
         else{

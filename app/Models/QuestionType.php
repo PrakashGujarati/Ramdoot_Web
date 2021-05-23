@@ -10,4 +10,10 @@ class QuestionType extends Model
     use HasFactory;
     
     protected $table = 'question_types';
+    public $timestamp = false;
+
+    public function virtudalAssignmentQuestion()
+    {
+    	return $this->belongsTo(VirtualAssignmentQuestions::class,'question_type');
+    }
 }

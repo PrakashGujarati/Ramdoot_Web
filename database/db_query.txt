@@ -1,6 +1,13 @@
+--------------- 23-5-21 ----------
+ALTER TABLE `question_types`
+  DROP `created_at`,
+  DROP `updated_at`;
 
+UPDATE `roles` SET `name` = 'Teacher / Faculty' WHERE `roles`.`id` = 7;
 
-
+ALTER TABLE `roles` CHANGE `slug` `slug` ENUM('Student','Parent','Teacher','Principal','TuitionClasses','SchoolCollege') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL;
+INSERT INTO `roles` (`id`, `name`, `guard_name`, `slug`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES (NULL, 'School - College', 'web', 'SchoolCollege', '1', NULL, NULL, NULL);
+---------------------------------
 ALTER TABLE `books` ADD `order_no` INT NOT NULL DEFAULT '0' AFTER `status`;
 ALTER TABLE `worksheets` ADD `order_no` INT NOT NULL DEFAULT '0' AFTER `status`;
 ALTER TABLE `notes` ADD `order_no` INT NOT NULL DEFAULT '0' AFTER `status`;

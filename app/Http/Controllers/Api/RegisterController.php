@@ -11,6 +11,15 @@ use App\Models\Role;
 
 class RegisterController extends Controller
 {
+    public function userRoles(Request $request)
+    {
+        $roles = Role::where('slug','!=',"")->get();
+        return response()->json([
+            "code" => 200,
+            "message" => "success",
+            "data" => $roles,
+        ]);
+    }
     public function register(Request $request)
     {
         $this->validate($request, [            
@@ -33,12 +42,12 @@ class RegisterController extends Controller
             }
 
             $role_id = 0;
-            if($user->user_type == "Teacher / Faculty"){
-                $getrole = Role::where(['name' => 'teacher'])->first();
+            if($user->user_type == "Teacher / Faculty" || $user->user_type == "Teacher"){
+                $getrole = Role::where(['slug' => 'Teacher'])->first();
                 $role_id = $getrole->id;
             }
             elseif ($user->user_type == "Student"){
-                $getrole = Role::where(['name' => 'student'])->first();
+                $getrole = Role::where(['slug' => 'Student'])->first();
                 $role_id = $getrole->id;
             }
 
@@ -151,6 +160,7 @@ class RegisterController extends Controller
 
             $update = User::find($checkuser->id);
             $update->username = $request->username;
+            $update->role_id = $request->role_id;
             $update->name = $request->name;
             $update->mobile = $request->mobile;
             $update->email = $request->email;
