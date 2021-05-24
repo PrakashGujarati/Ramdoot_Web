@@ -582,6 +582,8 @@ class RamdootEduController extends Controller
 
     public function addQuestions(Request $request){
 
+       // dd($request->all());
+
         $rules = array(
             'class_id' => 'required',
             'assignment_type' => 'required',

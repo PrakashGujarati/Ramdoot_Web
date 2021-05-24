@@ -92,6 +92,10 @@ Route::group(['middleware'=>'auth:api'], function()
 Route::post('view_semesters_web', [RamdootEduController::class, 'viewSemesters']);
 Route::post('view_units_web', [RamdootEduController::class, 'viewUnits']);
 Route::post('view_question_categories_web', [RamdootEduController::class, 'viewQuestionCategories']);
+Route::post('view_questions_web', [RamdootEduController::class, 'viewQuestions']);
+Route::post('add_questions_web', [RamdootEduController::class, 'addQuestions']);
+Route::post('question_counter_web', [RamdootEduController::class, 'questionCounter']);
+Route::post('review_questions_web', [RamdootEduController::class, 'reviewQuestions']);
 
 Route::post('roles', [RegisterController::class, 'userRoles']);
 Route::post('register', [RegisterController::class, 'register']);
