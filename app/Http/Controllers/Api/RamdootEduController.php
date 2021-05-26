@@ -20,6 +20,9 @@ use App\Models\Solution;
 use App\Models\Question;
 use App\Models\QuestionType;
 use App\Models\VirtualAssignmentQuestions;
+use App\Models\Assignment;
+use App\Models\AssignmentQuestion;
+
 
 
 class RamdootEduController extends Controller
@@ -715,6 +718,94 @@ class RamdootEduController extends Controller
                 "data" => [],
             ]);
         }
+
+    }
+
+    public function generateAssignment(Request $request){
+
+        $rules = array(
+            'class_id' => 'required',
+            'assignment_type' => 'required',
+        );
+        $messages = array(
+            'class_id' => 'Please enter class id.',
+            'assignment_type' => 'Please enter assignment id.',
+        );
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            $msg = $validator->messages();
+            return ['status' => "false",'msg' => $msg];
+        }
+
+        if($request->has('assignment_image'))
+        {
+        
+            $image = $request->file('assignment_image');
+            $url = public_path('upload/assignment_image/');
+            $originalPath = $url;
+            $name = time() . mt_rand(10000, 99999);
+            $new_name = $name . '.' . $image->getClientOriginalExtension();
+            $image->move($originalPath, $new_name);           
+        }
+
+        $add = new Assignment;
+        $add->user_id = $request->user_id;
+        $add->class_id = $request->class_id;
+        $add->assignment_type = $request->assignment_type;
+        $add->subject_id = $request->subject_id;
+        $add->semester_id = $request->semester_id;
+        $add->mode = $request->mode;
+        $add->title = $request->title;
+        $add->assignment_date = $request->assignment_date;
+        $add->assignment_time = $request->assignment_time;
+        $add->due_date = $request->due_date;
+        $add->due_time = $request->due_time;
+        $add->total_questions = $request->total_questions;
+        $add->marks = $request->marks;
+        $add->assignment_option = $request->assignment_option;
+        $add->assignment_image = $new_name;
+        $add->save();
+
+        $get_question = explode(',',$request->question_id);
+        
+        if(count($get_question) > 0){
+            for ($i=0; $i < count($get_question); $i++) { 
+                
+                $add_ques = new AssignmentQuestion;
+                $add_ques->unit_id = $request->unit_id;
+                $add_ques->question_type = $request->question_type;
+                $add_ques->assignment_id = $add->id;
+                $add_ques->question_id = $get_question[$i];
+                $add_ques->save();
+            }    
+        }
+        
+        return response()->json([
+            "code" => 200,
+            "message" => "success",
+        ]);
+    }
+
+    public function assignmentList(Request $request){
+
+        $assignment_details = Assignment::with('assignment_question')->get();
+        $assignment=[];
+        if(count($assignment_details) > 0){
+            foreach ($assignment_details as $key => $value) {
+               $total_submission =  0; 
+               $assignment_img = '';
+               if($value->assignment_image){
+                $assignment_img =  config('ramdoot.appurl')."/upload/assignment_image/".$value->assignment_image;
+                }
+               $assignment[] = Assignment::with('assignment_question')->where('id',$value->id)->select('*',DB::raw("CONCAT('$total_submission') AS total_submission"),DB::raw("CONCAT('$assignment_img') AS assignment_image_url"))->first();
+            }
+        }
+        return response()->json([
+            "code" => 200,
+            "message" => "success",
+            "data" => $assignment,
+        ]);        
 
     }
 }

@@ -41,17 +41,17 @@ class RegisterController extends Controller
                 $image = config('ramdoot.appurl')."/upload/profile/".$user->profile_photo_path;    
             }
 
-            $role_id = 0;
-            if($user->user_type == "Teacher / Faculty" || $user->user_type == "Teacher"){
-                $getrole = Role::where(['slug' => 'Teacher'])->first();
-                $role_id = $getrole->id;
-            }
-            elseif ($user->user_type == "Student"){
-                $getrole = Role::where(['slug' => 'Student'])->first();
-                $role_id = $getrole->id;
-            }
+            // $role_id = 0;
+            // if($user->user_type == "Teacher / Faculty" || $user->user_type == "Teacher"){
+            //     $getrole = Role::where(['slug' => 'Teacher'])->first();
+            //     $role_id = $getrole->id;
+            // }
+            // elseif ($user->user_type == "Student"){
+            //     $getrole = Role::where(['slug' => 'Student'])->first();
+            //     $role_id = $getrole->id;
+            // }
 
-            $data = ['id' => $user->id,'role_id' => $role_id,'name' => $user->name,'mobile' => $user->mobile,'email' => $user->email,'address' => $user->address,'pin_code' => $user->pin_code,'city' => $user->city,'birth_date' => $user->birth_date,'user_type' => $user->user_type,'gender' => $user->gender,'profile_photo' => $image,'username' => $user->username,'token' => $token];
+            $data = ['id' => $user->id,'role_id' => $user->role_id,'name' => $user->name,'mobile' => $user->mobile,'email' => $user->email,'address' => $user->address,'pin_code' => $user->pin_code,'city' => $user->city,'birth_date' => $user->birth_date,'user_type' => $user->user_type,'gender' => $user->gender,'profile_photo' => $image,'username' => $user->username,'token' => $token];
             return response()->json([
                 "code" => 200,
                 "message" => "success",
@@ -68,7 +68,7 @@ class RegisterController extends Controller
             if($user->profile_photo_path){
                 $image = config('ramdoot.appurl')."/upload/profile/".$user->profile_photo_path;    
             }
-            $data = ['id' => $user->id,'name' => $user->name,'mobile' => $user->mobile,'email' => $user->email,'address' => $user->address,'pin_code' => $user->pin_code,'city' => $user->city,'birth_date' => $user->birth_date,'user_type' => $user->user_type,'gender' => $user->gender,'profile_photo' => $image,'username' => $user->username,'token' => $token];
+            $data = ['id' => $user->id,'role_id' => $user->role_id,'name' => $user->name,'mobile' => $user->mobile,'email' => $user->email,'address' => $user->address,'pin_code' => $user->pin_code,'city' => $user->city,'birth_date' => $user->birth_date,'user_type' => $user->user_type,'gender' => $user->gender,'profile_photo' => $image,'username' => $user->username,'token' => $token];
             return response()->json([
                 "code" => 200,
                 "message" => "success",
@@ -179,7 +179,7 @@ class RegisterController extends Controller
             }
             
 
-            $data = ['name' => $update->name,'mobile' => $update->mobile,'email' => $update->email,'address' => $update->address,'pin_code' => $update->pin_code,'city' => $update->city,'birth_date' => $update->birth_date,'user_type' => $update->user_type,'gender' => $update->gender,'profile_photo' => $image,'username' => $update->username,'user_id'=>$checkuser->id];
+            $data = ['role_id' => $update->role_id,'name' => $update->name,'mobile' => $update->mobile,'email' => $update->email,'address' => $update->address,'pin_code' => $update->pin_code,'city' => $update->city,'birth_date' => $update->birth_date,'user_type' => $update->user_type,'gender' => $update->gender,'profile_photo' => $image,'username' => $update->username,'user_id'=>$checkuser->id];
 
             return response()->json([
                 "code" => 200,

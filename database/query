@@ -1,4 +1,9 @@
 
+
+-----------------------26-05-2021-------------------
+
+ALTER TABLE `assignments` ADD `marks` INT(11) NOT NULL DEFAULT '0' AFTER `total_questions`, ADD `assignment_image` TEXT NULL AFTER `marks`, ADD `assignment_option` VARCHAR(255) NULL AFTER `assignment_image`;
+
 -----------------------20-05-2021-------------------
 
 CREATE TABLE `virtual_assignment_questions` (
