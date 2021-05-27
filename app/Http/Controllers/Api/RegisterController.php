@@ -13,7 +13,7 @@ class RegisterController extends Controller
 {
     public function userRoles(Request $request)
     {
-        $roles = Role::where('slug','!=',"")->get();
+        $roles = Role::where(['status' => 0])->where('slug','!=',"")->get();
         return response()->json([
             "code" => 200,
             "message" => "success",

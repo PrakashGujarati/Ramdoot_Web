@@ -1,5 +1,26 @@
 
 
+
+-----------------------27-05-2021-------------------
+
+
+ALTER TABLE `virtual_assignment_questions` ADD `mode` VARCHAR(255) NULL AFTER `class_id`;
+
+ALTER TABLE `virtual_assignment_questions` CHANGE `mode` `mode` ENUM('manually_creation','smart_creation') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL;
+
+ALTER TABLE `assignments` CHANGE `mode` `mode` ENUM('manually_creation','smart_creation') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL;
+
+ALTER TABLE `assignment_questions` ADD `semester_id` INT(11) NOT NULL DEFAULT '0' AFTER `assignment_id`;
+
+ALTER TABLE `assignment_questions` ADD `marks` INT(11) NOT NULL DEFAULT '0' AFTER `question_type`;
+
+ALTER TABLE `assignments` CHANGE `marks` `total_marks` INT(11) NOT NULL DEFAULT '0';
+
+
+ALTER TABLE `assignments` ADD `water_mark` VARCHAR(255) NULL AFTER `assignment_option`, ADD `footer` VARCHAR(255) NULL AFTER `water_mark`, ADD `instruction` VARCHAR(255) NULL AFTER `footer`, ADD `font_size` VARCHAR(255) NULL AFTER `instruction`;
+
+ALTER TABLE `assignments` ADD `marks_on` VARCHAR(255) NULL DEFAULT NULL AFTER `font_size`;
+
 -----------------------26-05-2021-------------------
 
 ALTER TABLE `assignments` ADD `marks` INT(11) NOT NULL DEFAULT '0' AFTER `total_questions`, ADD `assignment_image` TEXT NULL AFTER `marks`, ADD `assignment_option` VARCHAR(255) NULL AFTER `assignment_image`;

@@ -621,6 +621,7 @@ class RamdootEduController extends Controller
             $add->question_id = $get_question_arr[$i];
             $add->question_type = $request->question_type;
             $add->is_mcq = $request->is_mcq;
+            $add->mode = $request->mode;
             $add->marks = $get_mark_arr[$i];
             $add->save();
         }
@@ -638,10 +639,12 @@ class RamdootEduController extends Controller
         $rules = array(
             'class_id' => 'required',
             'assignment_type' => 'required',
+            'mode' => 'required',
         );
         $messages = array(
             'class_id' => 'Please enter class id.',
             'assignment_type' => 'Please enter assignment id.',
+            'mode' => 'Please enter mode.',
         );
         $validator = Validator::make($request->all(), $rules, $messages);
 
@@ -650,12 +653,12 @@ class RamdootEduController extends Controller
             return ['status' => "false",'msg' => $msg];
         }
 
-        $get_question_details = VirtualAssignmentQuestions::where(['class_id' => $request->class_id,'assignment_type' => $request->assignment_type])->groupby('marks')->get();
+        $get_question_details = VirtualAssignmentQuestions::where(['class_id' => $request->class_id,'assignment_type' => $request->assignment_type,'mode' => $request->mode])->groupby('marks')->get();
 
         if(count($get_question_details) > 0){
             $counter_array=[];
             foreach ($get_question_details as $key => $value) {
-               $getcount = VirtualAssignmentQuestions::where(['class_id' => $value->class_id,'marks' => $value->marks,'assignment_type' => $value->assignment_type])->count('id');
+               $getcount = VirtualAssignmentQuestions::where(['class_id' => $value->class_id,'marks' => $value->marks,'assignment_type' => $value->assignment_type,'mode' => $request->mode])->count('id');
                $counter_array[] = ['marks' => $value->marks,'count' => $getcount];
             }
             return response()->json([
@@ -702,7 +705,7 @@ class RamdootEduController extends Controller
                     $vmquestions = VirtualAssignmentQuestions::with('question')->where(['class_id' => $value->class_id,'marks' => $value->marks,'assignment_type' => $value->assignment_type])->pluck('question_id')->toArray();
                     $questions = Solution::whereIn('id',$vmquestions)->get();
                 }                                
-                $question_array[] = ['id' => $value->id,'class_id' => $value->class_id,'assignment_type' => $value->assignment_type,'question_type' => $value->questionType,'is_mcq' => $value->is_mcq,'marks' => $value->marks,'question_solution' => $questions]; //,'question_type_id' => $value->questionType->id,'question_type' => $value->questionType->question_type
+                $question_array[] = ['id' => $value->id,'class_id' => $value->class_id,'mode' => $value->mode,'assignment_type' => $value->assignment_type,'question_type' => $value->questionType,'is_mcq' => $value->is_mcq,'marks' => $value->marks,'question_solution' => $questions]; //,'question_type_id' => $value->questionType->id,'question_type' => $value->questionType->question_type
             }
             
             return response()->json([
@@ -754,7 +757,6 @@ class RamdootEduController extends Controller
         $add->class_id = $request->class_id;
         $add->assignment_type = $request->assignment_type;
         $add->subject_id = $request->subject_id;
-        $add->semester_id = $request->semester_id;
         $add->mode = $request->mode;
         $add->title = $request->title;
         $add->assignment_date = $request->assignment_date;
@@ -762,21 +764,28 @@ class RamdootEduController extends Controller
         $add->due_date = $request->due_date;
         $add->due_time = $request->due_time;
         $add->total_questions = $request->total_questions;
-        $add->marks = $request->marks;
+        $add->total_marks = $request->total_marks;
         $add->assignment_option = $request->assignment_option;
         $add->assignment_image = $new_name;
         $add->save();
 
         $get_question = explode(',',$request->question_id);
+        $get_unit = explode(',',$request->unit_id);
+        $get_semester_id = explode(',',$request->semester_id);
+        $get_question_type = explode(',',$request->question_type);
+        $get_marks = explode(',',$request->marks);
+        
         
         if(count($get_question) > 0){
             for ($i=0; $i < count($get_question); $i++) { 
                 
                 $add_ques = new AssignmentQuestion;
-                $add_ques->unit_id = $request->unit_id;
-                $add_ques->question_type = $request->question_type;
+                $add_ques->unit_id = $get_unit[$i];
+                $add_ques->semester_id = $get_semester_id[$i];
+                $add_ques->question_type = $get_question_type[$i];
                 $add_ques->assignment_id = $add->id;
                 $add_ques->question_id = $get_question[$i];
+                $add_ques->marks = $get_marks[$i];
                 $add_ques->save();
             }    
         }
