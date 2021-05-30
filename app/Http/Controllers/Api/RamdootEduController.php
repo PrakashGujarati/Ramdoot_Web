@@ -827,19 +827,22 @@ class RamdootEduController extends Controller
                 
                 if($check_student){
 
-                    $get_student_assignment = AssignmentStudent::where(['student_id' => $request->student_id,'class_id' => $request->class_id])->get();
+                    $get_student_assignment = AssignmentStudent::where(['student_id' => $request->student_id])->get();
                    // $assignment_details = Assignment::with('assignment_question')->where(['user_id' => ])->get();
                     $assignment=[];
                     if(count($get_student_assignment) > 0){
                         foreach ($get_student_assignment as $key => $value) {
-                            $assig_data = Assignment::where(['id' => $value->assignment_id])->first();
-                            
-                           $total_submission =  0; 
-                           $assignment_img = '';
-                           if($assig_data->assignment_image){
-                            $assignment_img =  config('ramdoot.appurl')."/upload/assignment_image/".$assig_data->assignment_image;
-                            }
-                           $assignment[] = Assignment::with('assignment_question','assignment_question.question')->where('id',$assig_data->id)->select('*',DB::raw("CONCAT('$total_submission') AS total_submission"),DB::raw("CONCAT('$assignment_img') AS assignment_image_url"))->first();
+                            $assig_data = Assignment::where(['id' => $value->assignment_id,'class_id' => $request->class_id])->first();
+                           
+                           if($assig_data){
+                                $total_submission =  0; 
+                               $assignment_img = '';
+                               if($assig_data->assignment_image){
+                                $assignment_img =  config('ramdoot.appurl')."/upload/assignment_image/".$assig_data->assignment_image;
+                                }
+                               $assignment[] = Assignment::with('assignment_question','assignment_question.question')->where('id',$assig_data->id)->select('*',DB::raw("CONCAT('$total_submission') AS total_submission"),DB::raw("CONCAT('$assignment_img') AS assignment_image_url"))->first(); 
+                           } 
+                           
                         }
                     }
                     return response()->json([
