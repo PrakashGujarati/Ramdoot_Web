@@ -868,7 +868,7 @@ class RamdootEduController extends Controller
                        if($value->assignment_image){
                         $assignment_img =  config('ramdoot.appurl')."/upload/assignment_image/".$value->assignment_image;
                         }
-                       $assignment[] = Assignment::with('assignment_question')->where('id',$value->id)->select('*',DB::raw("CONCAT('$total_submission') AS total_submission"),DB::raw("CONCAT('$assignment_img') AS assignment_image_url"))->first();
+                       $assignment[] = Assignment::with('assignment_question','assignment_question.question')->where('id',$value->id)->select('*',DB::raw("CONCAT('$total_submission') AS total_submission"),DB::raw("CONCAT('$assignment_img') AS assignment_image_url"))->first();
                     }
                 }
                 return response()->json([
