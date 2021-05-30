@@ -22,8 +22,7 @@ use App\Models\QuestionType;
 use App\Models\VirtualAssignmentQuestions;
 use App\Models\Assignment;
 use App\Models\AssignmentQuestion;
-
-
+use App\Models\AssignmentStudent;
 
 class RamdootEduController extends Controller
 {
@@ -585,7 +584,7 @@ class RamdootEduController extends Controller
 
     public function addQuestions(Request $request){
 
-       // dd($request->all());
+        //dd($request->all());
 
         $rules = array(
             'class_id' => 'required',
@@ -593,7 +592,8 @@ class RamdootEduController extends Controller
             'question_ids' => 'required',
             'question_type' => 'required',
             'mark_ids' => 'required',
-            'is_mcq' => 'required'
+            'is_mcq' => 'required',
+            'mode' => 'required',
         );
         $messages = array(
             'class_id' => 'Please enter class id.',
@@ -601,7 +601,8 @@ class RamdootEduController extends Controller
             'question_ids' => 'Please enter question ids.',
             'question_type' => 'Please enter question type.',
             'mark_ids' => 'Please enter mark ids.',
-            'is_mcq' => 'Please enter mcq status.'
+            'is_mcq' => 'Please enter mcq status.',
+            'mode' => 'Please enter mode',
         );
         $validator = Validator::make($request->all(), $rules, $messages);
 
@@ -741,6 +742,7 @@ class RamdootEduController extends Controller
             return ['status' => "false",'msg' => $msg];
         }
 
+        $new_name=null;
         if($request->has('assignment_image'))
         {
         
@@ -801,10 +803,12 @@ class RamdootEduController extends Controller
     public function assignmentList(Request $request){
 
         $rules = array(
-            'class_id' => 'required'
+            'class_id' => 'required',
+            'student_id' => 'required',
         );
         $messages = array(
-            'class_id' => 'Please enter class id.'
+            'class_id' => 'Please enter class id.',
+            'student_id' => 'Please enter Student id.',
         );
         $validator = Validator::make($request->all(), $rules, $messages);
 
@@ -817,23 +821,64 @@ class RamdootEduController extends Controller
 
         if($check_class){
 
-            $assignment_details = Assignment::with('assignment_question')->where(['class_id' => $request->class_id])->get();
-            $assignment=[];
-            if(count($assignment_details) > 0){
-                foreach ($assignment_details as $key => $value) {
-                   $total_submission =  0; 
-                   $assignment_img = '';
-                   if($value->assignment_image){
-                    $assignment_img =  config('ramdoot.appurl')."/upload/assignment_image/".$value->assignment_image;
+            if($request->student_id != "0"){
+
+                $check_student = User::where(['id' => $request->student_id])->first();
+                
+                if($check_student){
+
+                    $get_student_assignment = AssignmentStudent::where(['student_id' => $request->student_id])->get();
+                   // $assignment_details = Assignment::with('assignment_question')->where(['user_id' => ])->get();
+                    $assignment=[];
+                    if(count($get_student_assignment) > 0){
+                        foreach ($get_student_assignment as $key => $value) {
+                            $assig_data = Assignment::where(['id' => $value->assignment_id])->first();
+                            
+                           $total_submission =  0; 
+                           $assignment_img = '';
+                           if($assig_data->assignment_image){
+                            $assignment_img =  config('ramdoot.appurl')."/upload/assignment_image/".$assig_data->assignment_image;
+                            }
+                           $assignment[] = Assignment::with('assignment_question','assignment_question.question')->where('id',$assig_data->id)->select('*',DB::raw("CONCAT('$total_submission') AS total_submission"),DB::raw("CONCAT('$assignment_img') AS assignment_image_url"))->first();
+                        }
                     }
-                   $assignment[] = Assignment::with('assignment_question')->where('id',$value->id)->select('*',DB::raw("CONCAT('$total_submission') AS total_submission"),DB::raw("CONCAT('$assignment_img') AS assignment_image_url"))->first();
+                    return response()->json([
+                        "code" => 200,
+                        "message" => "success",
+                        "data" => $assignment,
+                    ]);
                 }
+                else{
+                    return response()->json([
+                        "code" => 400,
+                        "message" => "Student not found.",
+                        "data" => [],
+                    ]);
+                }
+
+                
+
+            }else{
+                $assignment_details = Assignment::with('assignment_question')->where(['class_id' => $request->class_id])->get();
+                $assignment=[];
+                if(count($assignment_details) > 0){
+                    foreach ($assignment_details as $key => $value) {
+                       $total_submission =  0; 
+                       $assignment_img = '';
+                       if($value->assignment_image){
+                        $assignment_img =  config('ramdoot.appurl')."/upload/assignment_image/".$value->assignment_image;
+                        }
+                       $assignment[] = Assignment::with('assignment_question')->where('id',$value->id)->select('*',DB::raw("CONCAT('$total_submission') AS total_submission"),DB::raw("CONCAT('$assignment_img') AS assignment_image_url"))->first();
+                    }
+                }
+                return response()->json([
+                    "code" => 200,
+                    "message" => "success",
+                    "data" => $assignment,
+                ]);
             }
-            return response()->json([
-                "code" => 200,
-                "message" => "success",
-                "data" => $assignment,
-            ]);
+
+            
 
         }
         else{
@@ -844,9 +889,52 @@ class RamdootEduController extends Controller
                 "data" => [],
             ]);
         }
-
-                
-
     }
+
+    public function assignmentStudent(Request $request){
+
+        $rules = array(
+            'assignment_id' => 'required',
+            'student_ids' => 'required',
+        );
+        $messages = array(
+            'assignment_id' => 'Please enter assignment id.',
+            'student_ids' => 'Please enter student id.'
+        );
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            $msg = $validator->messages();
+            return ['status' => "false",'msg' => $msg];
+        }
+        $get_student = explode(',',$request->student_ids);
+        
+        $check_assignment = Assignment::where(['id' => $request->assignment_id])->first();
+        if($check_assignment){
+            if(count($get_student) > 0){
+                for ($i=0; $i < count($get_student); $i++) { 
+                    $add_ques = new AssignmentStudent;
+                    $add_ques->assignment_id = $request->assignment_id;
+                    $add_ques->student_id = $get_student[$i];
+                    $add_ques->save();
+                }
+
+                return response()->json([
+                    "code" => 200,
+                    "message" => "success"
+                ]);    
+            }   
+        }
+        else
+        {
+            return response()->json([
+                "code" => 400,
+                "message" => "Assignment not found.",
+                "data" => [],
+            ]);
+        }
+   
+    }
+    
 }
 
