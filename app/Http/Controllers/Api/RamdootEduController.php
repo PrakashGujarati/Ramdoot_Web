@@ -23,6 +23,8 @@ use App\Models\VirtualAssignmentQuestions;
 use App\Models\Assignment;
 use App\Models\AssignmentQuestion;
 use App\Models\AssignmentStudent;
+use App\Models\AssignmentSubmission;
+use App\Models\AssignmentDocument;
 
 class RamdootEduController extends Controller
 {
@@ -311,10 +313,12 @@ class RamdootEduController extends Controller
 
     public function teacher_request_list(Request $request){
         $rules = array(
-            'class_id' => 'required'
+            'class_id' => 'required',
+            'assignment_id' => 'required'
         );
         $messages = array(
-            'class_id' => 'Please enter class id.'
+            'class_id' => 'Please enter class id.',
+            'assignment_id' => 'Please enter assignment id.'
         );
 
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -324,11 +328,67 @@ class RamdootEduController extends Controller
             return ['status' => "false",'msg' => $msg];
         }
 
-        //$usercheck = User::where(['id' => $request->user_id])->first();
+        if($request->assignment_id != "0"){
 
-        // if($usercheck){
+            $check_assignment = Assignment::where(['id' => $request->assignment_id])->first();
+
+            if($check_assignment){
+
+                $classroom_details = ClassStudent::where(['class_id' => $request->class_id])
+                            ->where('status','!=','reject')->get();
+
+                $classrooms=[];$isAssignmentSent=0;
+                if(count($classroom_details) > 0){
+                    $classrooms=[];
+                    foreach ($classroom_details as $key => $value) {
+                        $aprove = 0;
+                        if($value->status == "aprove"){
+                            $aprove = 1;
+                        }
+                        $classdetails = Classroom::where(['id' => $value->class_id])->first();
+
+                        $getuser_details = User::where(['id' => $value->user_id])->first();
+
+                        $profile_path='';
+                        if($getuser_details->profile_photo_path){
+                          $profile_path =   config('ramdoot.appurl')."/upload/profile/".$getuser_details->profile_photo_path;
+                        }
+
+                        $check_student_assignment = AssignmentStudent::where(['assignment_id' => $check_assignment->id,
+                            'student_id' => $value->user_id])->first();
+
+                        $isAssignmentSent = 0;
+                        if($check_student_assignment != null){
+                            $isAssignmentSent = 1;
+                        }
+                        
+
+                        $classrooms[] = ['id' => $classdetails->id,
+                        'user_id' => $value->user_id,'user_name' => 
+                        isset($getuser_details->name) ? $getuser_details->name:'','mobile' => 
+                        isset($getuser_details->mobile) ? $getuser_details->mobile:'','profile' => $profile_path,
+                        'classroom_id' => $classdetails->classroom_id,'status' => $classdetails->status,'is_aprove' => $aprove,'isAssignmentSent' => $isAssignmentSent];
+                    }
+                }
+
+                return response()->json([
+                    "code" => 200,
+                    "message" => "success",
+                    "data" => $classrooms,
+                ]);
+            }
+            else{
+                return response()->json([
+                    "code" => 400,
+                    "message" => "Assignment not found.",
+                ]);
+            }
+            
+        }
+        else{
+
             $classroom_details = ClassStudent::where(['class_id' => $request->class_id])
-                                ->where('status','!=','reject')->get();
+                            ->where('status','!=','reject')->get();
 
             $classrooms=[];
             if(count($classroom_details) > 0){
@@ -351,7 +411,7 @@ class RamdootEduController extends Controller
                     'user_id' => $value->user_id,'user_name' => 
                     isset($getuser_details->name) ? $getuser_details->name:'','mobile' => 
                     isset($getuser_details->mobile) ? $getuser_details->mobile:'','profile' => $profile_path,
-                    'classroom_id' => $classdetails->classroom_id,'status' => $classdetails->status,'is_aprove' => $aprove];
+                    'classroom_id' => $classdetails->classroom_id,'status' => $classdetails->status,'is_aprove' => $aprove,'isAssignmentSent' => 0];
                 }
             }
 
@@ -360,15 +420,7 @@ class RamdootEduController extends Controller
                 "message" => "success",
                 "data" => $classrooms,
             ]);
-        
-        // else{
-        //     return response()->json([
-        //         "code" => 400,
-        //         "message" => "User not found.",
-        //         "data" => [],
-        //     ]);
-        // }
-
+        }
 
     }
 
@@ -840,7 +892,15 @@ class RamdootEduController extends Controller
                                if($assig_data->assignment_image){
                                 $assignment_img =  config('ramdoot.appurl')."/upload/assignment_image/".$assig_data->assignment_image;
                                 }
-                               $assignment[] = Assignment::with('assignment_question','assignment_question.question')->where('id',$assig_data->id)->select('*',DB::raw("CONCAT('$total_submission') AS total_submission"),DB::raw("CONCAT('$assignment_img') AS assignment_image_url"))->first(); 
+                                $is_submited=0;
+
+                                $get_assignment_question = AssignmentQuestion::where(['id' => $assig_data->assignment_id])->get();
+                                $assignment_question=[];
+                                foreach ($get_assignment_question as $key_assignment => $value_assignment) {
+                                    
+                                }
+
+                                // $assignment[] = Assignment::with('assignment_question','assignment_question.question')->where('id',$assig_data->id)->select('*',DB::raw("CONCAT('$total_submission') AS total_submission"),DB::raw("CONCAT('$assignment_img') AS assignment_image_url"))->first(); 
                            } 
                            
                         }
@@ -937,6 +997,86 @@ class RamdootEduController extends Controller
             ]);
         }
    
+    }
+
+    public function assignmentSubmission(Request $request){
+        $rules = array(
+            'user_id' => 'required',
+            'assignment_id' => 'required',
+            'document' => 'required',
+            'question_id' => 'required',
+        );
+        $messages = array(
+            'user_id' => 'Please enter user id',
+            'assignment_id' => 'Please enter assignment id.',
+            'document' => 'Please select document.',
+            'question_id' => 'Please enter question id',
+        );
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            $msg = $validator->messages();
+            return ['status' => "false",'msg' => $msg];
+        }
+
+        if($request->question_id != "0"){
+            $add = new AssignmentSubmission;
+            $add->user_id = $request->user_id;
+            $add->assignment_id = $request->assignment_id;
+            $add->question_id = $request->question_id;
+            $add->save();   
+
+            for ($doc=0; $doc < count($request->document); $doc++) {
+
+                $image = $request->document[$doc];
+                $url = public_path('upload/assignment_document/');
+                $originalPath = $url;
+                $name = time() . mt_rand(10000, 99999);
+                $new_name = $name . '.' . $image->getClientOriginalExtension();
+                $image->move($originalPath, $new_name);
+
+                $add_doc = new AssignmentDocument;
+                $add_doc->assignment_submission_id = $add->id;
+                $add_doc->document = $new_name;
+                $add_doc->save();
+                           
+            }
+
+            return response()->json([
+                "code" => 200,
+                "message" => "success"
+            ]);
+        }
+        else{
+
+            $add = new AssignmentSubmission;
+            $add->user_id = $request->user_id;
+            $add->assignment_id = $request->assignment_id;
+            $add->question_id = 0;
+            $add->save();   
+
+            for ($doc=0; $doc < count($request->document); $doc++) {
+
+                $image = $request->document[$doc];
+                $url = public_path('upload/assignment_document/');
+                $originalPath = $url;
+                $name = time() . mt_rand(10000, 99999);
+                $new_name = $name . '.' . $image->getClientOriginalExtension();
+                $image->move($originalPath, $new_name);
+
+                $add_doc = new AssignmentDocument;
+                $add_doc->assignment_submission_id = $add->id;
+                $add_doc->document = $new_name;
+                $add_doc->save();
+                           
+            }
+
+            return response()->json([
+                "code" => 200,
+                "message" => "success"
+            ]);
+        }
+
     }
     
 }
