@@ -1,4 +1,9 @@
 
+
+-----------------------01-06-2021-------------------
+
+ALTER TABLE `assignment_submissions` ADD `answer` TEXT NULL AFTER `question_id`;
+
 -----------------------31-05-2021-------------------
 
 CREATE TABLE `assignment_documents` (

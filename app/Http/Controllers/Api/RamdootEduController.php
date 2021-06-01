@@ -1018,12 +1018,14 @@ class RamdootEduController extends Controller
             'assignment_id' => 'required',
             'document' => 'required',
             'question_id' => 'required',
+            'answer' => 'required',
         );
         $messages = array(
             'user_id' => 'Please enter user id',
             'assignment_id' => 'Please enter assignment id.',
             'document' => 'Please select document.',
-            'question_id' => 'Please enter question id',
+            'question_id' => 'Please enter question id.',
+            'answer' => 'Please enter answer.',
         );
         $validator = Validator::make($request->all(), $rules, $messages);
 
@@ -1037,6 +1039,7 @@ class RamdootEduController extends Controller
             $add->user_id = $request->user_id;
             $add->assignment_id = $request->assignment_id;
             $add->question_id = $request->question_id;
+            $add->answer = $request->answer;
             $add->save();   
 
             for ($doc=0; $doc < count($request->document); $doc++) {
@@ -1066,6 +1069,7 @@ class RamdootEduController extends Controller
             $add->user_id = $request->user_id;
             $add->assignment_id = $request->assignment_id;
             $add->question_id = 0;
+            $add->answer = $request->answer;
             $add->save();   
 
             for ($doc=0; $doc < count($request->document); $doc++) {
