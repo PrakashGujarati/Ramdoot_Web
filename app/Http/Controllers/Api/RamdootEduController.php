@@ -1095,14 +1095,14 @@ class RamdootEduController extends Controller
             'assignment_id' => 'required',
            // / 'document' => 'required',
             'question_id' => 'required',
-            'answer' => 'required',
+            //'answer' => 'required',
         );
         $messages = array(
             'user_id' => 'Please enter user id',
             'assignment_id' => 'Please enter assignment id.',
          //   'document' => 'Please select document.',
             'question_id' => 'Please enter question id.',
-            'answer' => 'Please enter answer.',
+          //  'answer' => 'Please enter answer.',
         );
         $validator = Validator::make($request->all(), $rules, $messages);
 
