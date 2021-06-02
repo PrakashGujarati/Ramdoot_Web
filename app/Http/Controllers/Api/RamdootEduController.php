@@ -1112,28 +1112,66 @@ class RamdootEduController extends Controller
         }
 
         if($request->question_id != "0"){
-            $add = new AssignmentSubmission;
-            $add->user_id = $request->user_id;
-            $add->assignment_id = $request->assignment_id;
-            $add->question_id = $request->question_id;
-            $add->answer = $request->answer;
-            $add->save();   
 
-            for ($doc=0; $doc < count($request->document); $doc++) {
+            $check_assignment = AssignmentSubmission::where(['user_id' => $request->user_id,'assignment_id' => $request->assignment_id,'question_id' => $request->question_id])->first();
 
-                $image = $request->document[$doc];
-                $url = public_path('upload/assignment_document/');
-                $originalPath = $url;
-                $name = time() . mt_rand(10000, 99999);
-                $new_name = $name . '.' . $image->getClientOriginalExtension();
-                $image->move($originalPath, $new_name);
+            if($check_assignment){
 
-                $add_doc = new AssignmentDocument;
-                $add_doc->assignment_submission_id = $add->id;
-                $add_doc->document = $new_name;
-                $add_doc->save();
-                           
+                $add = AssignmentSubmission::find($check_assignment->id);
+                $add->user_id = $request->user_id;
+                $add->assignment_id = $request->assignment_id;
+                $add->question_id = $request->question_id;
+                $add->answer = $request->answer;
+                $add->save();   
+
+                if(count($request->document) > 0){
+                    for ($doc=0; $doc < count($request->document); $doc++) {
+
+                        $image = $request->document[$doc];
+                        $url = public_path('upload/assignment_document/');
+                        $originalPath = $url;
+                        $name = time() . mt_rand(10000, 99999);
+                        $new_name = $name . '.' . $image->getClientOriginalExtension();
+                        $image->move($originalPath, $new_name);
+
+                        $add_doc = new AssignmentDocument;
+                        $add_doc->assignment_submission_id = $add->id;
+                        $add_doc->document = $new_name;
+                        $add_doc->save();
+                                   
+                    }
+                }
+                    
             }
+            else{
+
+                $add = new AssignmentSubmission;
+                $add->user_id = $request->user_id;
+                $add->assignment_id = $request->assignment_id;
+                $add->question_id = $request->question_id;
+                $add->answer = $request->answer;
+                $add->save();   
+
+                if(count($request->document) > 0){
+                    for ($doc=0; $doc < count($request->document); $doc++) {
+
+                        $image = $request->document[$doc];
+                        $url = public_path('upload/assignment_document/');
+                        $originalPath = $url;
+                        $name = time() . mt_rand(10000, 99999);
+                        $new_name = $name . '.' . $image->getClientOriginalExtension();
+                        $image->move($originalPath, $new_name);
+
+                        $add_doc = new AssignmentDocument;
+                        $add_doc->assignment_submission_id = $add->id;
+                        $add_doc->document = $new_name;
+                        $add_doc->save();
+                                   
+                    }
+                }
+            }
+
+            
 
             return response()->json([
                 "code" => 200,
@@ -1141,29 +1179,56 @@ class RamdootEduController extends Controller
             ]);
         }
         else{
+            $check_assignment = AssignmentSubmission::where(['user_id' => $request->user_id,'assignment_id' => $request->assignment_id,'question_id' => 0])->first();
+            if($check_assignment){
+                $add = AssignmentSubmission::find($check_assignment->id);
+                $add->user_id = $request->user_id;
+                $add->assignment_id = $request->assignment_id;
+                $add->question_id = 0;
+                $add->answer = $request->answer;
+                $add->save();   
 
-            $add = new AssignmentSubmission;
-            $add->user_id = $request->user_id;
-            $add->assignment_id = $request->assignment_id;
-            $add->question_id = 0;
-            $add->answer = $request->answer;
-            $add->save();   
+                for ($doc=0; $doc < count($request->document); $doc++) {
 
-            for ($doc=0; $doc < count($request->document); $doc++) {
+                    $image = $request->document[$doc];
+                    $url = public_path('upload/assignment_document/');
+                    $originalPath = $url;
+                    $name = time() . mt_rand(10000, 99999);
+                    $new_name = $name . '.' . $image->getClientOriginalExtension();
+                    $image->move($originalPath, $new_name);
 
-                $image = $request->document[$doc];
-                $url = public_path('upload/assignment_document/');
-                $originalPath = $url;
-                $name = time() . mt_rand(10000, 99999);
-                $new_name = $name . '.' . $image->getClientOriginalExtension();
-                $image->move($originalPath, $new_name);
-
-                $add_doc = new AssignmentDocument;
-                $add_doc->assignment_submission_id = $add->id;
-                $add_doc->document = $new_name;
-                $add_doc->save();
-                           
+                    $add_doc = new AssignmentDocument;
+                    $add_doc->assignment_submission_id = $add->id;
+                    $add_doc->document = $new_name;
+                    $add_doc->save();
+                               
+                }
             }
+            else{
+                $add = new AssignmentSubmission;
+                $add->user_id = $request->user_id;
+                $add->assignment_id = $request->assignment_id;
+                $add->question_id = 0;
+                $add->answer = $request->answer;
+                $add->save();   
+
+                for ($doc=0; $doc < count($request->document); $doc++) {
+
+                    $image = $request->document[$doc];
+                    $url = public_path('upload/assignment_document/');
+                    $originalPath = $url;
+                    $name = time() . mt_rand(10000, 99999);
+                    $new_name = $name . '.' . $image->getClientOriginalExtension();
+                    $image->move($originalPath, $new_name);
+
+                    $add_doc = new AssignmentDocument;
+                    $add_doc->assignment_submission_id = $add->id;
+                    $add_doc->document = $new_name;
+                    $add_doc->save();
+                               
+                }
+            }
+            
 
             return response()->json([
                 "code" => 200,
