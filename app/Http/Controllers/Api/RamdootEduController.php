@@ -1124,23 +1124,22 @@ class RamdootEduController extends Controller
                 $add->answer = $request->answer;
                 $add->save();   
 
-                if(count($request->document) > 0){
-                    for ($doc=0; $doc < count($request->document); $doc++) {
+                for ($doc=0; $doc < count($request->document); $doc++) {
 
-                        $image = $request->document[$doc];
-                        $url = public_path('upload/assignment_document/');
-                        $originalPath = $url;
-                        $name = time() . mt_rand(10000, 99999);
-                        $new_name = $name . '.' . $image->getClientOriginalExtension();
-                        $image->move($originalPath, $new_name);
+                    $image = $request->document[$doc];
+                    $url = public_path('upload/assignment_document/');
+                    $originalPath = $url;
+                    $name = time() . mt_rand(10000, 99999);
+                    $new_name = $name . '.' . $image->getClientOriginalExtension();
+                    $image->move($originalPath, $new_name);
 
-                        $add_doc = new AssignmentDocument;
-                        $add_doc->assignment_submission_id = $add->id;
-                        $add_doc->document = $new_name;
-                        $add_doc->save();
-                                   
-                    }
+                    $add_doc = new AssignmentDocument;
+                    $add_doc->assignment_submission_id = $add->id;
+                    $add_doc->document = $new_name;
+                    $add_doc->save();
+                               
                 }
+                
                     
             }
             else{
@@ -1152,23 +1151,22 @@ class RamdootEduController extends Controller
                 $add->answer = $request->answer;
                 $add->save();   
 
-                if(count($request->document) > 0){
-                    for ($doc=0; $doc < count($request->document); $doc++) {
+                for ($doc=0; $doc < count($request->document); $doc++) {
 
-                        $image = $request->document[$doc];
-                        $url = public_path('upload/assignment_document/');
-                        $originalPath = $url;
-                        $name = time() . mt_rand(10000, 99999);
-                        $new_name = $name . '.' . $image->getClientOriginalExtension();
-                        $image->move($originalPath, $new_name);
+                    $image = $request->document[$doc];
+                    $url = public_path('upload/assignment_document/');
+                    $originalPath = $url;
+                    $name = time() . mt_rand(10000, 99999);
+                    $new_name = $name . '.' . $image->getClientOriginalExtension();
+                    $image->move($originalPath, $new_name);
 
-                        $add_doc = new AssignmentDocument;
-                        $add_doc->assignment_submission_id = $add->id;
-                        $add_doc->document = $new_name;
-                        $add_doc->save();
-                                   
-                    }
+                    $add_doc = new AssignmentDocument;
+                    $add_doc->assignment_submission_id = $add->id;
+                    $add_doc->document = $new_name;
+                    $add_doc->save();
+                               
                 }
+                
             }
 
             
