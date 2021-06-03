@@ -90,6 +90,9 @@ Route::group(['middleware'=>'auth:api'], function()
     Route::post('assignment_list', [RamdootEduController::class, 'assignmentList']);
     Route::post('assignment_student', [RamdootEduController::class, 'assignmentStudent']);
     Route::post('assignment_submission', [RamdootEduController::class, 'assignmentSubmission']);
+
+    Route::post('final_assignment_submission', [RamdootEduController::class, 'finalAssignmentSubmission']);
+    Route::post('delete_document', [RamdootEduController::class, 'deleteDocument']);
 });
 
 Route::post('view_semesters_web', [RamdootEduController::class, 'viewSemesters']);

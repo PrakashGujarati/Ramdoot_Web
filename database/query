@@ -1,5 +1,9 @@
 
 
+-----------------------03-06-2021-------------------
+
+ALTER TABLE `assignment_submissions` ADD `is_submit` TINYINT NOT NULL DEFAULT '0' AFTER `answer`;
+
 -----------------------01-06-2021-------------------
 
 ALTER TABLE `assignment_submissions` ADD `answer` TEXT NULL AFTER `question_id`;

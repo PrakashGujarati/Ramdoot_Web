@@ -910,7 +910,7 @@ class RamdootEduController extends Controller
                                                 $assignment_documents[] = ['id' => $value_get_doc->id,'assignment_submission_id' => $value_get_doc->assignment_submission_id,'document' => $doc_path,'created_at' => $value_get_doc->created_at,'updated_at' => $value_get_doc->updated_at];
                                             }
 
-                                           $media_assignment[] = ['id' => $value_media_assignment->id,'user_id' => $value_media_assignment->user_id,'assignment_id' => $value_media_assignment->assignment_id,'question_id' => $value_media_assignment->question_id,'answer' => $value_media_assignment->answer,'created_at' => $value_media_assignment->created_at,'updated_at' => $value_media_assignment->updated_at,'assignment_documents' => $assignment_documents];
+                                           $media_assignment[] = ['id' => $value_media_assignment->id,'user_id' => $value_media_assignment->user_id,'assignment_id' => $value_media_assignment->assignment_id,'question_id' => $value_media_assignment->question_id,'answer' => $value_media_assignment->answer,'is_submit' => $value_media_assignment->is_submit,'created_at' => $value_media_assignment->created_at,'updated_at' => $value_media_assignment->updated_at,'assignment_documents' => $assignment_documents];
                                         }
                                     }
                                 }
@@ -1245,6 +1245,77 @@ class RamdootEduController extends Controller
             ]);
         }
 
+    }
+
+    public function finalAssignmentSubmission(Request $request){
+
+        $rules = array(
+            'assignment_id' => 'required',
+            'user_id' => 'required',
+        );
+        $messages = array(
+            'assignment_id' => 'Please enter assignment id.',
+            'user_id' => 'Please enter user id.'
+        );
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            $msg = $validator->messages();
+            return ['status' => "false",'msg' => $msg];
+        }
+
+        $check_assignment = AssignmentSubmission::where(['user_id' => $request->user_id,'assignment_id' => $request->assignment_id])->first();
+
+        if($check_assignment){
+
+            AssignmentSubmission::where(['id' => $check_assignment->id])->update(['is_submit' => 1]);    
+
+            return response()->json([
+                "code" => 200,
+                "message" => "success"
+            ]);
+        }
+        else{
+            return response()->json([
+                "code" => 400,
+                "message" => "Assignment not found.",
+                "data" => [],
+            ]);
+        }
+
+
+    }
+
+    public function deleteDocument(Request $request){
+        $rules = array(
+            'document_id' => 'required'
+        );
+        $messages = array(
+            'document_id' => 'Please enter document id.'
+        );
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            $msg = $validator->messages();
+            return ['status' => "false",'msg' => $msg];
+        }
+
+        $check_document = AssignmentDocument::where(['id' => $request->document_id])->first();
+
+        if($check_document){
+            AssignmentDocument::where(['id' => $check_document->id])->delete();
+            return response()->json([
+                "code" => 200,
+                "message" => "success"
+            ]);            
+        }
+        else{
+            return response()->json([
+                "code" => 400,
+                "message" => "Assignment document not found.",
+                "data" => [],
+            ]);
+        }
     }
     
 }
