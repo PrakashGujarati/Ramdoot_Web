@@ -1271,7 +1271,7 @@ class RamdootEduController extends Controller
 
         if($check_assignment){
 
-            AssignmentSubmission::where(['id' => $check_assignment->id])->update(['is_submit' => 1]);    
+            AssignmentSubmission::where(['user_id' => $request->user_id,'assignment_id' => $request->assignment_id])->update(['is_submit' => 1]);    
 
             return response()->json([
                 "code" => 200,
