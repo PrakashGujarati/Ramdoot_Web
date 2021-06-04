@@ -1,4 +1,9 @@
 
+-----------------------04-06-2021-------------------
+
+ALTER TABLE `assignment_submissions` ADD `marks` INT(11) NOT NULL DEFAULT '0' AFTER `answer`, ADD `comment` TEXT NULL AFTER `marks`, ADD `emoji` INT(11) NOT NULL DEFAULT '0' AFTER `comment`;
+
+ALTER TABLE `assignment_submissions` ADD `teacher_id` INT(11) NOT NULL DEFAULT '0' AFTER `answer`;
 
 -----------------------03-06-2021-------------------
 
