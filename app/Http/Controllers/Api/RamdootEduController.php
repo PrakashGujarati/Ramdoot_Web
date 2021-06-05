@@ -1039,7 +1039,8 @@ class RamdootEduController extends Controller
                        $total_submission =  0; 
                        $assignment_img = '';
                        //$is_submit = 0;
-                       $check_submit_question = AssignmentSubmission::where(['user_id' => $request->student_id,'assignment_id' => $value->assignment_id,'question_id' => 0])->first();
+                       $check_submit_question = AssignmentSubmission::where(['user_id' => $request->student_id,'assignment_id' => $value->assignment_id])->first();
+                       dd($check_submit_question);
                         $is_submited = 0;
                         if($check_submit_question){
                             $is_submited = 1;
