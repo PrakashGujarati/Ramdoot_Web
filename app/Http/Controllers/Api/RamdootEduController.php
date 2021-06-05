@@ -361,15 +361,22 @@ class RamdootEduController extends Controller
 
                             $check_assignment_submission = AssignmentSubmission::where(['assignment_id' => $check_assignment->id,'user_id' => $value->user_id])->first();
 
-                            if($check_assignment_submission->is_submit ==  3){
-                                $isAssignmentSent = 3;
-                            }
-                            elseif ($check_assignment_submission->is_submit ==  1){
-                                $isAssignmentSent = 2;
+                            if($check_assignment_submission){
+                                if($check_assignment_submission->is_submit ==  3){
+                                    $isAssignmentSent = 3;
+                                }
+                                elseif ($check_assignment_submission->is_submit ==  1){
+                                    $isAssignmentSent = 2;
+                                }
+                                else{
+                                    $isAssignmentSent = 1;
+                                }    
                             }
                             else{
-                                $isAssignmentSent = 1;
+                                $isAssignmentSent = 0;
                             }
+
+                            
                             
                         }
                         
@@ -1422,8 +1429,7 @@ class RamdootEduController extends Controller
 
                                         $assignment_documents[] = ['id' => $value_get_doc->id,'assignment_submission_id' => $value_get_doc->assignment_submission_id,'document' => $doc_path,'created_at' => $value_get_doc->created_at,'updated_at' => $value_get_doc->updated_at];
                                     }
-
-                                   $media_assignment[] = ['id' => $value_media_assignment->id,'user_id' => $value_media_assignment->user_id,'assignment_id' => $value_media_assignment->assignment_id,'question_id' => $value_media_assignment->question_id,'answer' => $value_media_assignment->answer,'created_at' => $value_media_assignment->created_at,'updated_at' => $value_media_assignment->updated_at,'assignment_documents' => $assignment_documents];
+                                   $media_assignment[] = ['id' => $value_media_assignment->id,'user_id' => $value_media_assignment->user_id,'assignment_id' => $value_media_assignment->assignment_id,'question_id' => $value_media_assignment->question_id,'answer' => $value_media_assignment->answer,'teacher_id' => $value_media_assignment->teacher_id,'marks' => $value_media_assignment->marks,'comment' => $value_media_assignment->comment,'emoji' => $value_media_assignment->emoji,'is_submit' => $value_media_assignment->is_submit,'created_at' => $value_media_assignment->created_at,'updated_at' => $value_media_assignment->updated_at,'assignment_documents' => $assignment_documents];
                                 }
                             }
                         }
@@ -1481,7 +1487,7 @@ class RamdootEduController extends Controller
                                                 $assignment_documents_question[] = ['id' => $value_get_doc->id,'assignment_submission_id' => $value_get_doc->assignment_submission_id,'document' => $doc_path,'created_at' => $value_get_doc->created_at,'updated_at' => $value_get_doc->updated_at];
                                             }
 
-                                           $media_question[] = ['id' => $value_media_question->id,'user_id' => $value_media_question->user_id,'assignment_id' => $value_media_question->assignment_id,'question_id' => $value_media_question->question_id,'answer' => $value_media_question->answer,'created_at' => $value_media_question->created_at,'updated_at' => $value_media_question->updated_at,'assignment_documents' => $assignment_documents_question];
+                                           $media_question[] = ['id' => $value_media_question->id,'user_id' => $value_media_question->user_id,'assignment_id' => $value_media_question->assignment_id,'question_id' => $value_media_question->question_id,'answer' => $value_media_question->answer,'teacher_id' => $value_media_assignment->teacher_id,'marks' => $value_media_assignment->marks,'comment' => $value_media_assignment->comment,'emoji' => $value_media_assignment->emoji,'is_submit' => $value_media_assignment->is_submit,'created_at' => $value_media_question->created_at,'updated_at' => $value_media_question->updated_at,'assignment_documents' => $assignment_documents_question];
                                         }
                                     }
                                 }
