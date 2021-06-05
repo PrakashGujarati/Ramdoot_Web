@@ -1038,7 +1038,7 @@ class RamdootEduController extends Controller
                     foreach ($assignment_details as $key => $value) {
                        $total_submission =  0; 
                        $assignment_img = '';
-                       $is_submit = 0;
+                       //$is_submit = 0;
                        $check_submit_question = AssignmentSubmission::where(['user_id' => $request->student_id,'assignment_id' => $value->assignment_id,'question_id' => 0])->first();
                         $is_submited = 0;
                         if($check_submit_question){
@@ -1048,7 +1048,7 @@ class RamdootEduController extends Controller
                        if($value->assignment_image){
                         $assignment_img =  config('ramdoot.appurl')."/upload/assignment_image/".$value->assignment_image;
                         }
-                       $assignment[] = Assignment::with('assignment_question','assignment_question.question')->where('id',$value->id)->select('*',DB::raw("CONCAT('$total_submission') AS total_submission"),DB::raw("CONCAT('$is_submit') AS is_submit"),DB::raw("CONCAT('$assignment_img') AS assignment_image_url"))->first();
+                       $assignment[] = Assignment::with('assignment_question','assignment_question.question')->where('id',$value->id)->select('*',DB::raw("CONCAT('$total_submission') AS total_submission"),DB::raw("CONCAT('$is_submited') AS is_submit"),DB::raw("CONCAT('$assignment_img') AS assignment_image_url"))->first();
                     }
                 }
                 return response()->json([
