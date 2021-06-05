@@ -356,7 +356,7 @@ class RamdootEduController extends Controller
                         }
 
                         $check_student_assignment = AssignmentStudent::where(['assignment_id' => $check_assignment->id,'student_id' => $value->user_id])->first();
-                        
+
 
                         $isAssignmentSent = 0;
                         if($check_student_assignment != null){
@@ -375,7 +375,7 @@ class RamdootEduController extends Controller
                                 }    
                             }
                             else{
-                                $isAssignmentSent = 0;
+                                $isAssignmentSent = 1;
                             }
 
                             
