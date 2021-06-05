@@ -972,7 +972,7 @@ class RamdootEduController extends Controller
                                             $media_question_check = AssignmentSubmission::where(['assignment_id' => $assig_data->id,'user_id' => $request->student_id,'question_id' => 
                                                  0])->first();
                                         }
-                                        dd($media_question_check);
+                                        //dd($media_question_check);
                                         $media_question=[];
                                         if($media_question_check){
 
