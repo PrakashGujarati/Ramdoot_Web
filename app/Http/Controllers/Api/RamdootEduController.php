@@ -962,9 +962,17 @@ class RamdootEduController extends Controller
                                         }
 
 
-                                        $media_question_check = AssignmentSubmission::where(['assignment_id' => $assig_data->id,'user_id' => $request->student_id,'question_id' => 
-                                                 $value_assignment->question_id])->first();
-                                        //dd($media_question_check);
+                                        
+
+                                        if($value_assignment->question_id){
+                                            $media_question_check = AssignmentSubmission::where(['assignment_id' => $assig_data->id,'user_id' => $request->student_id,'question_id' => 
+                                                 $value_assignment->question_id])->first();    
+                                        }
+                                        else{
+                                            $media_question_check = AssignmentSubmission::where(['assignment_id' => $assig_data->id,'user_id' => $request->student_id,'question_id' => 
+                                                 0])->first();
+                                        }
+                                        dd($media_question_check);
                                         $media_question=[];
                                         if($media_question_check){
 
@@ -1040,7 +1048,7 @@ class RamdootEduController extends Controller
                        $assignment_img = '';
                        //$is_submit = 0;
                        $check_submit_question = AssignmentSubmission::where(['user_id' => $request->student_id,'assignment_id' => $value->assignment_id])->first();
-                       dd($check_submit_question);
+
                         $is_submited = 0;
                         if($check_submit_question){
                             $is_submited = 1;
