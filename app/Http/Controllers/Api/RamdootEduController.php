@@ -1759,7 +1759,7 @@ class RamdootEduController extends Controller
                     if(count($get_student_assignment) > 0){
                         foreach ($get_student_assignment as $key => $value) {
                             //dd($value->assignment_id,$value->student_id,$request->class_id);
-                            $assig_data = TeacherAssignment::where(['id' => $value->assignment_id,'user_id' => $value->student_id,'class_id' => $request->class_id])->first();
+                            $assig_data = TeacherAssignment::where(['id' => $value->assignment_id,'class_id' => $request->class_id])->first();
                            //dd($assig_data);
                            if($assig_data){
 
