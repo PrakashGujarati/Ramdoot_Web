@@ -1753,43 +1753,54 @@ class RamdootEduController extends Controller
                     
                 if($check_student){
 
-                    $get_assignment_list = TeacherAssignment::where(['user_id' => $check_student->id,'class_id' => $check_class->id])->get();
+                    $get_student_assignment = AssignmentStudent::where(['student_id' => $check_student->id])->get();
 
                     $assignment=[];
-                    foreach ($get_assignment_list as $key => $value) {
+                    if(count($get_student_assignment) > 0){
+                        foreach ($get_student_assignment as $key => $value) {
+                            //dd($value->assignment_id,$value->student_id,$request->class_id);
+                            $assig_data = TeacherAssignment::where(['id' => $value->assignment_id,'user_id' => $value->student_id,'class_id' => $request->class_id])->first();
+                           //dd($assig_data);
+                           if($assig_data){
 
-                        $assignment_img = '';
-                        if($value->assignment_image){
-                            $assignment_img =  config('ramdoot.appurl')."/upload/assignment_image/".$value->assignment_image;
+                               // $get_assignment_list = TeacherAssignment::where(['id' => $assig_data->id])->get();
+
+
+                              //  foreach ($get_assignment_list as $key => $value) {
+                                    $assignment_img = '';
+                                    if($assig_data->assignment_image){
+                                        $assignment_img =  config('ramdoot.appurl')."/upload/assignment_image/".$assig_data->assignment_image;
+                                    }
+                                        
+                                    $get_document = TeacherAssignmentDocument::where(['teacher_assignment_id' => $value->assignment_id])->get();
+                                    $documents=[];
+                                    foreach ($get_document as $key_sub => $value_sub) {
+                                        $doc_path='';
+                                        if($value_sub->document){
+                                            $doc_path =   config('ramdoot.appurl')."/upload/assignment_document/".$value_sub->document;
+                                        }
+                                        $documents[] = ['id' => $value_sub->id,'teacher_assignment_id' => $value_sub->teacher_assignment_id,'document' => $doc_path,'created_at' => $value_sub->created_at,'updated_at' => $value_sub->updated_at,];         
+                                    }
+
+                                    $assignment[] = ['id' => $assig_data->id,'user_id' => $assig_data->user_id,'class_id' => $assig_data->class_id,'assignment_type' => $assig_data->assignment_type,'subject_id' => $assig_data->subject_id,'semester_id' => $assig_data->semester_id,'unit_id' => $assig_data->unit_id,'mode' => $assig_data->mode,'title' => $assig_data->title,'assignment_details' => $assig_data->assignment_details,'assignment_date' => $assig_data->assignment_date,'assignment_time' => $assig_data->assignment_time,'due_date' => $assig_data->due_date,'due_time' => $assig_data->due_time,'assignment_image' => $assignment_img,'assignment_option' => $assig_data->assignment_option,'created_at' => $assig_data->created_at,'updated_at' => $assig_data->updated_at,'assignment_document' => $documents];    
+                              //  }
+
+                                if(count($assignment) > 0){
+                                    return response()->json([
+                                        "code" => 200,
+                                        "message" => "success",
+                                        "data" => $assignment,
+                                    ]);    
+                                }else{
+                                   return response()->json([
+                                        "code" => 400,
+                                        "message" => "Assignment not found.",
+                                        "data" => [],
+                                    ]); 
+                                }
+                           }
                         }
-                            
-                        $get_document = TeacherAssignmentDocument::where(['teacher_assignment_id' => $value->id])->get();
-                        $documents=[];
-                        foreach ($get_document as $key_sub => $value_sub) {
-                            $doc_path='';
-                            if($value_sub->document){
-                                $doc_path =   config('ramdoot.appurl')."/upload/assignment_document/".$value_sub->document;
-                            }
-                            $documents[] = ['id' => $value_sub->id,'teacher_assignment_id' => $value_sub->teacher_assignment_id,'document' => $doc_path,'created_at' => $value_sub->created_at,'updated_at' => $value_sub->updated_at,];         
-                        }
-
-                        $assignment[] = ['id' => $value->id,'user_id' => $value->user_id,'class_id' => $value->class_id,'assignment_type' => $value->assignment_type,'subject_id' => $value->subject_id,'semester_id' => $value->semester_id,'unit_id' => $value->unit_id,'mode' => $value->mode,'title' => $value->title,'assignment_details' => $value->assignment_details,'assignment_date' => $value->assignment_date,'assignment_time' => $value->assignment_time,'due_date' => $value->due_date,'due_time' => $value->due_time,'assignment_image' => $assignment_img,'assignment_option' => $value->assignment_option,'created_at' => $value->created_at,'updated_at' => $value->updated_at,'assignment_document' => $documents];    
                     }
-
-                    if(count($assignment) > 0){
-                        return response()->json([
-                            "code" => 200,
-                            "message" => "success",
-                            "data" => $assignment,
-                        ]);    
-                    }else{
-                       return response()->json([
-                            "code" => 400,
-                            "message" => "Assignment not found.",
-                            "data" => [],
-                        ]); 
-                    }
-                    
 
                 }
                 else{
