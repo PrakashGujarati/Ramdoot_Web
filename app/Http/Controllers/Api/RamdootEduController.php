@@ -1785,20 +1785,22 @@ class RamdootEduController extends Controller
                                     $assignment[] = ['id' => $assig_data->id,'user_id' => $assig_data->user_id,'class_id' => $assig_data->class_id,'assignment_type' => $assig_data->assignment_type,'subject_id' => $assig_data->subject_id,'semester_id' => $assig_data->semester_id,'unit_id' => $assig_data->unit_id,'mode' => $assig_data->mode,'title' => $assig_data->title,'assignment_details' => $assig_data->assignment_details,'assignment_date' => $assig_data->assignment_date,'assignment_time' => $assig_data->assignment_time,'due_date' => $assig_data->due_date,'due_time' => $assig_data->due_time,'assignment_image' => $assignment_img,'assignment_option' => $assig_data->assignment_option,'created_at' => $assig_data->created_at,'updated_at' => $assig_data->updated_at,'assignment_document' => $documents];    
                               //  }
 
-                                if(count($assignment) > 0){
-                                    return response()->json([
-                                        "code" => 200,
-                                        "message" => "success",
-                                        "data" => $assignment,
-                                    ]);    
-                                }else{
-                                   return response()->json([
-                                        "code" => 400,
-                                        "message" => "Assignment not found.",
-                                        "data" => [],
-                                    ]); 
-                                }
+                                
                            }
+                        }
+
+                        if(count($assignment) > 0){
+                            return response()->json([
+                                "code" => 200,
+                                "message" => "success",
+                                "data" => $assignment,
+                            ]);    
+                        }else{
+                           return response()->json([
+                                "code" => 400,
+                                "message" => "Assignment not found.",
+                                "data" => [],
+                            ]); 
                         }
                     }
 
