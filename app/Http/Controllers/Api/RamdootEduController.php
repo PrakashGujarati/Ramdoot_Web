@@ -25,6 +25,8 @@ use App\Models\AssignmentQuestion;
 use App\Models\AssignmentStudent;
 use App\Models\AssignmentSubmission;
 use App\Models\AssignmentDocument;
+use App\Models\TeacherAssignment;
+use App\Models\TeacherAssignmentDocument;
 
 class RamdootEduController extends Controller
 {
@@ -1619,7 +1621,208 @@ class RamdootEduController extends Controller
     }
 
     
+    public function teacherAssignmentGenerate(Request $request){
 
+        $rules = array(
+            'class_id' => 'required',
+            'assignment_type' => 'required',
+        );
+        $messages = array(
+            'class_id' => 'Please enter class id.',
+            'assignment_type' => 'Please enter assignment id.',
+        );
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            $msg = $validator->messages();
+            return ['status' => "false",'msg' => $msg];
+        }
+
+        $new_name=null;
+        if($request->has('assignment_image'))
+        {
+        
+            $image = $request->file('assignment_image');
+            $url = public_path('upload/assignment_image/');
+            $originalPath = $url;
+            $name = time() . mt_rand(10000, 99999);
+            $new_name = $name . '.' . $image->getClientOriginalExtension();
+            $image->move($originalPath, $new_name);           
+        }
+
+        $add = new TeacherAssignment;
+        $add->user_id = $request->user_id;
+        $add->class_id = $request->class_id;
+        $add->assignment_type = $request->assignment_type;
+        $add->subject_id = $request->subject_id;
+        $add->mode = $request->mode;
+        $add->title = $request->title;
+        $add->assignment_details = $request->assignment_details;
+        $add->assignment_date = $request->assignment_date;
+        $add->assignment_time = $request->assignment_time;
+        $add->due_date = $request->due_date;
+        $add->due_time = $request->due_time;
+        $add->assignment_option = $request->assignment_option;
+        $add->assignment_image = $new_name;
+        $add->unit_id = $request->unit_id;
+        $add->semester_id = $request->semester_id;
+        $add->save();
+        
+        if($request->has('documents')){
+            for ($doc=0; $doc < count($request->documents); $doc++) {
+
+                $image = $request->documents[$doc];
+                $url = public_path('upload/assignment_document/');
+                $originalPath = $url;
+                $name = time() . mt_rand(10000, 99999);
+                $new_name = $name . '.' . $image->getClientOriginalExtension();
+                $image->move($originalPath, $new_name);
+
+                $add_doc = new TeacherAssignmentDocument;
+                $add_doc->teacher_assignment_id = $add->id;
+                $add_doc->document = $new_name;
+                $add_doc->save();
+                           
+            }    
+        }
+        
+        return response()->json([
+            "code" => 200,
+            "message" => "success",
+        ]);
+
+    }
+
+
+    public function teacherAssignmentList(Request $request){
+
+        $rules = array(
+            'class_id' => 'required',
+            'user_id' => 'required',
+        );
+        $messages = array(
+            'class_id' => 'Please enter class id.',
+            'user_id' => 'Please enter Student id.',
+        );
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            $msg = $validator->messages();
+            return ['status' => "false",'msg' => $msg];
+        }
+
+        $check_class = Classroom::where(['id' => $request->class_id])->first();
+
+        if($check_class){
+
+            if($request->user_id == "0"){
+
+                $get_assignment_list = TeacherAssignment::where(['class_id' => $check_class->id])->get();
+
+                $assignment=[];
+                foreach ($get_assignment_list as $key => $value) {
+
+                    $assignment_img = '';
+                    if($value->assignment_image){
+                        $assignment_img =  config('ramdoot.appurl')."/upload/assignment_image/".$value->assignment_image;
+                    }
+                        
+                    $get_document = TeacherAssignmentDocument::where(['teacher_assignment_id' => $value->id])->get();
+                    $documents=[];
+                    foreach ($get_document as $key_sub => $value_sub) {
+                        $doc_path='';
+                        if($value_sub->document){
+                            $doc_path =   config('ramdoot.appurl')."/upload/assignment_document/".$value_sub->document;
+                        }
+                        $documents[] = ['id' => $value_sub->id,'teacher_assignment_id' => $value_sub->teacher_assignment_id,'document' => $doc_path,'created_at' => $value_sub->created_at,'updated_at' => $value_sub->updated_at,];         
+                    }
+
+                    $assignment[] = ['id' => $value->id,'user_id' => $value->user_id,'class_id' => $value->class_id,'assignment_type' => $value->assignment_type,'subject_id' => $value->subject_id,'semester_id' => $value->semester_id,'unit_id' => $value->unit_id,'mode' => $value->mode,'title' => $value->title,'assignment_details' => $value->assignment_details,'assignment_date' => $value->assignment_date,'assignment_time' => $value->assignment_time,'due_date' => $value->due_date,'due_time' => $value->due_time,'assignment_image' => $assignment_img,'assignment_option' => $value->assignment_option,'created_at' => $value->created_at,'updated_at' => $value->updated_at,'assignment_document' => $documents];    
+                }
+
+                return response()->json([
+                    "code" => 200,
+                    "message" => "success",
+                    "data" => $assignment,
+                ]);
+
+            }
+            else{
+                //dd('df');
+                $check_student = User::where(['id' => $request->user_id])->first();
+                    
+                if($check_student){
+
+                    $get_assignment_list = TeacherAssignment::where(['user_id' => $check_student->id,'class_id' => $check_class->id])->get();
+
+                    $assignment=[];
+                    foreach ($get_assignment_list as $key => $value) {
+
+                        $assignment_img = '';
+                        if($value->assignment_image){
+                            $assignment_img =  config('ramdoot.appurl')."/upload/assignment_image/".$value->assignment_image;
+                        }
+                            
+                        $get_document = TeacherAssignmentDocument::where(['teacher_assignment_id' => $value->id])->get();
+                        $documents=[];
+                        foreach ($get_document as $key_sub => $value_sub) {
+                            $doc_path='';
+                            if($value_sub->document){
+                                $doc_path =   config('ramdoot.appurl')."/upload/assignment_document/".$value_sub->document;
+                            }
+                            $documents[] = ['id' => $value_sub->id,'teacher_assignment_id' => $value_sub->teacher_assignment_id,'document' => $doc_path,'created_at' => $value_sub->created_at,'updated_at' => $value_sub->updated_at,];         
+                        }
+
+                        $assignment[] = ['id' => $value->id,'user_id' => $value->user_id,'class_id' => $value->class_id,'assignment_type' => $value->assignment_type,'subject_id' => $value->subject_id,'semester_id' => $value->semester_id,'unit_id' => $value->unit_id,'mode' => $value->mode,'title' => $value->title,'assignment_details' => $value->assignment_details,'assignment_date' => $value->assignment_date,'assignment_time' => $value->assignment_time,'due_date' => $value->due_date,'due_time' => $value->due_time,'assignment_image' => $assignment_img,'assignment_option' => $value->assignment_option,'created_at' => $value->created_at,'updated_at' => $value->updated_at,'assignment_document' => $documents];    
+                    }
+
+                    if(count($assignment) > 0){
+                        return response()->json([
+                            "code" => 200,
+                            "message" => "success",
+                            "data" => $assignment,
+                        ]);    
+                    }else{
+                       return response()->json([
+                            "code" => 400,
+                            "message" => "Assignment not found.",
+                            "data" => [],
+                        ]); 
+                    }
+                    
+
+                }
+                else{
+                    return response()->json([
+                        "code" => 400,
+                        "message" => "Student not found.",
+                        "data" => [],
+                    ]);
+                }
+
+                $get_assignment_list = TeacherAssignment::where(['class_id' => $request->$check_class])->get();
+
+            }
+
+        }
+        else{
+
+            return response()->json([
+                "code" => 400,
+                "message" => "Class not found.",
+                "data" => [],
+            ]);
+        }
+
+
+        // $doc_path='';
+        // if($value_get_doc->document){
+        //     $doc_path =   config('ramdoot.appurl')."/upload/assignment_document/".$value_get_doc->document;
+        // }
+
+    }
+
+    
 
     
     

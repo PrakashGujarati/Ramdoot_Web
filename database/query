@@ -1,4 +1,52 @@
 
+-----------------------06-06-2021-------------------
+
+CREATE TABLE `teacher_assignments` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL DEFAULT 0,
+  `class_id` int(11) NOT NULL DEFAULT 0,
+  `assignment_type` varchar(255) DEFAULT NULL,
+  `subject_id` int(11) NOT NULL DEFAULT 0,
+  `semester_id` int(11) NOT NULL DEFAULT 0,
+  `unit_id` int(11) NOT NULL DEFAULT 0,
+  `mode` varchar(255) DEFAULT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `assignment_date` varchar(255) DEFAULT NULL,
+  `assignment_time` varchar(255) DEFAULT NULL,
+  `due_date` varchar(255) DEFAULT NULL,
+  `due_time` varchar(255) DEFAULT NULL,
+  `assignment_image` varchar(255) DEFAULT NULL,
+  `assignment_option` varchar(255) DEFAULT NULL,
+  `assignment_details` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT NULL
+);
+
+
+CREATE TABLE `teacher_assignment_documents` (
+  `id` int(11) NOT NULL,
+  `teacher_assignment_id` int(11) NOT NULL DEFAULT 0,
+  `document` varchar(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT NULL
+);
+
+
+ALTER TABLE `teacher_assignments`
+  ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `teacher_assignment_documents`
+  ADD PRIMARY KEY (`id`);
+
+
+ALTER TABLE `teacher_assignments`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+
+ALTER TABLE `teacher_assignment_documents`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+
 -----------------------05-06-2021-------------------
 
 ALTER TABLE `assignments` ADD `assignment_details` TEXT NULL AFTER `marks_on`;
