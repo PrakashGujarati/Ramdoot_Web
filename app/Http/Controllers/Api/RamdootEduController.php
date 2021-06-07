@@ -918,6 +918,7 @@ class RamdootEduController extends Controller
 
             if($request->student_id != "0"){
 
+                dd('dsf');
                 $check_student = User::where(['id' => $request->student_id])->first();
                 
                 if($check_student){
@@ -1068,7 +1069,7 @@ class RamdootEduController extends Controller
                 
 
             }else{
-                dd('sdf');
+
                 $assignment_details = Assignment::with('assignment_question')->where(['class_id' => $request->class_id])->get();
                 $assignment=[];
                 if(count($assignment_details) > 0){
