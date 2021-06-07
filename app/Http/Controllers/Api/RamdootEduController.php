@@ -1772,7 +1772,7 @@ class RamdootEduController extends Controller
                                         $assignment_img =  config('ramdoot.appurl')."/upload/assignment_image/".$assig_data->assignment_image;
                                     }
                                         
-                                    $get_document = TeacherAssignmentDocument::where(['teacher_assignment_id' => $value->assignment_id])->get();
+                                    $get_document = TeacherAssignmentDocument::where(['teacher_assignment_id' => $assig_data->id])->get();
                                     $documents=[];
                                     foreach ($get_document as $key_sub => $value_sub) {
                                         $doc_path='';
