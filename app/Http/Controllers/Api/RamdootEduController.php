@@ -1101,6 +1101,7 @@ class RamdootEduController extends Controller
                        //$assignment[] = Assignment::with('assignment_question','assignment_question.question')->where('id',$value->id)->select('*',DB::raw("CONCAT('$total_submission') AS total_submission"),DB::raw("CONCAT('$is_submit') AS is_submit"),DB::raw("CONCAT('$assignment_img') AS assignment_image_url"))->first();
                     }
                 }
+                
                 return response()->json([
                     "code" => 200,
                     "message" => "success",

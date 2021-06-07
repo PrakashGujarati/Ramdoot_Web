@@ -4,6 +4,8 @@
 
 ALTER TABLE `assignments` CHANGE `mode` `mode` ENUM('manually_creation','smart_creation','file_upload') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL;
 
+ALTER TABLE `assignments` CHANGE `total_marks` `total_marks` INT NULL DEFAULT '0';
+
 -----------------------06-06-2021-------------------
 
 CREATE TABLE `teacher_assignments` (
