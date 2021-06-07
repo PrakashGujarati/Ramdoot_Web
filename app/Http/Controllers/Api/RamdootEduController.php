@@ -333,7 +333,8 @@ class RamdootEduController extends Controller
         if($request->assignment_id != "0"){
 
 
-            $check_assignment = Assignment::where(['id' => $request->assignment_id])->first();
+            //$check_assignment = Assignment::where(['id' => $request->assignment_id])->first();
+            $check_assignment = TeacherAssignment::where(['id' => $request->assignment_id])->first();
 
             if($check_assignment){
 
@@ -1138,7 +1139,8 @@ class RamdootEduController extends Controller
         }
         $get_student = explode(',',$request->student_ids);
         
-        $check_assignment = Assignment::where(['id' => $request->assignment_id])->first();
+        //$check_assignment = Assignment::where(['id' => $request->assignment_id])->first();
+        $check_assignment = TeacherAssignment::where(['id' => $request->assignment_id])->first();        
         if($check_assignment){
             if(count($get_student) > 0){
                 for ($i=0; $i < count($get_student); $i++) { 

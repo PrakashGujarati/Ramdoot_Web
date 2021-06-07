@@ -83,8 +83,9 @@ class SolutionController extends Controller
 		    				$sub_title="";
 		    			}	
 		    			//$data[] = ['id' => $request->unit_id,'unit_title' =>$title,'solution' => $solutiondata,"sub_title"=>$sub_title];
-		    			$getquestion_type_details = QuestionType::where(['id' => $value1->question_type])->first();
-		    			$data[] = ['question_type' => $getquestion_type_details->question_type,'solution' => $solutiondata];
+		    			//$getquestion_type_details = QuestionType::where(['id' => $value1->question_type])->first();
+		    			//$data[] = ['question_type' => $getquestion_type_details->question_type,'solution' => $solutiondata];
+						$data[] = ['question_type' => $value1->question_type,'solution' => $solutiondata];
 	    			}
 
 	    		return response()->json([
