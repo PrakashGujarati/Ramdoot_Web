@@ -334,7 +334,7 @@ class RamdootEduController extends Controller
 
 
             //$check_assignment = Assignment::where(['id' => $request->assignment_id])->first();
-            $check_assignment = TeacherAssignment::where(['id' => $request->assignment_id])->first();
+            $check_assignment = Assignment::where(['id' => $request->assignment_id])->first();
 
             if($check_assignment){
 
