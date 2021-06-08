@@ -3,21 +3,39 @@
                 <table class="datatable-init table">
                     <thead>
                         <tr>
-                            <th>User</th>
                             <th>Type</th>
                             <th>DateTime</th>
                             <th>Operation</th>
+                            <th>Role</th>
+                            <th>Interval</th>
                         </tr>
                     </thead>
                     <tbody>
                         @if(count($getData) > 0)
+                        <?php
+                            $dateTime1 = date_create($getData[0]->upload_time);
+                        ?>
                         @foreach($getData as $data)
+                        <?php
+                            $dateDifference = date_diff($dateTime1, date_create($data->upload_time));
+                            $minutes = $dateDifference->days * 24 * 60;
+                            $minutes += $dateDifference->h * 60;
+                            $interval = $minutes+$dateDifference->i;
+                        ?>
                         <tr>
-                            <td>{{$data->user->name}}</td>
                             <td>{{$data->type}}</td>
                             <td>{{$data->upload_time}}</td>
                             <td>{{$data->operation}}</td>
+                            <td>{{$role ? $role->slug : ''}}</td>
+                            <td>
+                                <span class="@if($interval <= 5) text-success @else text-danger @endif">
+                                    {{$interval}} minutes
+                                </span>
+                            </td>
                         </tr>
+                        <?php
+                            $dateTime1 = date_create($data->upload_time);
+                        ?>
                         @endforeach
                         @else
                         <tr>
@@ -27,4 +45,4 @@
                     </tbody>
                 </table>
             </div>
-</div>  
+</div>

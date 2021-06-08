@@ -25,19 +25,29 @@
     </div>
     <div class="card card-preview">
         <div class="row" style="margin: 10px">
-            <div class="col-lg-4">    
+            <div class="col-lg-4">
                 <label>Start Date</label>
                 <input type="date" name="start_date" value="{{date('Y-m-d')}}" class="form-control start_date">
             </div>
             <div class="col-lg-4">
                 <label>End Date</label>
                 <input type="date" name="end_date" value="{{date('Y-m-d')}}" class="form-control end_date">
-            </div>    
+            </div>
+            <div class="col-lg-4">
+                <label>Select User</label>
+                <select name="" class="form-control user-id">
+                    @foreach($users as $user)
+                        @if($user->name)
+                        <option value="{{$user->id}}">{{$user->name}}</option>
+                        @endif
+                    @endforeach
+                </select>
+            </div>
         </div>
         <div class="row dyanamicTable">
-            
+
         </div>
-            
+
     </div><!-- .card-preview -->
 </div>
 
@@ -56,15 +66,20 @@
     $(document).on('change','.start_date',function(){
         getData();
     });
+    $(document).on('change','.user-id',function(){
+        getData();
+    });
     function getData()
     {
         var start_date=$('.start_date').val();
         var end_date=$('.end_date').val();
+        var user_id=$('.user-id').val();
         $.ajax({
             type: "GET",
             data:{
                 'end_date':end_date,
-                'start_date':start_date
+                'start_date':start_date,
+                'user_id':user_id
             },
             url: "{{route('user_ajax.log')}}",
             beforeSend: function( xhr ) {
