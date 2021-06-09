@@ -619,7 +619,6 @@ td{
     }
 
     $(document).on('change','.subject_id',function(){
-
         var board_id = $('.board_id').val();
         var medium_id = $('.medium_id').val();
         var standard_id = $('.standard_id').val();
