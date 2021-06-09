@@ -6,7 +6,7 @@ table {
     table-layout:fixed;
 }
 td{
-    overflow:hidden;    
+    overflow:hidden;
     text-overflow: ellipsis;
     white-space: normal !important;
 }
@@ -124,8 +124,26 @@ td{
                             </div>
 
                         </div>
+                        <div class="row">
+                            <div class="form-group col-12">
+                                <label class="form-label">Question Type</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" id="question_type" name="question_type" value="{{ old('question_type') }}">
+                                    {{--<select class="form-control" id="question_type" name="question_type">
+                                        <option value="">--Select Question Type--</option>
+                                        @foreach($question_type_details as $question_type)
+                                            <option value="{{ $question_type->id }}">{{ $question_type->question_type }}</option>
+                                        @endforeach
+                                    </select>--}}
+                                    @error('question_type')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
 
-                        
 
                         <div class="form-group">
                             <label class="form-label">Question</label>
@@ -152,11 +170,9 @@ td{
                                 @enderror
                             </div>
                         </div>
-                        
-
 
                         <div class="row">
-                            <div class="form-group col-lg-3">
+                            <div class="form-group col-lg-4">
                                 <label class="form-label">Marks</label>
                                 <div class="form-control-wrap">
                                     <input type="text" class="form-control" id="marks" name="marks" value="{{ old('marks') }}">
@@ -168,7 +184,7 @@ td{
                                 </div>
                             </div>
 
-                            <div class="form-group col-lg-3">
+                            <div class="form-group col-lg-4">
                                 <label class="form-label">Label</label>
                                 <div class="form-control-wrap">
                                     <select class="form-control" id="label" name="label">
@@ -183,27 +199,9 @@ td{
                                         </span>
                                     @enderror
                                 </div>
-                            </div>    
-
-                            <div class="form-group col-lg-3">
-                                <label class="form-label">Question Type</label>
-                                <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="question_type" name="question_type" value="{{ old('question_type') }}">
-                                    {{--<select class="form-control" id="question_type" name="question_type">
-                                        <option value="">--Select Question Type--</option>
-                                        @foreach($question_type_details as $question_type)
-                                            <option value="{{ $question_type->id }}">{{ $question_type->question_type }}</option>
-                                        @endforeach
-                                    </select>--}}
-                                    @error('question_type')
-                                        <span class="text-danger" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
                             </div>
 
-                            <div class="form-group col-lg-3">
+                            <div class="form-group col-lg-4">
                                 <label class="form-label">Level</label>
                                 <div class="form-control-wrap">
                                     <select class="form-control" id="level" name="level">
@@ -219,7 +217,7 @@ td{
                                             <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
-                                    
+
                                 </div>
                             </div>
 
@@ -231,7 +229,7 @@ td{
                                 <div class="form-control-wrap">
                                     <input type="file" class="form-control" id="image" name="image" value="">
                                     <input type="hidden" id="hidden_image" name="hidden_image" value="">
-                                    
+
                                     @error('image')
                                         <span class="text-danger" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -243,31 +241,31 @@ td{
                                 <img id="image_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" width="100" />
                             </div>
                         </div> -->
-
-                        <div class="form-group col-lg-3">
-
-                            <div class="row">
-                                <input type="hidden" name="image_file_type" class="image_file_type" id="image_file_type" value="Drive">
-                                <div class="col-lg-6"><label class="form-label">Image</label></div>
-                                <div class="col-lg-6 text-right"><div class="g">
-                                    <div class="custom-control custom-control-sm custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input imagechk" name="thumbnail_result" value="1" id="thumbnail_result">
-                                        <label class="custom-control-label" for="thumbnail_result"></label>
+                        <div class="row">
+                            <div class="form-group col-lg-3">
+                                <div class="row">
+                                    <input type="hidden" name="image_file_type" class="image_file_type" id="image_file_type" value="Drive">
+                                    <div class="col-lg-6"><label class="form-label">Image</label></div>
+                                    <div class="col-lg-6 text-right"><div class="g">
+                                        <div class="custom-control custom-control-sm custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input imagechk" name="thumbnail_result" value="1" id="thumbnail_result">
+                                            <label class="custom-control-label" for="thumbnail_result"></label>
+                                        </div>
+                                    </div>
                                     </div>
                                 </div>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" id="image" name="image" value="">
+                                    <input type="hidden" id="hidden_image" name="hidden_image" value="">
+
+                                    @error('thumbnail')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                                 </div>
+                                <img id="image_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" />
                             </div>
-                            <div class="form-control-wrap">
-                                <input type="text" class="form-control" id="image" name="image" value="">
-                                <input type="hidden" id="hidden_image" name="hidden_image" value="">
-                                
-                                @error('thumbnail')
-                                    <span class="text-danger" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                            <img id="image_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" />
                         </div>
 
                         <!-- <div class="form-group">
@@ -281,8 +279,8 @@ td{
                                 @enderror
                             </div>
                         </div>
-                    
-                        
+
+
 
 
                         <div class="row">
@@ -309,7 +307,7 @@ td{
                                         </span>
                                     @enderror
                                 </div>
-                            </div>    
+                            </div>
 
                         </div>
 
@@ -324,16 +322,17 @@ td{
                                 @enderror
                             </div>
                         </div> -->
-
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-lg btn-primary">Submit</button>
-                            <a type="button" href="{{ route('material.index') }}" class="btn btn-lg btn-danger text-light">Cancel</a>
+                        <div class="row">
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-lg btn-primary">Submit</button>
+                                <a type="button" href="{{ route('material.index') }}" class="btn btn-lg btn-danger text-light">Cancel</a>
+                            </div>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-            
+
     </div>
 </div><!-- .nk-block -->
 <br/>
@@ -348,11 +347,22 @@ td{
 
 <script type="text/javascript">
 
+    $(document).ready(function(){
+
+        $('#sub_title').autocomplete({
+            serviceUrl: '{{route("load_autocomplete.book")}}',
+            onSelect: function (suggestion) {
+                $(this).val(suggestion.data);
+            }
+        });
+
+    });
+
     $(function(){
         var $ckfield = CKEDITOR.replace( 'question' );
 
         $ckfield.on('change', function() {
-          $ckfield.updateElement();         
+          $ckfield.updateElement();
         });
     });
 
@@ -360,7 +370,7 @@ td{
         var $ckfield1 = CKEDITOR.replace( 'answer' );
 
         $ckfield1.on('change', function() {
-          $ckfield1.updateElement();         
+          $ckfield1.updateElement();
         });
     });
 
@@ -376,7 +386,7 @@ td{
                 success: function(html) {
                     $('.dyamictable').empty();
                     $('.dyamictable').html(html.html);
-                    $(".datatable-init").DataTable();                  
+                    $(".datatable-init").DataTable();
                 }
             });
     });
@@ -392,23 +402,23 @@ td{
                 success: function(html) {
                     $('.dyamictable').empty();
                     $('.dyamictable').html(html.html);
-                    $(".datatable-init").DataTable();                  
+                    $(".datatable-init").DataTable();
                 }
-        });    
+        });
     });
 
     $(document).ready(function(){
         $('#image_preview').css('display','none');
-    });    
+    });
 
     function readThumbnail(input) {
       if (input.files && input.files[0]) {
         var reader = new FileReader();
-        
+
         reader.onload = function(e) {
           $('#image_preview').attr('src', e.target.result);
         }
-        
+
         reader.readAsDataURL(input.files[0]); // convert to base64 string
       }
     }
@@ -430,14 +440,14 @@ td{
 
 
     $( document ).ready(function() {
-        var check_board = <?PHP echo json_encode($isset); ?>;
+        var check_board = <?php echo json_encode($isset); ?>;
         if(check_board == 1){
-            
-            var boardid = <?PHP echo (!empty($semesters_details->board_id) ? json_encode($semesters_details->board_id) : '""'); ?>;
-            var mediumid = <?PHP echo (!empty($semesters_details->medium_id) ? json_encode($semesters_details->medium_id) : '""'); ?>;
-            var standardid = <?PHP echo (!empty($semesters_details->standard_id) ? json_encode($semesters_details->standard_id) : '""'); ?>;
-            var  subjectid = <?PHP echo (!empty($semesters_details->subject_id) ? json_encode($semesters_details->subject_id) : '""'); ?>;
-            var semesterid = <?PHP echo (!empty($semesters_details->id) ? json_encode($semesters_details->id) : '""'); ?>;
+
+            var boardid = <?php echo(!empty($semesters_details->board_id) ? json_encode($semesters_details->board_id) : '""'); ?>;
+            var mediumid = <?php echo(!empty($semesters_details->medium_id) ? json_encode($semesters_details->medium_id) : '""'); ?>;
+            var standardid = <?php echo(!empty($semesters_details->standard_id) ? json_encode($semesters_details->standard_id) : '""'); ?>;
+            var  subjectid = <?php echo(!empty($semesters_details->subject_id) ? json_encode($semesters_details->subject_id) : '""'); ?>;
+            var semesterid = <?php echo(!empty($semesters_details->id) ? json_encode($semesters_details->id) : '""'); ?>;
 
            $('.board_id').val(boardid);
            var board_id = boardid;
@@ -445,17 +455,17 @@ td{
            var standard_id = standardid;
            var semester_id = semesterid;
            var subject_id = subjectid;
-            
+
             getMediumEdit(board_id,medium_id);
             getStandardEdit(board_id,medium_id,standard_id);
             getSubjectEdit(board_id,medium_id,standard_id,subject_id);
-            getSemesterEdit(board_id,medium_id,standard_id,subject_id,semester_id);  
+            getSemesterEdit(board_id,medium_id,standard_id,subject_id,semester_id);
             getUnit(board_id,medium_id,standard_id,semester_id,subject_id);
         }
     });
 
     function getMediumEdit(board_id,medium_id){
-    
+
         $.ajax({
             type: "GET",
             url: "{{route('get.medium')}}",
@@ -466,11 +476,11 @@ td{
             success: function(result) {
                 $('.medium_id').html('');
                 $('.medium_id').html(result.html);
-            } 
+            }
         });
     }
 
-    function getStandardEdit(board_id,medium_id,standard_id){       
+    function getStandardEdit(board_id,medium_id,standard_id){
         $.ajax({
             type: "GET",
             url: "{{route('get.standard')}}",
@@ -482,7 +492,7 @@ td{
             success: function(result) {
                 $('.standard_id').html('');
                 $('.standard_id').html(result.html);
-            } 
+            }
         });
     }
 
@@ -500,7 +510,7 @@ td{
             success: function(result) {
                 $('.subject_id').html('');
                 $('.subject_id').html(result.html);
-            } 
+            }
         });
     }
 
@@ -518,7 +528,7 @@ td{
             success: function(result) {
                 $('.semester_id').html('');
                 $('.semester_id').html(result.html);
-            } 
+            }
         });
     }
 
@@ -537,11 +547,11 @@ td{
             success: function(result) {
                 $('.unit_id').html('');
                 $('.unit_id').html(result.html);
-            } 
+            }
         });
     }
 
-    
+
     $(document).on('change','.board_id',function(){
         var board_id = $('.board_id').val();
         getMedium(board_id);
@@ -557,9 +567,9 @@ td{
             success: function(result) {
                 $('.medium_id').html('');
                 $('.medium_id').html(result.html);
-            } 
+            }
         });
-    } 
+    }
 
     $(document).on('change','.medium_id',function(){
         var board_id = $('.board_id').val();
@@ -579,7 +589,7 @@ td{
             success: function(result) {
                 $('#standard_id').html('');
                 $('#standard_id').html(result.html);
-            } 
+            }
         });
     }
 
@@ -604,7 +614,7 @@ td{
             success: function(result) {
                 $('.subject_id').html('');
                 $('.subject_id').html(result.html);
-            } 
+            }
         });
     }
 
@@ -638,7 +648,7 @@ td{
             success: function(result) {
                 $('.semester_id').html('');
                 $('.semester_id').html(result.html);
-            } 
+            }
         });
     }
 
@@ -662,19 +672,19 @@ td{
                 "semester_id":semester_id,
                 "subject_id":subject_id,
             },
-            success: function(result) { 
+            success: function(result) {
                 $('.unit_id').html('');
                 $('.unit_id').html(result.html);
-            } 
+            }
         });
     }
-    
 
 
-    
+
+
 
     $(document).ready(function () {
-    
+
     $('#material_form').validate({
              rules: {
                     board_id:"required",
@@ -730,15 +740,15 @@ td{
                         $("#image").attr('type', 'text');
                         $('#image_file_type').val('Drive');
                         $('#image').val('');
-                        
+
                         $('.dyamictable').empty();
                         $('.dyamictable').html(data.html);
                         $(".datatable-init").DataTable();
-                    }            
+                    }
                 });
             }
         });
-        
+
     });
 
 
@@ -784,14 +794,14 @@ td{
                     $('#image_preview').css('display','none');
                     $("#image").attr('type', 'text');
                     $('#image_file_type').val('Drive');
-            
+
                 }
                 else{
                     $('.imagechk').prop("checked",true);
                     $('#hidden_image').val(result.materialdata.image);
                     $('#image_preview').css('display','block');
                     $("#image").attr('type', 'file');
-                    $('#image_file_type').val('Server');                
+                    $('#image_file_type').val('Server');
 
                     var image_path = "{{ config('ramdoot.appurl') }}"+"/data/"+board_id+'_'+result.sub_title.board_sub_title.sub_title+"/"+medium_id+'_'+result.sub_title.medium_sub_title.sub_title+"/"+standard_id+'_'+
                 result.sub_title.standard_sub_title.sub_title
@@ -800,10 +810,10 @@ td{
                     $('#image_preview').attr('src', image_path);
                 }
 
-                
+
                 $('#hidden_id').val(result.materialdata.id);
                 //$('#thumbnail').val('');
-            }            
+            }
         });
     });
 
@@ -837,7 +847,7 @@ td{
                         },
                         success: function(data) {
                             confirm("Material Deleted Successfully.");
-                                
+
                             $('#image').val('');
                             $('#question').val('');
                             $('#marks').val('');
@@ -855,7 +865,7 @@ td{
                             $('.dyamictable').empty();
                             $('.dyamictable').html(data);
                             $(".datatable-init").DataTable();
-                        }            
+                        }
                     });
                     //location.replace(del_url);
                 }
@@ -880,11 +890,11 @@ $(document).on('click','.status_change', function() {
         },
         success: function(data) {
             confirm("Material Status Change Successfully.");
-            
+
             $('.dyamictable').empty();
             $('.dyamictable').html(data);
             $(".datatable-init").DataTable();
-        }            
+        }
     });
 });
 
