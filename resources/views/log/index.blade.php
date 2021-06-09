@@ -86,6 +86,7 @@
                 $('.loader').show();
             },
             success: function(result) {
+                $('.dyanamicTable').html('');
                 $('.dyanamicTable').html(result.html);
             }
         });

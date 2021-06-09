@@ -113,7 +113,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('note/edit', [NoteController::class, 'edit'])->name('note.edit');
 	Route::post('note/{id}/update', [NoteController::class, 'update'])->name('note.update');
 	Route::get('note/delete', [NoteController::class, 'distroy'])->name('note.distroy');
-	
+
 	/*Semester*/
 	Route::get('semester', [SemesterController::class, 'index'])->name('semester.index');
 	Route::get('semester/create/{id?}', [SemesterController::class, 'create'])->name('semester.create');
@@ -125,7 +125,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('get_semester_export', [SemesterController::class, 'get_excel_semester'])->name('get.semester.export');
 
 	Route::get('load_semester', [SemesterController::class, 'loadSemester'])->name('load.semester');
-	
+
 
 	Route::get('get_semester', [SemesterController::class, 'getSemester'])->name('get.semester');
 	Route::get('get_semester_unit', [SemesterController::class, 'getSemesterUnit'])->name('get.semester.unit');
@@ -214,7 +214,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('import_question_view', [QuestionController::class, 'importQuestionView'])->name('import.question.view');
 	Route::post('question_import', [QuestionController::class, 'questionImport'])->name('question.import');
 	Route::get('question_export', [QuestionController::class, 'questionExport'])->name('question.export');
-	
+
 	/*exam*/
 	Route::get('exams', [ExamController::class, 'index'])->name('exam.index');
 	Route::get('exams/create', [ExamController::class, 'create'])->name('exam.create');
@@ -250,8 +250,8 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('exam_student/{id}/delete', [ExamStudentController::class, 'distroy'])->name('exam_student.distroy');
 
 	Route::get('get_exam_student', [ExamStudentController::class, 'index'])->name('get.examStudent');
-	
-	
+
+
 	/*exam_student_question_answer*/
 	Route::get('student_question_answer', [StudentQuestionAnswerController::class, 'index'])->name('exam_student_question_answer.index');
 	//Route::get('exam_student_question_answer/{id}/delete', [StudentQuestionAnswerController::class, 'distroy'])->name('exam_student_question_answer.distroy');
@@ -281,14 +281,14 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::post('permission/store', [PermissionController::class, 'store'])->name('permission.store');
 	Route::get('permission/{id}/edit', [PermissionController::class, 'edit'])->name('permission.edit');
 	Route::post('permission/{id}/update', [PermissionController::class, 'update'])->name('permission.update');
-	Route::get('permission/{id}/delete', [PermissionController::class, 'distroy'])->name('permission.distroy');	
+	Route::get('permission/{id}/delete', [PermissionController::class, 'distroy'])->name('permission.distroy');
 
 	Route::get('role_permission', [SpatieRolePermissionController::class, 'index_roles'])->name('role_permission.index');
 	//Route::get('/roles', [SpatieRolePermissionController::class, 'index_roles'])->name('role.get');
 	Route::get('/roles', [SpatieRolePermissionController::class, 'new_roles'])->name('role.get');
 
 	Route::post('/role/{role_id}/assign-permissions',[SpatieRolePermissionController::class, 'assign_permissions'])->name('role.assign_permission');
-		
+
 	Route::get('user/index',[UserController::class,'index'])->name('user.index');
 	Route::get('user/create',[UserController::class,'create'])->name('user.create');
 	Route::post('user/store',[UserController::class,'store'])->name('user.store');
@@ -298,7 +298,7 @@ Route::group(['middleware' => 'auth'], function(){
 
 	Route::get('user/log',[LogController::class,'index'])->name('user.log');
 	Route::get('ajax/user/log',[LogController::class,'getData'])->name('user_ajax.log');
-		
+
 	Route::get('load_autocomplete/medium',[MediumController::class,'load_autocomplete'])->name('load_autocomplete.medium');
 	Route::get('load_autocomplete/standard',[StandardController::class,'load_autocomplete'])->name('load_autocomplete.standard');
 	Route::get('load_autocomplete/section',[StandardController::class,'load_autocomplete_section'])->name('load_autocomplete.section');
@@ -318,7 +318,7 @@ Route::group(['middleware' => 'auth'], function(){
 
 	Route::get('load_autocomplete/note',[NoteController::class,'load_autocomplete'])->name('load_autocomplete.note');
 	Route::get('load_autocomplete/note_title',[NoteController::class,'load_autocomplete_title'])->name('load_autocomplete.note_title');
-	
+
 
 	Route::get('load_autocomplete/subject',[SubjectController::class,'load_autocomplete'])->name('load_autocomplete.subject');
 
@@ -328,10 +328,10 @@ Route::group(['middleware' => 'auth'], function(){
 
 	Route::get('load_autocomplete/unit_sub_title',[UnitController::class,'load_autocomplete_sub_title'])->name('load_autocomplete.unit_sub_title');
 
-	
+
 	Route::get('load_autocomplete/video',[VideosController::class,'load_autocomplete'])->name('load_autocomplete.video');
 
-	Route::get('load_autocomplete/video_sub_title',[VideosController::class,'load_autocomplete_sub_title'])->name('load_autocomplete.video_sub_title');	
+	Route::get('load_autocomplete/video_sub_title',[VideosController::class,'load_autocomplete_sub_title'])->name('load_autocomplete.video_sub_title');
 
 	Route::get('user/reviews',[UserDataReviewController::class,'index'])->name('user.reviews');
 	Route::get('user_ajax/review',[UserDataReviewController::class,'user_ajax_review'])->name('user_ajax.review');
@@ -353,7 +353,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('below_order/semester',[SemesterController::class,'below_order'])->name('below_order.semester');
 
 	Route::get('above_order/subject',[SubjectController::class,'above_order'])->name('above_order.subject');
-	Route::get('below_order/subject',[SubjectController::class,'below_order'])->name('below_order.subject');	
+	Route::get('below_order/subject',[SubjectController::class,'below_order'])->name('below_order.subject');
 
 	Route::get('above_order/unit',[UnitController::class,'above_order'])->name('above_order.unit');
 	Route::get('below_order/unit',[UnitController::class,'below_order'])->name('below_order.unit');
@@ -368,7 +368,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('below_order/video',[VideosController::class,'below_order'])->name('below_order.video');
 
 	Route::get('above_order/solution',[SolutionController::class,'above_order'])->name('above_order.solution');
-	Route::get('below_order/solution',[SolutionController::class,'below_order'])->name('below_order.solution');	
+	Route::get('below_order/solution',[SolutionController::class,'below_order'])->name('below_order.solution');
 
 	Route::get('above_order/material',[MaterialController::class,'above_order'])->name('above_order.material');
 	Route::get('below_order/material',[MaterialController::class,'below_order'])->name('below_order.material');
@@ -401,4 +401,4 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::post('/notification_store',[NotificationsController::class,'store'])->name('notification.store');
 	Route::get('/notification/create',[NotificationsController::class,'create']);
 
-});	
+});

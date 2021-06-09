@@ -12,31 +12,36 @@
                     </thead>
                     <tbody>
                         @if(count($getData) > 0)
+                        @for($i=0; $i < count($getData); $i++)
                         <?php
-                            $dateTime1 = date_create($getData[0]->upload_time);
-                        ?>
-                        @foreach($getData as $data)
-                        <?php
-                            $dateDifference = date_diff($dateTime1, date_create($data->upload_time));
-                            $minutes = $dateDifference->days * 24 * 60;
-                            $minutes += $dateDifference->h * 60;
-                            $interval = $minutes+$dateDifference->i;
+                            $nextKey = $i+1;
+                            if (($i != count($getData)-1)) {
+                                $dateDifference = date_diff(date_create($getData[$i]->upload_time), date_create($getData[$nextKey]->upload_time));
+                                $minutes = $dateDifference->days * 24 * 60;
+                                $minutes += $dateDifference->h * 60;
+                                $interval = $minutes+$dateDifference->i;
+                            } else {
+                                $interval = 0;
+                            }
                         ?>
                         <tr>
-                            <td>{{$data->type}}</td>
-                            <td>{{$data->upload_time}}</td>
-                            <td>{{$data->operation}}</td>
+                            <td>{{$getData[$i]->type}}</td>
+                            <td>{{$getData[$i]->upload_time}}</td>
+                            <td>{{$getData[$i]->operation}}</td>
                             <td>{{$role ? $role->slug : ''}}</td>
                             <td>
                                 <span class="@if($interval <= 5) text-success @else text-danger @endif">
-                                    {{$interval}} minutes
+                                    @if($interval > 59)
+                                        {{ intdiv($interval, 60).' hours '. ($interval % 60).' minutes'}}
+                                    @elseif($interval < 1)
+                                        < 1 minute
+                                    @else
+                                        {{$interval}} minutes
+                                    @endif
                                 </span>
                             </td>
                         </tr>
-                        <?php
-                            $dateTime1 = date_create($data->upload_time);
-                        ?>
-                        @endforeach
+                        @endfor
                         @else
                         <tr>
                             <td>No Record Found.</td>

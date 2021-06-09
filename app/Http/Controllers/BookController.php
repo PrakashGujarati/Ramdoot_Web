@@ -12,7 +12,6 @@ use App\Models\Standard;
 use App\Models\Subject;
 use App\Models\Semester;
 
-
 class BookController extends Controller
 {
     /**
@@ -29,8 +28,8 @@ class BookController extends Controller
     }
     public function index()
     {
-        $book_details = Book::where('status','!=','Deleted')->groupBy('semester_id')->get();
-        return view('book.index',compact('book_details'));
+        $book_details = Book::where('status', '!=', 'Deleted')->groupBy('semester_id')->get();
+        return view('book.index', compact('book_details'));
     }
 
     /**
@@ -40,23 +39,22 @@ class BookController extends Controller
      */
     public function create($id=null)
     {
-        if($id != null){
-            $units = Unit::where('status','!=','Deleted')->get();
-            $boards = Board::where('status','!=','Deleted')->get();
-            $book_details = Book::where(['semester_id' => $id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
-            $semesters_details = Semester::where('id',$id)->first();
+        if ($id != null) {
+            $units = Unit::where('status', '!=', 'Deleted')->get();
+            $boards = Board::where('status', '!=', 'Deleted')->get();
+            $book_details = Book::where(['semester_id' => $id])->where('status', '!=', 'Deleted')->orderBy('order_no', 'asc')->get();
+            $semesters_details = Semester::where('id', $id)->first();
             //$subjects_details = Subject::where('id',$id)->first();
             $isset = 1;
-            return view('book.add',compact('units','boards','book_details','semesters_details','isset'));
-        }
-        else{
-            $boards = Board::where('status','!=','Deleted')->get();
+            return view('book.add', compact('units', 'boards', 'book_details', 'semesters_details', 'isset'));
+        } else {
+            $boards = Board::where('status', '!=', 'Deleted')->get();
             $units = [];
-            $book_details = Book::where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+            $book_details = Book::where('status', '!=', 'Deleted')->orderBy('order_no', 'asc')->get();
             //$subjects_details=[];
-            $semesters_details = Semester::where('id',$id)->first();
+            $semesters_details = Semester::where('id', $id)->first();
             $isset = 0;
-            return view('book.add',compact('units','boards','book_details','semesters_details','isset'));
+            return view('book.add', compact('units', 'boards', 'book_details', 'semesters_details', 'isset'));
         }
     }
 
@@ -68,7 +66,7 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-       // dd($request->all());
+        // dd($request->all());
         $this->validate($request, [
             'board_id' => 'required',
             'medium_id'  => 'required',
@@ -91,36 +89,28 @@ class BookController extends Controller
 
         get_subtitle($request->unit_id);*/
 
-        if($request->hidden_id != "0")
-        {
+        if ($request->hidden_id != "0") {
             $new_name='';
 
-            if($request->thumbnail_file_type == 'Server'){
-                if($request->has('thumbnail'))
-                {
-                
+            if ($request->thumbnail_file_type == 'Server') {
+                if ($request->has('thumbnail')) {
                     $image = $request->file('thumbnail');
-                    
+
                     $url = get_subtitle($request->unit_id).'/book/thumbnail/';
                     $originalPath = imagePathCreate($url);
                     $name = time() . mt_rand(10000, 99999);
                     $new_name = $name . '.' . $image->getClientOriginalExtension();
                     $image->move($originalPath, $new_name);
-                    
-                }
-                else{
+                } else {
                     $new_name = $request->hidden_thumbnail;
                 }
-            }
-            else{
+            } else {
                 $new_name = $request->thumbnail;
             }
 
             $url_file='';
-            if($request->url_type == 'Server'){
-                if($request->file('url'))
-                {
-                    
+            if ($request->url_type == 'Server') {
+                if ($request->file('url')) {
                     $image = $request->file('url');
                     //$url = 'upload/'.$request->board_id.'/'.$request->medium_id.'/'.$request->standard_id.'/'.$request->subject_id.'/'.$request->semester_id.'/'.$request->unit_id.'/book/url/';
                     $url = get_subtitle($request->unit_id).'/book/url/';
@@ -128,11 +118,10 @@ class BookController extends Controller
                     $name = time() . mt_rand(10000, 99999);
                     $url_file = $name . '.' . $image->getClientOriginalExtension();
                     $image->move($originalPath, $url_file);
-                }
-                else{
+                } else {
                     $url_file = $request->hidden_url;
                 }
-            }else{
+            } else {
                 $url_file = $request->url;
             }
 
@@ -158,14 +147,10 @@ class BookController extends Controller
             $add->save();
 
             $msg = "Book Updated Successfully.";
-        }
-        else{
-
+        } else {
             $new_name='';
-            if($request->thumbnail_file_type == 'Server'){
-                if($request->has('thumbnail'))
-                {
-                
+            if ($request->thumbnail_file_type == 'Server') {
+                if ($request->has('thumbnail')) {
                     $image = $request->file('thumbnail');
                     //$url = 'upload/'.$request->board_id.'/'.$request->medium_id.'/'.$request->standard_id.'/'.$request->subject_id.'/'.$request->semester_id.'/'.$request->unit_id.'/book/thumbnail/';
                     $url = get_subtitle($request->unit_id).'/book/thumbnail/';
@@ -175,15 +160,13 @@ class BookController extends Controller
                     $new_name = $name . '.' . $image->getClientOriginalExtension();
                     $image->move($originalPath, $new_name);
                 }
-            }
-            else{
-              $new_name = $request->thumbnail;
+            } else {
+                $new_name = $request->thumbnail;
             }
 
             $url_file='';
-            if($request->url_type == 'Server'){
-                if($request->file('url'))
-                {
+            if ($request->url_type == 'Server') {
+                if ($request->file('url')) {
                     $image = $request->file('url');
                     //$url = 'upload/'.$request->board_id.'/'.$request->medium_id.'/'.$request->standard_id.'/'.$request->subject_id.'/'.$request->semester_id.'/'.$request->unit_id.'/book/url/';
                     $url = get_subtitle($request->unit_id).'/book/url/';
@@ -193,18 +176,15 @@ class BookController extends Controller
                     //$destinationPath = public_path('upload/book/url/');
                     $image->move($originalPath, $url_file);
                 }
-            }else{
+            } else {
                 $url_file = $request->url;
             }
 
-            $last_data=Book::select('*')->where('semester_id',$request->semester_id)->orderBy('order_no','desc')->first();
-            if($last_data)
-            {
-              $last_no=intval($last_data->order_no)+1;
-            } 
-            else
-            {
-              $last_no=1;
+            $last_data=Book::select('*')->where('semester_id', $request->semester_id)->orderBy('order_no', 'desc')->first();
+            if ($last_data) {
+                $last_no=intval($last_data->order_no)+1;
+            } else {
+                $last_no=1;
             }
 
             $add = new Book;
@@ -231,22 +211,20 @@ class BookController extends Controller
 
             $msg = "Book Added Successfully.";
 
-            storeLog('book',$add->id,date('Y-m-d H:i:s'),'create');
-            storeReview('book',$add->id,date('Y-m-d H:i:s'));
-
+            storeLog('book', $add->id, date('Y-m-d H:i:s'), 'create');
+            storeReview('book', $add->id, date('Y-m-d H:i:s'));
         }
 
 
-        $book_details = Book::where(['semester_id' => $request->semester_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
+        $book_details = Book::where(['semester_id' => $request->semester_id])->where('status', '!=', 'Deleted')->orderBy('order_no', 'asc')->get();
 
-        $html = view('book.dynamic_table',compact('book_details'))->render();
+        $html = view('book.dynamic_table', compact('book_details'))->render();
         $data = ['html' => $html,'message' => $msg];
-        return response()->json($data);        
+        return response()->json($data);
 
-        
+
         //return view('book.dynamic_table',compact('book_details'));
         //return redirect()->route('book.index')->with('success', 'Book Added Successfully.');
-
     }
 
     /**
@@ -270,7 +248,7 @@ class BookController extends Controller
     {
         //$units = Unit::where('status','Active')->get();
         //$boards = Board::where('status','Active')->get();
-        $bookdata = Book::where('id',$request->id)->first();
+        $bookdata = Book::where('id', $request->id)->first();
         $board_sub_title = board::where(['id' => $bookdata->board_id])->first();
         $medium_sub_title = Medium::where(['id' => $bookdata->medium_id])->first();
         $standard_sub_title = Standard::where(['id' => $bookdata->standard_id])->first();
@@ -292,7 +270,7 @@ class BookController extends Controller
      * @param  \App\Models\Book  $book
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Book $book,$id)
+    public function update(Request $request, Book $book, $id)
     {
         $this->validate($request, [
             'board_id' => 'required',
@@ -306,9 +284,7 @@ class BookController extends Controller
         ]);
 
         $new_name='';
-        if($request->has('thumbnail'))
-        {
-        
+        if ($request->has('thumbnail')) {
             $image = $request->file('thumbnail');
 
             $new_name = rand() . '.' . $image->getClientOriginalExtension();
@@ -321,27 +297,24 @@ class BookController extends Controller
             $file_extension = pathinfo($location, PATHINFO_EXTENSION);
             $file_extension = strtolower($file_extension);
 
-            if(in_array($file_extension,$valid_ext)){
-                $this->compressImage($image->getPathName(),$location,60);
+            if (in_array($file_extension, $valid_ext)) {
+                $this->compressImage($image->getPathName(), $location, 60);
             }
-        }
-        else{
+        } else {
             $new_name = $request->hidden_thumbnail;
         }
 
         $url_file='';
-        if($request->url_type == 'file'){
-            if($request->file('url'))
-            {
+        if ($request->url_type == 'file') {
+            if ($request->file('url')) {
                 $image = $request->file('url');
                 $url_file = time().'.'.$image->getClientOriginalExtension();
                 $destinationPath = public_path('upload/book/url/');
                 $image->move($destinationPath, $url_file);
-            }
-            else{
+            } else {
                 $url_file = $request->hidden_url;
             }
-        }else{
+        } else {
             $url_file = $request->url;
         }
 
@@ -376,95 +349,91 @@ class BookController extends Controller
      */
     public function distroy(Request $request)
     {
-        if($request->has('status')){
-          if($request->status == "Active"){
-            $delete = Book::find($request->id);
-            $delete->status = "Inactive";
-            $delete->save();
-          }
-          else{
-            $delete = Book::find($request->id);
-            $delete->status = "Active";
-            $delete->save();  
-          }
-        }else{
+        if ($request->has('status')) {
+            if ($request->status == "Active") {
+                $delete = Book::find($request->id);
+                $delete->status = "Inactive";
+                $delete->save();
+            } else {
+                $delete = Book::find($request->id);
+                $delete->status = "Active";
+                $delete->save();
+            }
+        } else {
             $delete = Book::find($request->id);
             $delete->status = "Deleted";
             $delete->save();
-            delete_order('books',$request->id,1);
+            delete_order('books', $request->id, 1);
         }
 
-        $book_details = Book::where(['semester_id' => $request->semester_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
-        return view('book.dynamic_table',compact('book_details'));
+        $book_details = Book::where(['semester_id' => $request->semester_id])->where('status', '!=', 'Deleted')->orderBy('order_no', 'asc')->get();
+        return view('book.dynamic_table', compact('book_details'));
         //return redirect()->route('book.index')->with('success', 'Book Deleted Successfully.');
     }
 
-    function compressImage($source, $destination, $quality) {
-      $info = getimagesize($source);
+    public function compressImage($source, $destination, $quality)
+    {
+        $info = getimagesize($source);
 
-      if ($info['mime'] == 'image/jpeg') 
-        $image = imagecreatefromjpeg($source);
+        if ($info['mime'] == 'image/jpeg') {
+            $image = imagecreatefromjpeg($source);
+        } elseif ($info['mime'] == 'image/gif') {
+            $image = imagecreatefromgif($source);
+        } elseif ($info['mime'] == 'image/png') {
+            $image = imagecreatefrompng($source);
+        }
 
-      elseif ($info['mime'] == 'image/gif') 
-        $image = imagecreatefromgif($source);
-
-      elseif ($info['mime'] == 'image/png') 
-        $image = imagecreatefrompng($source);
-
-      imagejpeg($image, $destination, $quality);
-
+        imagejpeg($image, $destination, $quality);
     }
     public function load_autocomplete(request $request)
     {
         $response=[];
-        
+
         // $lead_detail=Medicine::where('instruction_english', 'like', '%' . $request['query'] . '%')->where('instruction_english','!=',' ')->where('instruction_english','!=',null)->get();
 
         $lead_detail=Book::where('sub_title', 'like', '%' . $request['query'] . '%')->get();
-        
 
-        if(count($lead_detail) > 0)
-        {
+
+        if (count($lead_detail) > 0) {
             foreach ($lead_detail as $value) {
                 $response[] = array("value"=>$value->sub_title,"data"=>$value->sub_title);
-            }   
+            }
         }
         return json_encode(array("suggestions" => $response));
     }
     public function load_autocomplete_title(request $request)
     {
         $response=[];
-        
+
         // $lead_detail=Medicine::where('instruction_english', 'like', '%' . $request['query'] . '%')->where('instruction_english','!=',' ')->where('instruction_english','!=',null)->get();
 
         $lead_detail=Book::where('title', 'like', '%' . $request['query'] . '%')->get();
-        
 
-        if(count($lead_detail) > 0)
-        {
+
+        if (count($lead_detail) > 0) {
             foreach ($lead_detail as $value) {
                 $response[] = array("value"=>$value->title,"data"=>$value->title);
-            }   
+            }
         }
         return json_encode(array("suggestions" => $response));
     }
     public function above_order(request $request)
     {
-        above_order('books',$request->order_no,'semester_id',$request->semester_id);
+        above_order('books', $request->order_no, 'semester_id', $request->semester_id);
 
-        $book_details = Book::where(['semester_id' => $request->semester_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
-        $html = view('book.dynamic_table',compact('book_details'))->render();
+        $book_details = Book::where(['semester_id' => $request->semester_id])->where('status', '!=', 'Deleted')->orderBy('order_no', 'asc')->get();
+        $html = view('book.dynamic_table', compact('book_details'))->render();
         $data = ['html' => $html,'message' => $msg];
-        return response()->json($data);      
+        return response()->json($data);
     }
     public function below_order(request $request)
     {
         //dd($request->subject_id);
-        below_order('books',$request->order_no,'semester_id',$request->semester_id);
+        below_order('books', $request->order_no, 'semester_id', $request->semester_id);
 
-        $book_details = Book::where(['semester_id' => $request->semester_id])->where('status','!=','Deleted')->orderBy('order_no','asc')->get();
-        $html = view('book.dynamic_table',compact('book_details'))->render();
+        $book_details = Book::where(['semester_id' => $request->semester_id])->where('status', '!=', 'Deleted')->orderBy('order_no', 'asc')->get();
+        $html = view('book.dynamic_table', compact('book_details'))->render();
         $data = ['html' => $html];
-        return response()->json($data);      
+        return response()->json($data);
     }
 }
