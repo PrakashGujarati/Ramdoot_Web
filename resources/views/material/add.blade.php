@@ -808,7 +808,7 @@ td{
                 }
 
 
-                $('#hidden_id').val(result.materialdata.id);
+                //$('#hidden_id').val(result.materialdata.id);
                 //$('#thumbnail').val('');
             }
         });
