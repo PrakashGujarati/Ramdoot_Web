@@ -6,7 +6,7 @@ table {
     table-layout:fixed;
 }
 td{
-    overflow:hidden;    
+    overflow:hidden;
     text-overflow: ellipsis;
     white-space: normal !important;
 }
@@ -125,12 +125,26 @@ td{
                             </div>
 
                         </div>
-                        
-                        
-                            
-                        
+                        <div class="row">
+                            <div class="form-group col-12">
+                                <label class="form-label">Question Type</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" id="question_type" name="question_type" value="{{ old('question_type') }}">
+                                    {{--<select class="form-control" id="question_type" name="question_type">
+                                        <option value="">--Select Question Type--</option>
+                                        @foreach($question_type_details as $question_type)
+                                            <option value="{{ $question_type->id }}">{{ $question_type->question_type }}</option>
+                                        @endforeach
+                                    </select>--}}
+                                    @error('question_type')
+                                        <span class="text-danger" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
 
-                        
                         <div class="form-group">
                             <label class="form-label">Question</label>
                             <div class="form-control-wrap">
@@ -156,11 +170,11 @@ td{
                                 @enderror
                             </div>
                         </div>
-                        
+
 
 
                         <div class="row">
-                            <div class="form-group col-lg-3">
+                            <div class="form-group col-lg-4">
                                 <label class="form-label">Marks</label>
                                 <div class="form-control-wrap">
                                     <input type="text" class="form-control" id="marks" name="marks" value="{{ old('marks') }}">
@@ -172,7 +186,7 @@ td{
                                 </div>
                             </div>
 
-                            <div class="form-group col-lg-3">
+                            <div class="form-group col-lg-4">
                                 <label class="form-label">Label</label>
                                 <div class="form-control-wrap">
                                     <select class="form-control" id="label" name="label">
@@ -189,25 +203,7 @@ td{
                                 </div>
                             </div>
 
-                            <div class="form-group col-lg-3">
-                                <label class="form-label">Question Type</label>
-                                <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="question_type" name="question_type" value="{{ old('question_type') }}">
-                                    {{--<select class="form-control" id="question_type" name="question_type">
-                                        <option value="">--Select Question Type--</option>
-                                        @foreach($question_type_details as $question_type)
-                                            <option value="{{ $question_type->id }}">{{ $question_type->question_type }}</option>
-                                        @endforeach
-                                    </select>--}}
-                                    @error('question_type')
-                                        <span class="text-danger" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="form-group col-lg-3">
+                            <div class="form-group col-lg-4">
                                 <label class="form-label">Level</label>
                                 <div class="form-control-wrap">
                                     <select class="form-control" id="level" name="level">
@@ -223,9 +219,9 @@ td{
                                             <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
-                                    
+
                                 </div>
-                            </div>    
+                            </div>
 
                         </div>
 
@@ -246,7 +242,7 @@ td{
                             <div class="form-control-wrap">
                                 <input type="text" class="form-control" id="image" name="image" value="">
                                 <input type="hidden" id="hidden_image" name="hidden_image" value="">
-                                
+
                                 @error('thumbnail')
                                     <span class="text-danger" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -268,7 +264,7 @@ td{
                 </div>
             </div>
         </div>
-            
+
     </div>
 </div><!-- .nk-block -->
 <br/>
@@ -288,7 +284,7 @@ $(function(){
     var $ckfield = CKEDITOR.replace( 'question' );
 
     $ckfield.on('change', function() {
-      $ckfield.updateElement();         
+      $ckfield.updateElement();
     });
 });
 
@@ -296,7 +292,7 @@ $(function(){
     var $ckfield1 = CKEDITOR.replace( 'answer' );
 
     $ckfield1.on('change', function() {
-      $ckfield1.updateElement();         
+      $ckfield1.updateElement();
     });
 });
 //CKEDITOR.replace( 'answer' );
@@ -314,7 +310,7 @@ $(document).on('click','.above_order', function() {
                 success: function(html) {
                     $('.dyamictable').empty();
                     $('.dyamictable').html(html.html);
-                    $(".datatable-init").DataTable();                  
+                    $(".datatable-init").DataTable();
                 }
             });
     });
@@ -330,23 +326,23 @@ $(document).on('click','.above_order', function() {
                 success: function(html) {
                     $('.dyamictable').empty();
                     $('.dyamictable').html(html.html);
-                    $(".datatable-init").DataTable();                  
+                    $(".datatable-init").DataTable();
                 }
-        });    
+        });
     });
 
 $(document).ready(function(){
     $('#image_preview').css('display','none');
-});    
+});
 
 function readThumbnail(input) {
   if (input.files && input.files[0]) {
     var reader = new FileReader();
-    
+
     reader.onload = function(e) {
       $('#image_preview').attr('src', e.target.result);
     }
-    
+
     reader.readAsDataURL(input.files[0]); // convert to base64 string
   }
 }
@@ -362,32 +358,32 @@ $("#image").change(function() {
 });
 
 $( document ).ready(function() {
-    var check_board = <?PHP echo json_encode($isset); ?>;
+    var check_board = <?php echo json_encode($isset); ?>;
     if(check_board == 1){
-        
-        var boardid = <?PHP echo (!empty($semesters_details->board_id) ? json_encode($semesters_details->board_id) : '""'); ?>;
-        var mediumid = <?PHP echo (!empty($semesters_details->medium_id) ? json_encode($semesters_details->medium_id) : '""'); ?>;
-        var standardid = <?PHP echo (!empty($semesters_details->standard_id) ? json_encode($semesters_details->standard_id) : '""'); ?>;
-        var  subjectid = <?PHP echo (!empty($semesters_details->subject_id) ? json_encode($semesters_details->subject_id) : '""'); ?>;
-        var semesterid = <?PHP echo (!empty($semesters_details->id) ? json_encode($semesters_details->id) : '""'); ?>;
-            
+
+        var boardid = <?php echo(!empty($semesters_details->board_id) ? json_encode($semesters_details->board_id) : '""'); ?>;
+        var mediumid = <?php echo(!empty($semesters_details->medium_id) ? json_encode($semesters_details->medium_id) : '""'); ?>;
+        var standardid = <?php echo(!empty($semesters_details->standard_id) ? json_encode($semesters_details->standard_id) : '""'); ?>;
+        var  subjectid = <?php echo(!empty($semesters_details->subject_id) ? json_encode($semesters_details->subject_id) : '""'); ?>;
+        var semesterid = <?php echo(!empty($semesters_details->id) ? json_encode($semesters_details->id) : '""'); ?>;
+
        $('.board_id').val(boardid);
        var board_id = boardid;
        var medium_id = mediumid;
        var standard_id = standardid;
        var semester_id = semesterid;
        var subject_id = subjectid;
-        
+
         getMediumEdit(board_id,medium_id);
         getStandardEdit(board_id,medium_id,standard_id);
         getSubjectEdit(board_id,medium_id,standard_id,subject_id);
-        getSemesterEdit(board_id,medium_id,standard_id,subject_id,semester_id);  
+        getSemesterEdit(board_id,medium_id,standard_id,subject_id,semester_id);
         getUnit(board_id,medium_id,standard_id,semester_id,subject_id);
     }
 });
 
 function getMediumEdit(board_id,medium_id){
-    
+
     $.ajax({
         type: "GET",
         url: "{{route('get.medium')}}",
@@ -398,11 +394,11 @@ function getMediumEdit(board_id,medium_id){
         success: function(result) {
             $('.medium_id').html('');
             $('.medium_id').html(result.html);
-        } 
+        }
     });
 }
 
-function getStandardEdit(board_id,medium_id,standard_id){       
+function getStandardEdit(board_id,medium_id,standard_id){
     $.ajax({
         type: "GET",
         url: "{{route('get.standard')}}",
@@ -414,7 +410,7 @@ function getStandardEdit(board_id,medium_id,standard_id){
         success: function(result) {
             $('.standard_id').html('');
             $('.standard_id').html(result.html);
-        } 
+        }
     });
 }
 
@@ -432,7 +428,7 @@ function getSubjectEdit(board_id,medium_id,standard_id,subject_id){
         success: function(result) {
             $('.subject_id').html('');
             $('.subject_id').html(result.html);
-        } 
+        }
     });
 }
 
@@ -450,7 +446,7 @@ function getSemesterEdit(board_id,medium_id,standard_id,subject_id,semester_id){
         success: function(result) {
             $('.semester_id').html('');
             $('.semester_id').html(result.html);
-        } 
+        }
     });
 }
 
@@ -469,11 +465,11 @@ function getUnitEdit(board_id,medium_id,standard_id,semester_id,subject_id,unit_
         success: function(result) {
             $('.unit_id').html('');
             $('.unit_id').html(result.html);
-        } 
+        }
     });
 }
-    
-    
+
+
 $(document).on('change','.board_id',function(){
     var board_id = $('.board_id').val();
     getMedium(board_id);
@@ -489,9 +485,9 @@ function getMedium(board_id){
         success: function(result) {
             $('.medium_id').html('');
             $('.medium_id').html(result.html);
-        } 
+        }
     });
-} 
+}
 
 $(document).on('change','.medium_id',function(){
     var board_id = $('.board_id').val();
@@ -512,7 +508,7 @@ function getStandard(board_id,medium_id){
         success: function(result) {
             $('#standard_id').html('');
             $('#standard_id').html(result.html);
-        } 
+        }
     });
 }
 
@@ -537,7 +533,7 @@ function getSubject(standard_id,medium_id,board_id){
         success: function(result) {
             $('.subject_id').html('');
             $('.subject_id').html(result.html);
-        } 
+        }
     });
 }
 
@@ -571,7 +567,7 @@ function getSemester(board_id,medium_id,standard_id,subject_id){
         success: function(result) {
             $('.semester_id').html('');
             $('.semester_id').html(result.html);
-        } 
+        }
     });
 }
 
@@ -595,16 +591,16 @@ function getUnit(board_id,medium_id,standard_id,semester_id,subject_id){
             "semester_id":semester_id,
             "subject_id":subject_id,
         },
-        success: function(result) { 
+        success: function(result) {
             $('.unit_id').html('');
             $('.unit_id').html(result.html);
-        } 
+        }
     });
 }
 
 
 $(document).ready(function () {
-    
+
     $('#solution_form').validate({
          rules: {
                 board_id:"required",
@@ -663,16 +659,16 @@ $(document).ready(function () {
                     $("#image").attr('type', 'text');
                     $('#image_file_type').val('Drive');
                     $('#image').val('');
-                    
+
                     $('.dyamictable').empty();
                     $('.dyamictable').html(data.html);
                     $(".datatable-init").DataTable();
 
-                }            
+                }
             });
         }
     });
-    
+
 });
 
 
@@ -701,7 +697,7 @@ $(document).on('click','.edit-btn',function(){
             getSemesterEdit(board_id,medium_id,standard_id,subject_id,semester_id);
             getUnitEdit(board_id,medium_id,standard_id,semester_id,subject_id,unit_id);
 
-            //$('#question').html(result.solutiondata.question);            
+            //$('#question').html(result.solutiondata.question);
             //$("#question").val(result.solutiondata.question);
             CKEDITOR.instances['question'].setData(result.solutiondata.question);
             CKEDITOR.instances['answer'].setData(result.solutiondata.answer);
@@ -719,14 +715,14 @@ $(document).on('click','.edit-btn',function(){
                 $('#image_preview').css('display','none');
                 $("#image").attr('type', 'text');
                 $('#image_file_type').val('Drive');
-        
+
             }
             else{
                 $('.imagechk').prop("checked",true);
                 $('#hidden_image').val(result.solutiondata.image);
                 $('#image_preview').css('display','block');
                 $("#image").attr('type', 'file');
-                $('#image_file_type').val('Server');                
+                $('#image_file_type').val('Server');
                 var image_path = "{{ config('ramdoot.appurl') }}"+"/data/"+board_id+'_'+result.sub_title.board_sub_title.sub_title+"/"+medium_id+'_'+result.sub_title.medium_sub_title.sub_title+"/"+standard_id+'_'+
                 result.sub_title.standard_sub_title.sub_title
                 +"/"+subject_id+'_'+result.sub_title.subject_sub_title.sub_title+"/"+semester_id+'_'+
@@ -734,13 +730,13 @@ $(document).on('click','.edit-btn',function(){
                 $('#image_preview').attr('src', image_path);
             }
 
-            
+
             //$('#image_preview').css('display','block');
-            
-            
+
+
             $('#hidden_id').val(result.solutiondata.id);
             //$('#thumbnail').val('');
-        }            
+        }
     });
 });
 
@@ -773,7 +769,7 @@ $(document).on('click','.distroy', function() {
                     },
                     success: function(data) {
                         confirm("Solution Deleted Successfully.");
-                            
+
                         $('#image').val('');
                         $('#question').val('');
                         $('#marks').val('');
@@ -792,7 +788,7 @@ $(document).on('click','.distroy', function() {
                         $('.dyamictable').empty();
                         $('.dyamictable').html(data);
                         $(".datatable-init").DataTable();
-                    }            
+                    }
                 });
                 //location.replace(del_url);
             }
@@ -816,11 +812,11 @@ $(document).on('click','.status_change', function() {
         },
         success: function(data) {
             confirm("Solution Status Change Successfully.");
-            
+
             $('.dyamictable').empty();
             $('.dyamictable').html(data);
             $(".datatable-init").DataTable();
-        }            
+        }
     });
 });
 
@@ -863,7 +859,7 @@ $(document).ready(function(){
                 $(this).val(suggestion.data);
         }
     });
-    
+
 });
 
 

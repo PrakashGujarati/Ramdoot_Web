@@ -241,7 +241,7 @@ td{
                                 <img id="image_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" width="100" />
                             </div>
                         </div> -->
-                        <div class="row">
+                        <div class="row mb-4">
                             <div class="form-group col-lg-3">
                                 <div class="row">
                                     <input type="hidden" name="image_file_type" class="image_file_type" id="image_file_type" value="Drive">
@@ -322,11 +322,9 @@ td{
                                 @enderror
                             </div>
                         </div> -->
-                        <div class="row">
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-lg btn-primary">Submit</button>
-                                <a type="button" href="{{ route('material.index') }}" class="btn btn-lg btn-danger text-light">Cancel</a>
-                            </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-lg btn-primary">Submit</button>
+                            <a type="button" href="{{ route('material.index') }}" class="btn btn-lg btn-danger text-light">Cancel</a>
                         </div>
                     </form>
                 </div>
