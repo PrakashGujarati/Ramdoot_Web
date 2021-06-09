@@ -12,7 +12,7 @@ class LogController extends Controller
 {
     public function index()
     {
-        $users = User::all();
+        $users = User::where('role_id','<=',6)->get();
         return view('log.index', ['users'=>$users]);
     }
     public function getData(request $request)
