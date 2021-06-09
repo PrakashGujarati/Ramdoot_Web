@@ -399,6 +399,12 @@ class RamdootEduController extends Controller
                         "data" => $classrooms,
                     ]);
                 }
+                else{
+                    return response()->json([
+                        "code" => 400,
+                        "message" => "Student not found.",
+                    ]); 
+                }
                 
             }
             else{
@@ -437,6 +443,12 @@ class RamdootEduController extends Controller
                     isset($getuser_details->mobile) ? $getuser_details->mobile:'','profile' => $profile_path,
                     'classroom_id' => $classdetails->classroom_id,'status' => $classdetails->status,'is_aprove' => $aprove,'isAssignmentSent' => 0];
                 }
+            }
+            else{
+                return response()->json([
+                    "code" => 400,
+                    "message" => "Student not found.",
+                ]); 
             }
 
             return response()->json([
@@ -970,8 +982,9 @@ class RamdootEduController extends Controller
                                     }
                                 }
 
-
                                 $total_submission =  0; 
+                                $total_reviews = 0;
+                                $total_assignment_sent = 0;
                                $assignment_img = '';
                                if($assig_data->assignment_image){
                                 $assignment_img =  config('ramdoot.appurl')."/upload/assignment_image/".$assig_data->assignment_image;
@@ -1043,7 +1056,7 @@ class RamdootEduController extends Controller
                                 }
                                 
 
-                                $assignment[] = ['id' => $assig_data->id,'user_id' => $assig_data->user_id,'class_id' => $assig_data->class_id,'assignment_type' => $assig_data->assignment_type,'subject_id' => $assig_data->subject_id,'mode' => $assig_data->mode,'title' => $assig_data->title,'assignment_details' => $assig_data->assignment_details,'assignment_date' => $assig_data->assignment_date,'assignment_time' => $assig_data->assignment_time,'due_date' => $assig_data->due_date,'due_time' => $assig_data->due_time,'total_questions' => $assig_data->total_questions,'total_marks' => $assig_data->total_marks,'assignment_image' => $assig_data->assignment_image,'assignment_option' => $assig_data->assignment_option,'water_mark' => $assig_data->water_mark,'footer' => $assig_data->footer,'instruction' => $assig_data->instruction,'font_size' => $assig_data->font_size,'marks_on' => $assig_data->marks_on,'created_at' => $assig_data->created_at,'updated_at' => $assig_data->updated_at,'total_submission' => $total_submission,'is_submit' => $is_submit,'assignment_image_url' => 
+                                $assignment[] = ['id' => $assig_data->id,'user_id' => $assig_data->user_id,'class_id' => $assig_data->class_id,'assignment_type' => $assig_data->assignment_type,'subject_id' => $assig_data->subject_id,'mode' => $assig_data->mode,'title' => $assig_data->title,'assignment_details' => $assig_data->assignment_details,'assignment_date' => $assig_data->assignment_date,'assignment_time' => $assig_data->assignment_time,'due_date' => $assig_data->due_date,'due_time' => $assig_data->due_time,'total_questions' => $assig_data->total_questions,'total_marks' => $assig_data->total_marks,'assignment_image' => $assig_data->assignment_image,'assignment_option' => $assig_data->assignment_option,'water_mark' => $assig_data->water_mark,'footer' => $assig_data->footer,'instruction' => $assig_data->instruction,'font_size' => $assig_data->font_size,'marks_on' => $assig_data->marks_on,'created_at' => $assig_data->created_at,'updated_at' => $assig_data->updated_at,'total_submission' => $total_submission,'total_review' => $total_reviews,'total_assignment_sent' => $total_assignment_sent,'is_submit' => $is_submit,'assignment_image_url' => 
                                     $assignment_img,'assignment_document' => $assignment_document,'media' => $media_assignment,'assignment_question' => $assignment_question];
 
                                 // $assignment[] = Assignment::with('assignment_question','assignment_question.question')->where('id',$assig_data->id)->select('*',DB::raw("CONCAT('$total_submission') AS total_submission"),DB::raw("CONCAT('$assignment_img') AS assignment_image_url"))->first(); 
@@ -1073,7 +1086,18 @@ class RamdootEduController extends Controller
                 $assignment=[];
                 if(count($assignment_details) > 0){
                     foreach ($assignment_details as $key => $value) {
-                       $total_submission =  0; 
+                        
+
+                        $get_total_submission = AssignmentSubmission::where(['assignment_id' => $value->id,'is_submit' => 1])->groupby('user_id')->get()->count();
+
+                        $get_total_reviews = AssignmentSubmission::where(['assignment_id' => $value->id,'is_submit' => 3])->groupby('user_id')->get()->count();
+
+                        
+                        $get_assignment_sent_count = AssignmentStudent::where(['assignment_id' => $value->id])->get()->count();
+
+                       $total_submission =  $get_total_submission;
+                       $total_reviews =  $get_total_reviews; 
+                       $total_assignment_sent = $get_assignment_sent_count;
                        $assignment_img = '';
                        $is_submit = 0;
                        if($value->assignment_image){
@@ -1097,7 +1121,7 @@ class RamdootEduController extends Controller
                             $assignment_document[] = ['id' => $value_sub_doc->id,'teacher_assignment_id' => $value_sub_doc->teacher_assignment_id,'document' => $doc_path,'created_at' => $value_sub_doc->created_at,'updated_at' => $value_sub_doc->updated_at,];         
                         }
 
-                        $assignment[] = ['id' => $value->id,'user_id' => $value->user_id,'class_id' => $value->class_id,'assignment_type' => $value->assignment_type,'subject_id' => $value->subject_id,'mode' => $value->mode,'title' => $value->title,'assignment_details' => $value->assignment_details,'assignment_date' => $value->assignment_date,'assignment_time' => $value->assignment_time,'due_date' => $value->due_date,'due_time' => $value->due_time,'total_questions' => $value->total_questions,'total_marks' => $value->total_marks,'assignment_image' => $assignment_img,'assignment_option' => $value->assignment_option,'water_mark' => $value->water_mark,'footer' => $value->footer,'instruction' => $value->instruction,'font_size' => $value->font_size,'marks_on' => $value->marks_on,'created_at' => $value->created_at,'updated_at' => $value->updated_at,'total_submission' => $total_submission,'is_submit' => $is_submit,'assignment_document' => $assignment_document,'assignment_question' => $question_array];
+                        $assignment[] = ['id' => $value->id,'user_id' => $value->user_id,'class_id' => $value->class_id,'assignment_type' => $value->assignment_type,'subject_id' => $value->subject_id,'mode' => $value->mode,'title' => $value->title,'assignment_details' => $value->assignment_details,'assignment_date' => $value->assignment_date,'assignment_time' => $value->assignment_time,'due_date' => $value->due_date,'due_time' => $value->due_time,'total_questions' => $value->total_questions,'total_marks' => $value->total_marks,'assignment_image' => $assignment_img,'assignment_option' => $value->assignment_option,'water_mark' => $value->water_mark,'footer' => $value->footer,'instruction' => $value->instruction,'font_size' => $value->font_size,'marks_on' => $value->marks_on,'created_at' => $value->created_at,'updated_at' => $value->updated_at,'total_submission' => $total_submission,'total_review' => $total_reviews,'total_assignment_sent' => $total_assignment_sent,'is_submit' => $is_submit,'assignment_document' => $assignment_document,'assignment_question' => $question_array];
 
                        //$assignment[] = Assignment::with('assignment_question','assignment_question.question')->where('id',$value->id)->select('*',DB::raw("CONCAT('$total_submission') AS total_submission"),DB::raw("CONCAT('$is_submit') AS is_submit"),DB::raw("CONCAT('$assignment_img') AS assignment_image_url"))->first();
                     }
