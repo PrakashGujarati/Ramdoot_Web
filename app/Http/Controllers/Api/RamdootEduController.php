@@ -136,6 +136,156 @@ class RamdootEduController extends Controller
 
     }
 
+    public function edit_class(Request $request){
+        $rules = array(
+            'class_id' => 'required',
+            'user_id' => 'required',
+            'board_id' => 'required',
+            'medium_id' => 'required',
+            'standard_id' => 'required',
+            'subject_id' => 'required',
+           // 'semester_id' => 'required',
+            'division' => 'required',
+            'strenth' => 'required',
+            'type' => 'required'
+        );
+        $messages = array(
+            'class_id.required' => 'Please enter class id.',
+            'user_id.required' => 'Please enter user id.',
+            'board_id.required' => 'Please enter board id.',
+            'medium_id.required' => 'Please enter medium id.',
+            'standard_id.required' => 'Please enter standard id.',
+            'subject_id.required' => 'Please enter subject id.',
+           // 'semester_id.required' => 'Please enter semester id.',
+            'division.required' => 'Please enter division.',
+            'strenth.required' => 'required enter strenth.',
+            'type.required' => 'required enter type'
+        );
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            $msg = $validator->messages();
+            return ['status' => "false",'msg' => $msg];
+        }
+
+        $check_class = Classroom::where(['id' => $request->class_id])->first();
+
+        if($check_class){
+
+            $chkboard = Board::where(['id' => $request->board_id,'status' => 'Active'])->first();
+            $chkmedium = Medium::where(['id' => $request->medium_id,'status' => 'Active'])->first();
+            $chkstandard = Standard::where(['id' => $request->standard_id,'status' => 'Active'])->first();
+            $chksubject = Subject::where(['id' => $request->subject_id,'status' => 'Active'])->first();
+            $chksemester = Semester::where(['id' => $request->semester_id,'status' => 'Active'])->first();
+
+            function random_strings($length_of_string)
+            {
+                $str_result = '0123456789';
+              
+                return substr(str_shuffle($str_result),0, $length_of_string);
+            }
+            $unique_string = random_strings(9);
+
+            if(empty($chkboard)){
+                return response()->json([
+                    "code" => 400,
+                    "message" => "Board not found.",
+                    "data" => [],
+                ]);
+            }
+            elseif (empty($chkmedium)) {
+                return response()->json([
+                    "code" => 400,
+                    "message" => "Medium not found.",
+                    "data" => [],
+                ]);
+            }
+            elseif (empty($chkstandard)) {
+                return response()->json([
+                    "code" => 400,
+                    "message" => "Standard not found.",
+                    "data" => [],
+                ]);
+            }
+            elseif (empty($chksubject)) {
+                return response()->json([
+                    "code" => 400,
+                    "message" => "Subject not found.",
+                    "data" => [],
+                ]);
+            }
+        //  elseif (empty($chksemester)) {
+        //    return response()->json([
+            //  "code" => 400,
+                // "message" => "Semester not found.",
+                // "data" => [],
+        //    ]);
+        //  }
+            else{
+
+                $add = Classroom::find($request->class_id);
+                $add->user_id = $request->user_id;
+                $add->board_id = $request->board_id;
+                $add->medium_id = $request->medium_id;
+                $add->standard_id = $request->standard_id;
+                $add->subject_id = $request->subject_id;
+                $add->semester_id = isset($request->semester_id) ? $request->semester_id:0;
+                $add->division = $request->division;
+                $add->strenth = $request->strenth;
+                $add->classroom_id  = $unique_string;
+                $add->type = $request->type;
+                $add->save();
+
+                return response()->json([
+                    "code" => 200,
+                    "message" => "success",
+                    "data" => $add,
+                ]);
+            }
+        }
+        else{
+            return response()->json([
+                "code" => 400,
+                "message" => "Classroom not found.",
+                "data" => [],
+            ]);
+        }
+    }
+
+    public function delete_class(Request $request){
+        $rules = array(
+            'class_id' => 'required'
+        );
+        $messages = array(
+            'class_id.required' => 'Please enter class id.'
+        );
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            $msg = $validator->messages();
+            return ['status' => "false",'msg' => $msg];
+        }
+
+        $check_class = Classroom::where(['id' => $request->class_id])->first();
+
+        if($check_class){
+            Classroom::where(['id' => $request->class_id])->delete();
+            return response()->json([
+                "code" => 200,
+                "message" => "success",
+            ]);
+        }
+        else{
+            return response()->json([
+                "code" => 400,
+                "message" => "Classroom not found.",
+                "data" => [],
+            ]);
+        }
+    }
+
     public function view_class(Request $request){
 
     	$rules = array(
@@ -160,6 +310,7 @@ class RamdootEduController extends Controller
         		$classrooms_arr = Classroom::where(['user_id' => $request->user_id,'status' => 'Active'])->get();
                 $classrooms=[];
                 foreach ($classrooms_arr as $key_class => $value_class) {
+
                     //dd($value_class);
                     $classrooms[] = ['id' => $value_class->id,
                         'user_id' => $value_class->user_id,'board_id' => $value_class->board_id,'board' => 
@@ -181,12 +332,13 @@ class RamdootEduController extends Controller
                         if($value->status == "aprove"){
                             $aprove = 1;
                         }
+
         				$classdetails = Classroom::where(['id' => $value->class_id])->first();
         				$classrooms[] = ['id' => $classdetails->id,
                         'user_id' => $classdetails->user_id,'board_id' => $classdetails->board_id,'board' => 
                         isset($classdetails->board->sub_title) ? $classdetails->board->sub_title:'','medium_id' => $classdetails->medium_id,
                         'medium' => isset($classdetails->medium->sub_title) ? $classdetails->medium->sub_title:'','standard_id' => $classdetails->standard_id,'standard' => isset($classdetails->standard->standard) ? $classdetails->standard->standard:'','subject_id' => $classdetails->subject_id,'subject' => $classdetails->subject->sub_title,'semester_id' => $classdetails->semester_id,'semester' => 
-                        isset($classdetails->semester->semester) ? $classdetails->semester->semester:'','division' => $classdetails->division,'strenth' => $classdetails->strenth,'classroom_id' => $classdetails->classroom_id,'type'=> $classdetails->type,'status' => $classdetails->status,'is_aprove' => $aprove];
+                        isset($classdetails->semester->semester) ? $classdetails->semester->semester:'','division' => $classdetails->division,'strenth' => $classdetails->strenth,'classroom_id' => $classdetails->classroom_id,'type'=> $classdetails->type,'status' => $classdetails->status,'is_aprove' => $aprove,'created_at' => $value->created_at,'updated_at' => $value->updated_at];
         			}
         		}
         	}
@@ -990,13 +1142,17 @@ class RamdootEduController extends Controller
                                 $assignment_img =  config('ramdoot.appurl')."/upload/assignment_image/".$assig_data->assignment_image;
                                 }
                                 $is_submited=0;
+                                $assignment_submission_created_at='';
+                                $assignment_submission_updated_at='';
 
                                 $get_assignment_question = AssignmentQuestion::with('question')->where(['assignment_id' => $assig_data->id])->get();
-                                $assignment_question=[];$is_submit=0;
+                                $assignment_question=[];$is_submit=0;$media_question=[];
                                 if(count($get_assignment_question) > 0){
+
                                     foreach ($get_assignment_question as $key_assignment => $value_assignment) {
 
                                         $check_submit_question = AssignmentSubmission::where(['user_id' => $request->student_id,'assignment_id' => $value->assignment_id,'question_id' => $value_assignment->question_id])->first();
+
                                         $is_submited = 0;
                                         if($check_submit_question){
                                             $is_submited = 1;
@@ -1004,41 +1160,60 @@ class RamdootEduController extends Controller
 
 
                                         $media_question_check = AssignmentSubmission::where(['assignment_id' => $assig_data->id,'user_id' => $request->student_id,'question_id' => $value_assignment->question_id])->first();
-                                        $media_question=[];
+
+                                        
                                         if($media_question_check){
                                            
-                                            if($media_question_check->question_id != 0){
-                                                $media_question = AssignmentSubmission::with('assignment_document')->where(['id' => $media_question_check->id])->get();
-                                            }
-                                        }
+                                            // if($media_question_check->question_id != 0){
+                                            //     $media_question = AssignmentSubmission::with('assignment_document')->where(['id' => $media_question_check->id,'question_id' => $media_question_check->question_id])->get();
+                                            // }
 
-                                        $media_question_check = AssignmentSubmission::where(['assignment_id' => $assig_data->id,'user_id' => $request->student_id])->first();
-                                        //  dd($media_question_check);
-                                        $media_question=[];
-                                        if($media_question_check){
+                                           // $media_question_check = AssignmentSubmission::where(['assignment_id' => $assig_data->id,'user_id' => $request->student_id])->first();
+                                            //  dd($media_question_check);
 
-                                            $is_submit = $media_question_check->is_submit;
-                                           
-                                            if($media_question_check->question_id != 0){
-                                                $media_question_details = AssignmentSubmission::where(['id' => $media_question_check->id])->get();
+                                            //if($media_question_check){
 
-                                                foreach ($media_question_details as $key_media_question => $value_media_question) {
+                                                $is_submit = $media_question_check->is_submit;
+                                                $assignment_submission_created_at = $media_question_check->created_at;
+                                                $assignment_submission_updated_at = $media_question_check->updated_at;
 
-                                                    $get_doc = AssignmentDocument::where(['assignment_submission_id' => $value_media_question->id])->get();
-                                                    $assignment_documents_question=[];
-                                                    foreach ($get_doc as $key_get_doc => $value_get_doc) {
-                                                        $doc_path='';
-                                                        if($value_get_doc->document){
-                                                            $doc_path =   config('ramdoot.appurl')."/upload/assignment_document/".$value_get_doc->document;
+                                                if($media_question_check->question_id != 0){
+
+                                                    $media_question_details = AssignmentSubmission::where(['id' => $media_question_check->id,'question_id' =>$media_question_check->question_id])->get();
+                                                }
+                                                else{
+                                                    $media_question_details = AssignmentSubmission::where(['id' => $media_question_check->id])->get();
+                                                }  
+                                                    
+                                                foreach ($media_question_details as $key_media_question => 
+                                                    $value_media_question) 
+                                                {
+
+                                                        $get_doc = AssignmentDocument::where(['assignment_submission_id' => $value_media_question->id])->get();
+
+                                                        $assignment_documents_question=[];
+                                                        foreach ($get_doc as $key_get_doc => $value_get_doc) {
+                                                            $doc_path='';
+                                                            if($value_get_doc->document){
+                                                                $doc_path =   config('ramdoot.appurl')."/upload/assignment_document/".$value_get_doc->document;
+                                                            }
+
+                                                            $assignment_documents_question[] = ['id' => $value_get_doc->id,'assignment_submission_id' => $value_get_doc->assignment_submission_id,'document' => $doc_path,'created_at' => $value_get_doc->created_at,'updated_at' => $value_get_doc->updated_at];
                                                         }
 
-                                                        $assignment_documents_question[] = ['id' => $value_get_doc->id,'assignment_submission_id' => $value_get_doc->assignment_submission_id,'document' => $doc_path,'created_at' => $value_get_doc->created_at,'updated_at' => $value_get_doc->updated_at];
-                                                    }
 
-                                                   $media_question[] = ['id' => $value_media_question->id,'user_id' => $value_media_question->user_id,'assignment_id' => $value_media_question->assignment_id,'question_id' => $value_media_question->question_id,'answer' => $value_media_question->answer,'created_at' => $value_media_question->created_at,'updated_at' => $value_media_question->updated_at,'assignment_documents' => $assignment_documents_question];
+                                                       $media_question[] = ['id' => $value_media_question->id,'user_id' => $value_media_question->user_id,'assignment_id' => $value_media_question->assignment_id,'question_id' => $value_media_question->question_id,'answer' => $value_media_question->answer,'created_at' => $value_media_question->created_at,'updated_at' => $value_media_question->updated_at,'assignment_documents' => $assignment_documents_question];
                                                 }
-                                            }
+                                                    
+                                                
+                                           // }
+
                                         }
+                                        else{
+                                            $media_question=[];
+                                        }
+
+                                        
 
 
 
@@ -1056,7 +1231,7 @@ class RamdootEduController extends Controller
                                 }
                                 
 
-                                $assignment[] = ['id' => $assig_data->id,'user_id' => $assig_data->user_id,'class_id' => $assig_data->class_id,'assignment_type' => $assig_data->assignment_type,'subject_id' => $assig_data->subject_id,'mode' => $assig_data->mode,'title' => $assig_data->title,'assignment_details' => $assig_data->assignment_details,'assignment_date' => $assig_data->assignment_date,'assignment_time' => $assig_data->assignment_time,'due_date' => $assig_data->due_date,'due_time' => $assig_data->due_time,'total_questions' => $assig_data->total_questions,'total_marks' => $assig_data->total_marks,'assignment_image' => $assig_data->assignment_image,'assignment_option' => $assig_data->assignment_option,'water_mark' => $assig_data->water_mark,'footer' => $assig_data->footer,'instruction' => $assig_data->instruction,'font_size' => $assig_data->font_size,'marks_on' => $assig_data->marks_on,'created_at' => $assig_data->created_at,'updated_at' => $assig_data->updated_at,'total_submission' => $total_submission,'total_review' => $total_reviews,'total_assignment_sent' => $total_assignment_sent,'is_submit' => $is_submit,'assignment_image_url' => 
+                                $assignment[] = ['id' => $assig_data->id,'user_id' => $assig_data->user_id,'class_id' => $assig_data->class_id,'assignment_type' => $assig_data->assignment_type,'subject_id' => $assig_data->subject_id,'mode' => $assig_data->mode,'title' => $assig_data->title,'assignment_details' => $assig_data->assignment_details,'assignment_date' => $assig_data->assignment_date,'assignment_time' => $assig_data->assignment_time,'due_date' => $assig_data->due_date,'due_time' => $assig_data->due_time,'total_questions' => $assig_data->total_questions,'total_marks' => $assig_data->total_marks,'assignment_image' => $assig_data->assignment_image,'assignment_option' => $assig_data->assignment_option,'water_mark' => $assig_data->water_mark,'footer' => $assig_data->footer,'instruction' => $assig_data->instruction,'font_size' => $assig_data->font_size,'marks_on' => $assig_data->marks_on,'created_at' => $assig_data->created_at,'updated_at' => $assig_data->updated_at,'total_submission' => $total_submission,'total_review' => $total_reviews,'total_assignment_sent' => $total_assignment_sent,'is_submit' => $is_submit,'assignment_created_at' => $assignment_submission_created_at,'assignment_updated_at' => $assignment_submission_updated_at,'assignment_image_url' => 
                                     $assignment_img,'assignment_document' => $assignment_document,'media' => $media_assignment,'assignment_question' => $assignment_question];
 
                                 // $assignment[] = Assignment::with('assignment_question','assignment_question.question')->where('id',$assig_data->id)->select('*',DB::raw("CONCAT('$total_submission') AS total_submission"),DB::raw("CONCAT('$assignment_img') AS assignment_image_url"))->first(); 
@@ -1100,6 +1275,8 @@ class RamdootEduController extends Controller
                        $total_assignment_sent = $get_assignment_sent_count;
                        $assignment_img = '';
                        $is_submit = 0;
+                       $assignment_submission_created_at='';
+                       $assignment_submission_updated_at='';
                        if($value->assignment_image){
                         $assignment_img =  config('ramdoot.appurl')."/upload/assignment_image/".$value->assignment_image;
                         }
@@ -1121,7 +1298,7 @@ class RamdootEduController extends Controller
                             $assignment_document[] = ['id' => $value_sub_doc->id,'teacher_assignment_id' => $value_sub_doc->teacher_assignment_id,'document' => $doc_path,'created_at' => $value_sub_doc->created_at,'updated_at' => $value_sub_doc->updated_at,];         
                         }
 
-                        $assignment[] = ['id' => $value->id,'user_id' => $value->user_id,'class_id' => $value->class_id,'assignment_type' => $value->assignment_type,'subject_id' => $value->subject_id,'mode' => $value->mode,'title' => $value->title,'assignment_details' => $value->assignment_details,'assignment_date' => $value->assignment_date,'assignment_time' => $value->assignment_time,'due_date' => $value->due_date,'due_time' => $value->due_time,'total_questions' => $value->total_questions,'total_marks' => $value->total_marks,'assignment_image' => $assignment_img,'assignment_option' => $value->assignment_option,'water_mark' => $value->water_mark,'footer' => $value->footer,'instruction' => $value->instruction,'font_size' => $value->font_size,'marks_on' => $value->marks_on,'created_at' => $value->created_at,'updated_at' => $value->updated_at,'total_submission' => $total_submission,'total_review' => $total_reviews,'total_assignment_sent' => $total_assignment_sent,'is_submit' => $is_submit,'assignment_document' => $assignment_document,'assignment_question' => $question_array];
+                        $assignment[] = ['id' => $value->id,'user_id' => $value->user_id,'class_id' => $value->class_id,'assignment_type' => $value->assignment_type,'subject_id' => $value->subject_id,'mode' => $value->mode,'title' => $value->title,'assignment_details' => $value->assignment_details,'assignment_date' => $value->assignment_date,'assignment_time' => $value->assignment_time,'due_date' => $value->due_date,'due_time' => $value->due_time,'total_questions' => $value->total_questions,'total_marks' => $value->total_marks,'assignment_image' => $assignment_img,'assignment_option' => $value->assignment_option,'water_mark' => $value->water_mark,'footer' => $value->footer,'instruction' => $value->instruction,'font_size' => $value->font_size,'marks_on' => $value->marks_on,'created_at' => $value->created_at,'updated_at' => $value->updated_at,'total_submission' => $total_submission,'total_review' => $total_reviews,'total_assignment_sent' => $total_assignment_sent,'is_submit' => $is_submit,'assignment_created_at' => $assignment_submission_created_at,'assignment_updated_at' =>  $assignment_submission_updated_at,'assignment_document' => $assignment_document,'assignment_question' => $question_array];
 
                        //$assignment[] = Assignment::with('assignment_question','assignment_question.question')->where('id',$value->id)->select('*',DB::raw("CONCAT('$total_submission') AS total_submission"),DB::raw("CONCAT('$is_submit') AS is_submit"),DB::raw("CONCAT('$assignment_img') AS assignment_image_url"))->first();
                     }
@@ -1522,7 +1699,7 @@ class RamdootEduController extends Controller
 
                                         $assignment_documents[] = ['id' => $value_get_doc->id,'assignment_submission_id' => $value_get_doc->assignment_submission_id,'document' => $doc_path,'created_at' => $value_get_doc->created_at,'updated_at' => $value_get_doc->updated_at];
                                     }
-                                   $media_assignment[] = ['id' => $value_media_assignment->id,'user_id' => $value_media_assignment->user_id,'assignment_id' => $value_media_assignment->assignment_id,'question_id' => $value_media_assignment->question_id,'answer' => $value_media_assignment->answer,'teacher_id' => $value_media_assignment->teacher_id,'marks' => $value_media_assignment->marks,'comment' => $value_media_assignment->comment,'emoji' => $value_media_assignment->emoji,'is_submit' => $value_media_assignment->is_submit,'created_at' => $value_media_assignment->created_at,'updated_at' => $value_media_assignment->updated_at,'assignment_documents' => $assignment_documents];
+                                    $media_assignment[] = ['id' => $value_media_assignment->id,'user_id' => $value_media_assignment->user_id,'assignment_id' => $value_media_assignment->assignment_id,'question_id' => $value_media_assignment->question_id,'answer' => $value_media_assignment->answer,'teacher_id' => $value_media_assignment->teacher_id,'marks' => $value_media_assignment->marks,'comment' => $value_media_assignment->comment,'emoji' => $value_media_assignment->emoji,'is_submit' => $value_media_assignment->is_submit,'created_at' => $value_media_assignment->created_at,'updated_at' => $value_media_assignment->updated_at,'assignment_documents' => $assignment_documents];
                                 }
                             }
                         }
@@ -1536,7 +1713,7 @@ class RamdootEduController extends Controller
                         $is_submited=0;
 
                         $get_assignment_question = AssignmentQuestion::with('question')->where(['assignment_id' => $assig_data->id])->get();
-                        $assignment_question=[];$is_submit=0;
+                        $assignment_question=[];$is_submit=0;$media_question=[];
                         if(count($get_assignment_question) > 0){
                             foreach ($get_assignment_question as $key_assignment => $value_assignment) {
 
@@ -1550,38 +1727,43 @@ class RamdootEduController extends Controller
                                 $media_question=[];
                                 if($media_question_check){
                                    
-                                    if($media_question_check->question_id != 0){
-                                        $media_question = AssignmentSubmission::with('assignment_document')->where(['id' => $media_question_check->id])->get();
-                                    }
-                                }
+                                    // if($media_question_check->question_id != 0){
+                                    //     $media_question = AssignmentSubmission::with('assignment_document')->where(['id' => $media_question_check->id])->get();
+                                    // }
 
-
-                                $media_question_check = AssignmentSubmission::where(['assignment_id' => $assig_data->id,'user_id' => $request->student_id])->first();
+                                    $media_question_check = AssignmentSubmission::where(['assignment_id' => $assig_data->id,'user_id' => $request->student_id])->first();
                                 //dd($media_question_check);
-                                $media_question=[];
-                                if($media_question_check){
+                                
+                                    if($media_question_check){
 
-                                    $is_submit = $media_question_check->is_submit;
-                                   
-                                    if($media_question_check->question_id != 0){
-                                        $media_question_details = AssignmentSubmission::where(['id' => $media_question_check->id])->get();
+                                        $is_submit = $media_question_check->is_submit;
+                                        $assignment_submission_created_at = $media_question_check->created_at;
+                                        $assignment_submission_updated_at = $media_question_check->updated_at;
+                                       
+                                        if($media_question_check->question_id != 0){
+                                            $media_question_details = AssignmentSubmission::where(['id' => $media_question_check->id])->get();
 
-                                        foreach ($media_question_details as $key_media_question => $value_media_question) {
+                                            foreach ($media_question_details as $key_media_question => $value_media_question) {
 
-                                            $get_doc = AssignmentDocument::where(['assignment_submission_id' => $value_media_question->id])->get();
-                                            $assignment_documents_question=[];
-                                            foreach ($get_doc as $key_get_doc => $value_get_doc) {
-                                                $doc_path='';
-                                                if($value_get_doc->document){
-                                                    $doc_path =   config('ramdoot.appurl')."/upload/assignment_document/".$value_get_doc->document;
+                                                $get_doc = AssignmentDocument::where(['assignment_submission_id' => $value_media_question->id])->get();
+                                                $assignment_documents_question=[];
+                                                foreach ($get_doc as $key_get_doc => $value_get_doc) {
+                                                    $doc_path='';
+                                                    if($value_get_doc->document){
+                                                        $doc_path =   config('ramdoot.appurl')."/upload/assignment_document/".$value_get_doc->document;
+                                                    }
+
+                                                    $assignment_documents_question[] = ['id' => $value_get_doc->id,'assignment_submission_id' => $value_get_doc->assignment_submission_id,'document' => $doc_path,'created_at' => $value_get_doc->created_at,'updated_at' => $value_get_doc->updated_at];
                                                 }
 
-                                                $assignment_documents_question[] = ['id' => $value_get_doc->id,'assignment_submission_id' => $value_get_doc->assignment_submission_id,'document' => $doc_path,'created_at' => $value_get_doc->created_at,'updated_at' => $value_get_doc->updated_at];
+                                               $media_question[] = ['id' => $value_media_question->id,'user_id' => $value_media_question->user_id,'assignment_id' => $value_media_question->assignment_id,'question_id' => $value_media_question->question_id,'answer' => $value_media_question->answer,'teacher_id' => $value_media_question->teacher_id,'marks' => $value_media_question->marks,'comment' => $value_media_question->comment,'emoji' => $value_media_question->emoji,'created_at' => $value_media_question->created_at,'updated_at' => $value_media_question->updated_at,'assignment_documents' => $assignment_documents_question];
                                             }
-
-                                           $media_question[] = ['id' => $value_media_question->id,'user_id' => $value_media_question->user_id,'assignment_id' => $value_media_question->assignment_id,'question_id' => $value_media_question->question_id,'answer' => $value_media_question->answer,'teacher_id' => $value_media_question->teacher_id,'marks' => $value_media_question->marks,'comment' => $value_media_question->comment,'emoji' => $value_media_question->emoji,'created_at' => $value_media_question->created_at,'updated_at' => $value_media_question->updated_at,'assignment_documents' => $assignment_documents_question];
                                         }
                                     }
+
+                                }
+                                else{
+                                    $media_question=[];
                                 }
 
 
@@ -1600,7 +1782,7 @@ class RamdootEduController extends Controller
                         }
                         
 
-                        $assignment[] = ['id' => $assig_data->id,'user_id' => $assig_data->user_id,'class_id' => $assig_data->class_id,'assignment_type' => $assig_data->assignment_type,'subject_id' => $assig_data->subject_id,'mode' => $assig_data->mode,'title' => $assig_data->title,'assignment_details' => $assig_data->assignment_details,'assignment_date' => $assig_data->assignment_date,'assignment_time' => $assig_data->assignment_time,'due_date' => $assig_data->due_date,'due_time' => $assig_data->due_time,'total_questions' => $assig_data->total_questions,'total_marks' => $assig_data->total_marks,'assignment_image' => $assig_data->assignment_image,'assignment_option' => $assig_data->assignment_option,'water_mark' => $assig_data->water_mark,'footer' => $assig_data->footer,'instruction' => $assig_data->instruction,'font_size' => $assig_data->font_size,'marks_on' => $assig_data->marks_on,'created_at' => $assig_data->created_at,'updated_at' => $assig_data->updated_at,'total_submission' => $total_submission,'is_submit' => $is_submit,'assignment_image_url' => 
+                        $assignment[] = ['id' => $assig_data->id,'user_id' => $assig_data->user_id,'class_id' => $assig_data->class_id,'assignment_type' => $assig_data->assignment_type,'subject_id' => $assig_data->subject_id,'mode' => $assig_data->mode,'title' => $assig_data->title,'assignment_details' => $assig_data->assignment_details,'assignment_date' => $assig_data->assignment_date,'assignment_time' => $assig_data->assignment_time,'due_date' => $assig_data->due_date,'due_time' => $assig_data->due_time,'total_questions' => $assig_data->total_questions,'total_marks' => $assig_data->total_marks,'assignment_image' => $assig_data->assignment_image,'assignment_option' => $assig_data->assignment_option,'water_mark' => $assig_data->water_mark,'footer' => $assig_data->footer,'instruction' => $assig_data->instruction,'font_size' => $assig_data->font_size,'marks_on' => $assig_data->marks_on,'created_at' => $assig_data->created_at,'updated_at' => $assig_data->updated_at,'total_submission' => $total_submission,'is_submit' => $is_submit,'assignment_created_at' => $assignment_submission_created_at,'assignment_updated_at' => $assignment_submission_updated_at,'assignment_image_url' => 
                             $assignment_img,'media' => $media_assignment,'assignment_document' =>  $assignment_document,'assignment_question' => $assignment_question];
 
                         // $assignment[] = Assignment::with('assignment_question','assignment_question.question')->where('id',$assig_data->id)->select('*',DB::raw("CONCAT('$total_submission') AS total_submission"),DB::raw("CONCAT('$assignment_img') AS assignment_image_url"))->first(); 
