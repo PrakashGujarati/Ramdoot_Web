@@ -54,7 +54,7 @@ class MaterialController extends Controller
 
                     $title = $value1->label;
 
-                    $getdata_material = Material::where(['question_type' => $value1->question_type,
+                    $getdata_material = Material::where(['unit_id' => $request->unit_id,'question_type' => $value1->question_type,
                             'status' => 'Active'])->orderBy('order_no','asc')->get();
                     $materialdata=[];
                     foreach ($getdata_material as $value_sub) {
@@ -76,8 +76,9 @@ class MaterialController extends Controller
                         isset($value->sub_title) ? $value->sub_title:'','answer' => $value_sub->answer,'marks' => $value_sub->marks,'image' => $image,'label' => $value_sub->label];
                     }    
 
-                    $getquestion_type_details = QuestionType::where(['id' => $value1->question_type])->first();
-                    $data[] = ['question_type' => $getquestion_type_details->question_type,'material' => $materialdata];
+                    //$getquestion_type_details = QuestionType::where(['id' => $value1->question_type])->first();
+                    //$data[] = ['question_type' => $getquestion_type_details->question_type,'material' => $materialdata];
+                    $data[] = ['question_type' => $value1->question_type,'material' => $materialdata];
                 }
 
                 // $sub_title = Unit::where(['id' => $request->unit_id,'status' => 'Active'])->first();
