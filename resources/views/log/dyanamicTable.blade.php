@@ -26,9 +26,9 @@
                         ?>
                         <tr>
                             <td>{{$getData[$i]->type}}</td>
-                            <td>{{$getData[$i]->upload_time}}</td>
+                            <td>{{date_format(date_create($getData[$i]->upload_time), 'd-m-Y H:i:s')}}</td>
                             <td>{{$getData[$i]->operation}}</td>
-                            <td>{{$role ? $role->slug : ''}}</td>
+                            <td>{{$role ? $role-> slug : ''}}</td>
                             <td>
                                 <span class="@if($interval <= 5) text-success @else text-danger @endif">
                                     @if($interval > 59)
