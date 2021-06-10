@@ -54,7 +54,7 @@ class MaterialController extends Controller
 
                     $title = $value1->label;
 
-                    $getdata_material = Material::where(['question_type' => $value1->question_type,
+                    $getdata_material = Material::where(['unit_id' => $request->unit_id,'question_type' => $value1->question_type,
                             'status' => 'Active'])->orderBy('order_no','asc')->get();
                     $materialdata=[];
                     foreach ($getdata_material as $value_sub) {
