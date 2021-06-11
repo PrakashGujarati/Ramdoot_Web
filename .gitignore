@@ -1,5 +1,6 @@
 /node_modules
 /public/hot
+/config/app.php
 /public/upload
 /public/storage
 /storage/*.key
