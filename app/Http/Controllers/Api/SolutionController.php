@@ -53,7 +53,7 @@ class SolutionController extends Controller
 	    			
 	    			foreach ($getdata as $value1) {
 
-	    				$getdata_solution = Solution::where(['question_type' => $value1->question_type,
+	    				$getdata_solution = Solution::where(['unit_id' => $request->unit_id,'question_type' => $value1->question_type,
 	    					'status' => 'Active'])->orderBy('order_no','asc')->get();
 	    				$solutiondata=[];
 	    				foreach ($getdata_solution as $value_sub) {
