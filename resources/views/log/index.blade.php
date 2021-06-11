@@ -24,20 +24,24 @@
         </div>
     </div>
     <div class="card card-preview">
+        <form action="/log_minutes" method="POST">
+        @csrf
         <div class="row" style="margin: 10px">
             <div class="col-lg-4">
                 <label>Start Date</label>
-                <input type="date" name="start_date" value="{{date('Y-m-d')}}" class="form-control start_date">
+                <input type="date" name="start_date" value="{{$start_date}}" class="form-control start_date">
             </div>
             <div class="col-lg-4">
                 <label>End Date</label>
-                <input type="date" name="end_date" value="{{date('Y-m-d')}}" class="form-control end_date">
+                <input type="date" name="end_date" value="{{$end_date}}" class="form-control end_date">
             </div>
             <div class="col-lg-4">
                 <label>Select User</label>
-                <select name="" class="form-control user-id">
+                <select name="user_id" class="form-control user-id">
                     @foreach($users as $user)
-                        @if($user->name)
+                        @if($user->name && isset($user_id))
+                        <option value="{{$user->id}}" {{$user->id == $user_id ? 'selected' : ''}}>{{$user->name}}</option>
+                        @elseif($user->name)
                         <option value="{{$user->id}}">{{$user->name}}</option>
                         @endif
                     @endforeach
@@ -74,6 +78,7 @@
         var start_date=$('.start_date').val();
         var end_date=$('.end_date').val();
         var user_id=$('.user-id').val();
+        $('.dyanamicTable').html('');
         $.ajax({
             type: "GET",
             data:{
@@ -86,7 +91,6 @@
                 $('.loader').show();
             },
             success: function(result) {
-                $('.dyanamicTable').html('');
                 $('.dyanamicTable').html(result.html);
             }
         });
