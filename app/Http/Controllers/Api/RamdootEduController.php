@@ -746,10 +746,11 @@ class RamdootEduController extends Controller
             
             $get_question_type=[];
             foreach ($get_unit as $key => $value) {
-                $getquestion_details = QuestionType::select('id','question_type')->where(['id' => $value->question_type])->first();
-                $get_question_type[] = $getquestion_details;
+                //dd($get_unit);
+                // $getquestion_details = QuestionType::select('id','question_type')->where(['id' => $value->question_type])->first();
+                $get_question_type[] = ['question_type' => $value->question_type]; //$getquestion_details;
             }
-            $mcqdetails = ['id' => 0,'question_type' => "MCQ"];
+            $mcqdetails = ['question_type' => "MCQ"];
             array_push($get_question_type,$mcqdetails);
 
             return response()->json([
@@ -778,9 +779,9 @@ class RamdootEduController extends Controller
 
         $chkunit = Unit::where(['id' => $request->unit_id,'status' => 'Active'])->first();
 
-        if($request->category_id != 0){
-            $chkquestiontype = QuestionType::where(['id' => $request->category_id,'status' => 'Active'])->first();    
-        }
+        // if($request->category_id != 0){
+        //     $chkquestiontype = QuestionType::where(['id' => $request->category_id,'status' => 'Active'])->first();    
+        // }
         
 
         if(empty($chkunit)){
@@ -792,23 +793,23 @@ class RamdootEduController extends Controller
         }
         else{
 
-            if($request->category_id != 0){
+            if($request->category_id){
 
-                if(empty($chkquestiontype)){
-                    return response()->json([
-                        "code" => 400,
-                        "message" => "Category not found.",
-                        "data" => [],
-                    ]);    
-                }
-                else{
+                // if(empty($chkquestiontype)){
+                //     return response()->json([
+                //         "code" => 400,
+                //         "message" => "Category not found.",
+                //         "data" => [],
+                //     ]);    
+                // }
+                // else{
                     $get_question = Solution::where(['unit_id' => $request->unit_id,'question_type' => $request->category_id])->get();
                     return response()->json([
                         "code" => 200,
                         "message" => "success",
                         "data" => $get_question,
                     ]);
-                }
+                // }
             }
             else{
                 $get_question = Question::where(['unit_id' => $request->unit_id])->get();
@@ -938,7 +939,7 @@ class RamdootEduController extends Controller
         if(count($get_question_details) > 0){
             $counter_array=[];
             foreach ($get_question_details as $key => $value) {
-                if($value->question_type != 0 || $value->is_mcq == 0){
+                if($value->question_type != null || $value->is_mcq == 0){
                      $vquestions = VirtualAssignmentQuestions::where(['class_id' => $value->class_id,'marks' => $value->marks,'assignment_type' => $value->assignment_type])->pluck('question_id')->toArray();     
                      $questions = Solution::whereIn('id',$vquestions)->get();
                 } 
@@ -946,7 +947,7 @@ class RamdootEduController extends Controller
                     $vmquestions = VirtualAssignmentQuestions::with('question')->where(['class_id' => $value->class_id,'marks' => $value->marks,'assignment_type' => $value->assignment_type])->pluck('question_id')->toArray();
                     $questions = Solution::whereIn('id',$vmquestions)->get();
                 }                                
-                $question_array[] = ['id' => $value->id,'class_id' => $value->class_id,'mode' => $value->mode,'assignment_type' => $value->assignment_type,'question_type' => $value->questionType,'is_mcq' => $value->is_mcq,'marks' => $value->marks,'question_solution' => $questions]; //,'question_type_id' => $value->questionType->id,'question_type' => $value->questionType->question_type
+                $question_array[] = ['id' => $value->id,'class_id' => $value->class_id,'mode' => $value->mode,'assignment_type' => $value->assignment_type,'question_type' => $value->question_type,'is_mcq' => $value->is_mcq,'marks' => $value->marks,'question_solution' => $questions]; //,'question_type_id' => $value->questionType->id,'question_type' => $value->questionType->question_type
             }
             
             return response()->json([

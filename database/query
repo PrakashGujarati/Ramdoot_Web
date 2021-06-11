@@ -1,5 +1,11 @@
 
 
+-----------------------11-06-2021-------------------
+
+ALTER TABLE `virtual_assignment_questions` CHANGE `question_type` `question_type` VARCHAR(255) NULL;
+
+ALTER TABLE `assignment_questions` CHANGE `question_type` `question_type` VARCHAR(255) NULL;
+
 -----------------------07-06-2021-------------------
 
 ALTER TABLE `assignments` CHANGE `mode` `mode` ENUM('manually_creation','smart_creation','file_upload') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL;
