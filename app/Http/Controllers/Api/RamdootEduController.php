@@ -273,7 +273,7 @@ class RamdootEduController extends Controller
         
         if($check_class){
 
-            $check_class = new Classroom;
+            $check_class = Classroom::find($check_class->id);
             $check_class->status = "Deleted";
             $check_class->save();
             //Classroom::where(['id' => $request->class_id])->delete();
@@ -1878,10 +1878,11 @@ class RamdootEduController extends Controller
             if($check_assignment){
 
                 $add = AssignmentSubmission::find($check_assignment->id);
+                $add->teacher_id = $request->teacher_id;
                 $add->question_id = 0;
                 $add->marks = $request->marks;
                 $add->comment = $request->comment;
-                $add->emoji = $request->emoji;
+                $add->emoji = $Request->emoji;
                 $add->save();
 
                 return response()->json([
@@ -2112,9 +2113,138 @@ class RamdootEduController extends Controller
 
     }
 
-    
+    public function delete_question(Request $request)
+    {
+        $rules = array(
+            'virtual_assignment_question_id' => 'required'    
+        );
+        $messages = array(
+            'virtual_assignment_question_id' => 'Please enter virtual assignment question id.'
+        );
+        $validator = Validator::make($request->all(), $rules, $messages);
 
-    
-    
+        if ($validator->fails()) {
+            $msg = $validator->messages();
+            return ['status' => "false",'msg' => $msg];
+        }
+
+        $check_question = VirtualAssignmentQuestions::where(['id' => $request->virtual_assignment_question_id])->first();
+
+        if($check_question){
+            VirtualAssignmentQuestions::where(['id' => $check_question->id])->delete(); 
+            return response()->json([
+                "code" => 200,
+                "message" => "success"
+            ]);   
+        }
+        else{
+            return response()->json([
+                "code" => 400,
+                "message" => "Question not found.",
+                "data" => [],
+            ]);
+        }
+
+        
+    }
+
+
+    public function shuffle_question(Request $request)
+    {
+        $rules = array(
+            'virtual_assignment_question_id' => 'required'    
+        );
+        $messages = array(
+            'virtual_assignment_question_id' => 'Please enter virtual assignment question id.'
+        );
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            $msg = $validator->messages();
+            return ['status' => "false",'msg' => $msg];
+        }
+
+        $check_question = VirtualAssignmentQuestions::where(['id' => $request->virtual_assignment_question_id])->first();
+
+        if($check_question){
+
+            $solution_questions = Solution::where('id',$check_question->question_id)->first();
+
+            if($solution_questions){
+               // dd($questions_get);
+
+                $questions_get = Solution::where(['board_id' => $solution_questions->board_id,'medium_id' => $solution_questions->medium_id,"standard_id" => $solution_questions->standard_id,"semester_id" => $solution_questions->semester_id,"subject_id" => $solution_questions->subject_id,"unit_id" => $solution_questions->unit_id,'question_type' => $solution_questions->question_type])->where('id','!=',$solution_questions->id)->first();
+
+                if($questions_get){
+                    return response()->json([
+                        "code" => 200,
+                        "message" => "success",
+                        "data" => $questions_get,
+                    ]);     
+                }
+                else{
+
+                    return response()->json([
+                        "code" => 400,
+                        "message" => "Shuffle Question not found.",
+                        "data" => [],
+                    ]);
+                }
+                  
+            }
+            else{
+
+                return response()->json([
+                    "code" => 400,
+                    "message" => "Question not found.",
+                    "data" => [],
+                ]);
+
+            }
+
+        }
+        else{
+            return response()->json([
+                "code" => 400,
+                "message" => "Virtual Assignment Question not found.",
+                "data" => [],
+            ]);
+        } 
+    }
+
+
+    public function edit_question(Request $request)
+    {
+        $rules = array(
+            'virtual_assignment_question_id' => 'required'    
+        );
+        $messages = array(
+            'virtual_assignment_question_id' => 'Please enter virtual assignment question id.'
+        );
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            $msg = $validator->messages();
+            return ['status' => "false",'msg' => $msg];
+        }
+
+        $check_question = VirtualAssignmentQuestions::where(['id' => $request->virtual_assignment_question_id])->first();
+
+        if($check_question){
+            VirtualAssignmentQuestions::where(['id' => $check_question->id])->update(['question_id' => $request->question_id]);   
+            return response()->json([
+                "code" => 200,
+                "message" => "success"
+            ]);   
+        }
+        else{
+            return response()->json([
+                "code" => 400,
+                "message" => "Question not found.",
+                "data" => [],
+            ]);
+        }
+    }
+
 }
 
