@@ -1712,6 +1712,8 @@ class RamdootEduController extends Controller
                         $assignment_img =  config('ramdoot.appurl')."/upload/assignment_image/".$assig_data->assignment_image;
                         }
                         $is_submited=0;
+                        $assignment_submission_created_at='';
+                        $assignment_submission_updated_at='';
 
                         $get_assignment_question = AssignmentQuestion::with('question')->where(['assignment_id' => $assig_data->id])->get();
                         $assignment_question=[];$is_submit=0;$media_question=[];
