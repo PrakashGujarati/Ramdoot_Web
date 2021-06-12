@@ -169,7 +169,7 @@ class RamdootEduController extends Controller
             return ['status' => "false",'msg' => $msg];
         }
 
-        $check_class = Classroom::where(['id' => $request->class_id])->first();
+        $check_class = Classroom::where(['id' => $request->class_id,'status' => 'Active'])->first();
 
         if($check_class){
 
@@ -268,12 +268,15 @@ class RamdootEduController extends Controller
             return ['status' => "false",'msg' => $msg];
         }
 
-        $check_class = Classroom::where(['id' => $request->class_id])->first();
-        $check_class->status = "Deleted";
-        $check_class->save();
+        $check_class = Classroom::where(['id' => $request->class_id,'status' => 'Active'])->first();
+        
         
         if($check_class){
-            Classroom::where(['id' => $request->class_id])->delete();
+
+            $check_class = new Classroom;
+            $check_class->status = "Deleted";
+            $check_class->save();
+            //Classroom::where(['id' => $request->class_id])->delete();
             return response()->json([
                 "code" => 200,
                 "message" => "success",
@@ -336,11 +339,16 @@ class RamdootEduController extends Controller
                         }
 
         				$classdetails = Classroom::where(['id' => $value->class_id])->first();
-        				$classrooms[] = ['id' => $classdetails->id,
+                        if($classdetails){
+
+                            $classrooms[] = ['id' => $classdetails->id,
                         'user_id' => $classdetails->user_id,'board_id' => $classdetails->board_id,'board' => 
                         isset($classdetails->board->sub_title) ? $classdetails->board->sub_title:'','medium_id' => $classdetails->medium_id,
                         'medium' => isset($classdetails->medium->sub_title) ? $classdetails->medium->sub_title:'','standard_id' => $classdetails->standard_id,'standard' => isset($classdetails->standard->standard) ? $classdetails->standard->standard:'','subject_id' => $classdetails->subject_id,'subject' => $classdetails->subject->sub_title,'semester_id' => $classdetails->semester_id,'semester' => 
                         isset($classdetails->semester->semester) ? $classdetails->semester->semester:'','division' => $classdetails->division,'strenth' => $classdetails->strenth,'classroom_id' => $classdetails->classroom_id,'type'=> $classdetails->type,'status' => $classdetails->status,'is_aprove' => $aprove,'created_at' => $value->created_at,'updated_at' => $value->updated_at];
+                                
+                        }
+        				
         			}
         		}
         	}
@@ -1079,7 +1087,7 @@ class RamdootEduController extends Controller
             return ['status' => "false",'msg' => $msg];
         }
 
-        $check_class = Classroom::where(['id' => $request->class_id])->first();
+        $check_class = Classroom::where(['id' => $request->class_id,'status' => 'Active'])->first();
 
         if($check_class){
 
@@ -1986,7 +1994,7 @@ class RamdootEduController extends Controller
             return ['status' => "false",'msg' => $msg];
         }
 
-        $check_class = Classroom::where(['id' => $request->class_id])->first();
+        $check_class = Classroom::where(['id' => $request->class_id,'status' => 'Active'])->first();
 
         if($check_class){
 
