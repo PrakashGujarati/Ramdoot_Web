@@ -298,6 +298,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('user/log', [LogController::class,'index'])->name('user.log');
     Route::get('ajax/user/log', [LogController::class,'getData'])->name('user_ajax.log');
+    Route::get('log_minutes', [LogController::class,'logMinutes'])->name('log_minutes');
 
     Route::get('load_autocomplete/medium', [MediumController::class,'load_autocomplete'])->name('load_autocomplete.medium');
     Route::get('load_autocomplete/standard', [StandardController::class,'load_autocomplete'])->name('load_autocomplete.standard');

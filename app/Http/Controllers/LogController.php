@@ -27,4 +27,14 @@ class LogController extends Controller
         $html=view('log.dyanamicTable', ['getData' => $getData,'role' => $role])->render();
         return response()->json(['html'=>$html]);
     }
+
+    public function logMinutes(Request $request)
+    {
+        foreach ($request->log_ids as $key => $id) {
+            UserDataLog::where('id', $id)->
+            update([
+                'minutes' => $request->minutes[$key]
+            ]);
+        }
+    }
 }

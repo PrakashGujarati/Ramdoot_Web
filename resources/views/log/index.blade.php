@@ -35,9 +35,11 @@
             </div>
             <div class="col-lg-4">
                 <label>Select User</label>
-                <select name="" class="form-control user-id">
+                <select name="user_id" class="form-control user-id">
                     @foreach($users as $user)
-                        @if($user->name)
+                        @if($user->name && isset($user_id))
+                        <option value="{{$user->id}}">{{$user->name}}</option>
+                        @elseif($user->name)
                         <option value="{{$user->id}}">{{$user->name}}</option>
                         @endif
                     @endforeach
@@ -74,6 +76,7 @@
         var start_date=$('.start_date').val();
         var end_date=$('.end_date').val();
         var user_id=$('.user-id').val();
+        $('.dyanamicTable').html('');
         $.ajax({
             type: "GET",
             data:{
@@ -86,11 +89,35 @@
                 $('.loader').show();
             },
             success: function(result) {
-                $('.dyanamicTable').html('');
                 $('.dyanamicTable').html(result.html);
             }
         });
     }
+
+    $(document).on('click','#submit-btn',function(){
+        var logIds = [];
+        var minutes = [];
+        $('input[name ="log_ids"]').each(function() {
+            logIds.push($(this).val());
+        });
+        $('input[name ="minutes"]').each(function() {
+            minutes.push($(this).val());
+        });
+        $.ajax({
+            type: "GET",
+            data:{
+                'log_ids':logIds,
+                'minutes': minutes
+            },
+            url: "{{route('log_minutes')}}",
+            beforeSend: function( xhr ) {
+                $('.loader').show();
+            },
+            success: function(result) {
+                getData();
+            }
+        });
+    });
 
 	$(document).on('click','.distroy', function() {
 	    let del_url = $(this).attr('data-url');
