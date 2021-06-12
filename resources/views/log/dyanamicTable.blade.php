@@ -27,7 +27,7 @@
                     } else {
                         $interval = 0;
                     }
-                    $totalInterval += $interval;
+                    $totalInterval += $getData[$i]->minutes ? $getData[$i]->minutes : $interval ;
                 ?>
                 <tr>
                     <td>{{$getData[$i]->type}}</td>
@@ -46,15 +46,15 @@
                         </span>
                     </td>
                     <td>
-                        <input type="hidden" name="log_ids[]" value="{{$getData[$i]->id}}">
-                        <input type="number" class="form-control" name="minutes[]" value="{{$getData[$i]->minutes ? $getData[$i]->minutes : $interval}}">
+                        <input type="hidden" name="log_ids" value="{{$getData[$i]->id}}">
+                        <input type="number" class="form-control" name="minutes" value="{{$getData[$i]->minutes ? $getData[$i]->minutes : $interval}}">
                     </td>
                 </tr>
                 @endfor
                 <tr>
                     <td colspan="3" align="center">Total : {{$totalInterval}} Minutes</td>
                     <td colspan="3" align="right">
-                        <button type="submit" class="btn btn-primary" id="submit-btn">
+                        <button type="button" class="btn btn-primary" id="submit-btn">
                             Save Minutes
                         </button>
                     </td>
@@ -66,6 +66,5 @@
                 @endif
             </tbody>
         </table>
-        </form>
     </div>
 </div>

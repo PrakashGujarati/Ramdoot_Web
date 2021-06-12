@@ -24,23 +24,21 @@
         </div>
     </div>
     <div class="card card-preview">
-        <form action="/log_minutes" method="POST">
-        @csrf
         <div class="row" style="margin: 10px">
             <div class="col-lg-4">
                 <label>Start Date</label>
-                <input type="date" name="start_date" value="{{$start_date}}" class="form-control start_date">
+                <input type="date" name="start_date" value="{{date('Y-m-d')}}" class="form-control start_date">
             </div>
             <div class="col-lg-4">
                 <label>End Date</label>
-                <input type="date" name="end_date" value="{{$end_date}}" class="form-control end_date">
+                <input type="date" name="end_date" value="{{date('Y-m-d')}}" class="form-control end_date">
             </div>
             <div class="col-lg-4">
                 <label>Select User</label>
                 <select name="user_id" class="form-control user-id">
                     @foreach($users as $user)
                         @if($user->name && isset($user_id))
-                        <option value="{{$user->id}}" {{$user->id == $user_id ? 'selected' : ''}}>{{$user->name}}</option>
+                        <option value="{{$user->id}}">{{$user->name}}</option>
                         @elseif($user->name)
                         <option value="{{$user->id}}">{{$user->name}}</option>
                         @endif
@@ -95,6 +93,31 @@
             }
         });
     }
+
+    $(document).on('click','#submit-btn',function(){
+        var logIds = [];
+        var minutes = [];
+        $('input[name ="log_ids"]').each(function() {
+            logIds.push($(this).val());
+        });
+        $('input[name ="minutes"]').each(function() {
+            minutes.push($(this).val());
+        });
+        $.ajax({
+            type: "GET",
+            data:{
+                'log_ids':logIds,
+                'minutes': minutes
+            },
+            url: "{{route('log_minutes')}}",
+            beforeSend: function( xhr ) {
+                $('.loader').show();
+            },
+            success: function(result) {
+                getData();
+            }
+        });
+    });
 
 	$(document).on('click','.distroy', function() {
 	    let del_url = $(this).attr('data-url');
