@@ -268,8 +268,9 @@ class RamdootEduController extends Controller
             return ['status' => "false",'msg' => $msg];
         }
 
-        $check_class = Classroom::where(['id' => $request->class_id])->first();
-
+        $check_class = Classroom::where(['id' => $request->class_id]);
+        $check_class->status = "Deleted";
+        $check_class->save();
         if($check_class){
             Classroom::where(['id' => $request->class_id])->delete();
             return response()->json([
