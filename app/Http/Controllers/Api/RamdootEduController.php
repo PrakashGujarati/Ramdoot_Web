@@ -312,7 +312,14 @@ class RamdootEduController extends Controller
         if($usercheck){
         	$getrole = Role::where(['id' => $usercheck->role_id])->first();
         	if($getrole->slug == "Teacher"){
-        		$classrooms_arr = Classroom::where(['user_id' => $request->user_id,'status' => 'Active'])->get();
+        		if($request->standard_id != 0)
+                {
+                    $classrooms_arr = Classroom::where(['user_id' => $request->user_id,'standard_id'=> $request->standard_id,'status' => 'Active'])->get();
+                }else
+                {
+                    $classrooms_arr = Classroom::where(['user_id' => $request->user_id,'status' => 'Active'])->get();
+                }
+                
                 $classrooms=[];
                 foreach ($classrooms_arr as $key_class => $value_class) {
 
