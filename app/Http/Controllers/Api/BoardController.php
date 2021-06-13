@@ -12,13 +12,13 @@ class BoardController extends Controller
 {
     public function boardMedium(Request $request){
 
-    	$getboard_details = Board::where(['status' => 'Active'])->select('id','name','thumbnail','thumbnail_file_type')->groupBy('name')->get();
+    	$getboard_details = Board::where(['status' => 'Active'])->select('id','name','sub_title','thumbnail','thumbnail_file_type')->groupBy('name')->get();
 
     	if(count($getboard_details) > 0){
     		$data=[];$getdata=[];
             $mediumArray = [];
     		foreach ($getboard_details as $value) { 
-    			$getdata = Medium::select('id','medium_name')->where('board_id',$value->id)->orderBy('order_no','asc')->get();
+    			$getdata = Medium::select('id','medium_name','sub_title')->where('board_id',$value->id)->orderBy('order_no','asc')->get();
                 $sortname = explode("-",$value->name);
                 $mediumArray=[];
                 foreach ($getdata as $key => $sub_value) 
