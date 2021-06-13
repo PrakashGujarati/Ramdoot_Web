@@ -12,7 +12,7 @@ class BoardController extends Controller
 {
     public function boardMedium(Request $request){
 
-    	$getboard_details = Board::where(['status' => 'Active'])->select('id','name','sub_title','thumbnail','thumbnail_file_type','abbreviation')->groupBy('name')->get();
+    	$getboard_details = Board::where(['status' => 'Active'])->select('id','name','sub_title','thumbnail','thumbnail_file_type','abbreviation','url')->groupBy('name')->get();
 
     	if(count($getboard_details) > 0){
     		$data=[];$getdata=[];
