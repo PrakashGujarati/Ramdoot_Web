@@ -8,9 +8,18 @@ use Illuminate\Database\Eloquent\Model;
 class UserDataLog extends Model
 {
     use HasFactory;
+
+    protected $guarded = [];
+
     public $timestamps = false;
+
     public function user()
     {
-    	return $this->belongsTo(User::class,'user_id');
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function logable()
+    {
+        return $this->morphTo();
     }
 }

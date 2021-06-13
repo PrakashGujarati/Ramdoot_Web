@@ -13,32 +13,36 @@ class Book extends Model
 
     public function board()
     {
-        return $this->belongsTo(Board::class,'board_id');
+        return $this->belongsTo(Board::class, 'board_id');
     }
 
     public function medium()
     {
-        return $this->belongsTo(Medium::class,'medium_id');
+        return $this->belongsTo(Medium::class, 'medium_id');
     }
 
 
     public function standard()
     {
-    	return $this->belongsTo(Standard::class,'standard_id');
+        return $this->belongsTo(Standard::class, 'standard_id');
     }
 
     public function semester()
     {
-    	return $this->belongsTo(Semester::class,'semester_id');
+        return $this->belongsTo(Semester::class, 'semester_id');
     }
 
     public function subject()
     {
-    	return $this->belongsTo(Subject::class,'subject_id');
+        return $this->belongsTo(Subject::class, 'subject_id');
     }
 
     public function unit()
     {
-    	return $this->belongsTo(Unit::class,'unit_id');
+        return $this->belongsTo(Unit::class, 'unit_id');
+    }
+    public function dataLog()
+    {
+        return $this->morphMany(UserDataLog::class, 'logable');
     }
 }

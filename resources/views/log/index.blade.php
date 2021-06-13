@@ -4,6 +4,9 @@
 @endsection
 
 @section('content')
+<div class="details-modal">
+
+</div>
 <div class="nk-block nk-block-lg">
     <div class="nk-block-head">
         <div class="nk-block-head-content">
@@ -71,6 +74,28 @@
     $(document).on('change','.user-id',function(){
         getData();
     });
+
+    function getDetails(userDataLogId,id){
+        var userDataLogId = userDataLogId;
+        var logable_id = id;
+        $('.details-modal').html();
+        $.ajax({
+            type: "GET",
+            data:{
+                'userDataLogId':userDataLogId,
+                'logable_id':logable_id,
+            },
+            url: "{{route('log.details_modal')}}",
+            beforeSend: function( xhr ) {
+                $('.loader').show();
+            },
+            success: function(result) {
+                $('.details-modal').html(result.html);
+                $('.modal').modal('toggle');
+            }
+        });
+    }
+
     function getData()
     {
         var start_date=$('.start_date').val();

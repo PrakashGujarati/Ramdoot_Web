@@ -3,6 +3,7 @@
         <table class="datatable-init table">
             <thead>
                 <tr>
+                    <th>#</th>
                     <th>Type</th>
                     <th>DateTime</th>
                     <th>Operation</th>
@@ -30,7 +31,10 @@
                     $totalInterval += $getData[$i]->minutes ? $getData[$i]->minutes : $interval ;
                 ?>
                 <tr>
-                    <td>{{$getData[$i]->type}}</td>
+                    <td>
+                        <a href="#" onclick="getDetails(<?php echo $getData[$i]->id ?>,<?php echo $getData[$i]->logable_id ?>)"><i class="fas fa-info-circle"></i></a>
+                    </td>
+                    <td>{{$getData[$i]->logable_type}}</td>
                     <td>{{date_format(date_create($getData[$i]->upload_time), 'd-m-Y H:i:s')}}</td>
                     <td>{{$getData[$i]->operation}}</td>
                     <td>{{$role ? $role-> slug : ''}}</td>

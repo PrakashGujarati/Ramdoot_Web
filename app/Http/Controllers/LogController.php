@@ -37,4 +37,12 @@ class LogController extends Controller
             ]);
         }
     }
+
+    public function getDetails(Request $request)
+    {
+        $userDataLog = UserDataLog::where('id', $request->userDataLogId)->first();
+        $data = $userDataLog->logable->toArray();
+        $html = view('log.modal', ['data' => $data,'model' => $userDataLog->logable_type])->render();
+        return response()->json(['success'=>true,'html'=>$html]);
+    }
 }

@@ -11,6 +11,10 @@ class Mcq extends Model
 
     public function unit()
     {
-    	return $this->belongsTo(Unit::class,'unit_id');
+        return $this->belongsTo(Unit::class, 'unit_id');
+    }
+    public function dataLog()
+    {
+        return $this->morphMany(UserDataLog::class, 'logable');
     }
 }
