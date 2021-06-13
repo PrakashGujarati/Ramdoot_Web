@@ -335,9 +335,18 @@ class RamdootEduController extends Controller
 
         	}
         	elseif ($getrole->slug == "Student") {
-        		$classroom_details = ClassStudent::whereHas('classroom', function($q) use($request){
-                    $q->where(['status'=>'Active','standard_id'=>$request->standard_id]);
-                })->where(['user_id' => $request->user_id])->where('status','!=','reject')->get();
+        		if($request->standard_id != 0)
+                {
+                    $classroom_details = ClassStudent::whereHas('classroom', function($q) use($request){
+                        $q->where(['status'=>'Active','standard_id'=>$request->standard_id]);
+                    })->where(['user_id' => $request->user_id])->where('status','!=','reject')->get();
+                }else
+                {
+                    $classroom_details = ClassStudent::whereHas('classroom', function($q) use($request){
+                        $q->where(['status'=>'Active']);
+                    })->where(['user_id' => $request->user_id])->where('status','!=','reject')->get();
+                }
+
         		$classrooms=[];
         		if(count($classroom_details) > 0){
                     $classrooms=[];
