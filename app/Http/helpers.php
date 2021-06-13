@@ -31,91 +31,84 @@ function storeLog($type, $type_id, $upload_time, $operation)
     // $add->save();
     // return $type;
     if ($type == 'subject') {
-        $subject = new Subject();
+        $subject = Subject::find($type_id);
         $subject -> datalog() -> create([
             'user_id' => Auth::user()->id,
             'upload_time' => $upload_time,
             'operation' => $operation
         ]);
     } elseif ($type == 'unit') {
-        $subject = new Unit();
+        $subject = Unit::find($type_id);
         $subject -> datalog() -> create([
             'user_id' => Auth::user()->id,
             'upload_time' => $upload_time,
             'operation' => $operation
         ]);
     } elseif ($type == 'book') {
-        $subject = new Book();
+        $subject = Book::find($type_id);
         $subject -> datalog() -> create([
             'user_id' => Auth::user()->id,
             'upload_time' => $upload_time,
             'operation' => $operation
         ]);
     } elseif ($type == 'semester') {
-        $subject = new Semester();
+        $subject = Semester::find($type_id);
         $subject -> datalog() -> create([
             'user_id' => Auth::user()->id,
             'upload_time' => $upload_time,
             'operation' => $operation
         ]);
     } elseif ($type == 'video') {
-        $subject = new Videos();
+        $subject = Videos::find($type_id);
         $subject -> datalog() -> create([
             'user_id' => Auth::user()->id,
             'upload_time' => $upload_time,
             'operation' => $operation
         ]);
     } elseif ($type == 'board') {
-        $subject = new Board();
+        $subject = Board::find($type_id);
         $subject -> datalog() -> create([
             'user_id' => Auth::user()->id,
             'upload_time' => $upload_time,
             'operation' => $operation
         ]);
     } elseif ($type == 'slider') {
-        $subject = new Slider();
+        $subject = Slider::find($type_id);
         $subject -> datalog() -> create([
             'user_id' => Auth::user()->id,
             'upload_time' => $upload_time,
             'operation' => $operation
         ]);
-    } elseif ($type == 'permission') {
-        $subject = new Permission();
-        $subject -> datalog() -> create([
-            'user_id' => Auth::user()->id,
-            'upload_time' => $upload_time,
-            'operation' => $operation
-        ]);
-    } elseif ($type == 'solution') {
-        $subject = new Solution();
+    }elseif ($type == 'solution') {
+        $subject = Solution::find($type_id);
         $subject -> datalog() -> create([
             'user_id' => Auth::user()->id,
             'upload_time' => $upload_time,
             'operation' => $operation
         ]);
     } elseif ($type == 'standard') {
-        $subject = new Standard();
+        $subject = Standard::find($type_id);
         $subject -> datalog() -> create([
             'user_id' => Auth::user()->id,
             'upload_time' => $upload_time,
             'operation' => $operation
         ]);
     } elseif ($type == 'worksheet') {
-        $subject = new Worksheet();
+        $subject = Worksheet::find($type_id);
         $subject -> datalog() -> create([
             'user_id' => Auth::user()->id,
             'upload_time' => $upload_time,
             'operation' => $operation
         ]);
     } elseif ($type == 'question') {
-        $subject = new Question();
+        $subject = Question::find($type_id);
         $subject -> datalog() -> create([
             'user_id' => Auth::user()->id,
             'upload_time' => $upload_time,
             'operation' => $operation
         ]);
     } elseif ($type == 'material') {
-        $subject = new Material();
+        $subject = Material::find($type_id);
         $subject -> datalog() -> create([
             'user_id' => Auth::user()->id,
             'upload_time' => $upload_time,
