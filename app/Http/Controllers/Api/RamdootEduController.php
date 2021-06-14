@@ -338,7 +338,7 @@ class RamdootEduController extends Controller
                             $aprove = 1;
                         }
 
-        				$classdetails = Classroom::where(['id' => $value->class_id])->first();
+        				$classdetails = Classroom::where(['id' => $value->class_id,'status' => 'Active'])->first();
                         if($classdetails){
 
                             $classrooms[] = ['id' => $classdetails->id,
