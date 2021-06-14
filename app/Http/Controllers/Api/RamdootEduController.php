@@ -1900,7 +1900,7 @@ class RamdootEduController extends Controller
                 $add->question_id = 0;
                 $add->marks = $request->marks;
                 $add->comment = $request->comment;
-                $add->emoji = $Request->emoji;
+                $add->emoji = $request->emoji;
                 $add->save();
 
                 return response()->json([
