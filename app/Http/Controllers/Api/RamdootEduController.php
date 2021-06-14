@@ -312,14 +312,7 @@ class RamdootEduController extends Controller
         if($usercheck){
         	$getrole = Role::where(['id' => $usercheck->role_id])->first();
         	if($getrole->slug == "Teacher"){
-        		if($request->standard_id != 0)
-                {
-                    $classrooms_arr = Classroom::where(['user_id' => $request->user_id,'standard_id'=> $request->standard_id,'status' => 'Active'])->get();
-                }else
-                {
-                    $classrooms_arr = Classroom::where(['user_id' => $request->user_id,'status' => 'Active'])->get();
-                }
-                
+        		$classrooms_arr = Classroom::where(['user_id' => $request->user_id,'status' => 'Active'])->get();
                 $classrooms=[];
                 foreach ($classrooms_arr as $key_class => $value_class) {
 
@@ -335,18 +328,7 @@ class RamdootEduController extends Controller
 
         	}
         	elseif ($getrole->slug == "Student") {
-        		if($request->standard_id != 0)
-                {
-                    $classroom_details = ClassStudent::whereHas('classroom', function($q) use($request){
-                        $q->where(['status'=>'Active','standard_id'=>$request->standard_id]);
-                    })->where(['user_id' => $request->user_id])->where('status','!=','reject')->get();
-                }else
-                {
-                    $classroom_details = ClassStudent::whereHas('classroom', function($q) use($request){
-                        $q->where(['status'=>'Active']);
-                    })->where(['user_id' => $request->user_id])->where('status','!=','reject')->get();
-                }
-
+        		$classroom_details = ClassStudent::where(['user_id' => $request->user_id])->where('status','!=','reject')->get();
         		$classrooms=[];
         		if(count($classroom_details) > 0){
                     $classrooms=[];
@@ -968,14 +950,29 @@ class RamdootEduController extends Controller
             $counter_array=[];
             foreach ($get_question_details as $key => $value) {
                 if($value->question_type != null || $value->is_mcq == 0){
-                     $vquestions = VirtualAssignmentQuestions::where(['class_id' => $value->class_id,'marks' => $value->marks,'assignment_type' => $value->assignment_type])->pluck('question_id')->toArray();     
+                     $vquestions = VirtualAssignmentQuestions::where(['class_id' => $value->class_id,'marks' => $value->marks,'assignment_type' => $value->assignment_type])->pluck('question_id')->toArray();
+                     //dd($vquestions);     
                      $questions = Solution::whereIn('id',$vquestions)->get();
-                } 
+                     $question_arr=[];
+                     foreach ($questions as $key_question => $value_question) {
+                        
+                        $get_vquestions_id = VirtualAssignmentQuestions::where(['question_id' => $value_question->id])->first();
+                        
+                         $question_arr[] = Solution::where(['id' => $vquestions])->select('*',DB::raw("CONCAT('$get_vquestions_id->id') AS virtual_assignment_question_id"))->first();
+                     }
+                }    
                 else{
                     $vmquestions = VirtualAssignmentQuestions::with('question')->where(['class_id' => $value->class_id,'marks' => $value->marks,'assignment_type' => $value->assignment_type])->pluck('question_id')->toArray();
                     $questions = Solution::whereIn('id',$vmquestions)->get();
+                    $question_arr=[];
+                     foreach ($questions as $key_question => $value_question) {
+                        
+                        $get_vquestions_id = VirtualAssignmentQuestions::where(['question_id' => $value_question->id])->first();
+                        
+                         $question_arr[] = Solution::where(['id' => $vquestions])->select('*',DB::raw("CONCAT('$get_vquestions_id->id') AS virtual_assignment_question_id"))->first();
+                     }
                 }                                
-                $question_array[] = ['id' => $value->id,'class_id' => $value->class_id,'mode' => $value->mode,'assignment_type' => $value->assignment_type,'question_type' => $value->question_type,'is_mcq' => $value->is_mcq,'marks' => $value->marks,'question_solution' => $questions]; //,'question_type_id' => $value->questionType->id,'question_type' => $value->questionType->question_type
+                $question_array[] = ['id' => $value->id,'class_id' => $value->class_id,'mode' => $value->mode,'assignment_type' => $value->assignment_type,'question_type' => $value->question_type,'is_mcq' => $value->is_mcq,'marks' => $value->marks,'question_solution' => $question_arr]; //,'question_type_id' => $value->questionType->id,'question_type' => $value->questionType->question_type
             }
             
             return response()->json([
@@ -1039,6 +1036,7 @@ class RamdootEduController extends Controller
         $add->total_marks = $request->total_marks;
         $add->assignment_option = $request->assignment_option;
         $add->assignment_image = $new_name;
+        $add->instruction = isset($request->instruction) ? $request->instruction:null;
         $add->save();
 
         $get_question = explode(',',$request->question_id);
@@ -1900,7 +1898,7 @@ class RamdootEduController extends Controller
                 $add->question_id = 0;
                 $add->marks = $request->marks;
                 $add->comment = $request->comment;
-                $add->emoji = $request->emoji;
+                $add->emoji = $Request->emoji;
                 $add->save();
 
                 return response()->json([
@@ -2249,7 +2247,7 @@ class RamdootEduController extends Controller
         $check_question = VirtualAssignmentQuestions::where(['id' => $request->virtual_assignment_question_id])->first();
 
         if($check_question){
-            VirtualAssignmentQuestions::where(['id' => $check_question->id])->update(['question_id' => $request->question_id]);   
+            VirtualAssignmentQuestions::where(['id' => $check_question->id])->update(['question_id' => $request->new_question_id]);   
             return response()->json([
                 "code" => 200,
                 "message" => "success"
