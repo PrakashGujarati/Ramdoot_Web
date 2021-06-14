@@ -728,6 +728,7 @@ td{
                         $('#label').val('');
                         $('#question_type').val('');
                         $('#level').val('');
+                        $('#hidden_id').val(0);
                         var blank = '';
                         CKEDITOR.instances['question'].setData(blank);
                         CKEDITOR.instances['answer'].setData(blank);
@@ -808,8 +809,8 @@ td{
                 }
 
 
-                //$('#hidden_id').val(result.materialdata.id);
-                //$('#thumbnail').val('');
+                $('#hidden_id').val(result.materialdata.id);
+                $('#thumbnail').val('');
             }
         });
     });

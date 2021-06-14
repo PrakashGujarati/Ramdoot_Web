@@ -649,6 +649,7 @@ $(document).ready(function () {
                     $('#label').val('');
                     $('#question_type').val('');
                     $('#level').val('');
+                    $('#hidden_id').val(0);
 
                     var blank = '';
                     CKEDITOR.instances['question'].setData(blank);
