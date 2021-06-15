@@ -1229,7 +1229,8 @@ class RamdootEduController extends Controller
                                                 else{
                                                     $media_question_details = AssignmentSubmission::where(['id' => $media_question_check->id])->get();
                                                 }  
-                                                    
+                                                
+                                                $media_question=[];
                                                 foreach ($media_question_details as $key_media_question => 
                                                     $value_media_question) 
                                                 {
@@ -1781,25 +1782,34 @@ class RamdootEduController extends Controller
                                 }
 
                                 $media_question_check = AssignmentSubmission::where(['assignment_id' => $assig_data->id,'user_id' => $request->student_id,'question_id' => $value_assignment->question_id])->first();
-                                $media_question=[];
+                                
                                 if($media_question_check){
                                    
                                     // if($media_question_check->question_id != 0){
                                     //     $media_question = AssignmentSubmission::with('assignment_document')->where(['id' => $media_question_check->id])->get();
                                     // }
 
-                                    $media_question_check = AssignmentSubmission::where(['assignment_id' => $assig_data->id,'user_id' => $request->student_id])->first();
+                                  //  $media_question_check = AssignmentSubmission::where(['assignment_id' => $assig_data->id,'user_id' => $request->student_id])->first();
                                 //dd($media_question_check);
-                                
-                                    if($media_question_check){
+                                    
+                                  //  if($media_question_check){
 
                                         $is_submit = $media_question_check->is_submit;
                                         $assignment_submission_created_at = $media_question_check->created_at;
                                         $assignment_submission_updated_at = $media_question_check->updated_at;
-                                       
-                                        if($media_question_check->question_id != 0){
-                                            $media_question_details = AssignmentSubmission::where(['id' => $media_question_check->id])->get();
 
+                                        if($media_question_check->question_id != 0){
+
+                                            $media_question_details = AssignmentSubmission::where(['id' => $media_question_check->id,'question_id' =>$media_question_check->question_id])->get();
+                                        }
+                                        else{
+                                            $media_question_details = AssignmentSubmission::where(['id' => $media_question_check->id])->get();
+                                        }
+                                       
+                                        // if($media_question_check->question_id != 0){
+                                        //     $media_question_details = AssignmentSubmission::where(['id' => $media_question_check->id])->get();
+
+                                            $media_question=[];
                                             foreach ($media_question_details as $key_media_question => $value_media_question) {
 
                                                 $get_doc = AssignmentDocument::where(['assignment_submission_id' => $value_media_question->id])->get();
@@ -1813,10 +1823,12 @@ class RamdootEduController extends Controller
                                                     $assignment_documents_question[] = ['id' => $value_get_doc->id,'assignment_submission_id' => $value_get_doc->assignment_submission_id,'document' => $doc_path,'created_at' => $value_get_doc->created_at,'updated_at' => $value_get_doc->updated_at];
                                                 }
 
-                                               $media_question[] = ['id' => $value_media_question->id,'user_id' => $value_media_question->user_id,'assignment_id' => $value_media_question->assignment_id,'question_id' => $value_media_question->question_id,'answer' => $value_media_question->answer,'teacher_id' => $value_media_question->teacher_id,'marks' => $value_media_question->marks,'comment' => $value_media_question->comment,'emoji' => $value_media_question->emoji,'created_at' => $value_media_question->created_at,'updated_at' => $value_media_question->updated_at,'assignment_documents' => $assignment_documents_question];
+                                                $media_question[] = ['id' => $value_media_question->id,'user_id' => $value_media_question->user_id,'assignment_id' => $value_media_question->assignment_id,'question_id' => $value_media_question->question_id,'answer' => $value_media_question->answer,'created_at' => $value_media_question->created_at,'updated_at' => $value_media_question->updated_at,'assignment_documents' => $assignment_documents_question];
+
+                                               // $media_question[] = ['id' => $value_media_question->id,'user_id' => $value_media_question->user_id,'assignment_id' => $value_media_question->assignment_id,'question_id' => $value_media_question->question_id,'answer' => $value_media_question->answer,'teacher_id' => $value_media_question->teacher_id,'marks' => $value_media_question->marks,'comment' => $value_media_question->comment,'emoji' => $value_media_question->emoji,'created_at' => $value_media_question->created_at,'updated_at' => $value_media_question->updated_at,'assignment_documents' => $assignment_documents_question];
                                             }
-                                        }
-                                    }
+                                       // }
+                                  //  }
 
                                 }
                                 else{
