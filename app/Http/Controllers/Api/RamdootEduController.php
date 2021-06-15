@@ -268,7 +268,9 @@ class RamdootEduController extends Controller
             return ['status' => "false",'msg' => $msg];
         }
 
-        $check_class = Classroom::where(['id' => $request->class_id,'status' => 'Active'])->first();
+        $check_class = Classroom::where(['id' => $request->class_id])->first();
+        $check_class->status = "Deleted";
+        $check_class->save();
         
         
         if($check_class){
@@ -312,7 +314,13 @@ class RamdootEduController extends Controller
         if($usercheck){
         	$getrole = Role::where(['id' => $usercheck->role_id])->first();
         	if($getrole->slug == "Teacher"){
-        		$classrooms_arr = Classroom::where(['user_id' => $request->user_id,'status' => 'Active'])->get();
+        		if($request->standard_id != 0)
+                {
+                    $classrooms_arr = Classroom::where(['user_id' => $request->user_id,'standard_id'=> $request->standard_id,'status' => 'Active'])->get();
+                }else
+                {
+                    $classrooms_arr = Classroom::where(['user_id' => $request->user_id,'status' => 'Active'])->get();
+                }
                 $classrooms=[];
                 foreach ($classrooms_arr as $key_class => $value_class) {
 
@@ -328,7 +336,17 @@ class RamdootEduController extends Controller
 
         	}
         	elseif ($getrole->slug == "Student") {
-        		$classroom_details = ClassStudent::where(['user_id' => $request->user_id])->where('status','!=','reject')->get();
+                if($request->standard_id != 0)
+                {
+                    $classroom_details = ClassStudent::whereHas('classroom', function($q) use($request){
+                        $q->where(['status'=>'Active','standard_id'=>$request->standard_id]);
+                    })->where(['user_id' => $request->user_id])->where('status','!=','reject')->get();
+                }else
+                {
+                    $classroom_details = ClassStudent::whereHas('classroom', function($q) use($request){
+                        $q->where(['status'=>'Active']);
+                    })->where(['user_id' => $request->user_id])->where('status','!=','reject')->get();
+                }
         		$classrooms=[];
         		if(count($classroom_details) > 0){
                     $classrooms=[];
