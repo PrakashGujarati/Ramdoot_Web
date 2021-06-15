@@ -740,7 +740,7 @@ $(document).ready(function () {
 
                     $('#url').val('');
                     //$('#url_preview').css('display','none');
-                    $('#hidden_id').val('0');
+                    $('#hidden_id').val(0);
 
                     $('#thumbnail_preview').css('display','none');
                     $('.thumbnailchk').prop("checked",false);

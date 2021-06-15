@@ -91,7 +91,7 @@
                                     @enderror
                                 </div>
                             </div>
-                            
+
                             <div class="form-group col-lg-4">
                                 <label class="form-label">Units</label>
                                 <div class="form-control-wrap">
@@ -147,7 +147,7 @@
                             </div>
 
                         </div>
-                        
+
                         <div class="row">
 
                             <div class="form-group col-lg-4">
@@ -190,14 +190,14 @@
                                 <div class="form-control-wrap">
                                     <input type="text" class="form-control" id="thumbnail" name="thumbnail" value="">
                                     <input type="hidden" id="hidden_thumbnail" name="hidden_thumbnail" value="">
-                                    
+
                                     @error('thumbnail')
                                         <span class="text-danger" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
                                 </div>
-                                <img id="thumbnail_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" />    
+                                <img id="thumbnail_preview" src="#" alt="your image" class="thumbnail mt-1" height="100" />
                             </div>
 
 
@@ -219,11 +219,11 @@
                             </div>
 
                         </div>
-                        
+
                         <div class="row">
-                            
-                            
-                        
+
+
+
                             <div class="form-group col-lg-4">
                                 <label class="form-label">Description</label>
                                 <div class="form-control-wrap">
@@ -275,7 +275,7 @@
                 </div>
             </div>
         </div>
-            
+
     </div>
 </div><!-- .nk-block -->
 
@@ -284,7 +284,7 @@
 <div class="dyamictable">
     @include('note.dynamic_table')
 </div>
-            
+
 
 @endsection
 
@@ -306,7 +306,7 @@
                 success: function(html) {
                     $('.dyamictable').empty();
                     $('.dyamictable').html(html.html);
-                    $(".datatable-init").DataTable();                  
+                    $(".datatable-init").DataTable();
                 }
             });
     });
@@ -322,9 +322,9 @@
                 success: function(html) {
                     $('.dyamictable').empty();
                     $('.dyamictable').html(html.html);
-                    $(".datatable-init").DataTable();                  
+                    $(".datatable-init").DataTable();
                 }
-        });    
+        });
     });
 
 $(document).ready(function(){
@@ -345,16 +345,16 @@ $(document).ready(function(){
 
     $('#thumbnail_preview').css('display','none');
         $('#url_preview').css('display','none');
-});    
+});
 
 function readThumbnail(input) {
   if (input.files && input.files[0]) {
     var reader = new FileReader();
-    
+
     reader.onload = function(e) {
       $('#thumbnail_preview').attr('src', e.target.result);
     }
-    
+
     reader.readAsDataURL(input.files[0]); // convert to base64 string
   }
 }
@@ -373,11 +373,11 @@ $("#thumbnail").change(function() {
 function readURL(input) {
   if (input.files && input.files[0]) {
     var reader = new FileReader();
-    
+
     reader.onload = function(e) {
       $('#url_preview').attr('src', e.target.result);
     }
-    
+
     reader.readAsDataURL(input.files[0]); // convert to base64 string
   }
 }
@@ -407,33 +407,33 @@ $("#thumbnail").change(function() {
 
 
 $( document ).ready(function() {
-    var check_board = <?PHP echo json_encode($isset); ?>;
+    var check_board = <?php echo json_encode($isset); ?>;
     if(check_board == 1){
 
-        var boardid = <?PHP echo (!empty($semesters_details->board_id) ? json_encode($semesters_details->board_id) : '""'); ?>;
-        var mediumid = <?PHP echo (!empty($semesters_details->medium_id) ? json_encode($semesters_details->medium_id) : '""'); ?>;
-        var standardid = <?PHP echo (!empty($semesters_details->standard_id) ? json_encode($semesters_details->standard_id) : '""'); ?>;
-        var  subjectid = <?PHP echo (!empty($semesters_details->subject_id) ? json_encode($semesters_details->subject_id) : '""'); ?>;
-        var semesterid = <?PHP echo (!empty($semesters_details->id) ? json_encode($semesters_details->id) : '""'); ?>;
-            
+        var boardid = <?php echo(!empty($semesters_details->board_id) ? json_encode($semesters_details->board_id) : '""'); ?>;
+        var mediumid = <?php echo(!empty($semesters_details->medium_id) ? json_encode($semesters_details->medium_id) : '""'); ?>;
+        var standardid = <?php echo(!empty($semesters_details->standard_id) ? json_encode($semesters_details->standard_id) : '""'); ?>;
+        var  subjectid = <?php echo(!empty($semesters_details->subject_id) ? json_encode($semesters_details->subject_id) : '""'); ?>;
+        var semesterid = <?php echo(!empty($semesters_details->id) ? json_encode($semesters_details->id) : '""'); ?>;
+
         $('.board_id').val(boardid);
         var board_id = boardid;
         var medium_id = mediumid;
         var standard_id = standardid;
         var semester_id = semesterid;
         var subject_id = subjectid;
-        
+
         getMediumEdit(board_id,medium_id);
         getStandardEdit(board_id,medium_id,standard_id);
         getSubjectEdit(board_id,medium_id,standard_id,subject_id);
-        getSemesterEdit(board_id,medium_id,standard_id,subject_id,semester_id);  
+        getSemesterEdit(board_id,medium_id,standard_id,subject_id,semester_id);
         getUnit(board_id,medium_id,standard_id,semester_id,subject_id);
     }
 });
 
 
 function getMediumEdit(board_id,medium_id){
-    
+
     $.ajax({
         type: "GET",
         url: "{{route('get.medium')}}",
@@ -444,11 +444,11 @@ function getMediumEdit(board_id,medium_id){
         success: function(result) {
             $('.medium_id').html('');
             $('.medium_id').html(result.html);
-        } 
+        }
     });
 }
 
-function getStandardEdit(board_id,medium_id,standard_id){       
+function getStandardEdit(board_id,medium_id,standard_id){
     $.ajax({
         type: "GET",
         url: "{{route('get.standard')}}",
@@ -460,7 +460,7 @@ function getStandardEdit(board_id,medium_id,standard_id){
         success: function(result) {
             $('.standard_id').html('');
             $('.standard_id').html(result.html);
-        } 
+        }
     });
 }
 
@@ -478,7 +478,7 @@ function getSubjectEdit(board_id,medium_id,standard_id,subject_id){
         success: function(result) {
             $('.subject_id').html('');
             $('.subject_id').html(result.html);
-        } 
+        }
     });
 }
 
@@ -496,7 +496,7 @@ function getSemesterEdit(board_id,medium_id,standard_id,subject_id,semester_id){
         success: function(result) {
             $('.semester_id').html('');
             $('.semester_id').html(result.html);
-        } 
+        }
     });
 }
 
@@ -515,7 +515,7 @@ function getUnitEdit(board_id,medium_id,standard_id,semester_id,subject_id,unit_
         success: function(result) {
             $('.unit_id').html('');
             $('.unit_id').html(result.html);
-        } 
+        }
     });
 }
 
@@ -535,9 +535,9 @@ function getMedium(board_id){
         success: function(result) {
             $('.medium_id').html('');
             $('.medium_id').html(result.html);
-        } 
+        }
     });
-} 
+}
 
 $(document).on('change','.medium_id',function(){
     var board_id = $('.board_id').val();
@@ -558,7 +558,7 @@ function getStandard(board_id,medium_id){
         success: function(result) {
             $('#standard_id').html('');
             $('#standard_id').html(result.html);
-        } 
+        }
     });
 }
 
@@ -583,7 +583,7 @@ function getSubject(standard_id,medium_id,board_id){
         success: function(result) {
             $('.subject_id').html('');
             $('.subject_id').html(result.html);
-        } 
+        }
     });
 }
 
@@ -611,7 +611,7 @@ function getSemester(board_id,medium_id,standard_id,subject_id){
         success: function(result) {
             $('.semester_id').html('');
             $('.semester_id').html(result.html);
-        } 
+        }
     });
 }
 
@@ -635,15 +635,15 @@ function getUnit(board_id,medium_id,standard_id,semester_id,subject_id){
             "semester_id":semester_id,
             "subject_id":subject_id,
         },
-        success: function(result) { 
+        success: function(result) {
             $('.unit_id').html('');
             $('.unit_id').html(result.html);
-        } 
+        }
     });
 }
 
 $(document).ready(function () {
-    
+
     $('#note_form').validate({
          rules: {
                 board_id:"required",
@@ -697,7 +697,7 @@ $(document).ready(function () {
                     $('#release_date').val('');
                     $('#edition').val('');
 
-                    $('#hidden_id').val('0');
+                    $('#hidden_id').val(0);
 
                     $('#url_preview').css('display','none');
                     $(".urlchk").prop("checked",false);
@@ -710,15 +710,15 @@ $(document).ready(function () {
                     $("#thumbnail").attr('type', 'text');
                     $('#thumbnail_file_type').val('Drive');
                     $('#thumbnail').val('');
-                    
+
                     $('.dyamictable').empty();
                     $('.dyamictable').html(data.html);
                     $(".datatable-init").DataTable();
-                }            
+                }
             });
         }
     });
-    
+
 });
 
 // $(document).on('change','.urlchk',function(){
@@ -791,19 +791,19 @@ $(document).on('click','.edit-btn',function(){
                 $('#thumbnail_preview').css('display','none');
                 $("#thumbnail").attr('type', 'text');
                 $('#thumbnail_file_type').val('Drive');
-        
+
             }
             else{
                 $('.thumbnailchk').prop("checked",true);
                 $('#hidden_thumbnail').val(result.notedetails.thumbnail);
                 $('#thumbnail_preview').css('display','block');
                 $("#thumbnail").attr('type', 'file');
-                $('#thumbnail_file_type').val('Server');      
+                $('#thumbnail_file_type').val('Server');
                 var thumbnail_path = "{{ config('ramdoot.appurl') }}"+"/data/"+board_id+'_'+result.sub_title.board_sub_title.sub_title+"/"+medium_id+'_'+result.sub_title.medium_sub_title.sub_title+"/"+standard_id+'_'+
                 result.sub_title.standard_sub_title.sub_title
                 +"/"+subject_id+'_'+result.sub_title.subject_sub_title.sub_title+"/"+semester_id+'_'+
                 result.sub_title.semester_sub_title.sub_title+"/"+unit_id+'_'+result.sub_title.unit_sub_title.sub_title+"/note/thumbnail/"+result.notedetails.thumbnail;
-                $('#thumbnail_preview').attr('src', thumbnail_path);          
+                $('#thumbnail_preview').attr('src', thumbnail_path);
             }
 
 
@@ -814,41 +814,41 @@ $(document).on('click','.edit-btn',function(){
                 $("#url").val(result.notedetails.url);
                 $('#url_preview').css('display','none');
                 $("#url").attr('type', 'text');
-                $('#url_type').val('Drive');   
+                $('#url_type').val('Drive');
             }
             else{
                 $('.urlchk').prop("checked",true);
                 $('#hidden_url').val(result.notedetails.url);
                 $('#url_preview').css('display','block');
                 $("#url").attr('type', 'file');
-                $('#url_type').val('Server'); 
-                
+                $('#url_type').val('Server');
+
                 var url_path = "{{ config('ramdoot.appurl') }}"+"/data/"+board_id+'_'+result.sub_title.board_sub_title.sub_title+"/"+medium_id+'_'+result.sub_title.medium_sub_title.sub_title+"/"+standard_id+'_'+
                 result.sub_title.standard_sub_title.sub_title
                 +"/"+subject_id+'_'+result.sub_title.subject_sub_title.sub_title+"/"+semester_id+'_'+
                 result.sub_title.semester_sub_title.sub_title+"/"+unit_id+'_'+result.sub_title.unit_sub_title.sub_title+"/note/url/"+result.notedetails.url;
-                $('#url_preview').attr('src', url_path);     
+                $('#url_preview').attr('src', url_path);
             }
 
             // if(result.url_type == 'file'){
             //     $('#hidden_url').val(result.url);
             //     $('#url_preview').css('display','block');
             //     var url_path = "{{ config('ramdoot.appurl') }}"+"/upload/note/url/"+result.url;
-            //     $('#url_preview').attr('src', url_path);    
+            //     $('#url_preview').attr('src', url_path);
             // }
             // else{
             //     $('.urlchk').prop("checked",true);
             //     $("#url").attr('type', 'text');
             //     $('#url_type').val('text');
-            //     $('#url_preview').css('display','none');   
+            //     $('#url_preview').css('display','none');
             //     $('#url').val(result.url);
             // }
-            
 
-            
+
+
             $('#hidden_id').val(result.notedetails.id);
             //$('#thumbnail').val('');
-        }            
+        }
     });
 });
 
@@ -881,7 +881,7 @@ $(document).on('click','.distroy', function() {
                     },
                     success: function(data) {
                         confirm("Note Deleted Successfully.");
-                            
+
                         $('#title').val('');
                         $('#sub_title').val('');
                         $('#url').val('');
@@ -904,7 +904,7 @@ $(document).on('click','.distroy', function() {
                         $('.dyamictable').empty();
                         $('.dyamictable').html(data);
                         $(".datatable-init").DataTable();
-                    }            
+                    }
                 });
                 //location.replace(del_url);
             }
@@ -928,11 +928,11 @@ $(document).on('click','.status_change', function() {
         },
         success: function(data) {
             confirm("Note Status Change Successfully.");
-            
+
             $('.dyamictable').empty();
             $('.dyamictable').html(data);
             $(".datatable-init").DataTable();
-        }            
+        }
     });
 });
 
