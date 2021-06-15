@@ -20,7 +20,7 @@
                 @for($i=0; $i < count($getData); $i++)
                 <?php
                     $nextKey = $i+1;
-                    if (($i != count($getData)-1)) {
+                    if (($i != count($getData)-1) && date_format(date_create($getData[$i]->upload_time), 'd-m-Y') == $test = date_format(date_create($getData[$nextKey]->upload_time), 'd-m-Y')) {
                         $dateDifference = date_diff(date_create($getData[$i]->upload_time), date_create($getData[$nextKey]->upload_time));
                         $minutes = $dateDifference->days * 24 * 60;
                         $minutes += $dateDifference->h * 60;
@@ -42,7 +42,7 @@
                         <span class="@if($interval <= 5) text-success @else text-danger @endif">
                             @if($interval > 59)
                                 {{ intdiv($interval, 60).' hours '. ($interval % 60).' minutes'}}
-                            @elseif($interval < 1)
+                            @elseif($interval < 1 )
                                 < 1 minute
                             @else
                                 {{$interval}} minutes

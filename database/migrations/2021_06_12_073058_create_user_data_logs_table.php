@@ -18,9 +18,9 @@ class CreateUserDataLogsTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('logable_id');
             $table->string('logable_type');
-            $table->date('upload_time');
+            $table->dateTime('upload_time');
             $table->string('operation');
-            $table->string('minutes');
+            $table->string('minutes')->nullable();
             $table->timestamps();
         });
     }
