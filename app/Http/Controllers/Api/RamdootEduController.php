@@ -2272,17 +2272,20 @@ class RamdootEduController extends Controller
             if($solution_questions){
                // dd($questions_get);
 
-                $questions_get = Solution::where(['board_id' => $solution_questions->board_id,'medium_id' => $solution_questions->medium_id,"standard_id" => $solution_questions->standard_id,"semester_id" => $solution_questions->semester_id,"subject_id" => $solution_questions->subject_id,"unit_id" => $solution_questions->unit_id,'question_type' => $solution_questions->question_type])->where('id','!=',$solution_questions->id)->first();
+                $questions_get = Solution::where(['board_id' => $solution_questions->board_id,'medium_id' => $solution_questions->medium_id,"standard_id" => $solution_questions->standard_id,"semester_id" => $solution_questions->semester_id,"subject_id" => $solution_questions->subject_id,"unit_id" => $solution_questions->unit_id,'question_type' => $solution_questions->question_type])->where('id','!=',$solution_questions->id)->inRandomOrder()->limit(1)->get();
 
-                if($questions_get){
+                
+                if(count($questions_get) > 0){
+                    foreach ($questions_get as $key_get => $value_get) {
+                        
+                        VirtualAssignmentQuestions::where(['id' => $check_question->id])->update(['question_id' => $value_get->id]);
 
-                    VirtualAssignmentQuestions::where(['id' => $check_question->id])->update(['question_id' => $questions_get->id]);
-
-                    return response()->json([
-                        "code" => 200,
-                        "message" => "success",
-                        "data" => $questions_get,
-                    ]);     
+                        return response()->json([
+                            "code" => 200,
+                            "message" => "success",
+                            "data" => $questions_get,
+                        ]);
+                    }     
                 }
                 else{
 
