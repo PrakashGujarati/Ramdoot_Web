@@ -179,13 +179,13 @@ class RamdootEduController extends Controller
             $chksubject = Subject::where(['id' => $request->subject_id,'status' => 'Active'])->first();
             $chksemester = Semester::where(['id' => $request->semester_id,'status' => 'Active'])->first();
 
-            function random_strings($length_of_string)
-            {
-                $str_result = '0123456789';
+            // function random_strings($length_of_string)
+            // {
+            //     $str_result = '0123456789';
               
-                return substr(str_shuffle($str_result),0, $length_of_string);
-            }
-            $unique_string = random_strings(9);
+            //     return substr(str_shuffle($str_result),0, $length_of_string);
+            // }
+            // $unique_string = random_strings(9);
 
             if(empty($chkboard)){
                 return response()->json([
@@ -233,7 +233,7 @@ class RamdootEduController extends Controller
                 $add->semester_id = isset($request->semester_id) ? $request->semester_id:0;
                 $add->division = $request->division;
                 $add->strenth = $request->strenth;
-                $add->classroom_id  = $unique_string;
+              //  $add->classroom_id  = $unique_string;
                 $add->type = $request->type;
                 $add->save();
 
@@ -967,6 +967,7 @@ class RamdootEduController extends Controller
         if(count($get_question_details) > 0){
             $counter_array=[];
             foreach ($get_question_details as $key => $value) {
+
                 if($value->question_type != null || $value->is_mcq == 0){
                      $vquestions = VirtualAssignmentQuestions::where(['class_id' => $value->class_id,'marks' => $value->marks,'assignment_type' => $value->assignment_type])->pluck('question_id')->toArray();
                      //dd($vquestions);     
@@ -974,7 +975,7 @@ class RamdootEduController extends Controller
                      $question_arr=[];
                      foreach ($questions as $key_question => $value_question) {
                         
-                        $get_vquestions_id = VirtualAssignmentQuestions::where(['question_id' => $value_question->id])->first();
+                        $get_vquestions_id = VirtualAssignmentQuestions::where(['question_id' => $value_question->id,'class_id' => $value->class_id])->first();
                         
                          $question_arr[] = Solution::where(['id' => $value_question->id])->select('*',DB::raw("CONCAT('$get_vquestions_id->id') AS virtual_assignment_question_id"))->first();
                      }
@@ -985,7 +986,7 @@ class RamdootEduController extends Controller
                     $question_arr=[];
                      foreach ($questions as $key_question => $value_question) {
                         
-                        $get_vquestions_id = VirtualAssignmentQuestions::where(['question_id' => $value_question->id])->first();
+                        $get_vquestions_id = VirtualAssignmentQuestions::where(['question_id' => $value_question->id,'class_id' => $value->class_id])->first();
                         
                          $question_arr[] = Solution::where(['id' => $value_question->id])->select('*',DB::raw("CONCAT('$get_vquestions_id->id') AS virtual_assignment_question_id"))->first();
                      }
@@ -1501,11 +1502,32 @@ class RamdootEduController extends Controller
                 
             }
 
+            $get_assignment_data = AssignmentSubmission::where(['id' => $add->id])->first();
+            $get_doc = AssignmentDocument::where(['assignment_submission_id' => $add->id])->get();
+            //dd(count($get_doc));
+
+            $assignment_documents_question=[];
+            foreach ($get_doc as $key_get_doc => $value_get_doc) {
+                $doc_path='';
+                if($value_get_doc->document){
+                    $doc_path =   config('ramdoot.appurl')."/upload/assignment_document/".$value_get_doc->document;
+                }
+
+                $assignment_documents_question[] = ['id' => $value_get_doc->id,'assignment_submission_id' => $value_get_doc->assignment_submission_id,'document' => $doc_path,'created_at' => $value_get_doc->created_at,'updated_at' => $value_get_doc->updated_at];
+            }
             
+            $assignment=[];
+            if($get_assignment_data){
+
+                $assignment[] = ['assignment_document' => $assignment_documents_question];                    
+            }
+            
+
 
             return response()->json([
                 "code" => 200,
-                "message" => "success"
+                "message" => "success",
+                'data' => $assignment,
             ]);
         }
         else{
@@ -1564,11 +1586,32 @@ class RamdootEduController extends Controller
                     }
                 }
             }
+
+            $get_assignment_data = AssignmentSubmission::where(['id' => $add->id])->first();
+            $get_doc = AssignmentDocument::where(['assignment_submission_id' => $add->id])->get();
+            //dd(count($get_doc));
+
+            $assignment_documents_question=[];
+            foreach ($get_doc as $key_get_doc => $value_get_doc) {
+                $doc_path='';
+                if($value_get_doc->document){
+                    $doc_path =   config('ramdoot.appurl')."/upload/assignment_document/".$value_get_doc->document;
+                }
+
+                $assignment_documents_question[] = ['id' => $value_get_doc->id,'assignment_submission_id' => $value_get_doc->assignment_submission_id,'document' => $doc_path,'created_at' => $value_get_doc->created_at,'updated_at' => $value_get_doc->updated_at];
+            }
+            
+            $assignment=[];
+            if($get_assignment_data){
+
+                $assignment[] = ['assignment_document' => $assignment_documents_question];                    
+            }
             
 
             return response()->json([
                 "code" => 200,
-                "message" => "success"
+                "message" => "success",
+                'data' => $assignment,
             ]);
         }
 
@@ -2232,6 +2275,9 @@ class RamdootEduController extends Controller
                 $questions_get = Solution::where(['board_id' => $solution_questions->board_id,'medium_id' => $solution_questions->medium_id,"standard_id" => $solution_questions->standard_id,"semester_id" => $solution_questions->semester_id,"subject_id" => $solution_questions->subject_id,"unit_id" => $solution_questions->unit_id,'question_type' => $solution_questions->question_type])->where('id','!=',$solution_questions->id)->first();
 
                 if($questions_get){
+
+                    VirtualAssignmentQuestions::where(['id' => $check_question->id])->update(['question_id' => $questions_get->id]);
+
                     return response()->json([
                         "code" => 200,
                         "message" => "success",
