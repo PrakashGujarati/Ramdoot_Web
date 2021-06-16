@@ -2267,12 +2267,20 @@ class RamdootEduController extends Controller
 
         if($check_question){
 
+            $get_exits_question = VirtualAssignmentQuestions::where(['class_id' => $check_question->class_id])->get();
+            $question_arr=[];
+            foreach ($get_exits_question as $key_old => $value_old) {
+                $question_arr[] = $value_old->question_id;
+            }
+            
+           // dd($check_question);
+
             $solution_questions = Solution::where('id',$check_question->question_id)->first();
 
             if($solution_questions){
                // dd($questions_get);
 
-                $questions_get = Solution::where(['board_id' => $solution_questions->board_id,'medium_id' => $solution_questions->medium_id,"standard_id" => $solution_questions->standard_id,"semester_id" => $solution_questions->semester_id,"subject_id" => $solution_questions->subject_id,"unit_id" => $solution_questions->unit_id,'question_type' => $solution_questions->question_type])->where('id','!=',$solution_questions->id)->inRandomOrder()->limit(1)->get();
+                $questions_get = Solution::where(['board_id' => $solution_questions->board_id,'medium_id' => $solution_questions->medium_id,"standard_id" => $solution_questions->standard_id,"semester_id" => $solution_questions->semester_id,"subject_id" => $solution_questions->subject_id,"unit_id" => $solution_questions->unit_id,'question_type' => $solution_questions->question_type])->whereNotIn('id', $question_arr)->inRandomOrder()->limit(1)->get();
 
                 
                 if(count($questions_get) > 0){
