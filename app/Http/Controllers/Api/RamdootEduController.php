@@ -2398,5 +2398,60 @@ class RamdootEduController extends Controller
         }
     }
 
+
+    public function classgroupjoin(Request $request)
+    {
+        $rules = array(
+            'user_id' => 'required',
+            'passcode' => 'required',
+            'group_id' => 'required'
+        );
+        $messages = array(
+            'user_id.required' => 'Please enter user id.',
+            'passcode.required' => 'Please enter passcode.',
+            'group_id.required' => 'Please enter group id.'
+        );
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            $msg = $validator->messages();
+            return ['status' => "false",'msg' => $msg];
+        }
+
+        $usercheck = User::where(['id' => $request->user_id])->first();
+
+        if ($usercheck) {
+            $classGroup = DB::table('classroom_groups')->where(['id' => $request->group_id])->first();
+            if($classGroup->passcode == $request->passcode){
+                $classroom_ids = explode(",",$classGroup->class_ids);
+                foreach($classroom_ids as $classroom_id){
+                    $class_id = Classroom::where('classroom_id',$classroom_id)->first()->id;
+                    $classStudent = new ClassStudent();
+                    $classStudent->class_id = $class_id;
+                    $classStudent->user_id = $request->user_id;
+                    $classStudent->status = 'approve';
+                }
+            }else {
+                return response()->json([
+                    "code" => 400,
+                    "message" => "Passcode not match.",
+                    "data" => [],
+                ]);
+            }
+            return response()->json([
+                "code" => 200,
+                "message" => "success",
+                "data" => []
+            ]);
+        } else {
+            return response()->json([
+                "code" => 400,
+                "message" => "User not found.",
+                "data" => [],
+            ]);
+        }
+    }
+
 }
 

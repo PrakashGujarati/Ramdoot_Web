@@ -108,6 +108,8 @@ Route::group(['middleware'=>'auth:api'], function()
     Route::post('shuffle_question', [RamdootEduController::class, 'shuffle_question']);
     Route::post('edit_question', [RamdootEduController::class, 'edit_question']);
 
+    Route::post('classgroup_join', [RamdootEduController::class, 'classgroupjoin']);
+
 });
 
 Route::post('view_semesters_web', [RamdootEduController::class, 'viewSemesters']);
