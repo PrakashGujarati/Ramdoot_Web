@@ -32,9 +32,8 @@ use App\Http\Controllers\Api\RamdootEduController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::group(['middleware'=>'auth:api'], function()
-{
-	Route::post('logout',[RegisterController::class, 'logout']); 
+Route::group(['middleware'=>'auth:api'], function () {
+    Route::post('logout', [RegisterController::class, 'logout']);
     Route::post('board_medium', [BoardController::class, 'boardMedium']);
     Route::post('slider', [SliderController::class, 'slider']);
     Route::post('standard_list', [StandardController::class, 'standardList']);
@@ -64,7 +63,7 @@ Route::group(['middleware'=>'auth:api'], function()
     Route::post('list_of_exams', [ExamController::class, 'listOfExams']);
 
     Route::post('exam_questions', [ExamController::class, 'examQuestions']);
-    Route::post('submit_exam', [ExamController::class, 'submitExam']);        
+    Route::post('submit_exam', [ExamController::class, 'submitExam']);
     Route::post('result_exam', [ExamController::class, 'resultExam']);
     Route::post('note_list', [TextbookController::class, 'note_list']);
 
@@ -76,16 +75,18 @@ Route::group(['middleware'=>'auth:api'], function()
     Route::post('view_class', [RamdootEduController::class, 'view_class']);
     Route::post('update_request', [RamdootEduController::class, 'update_request']);
     Route::post('join_class', [RamdootEduController::class, 'join_class']);
+    Route::post('classgroup_join', [RamdootEduController::class, 'classgroupjoin']);
+
 
     Route::post('teacher_request_list', [RamdootEduController::class, 'teacher_request_list']);
-    
-    Route::post('view_semesters', [RamdootEduController::class, 'viewSemesters']);    
+
+    Route::post('view_semesters', [RamdootEduController::class, 'viewSemesters']);
     Route::post('view_units', [RamdootEduController::class, 'viewUnits']);
     Route::post('view_question_categories', [RamdootEduController::class, 'viewQuestionCategories']);
     Route::post('view_questions', [RamdootEduController::class, 'viewQuestions']);
     Route::post('add_questions', [RamdootEduController::class, 'addQuestions']);
     Route::post('question_counter', [RamdootEduController::class, 'questionCounter']);
-    Route::post('review_questions', [RamdootEduController::class, 'reviewQuestions']);   
+    Route::post('review_questions', [RamdootEduController::class, 'reviewQuestions']);
     Route::post('generate_assignment', [RamdootEduController::class, 'generateAssignment']);
     Route::post('assignment_list', [RamdootEduController::class, 'assignmentList']);
     Route::post('assignment_student', [RamdootEduController::class, 'assignmentStudent']);
@@ -97,8 +98,8 @@ Route::group(['middleware'=>'auth:api'], function()
     Route::post('assignment_review_submit', [RamdootEduController::class, 'assignmentReviewSubmit']);
     Route::post('student_assignment_detail', [RamdootEduController::class, 'studentAssignmentDetail']);
     Route::post('teacher_assignment_comment', [RamdootEduController::class, 'teacherAssignmentComment']);
-    
-    Route::post('teacher_generate_assignment', [RamdootEduController::class, 'teacherAssignmentGenerate']);    
+
+    Route::post('teacher_generate_assignment', [RamdootEduController::class, 'teacherAssignmentGenerate']);
     Route::post('teacher_assignment_list', [RamdootEduController::class, 'teacherAssignmentList']);
 
     Route::post('edit_class', [RamdootEduController::class, 'edit_class']);
@@ -107,7 +108,6 @@ Route::group(['middleware'=>'auth:api'], function()
     Route::post('delete_question', [RamdootEduController::class, 'delete_question']);
     Route::post('shuffle_question', [RamdootEduController::class, 'shuffle_question']);
     Route::post('edit_question', [RamdootEduController::class, 'edit_question']);
-
 });
 
 Route::post('view_semesters_web', [RamdootEduController::class, 'viewSemesters']);
@@ -123,4 +123,3 @@ Route::post('assignment_list_web', [RamdootEduController::class, 'assignmentList
 Route::post('roles', [RegisterController::class, 'userRoles']);
 Route::post('register', [RegisterController::class, 'register']);
 Route::post('login', [RegisterController::class, 'login']);
-
