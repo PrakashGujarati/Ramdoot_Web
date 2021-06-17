@@ -1,4 +1,10 @@
 
+
+-----------------------17-06-2021-------------------
+
+ALTER TABLE `assignment_students` ADD `student_submission_date` VARCHAR(255) NULL AFTER `student_id`, ADD `teacher_submission_date` VARCHAR(255) NULL AFTER `student_submission_date`;
+
+
 -----------------------12-06-2021-------------------
 
 ALTER TABLE `virtual_assignment_questions` CHANGE `mode` `mode` ENUM('manually_creation','smart_creation','file_upload') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL;
