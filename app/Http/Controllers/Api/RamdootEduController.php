@@ -2430,7 +2430,8 @@ class RamdootEduController extends Controller
                     $classStudent = new ClassStudent();
                     $classStudent->class_id = $class_id;
                     $classStudent->user_id = $request->user_id;
-                    $classStudent->status = 'approve';
+                    $classStudent->status = 'aprove';
+                    $classStudent->save();
                 }
             }else {
                 return response()->json([
