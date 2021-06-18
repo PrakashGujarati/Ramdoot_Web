@@ -110,6 +110,11 @@ Route::group(['middleware'=>'auth:api'], function()
 
     Route::post('classgroup_join', [RamdootEduController::class, 'classgroupjoin']);
 
+    Route::post('class_detail', [RamdootEduController::class, 'classDetail']);
+    Route::post('create_group', [RamdootEduController::class, 'createGroup']);
+    Route::post('view_group', [RamdootEduController::class, 'viewGroup']);
+    Route::post('edit_group', [RamdootEduController::class, 'editGroup']);
+    
 });
 
 Route::post('view_semesters_web', [RamdootEduController::class, 'viewSemesters']);
