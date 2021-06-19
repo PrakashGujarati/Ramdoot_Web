@@ -1,5 +1,29 @@
 
 
+-----------------------19-06-2021-------------------
+
+ALTER TABLE `assignments` ADD `status` ENUM('Active','Inactive','Deleted') NOT NULL DEFAULT 'Active' AFTER `assignment_details`;
+
+
+CREATE TABLE `timetables` (
+  `id` bigint UNSIGNED NOT NULL,
+  `class_id` bigint NOT NULL,
+  `user_id` tinyint NOT NULL,
+  `day` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `start_time` time NOT NULL,
+  `end_time` time NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+);
+
+ALTER TABLE `timetables`
+  ADD PRIMARY KEY (`id`);
+
+
+ALTER TABLE `timetables`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+
+
 -----------------------18-06-2021-------------------
 
 ALTER TABLE `assignments` CHANGE `instruction` `instruction` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL;
