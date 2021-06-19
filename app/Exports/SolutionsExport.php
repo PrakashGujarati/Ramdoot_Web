@@ -10,13 +10,13 @@ use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class SolutionsExport implements FromCollection,WithHeadings,ShouldAutoSize, WithEvents
+class SolutionsExport implements FromCollection, WithHeadings, ShouldAutoSize, WithEvents
 {
     /**
     * @return \Illuminate\Support\Collection
     */
-    
-    private  $data = [];
+
+    private $data = [];
 
     public function __construct($data)
     {
@@ -25,7 +25,7 @@ class SolutionsExport implements FromCollection,WithHeadings,ShouldAutoSize, Wit
 
     public function collection()
     {
-        $solutions=[];
+        $solutions = [];
         foreach ($this->data as $value) {
             $solutions[] = array(
                 'id' => $value->id,
@@ -41,7 +41,7 @@ class SolutionsExport implements FromCollection,WithHeadings,ShouldAutoSize, Wit
                 "semester_name" => isset($value->semester->semester) ? $value->semester->semester:'',
                 'unit_id' => $value->unit_id,
                 "unit_name" => isset($value->unit->title) ? $value->unit->title:'',
-                "user_id" => $value->user_id,                
+                "user_id" => $value->user_id,
                 'question' => isset($value->question) ? $value->question:'',
                 'answer' => isset($value->answer) ? $value->answer:'',
                 "marks" => isset($value->marks) ? $value->marks:'',
@@ -50,7 +50,7 @@ class SolutionsExport implements FromCollection,WithHeadings,ShouldAutoSize, Wit
                 'label' => isset($value->label) ? $value->label:'',
                 'question_type_id' => isset($value->question_type) ? $value->question_type:'',
                 'question_type' => isset($value->questionType->question_type) ? $value->questionType->question_type:'',
-                'level' => isset($value->level) ? $value->level:'',                
+                'level' => isset($value->level) ? $value->level:'',
                 'status' => $value->status,
                 'order_no' => $value->order_no
             );
@@ -65,42 +65,41 @@ class SolutionsExport implements FromCollection,WithHeadings,ShouldAutoSize, Wit
     public function headings(): array
     {
         return [
-        	'Id',
+            'Id',
             "Board Id",
             "Board Name",
             "Medium Id",
             "Medium Name",
-	    	"Standard Id",
+            "Standard Id",
             "Standard Name",
-	    	"Subject Id",
+            "Subject Id",
             "Subject Name",
-	    	"Semester Id",
-	    	"Semester Name",
-	    	"Unit Id",
-	    	"Unit Name",
-	    	"User Id",
-	        "Question",
-	        "Answer",
-	        "Marks",
+            "Semester Id",
+            "Semester Name",
+            "Unit Id",
+            "Unit Name",
+            "User Id",
+            "Question",
+            "Answer",
+            "Marks",
             "Image File Type",
-	        "Image",
-	    	"Label",
-	        "QuestionType Id",
+            "Image",
+            "Label",
+            "QuestionType Id",
             "QuestionType",
-	        "Level",	        
-	        "Status",
-	        "Order No",
+            "Level",
+            "Status",
+            "Order No",
         ];
     }
 
     public function registerEvents(): array
     {
         return [
-            AfterSheet::class    => function(AfterSheet $event) {
+            AfterSheet::class    => function (AfterSheet $event) {
                 $cellRange = 'A1:Z1';
                 $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setBold(true)->setSize(14);
             },
         ];
     }
-
 }

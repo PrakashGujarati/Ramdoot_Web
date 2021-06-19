@@ -6,7 +6,7 @@ table {
     table-layout:fixed;
 }
 td{
-    overflow:hidden;    
+    overflow:hidden;
     text-overflow: ellipsis;
     white-space: normal !important;
 }
@@ -32,7 +32,7 @@ td{
 						</div>
 					</div>
 				@endif
-	            <form action="{{ route('import.data_excel') }}" method="POST" enctype='multipart/form-data' 
+	            <form action="{{ route('import.data_excel') }}" method="POST" enctype='multipart/form-data'
 	            id="import_form">
 	                @csrf
 	                <input type="hidden" name="hidden_id" class="hidden_id" id="hidden_id" value="0">
@@ -49,6 +49,7 @@ td{
 		                    	<option>Book</option>
 		                    	<option>Note</option>
 		                    	<option>Video</option>
+		                    	<option>Question</option>
 		                    	<option>Solution</option>
 		                    	<option>Material</option>
 		                    	<option>Paper</option>
@@ -76,8 +77,8 @@ td{
 	                    </div>
 		            </div>
 
-	            </form>  
-	            </div>     
+	            </form>
+	            </div>
 	        </div>
 	    </div>
     </div>
@@ -88,22 +89,22 @@ td{
 @section('scripts')
 
 <script type="text/javascript">
-	
+
 $(document).ready(function () {
-    
+
     // $('#import_form').validate({
     //      rules: {
     //         file : {
 	   //          required : true,
 	   //          extension: "xls|csv"
-    //     	},	
+    //     	},
     //     },
     //     messages: {
     //     	file:{
     //     		required : "A csv file is required.",
-    //         	extension: "The file type must be 'CSV'."	
+    //         	extension: "The file type must be 'CSV'."
     //     	},
-        	
+
     //     },
     // });
 });

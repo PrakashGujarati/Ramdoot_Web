@@ -6,7 +6,7 @@ table {
     table-layout:fixed;
 }
 td{
-    overflow:hidden;    
+    overflow:hidden;
     text-overflow: ellipsis;
     white-space: normal !important;
 }
@@ -23,7 +23,7 @@ td{
 	                <div class="card-head">
 	                    <h5 class="card-title">All Data Excel</h5>
 	                </div>
-	            
+
 	            <form action="{{ route('get.all_data_excel') }}" method="POST" enctype='multipart/form-data' id="board_form">
 	                @csrf
 	                <input type="hidden" name="hidden_id" class="hidden_id" id="hidden_id" value="0">
@@ -40,6 +40,7 @@ td{
 		                    	<option>Book</option>
 		                    	<option>Note</option>
 		                    	<option>Video</option>
+                                <option>Question</option>
 		                    	<option>Solution</option>
 		                    	<option>Material</option>
 		                    	<option>Paper</option>
@@ -58,8 +59,8 @@ td{
 	                    </div>
 		            </div>
 
-	            </form>  
-	            </div>     
+	            </form>
+	            </div>
 	        </div>
 	    </div>
     </div>
