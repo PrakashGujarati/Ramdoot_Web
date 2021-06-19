@@ -27,6 +27,7 @@ use App\Models\AssignmentSubmission;
 use App\Models\AssignmentDocument;
 use App\Models\TeacherAssignment;
 use App\Models\TeacherAssignmentDocument;
+use App\Models\ClassroomGroup;
 
 class RamdootEduController extends Controller
 {
@@ -388,16 +389,16 @@ class RamdootEduController extends Controller
 
         if ($usercheck) {
             $classGroup = DB::table('classroom_groups')->where(['id' => $request->group_id])->first();
-            if($classGroup->passcode == $request->passcode){
-                $classroom_ids = explode(",",$classGroup->class_ids);
-                foreach($classroom_ids as $classroom_id){
-                    $class_id = Classroom::where('classroom_id',$classroom_id)->first()->id;
+            if ($classGroup->passcode == $request->passcode) {
+                $classroom_ids = explode(",", $classGroup->class_ids);
+                foreach ($classroom_ids as $classroom_id) {
+                    $class_id = Classroom::where('classroom_id', $classroom_id)->first()->id;
                     $classStudent = new ClassStudent();
                     $classStudent->class_id = $class_id;
                     $classStudent->user_id = $request->user_id;
                     $classStudent->status = 'approve';
                 }
-            }else {
+            } else {
                 return response()->json([
                     "code" => 400,
                     "message" => "Passcode not match.",
@@ -2228,4 +2229,298 @@ class RamdootEduController extends Controller
             ]);
         }
     }
+
+
+    public function classgroupjoin(Request $request)
+    {
+        $rules = array(
+            'user_id' => 'required',
+            'passcode' => 'required',
+            'group_id' => 'required'
+        );
+        $messages = array(
+            'user_id.required' => 'Please enter user id.',
+            'passcode.required' => 'Please enter passcode.',
+            'group_id.required' => 'Please enter group id.'
+        );
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            $msg = $validator->messages();
+            return ['status' => "false",'msg' => $msg];
+        }
+
+        $usercheck = User::where(['id' => $request->user_id])->first();
+
+        if ($usercheck) {
+            $classGroup = DB::table('classroom_groups')->where(['id' => $request->group_id])->first();
+            if ($classGroup->passcode == $request->passcode) {
+                $classroom_ids = explode(",", $classGroup->class_ids);
+                foreach ($classroom_ids as $classroom_id) {
+                    $class_id = Classroom::where('classroom_id', $classroom_id)->first()->id;
+                    $classStudent = new ClassStudent();
+                    $classStudent->class_id = $class_id;
+                    $classStudent->user_id = $request->user_id;
+                    $classStudent->status = 'aprove';
+                    $classStudent->save();
+                }
+            } else {
+                return response()->json([
+                    "code" => 400,
+                    "message" => "Passcode not match.",
+                    "data" => [],
+                ]);
+            }
+            return response()->json([
+                "code" => 200,
+                "message" => "success",
+                "data" => []
+            ]);
+        } else {
+            return response()->json([
+                "code" => 400,
+                "message" => "User not found.",
+                "data" => [],
+            ]);
+        }
+    }
+
+
+    public function classDetail(Request $request)
+    {
+        $rules = array(
+            'classroom_id' => 'required'
+        );
+        $messages = array(
+            'classroom_id.required' => 'Please enter classroom id.'
+        );
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            $msg = $validator->messages();
+            return ['status' => "false",'msg' => $msg];
+        }
+
+        $check_class = Classroom::where('classroom_id', $request->classroom_id)->first();
+
+        if ($check_class) {
+            $data =  ['id' => $check_class->id,'user_id' => $check_class->user_id,'board_id' => $check_class->board_id,'board' =>
+            isset($check_class->board->sub_title) ? $check_class->board->sub_title:'','medium_id' => $check_class->medium_id,
+            'medium' => isset($check_class->medium->sub_title) ? $check_class->medium->sub_title:'','standard_id' =>
+            $check_class->standard_id,'standard' => isset($check_class->standard->standard) ? $check_class->standard->standard:'',
+            'subject_id' => $check_class->subject_id,
+            'subject' => isset($check_class->subject->sub_title) ? $check_class->subject->sub_title:'',
+            'semester_id' => $check_class->semester_id,
+            'semester' => isset($check_class->semester->semester) ? $check_class->semester->semester:'',
+            'division' => $check_class->division,'strenth' => $check_class->strenth,
+            'classroom_id' => $check_class->classroom_id,'type'=> $check_class->type,'status' => $check_class->status];
+
+            return response()->json([
+                "code" => 200,
+                "message" => "success",
+                "data" => $data,
+            ]);
+        } else {
+            return response()->json([
+                "code" => 400,
+                "message" => "Classroom not found.",
+                "data" => [],
+            ]);
+        }
+    }
+
+    public function createGroup(Request $request)
+    {
+        $rules = array(
+            'user_id' => 'required',
+            'standard_id' => 'required',
+            'group_name' => 'required',
+            'passcode' => 'required',
+            'class_id' => 'required',
+        );
+        $messages = array(
+            'user_id.required' => 'Please enter user id.',
+            'standard_id' => 'Please enter standard id.',
+            'group_name' => 'Please enter group name.',
+            'passcode' => 'Please enter passcode.',
+            'class_id' => 'Please enter class id.'
+        );
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            $msg = $validator->messages();
+            return ['status' => "false",'msg' => $msg];
+        }
+
+        $chkuser = User::where(['id' => $request->user_id])->first();
+        $chkstandard = Standard::where(['id' => $request->standard_id,'status' => 'Active'])->first();
+
+        if (empty($chkuser)) {
+            return response()->json([
+                "code" => 400,
+                "message" => "User not found.",
+                "data" => [],
+            ]);
+        } elseif (empty($chkstandard)) {
+            return response()->json([
+                "code" => 400,
+                "message" => "Standard not found.",
+                "data" => [],
+            ]);
+        } else {
+            $add =  new ClassroomGroup;
+            $add->user_id = $request->user_id;
+            $add->standard_id = $request->standard_id;
+            $add->group_name = $request->group_name;
+            $add->passcode = $request->passcode;
+            $add->class_ids  = $request->class_id;
+            $add->status = "Active";
+            $add->save();
+
+            return response()->json([
+                "code" => 200,
+                "message" => "success",
+            ]);
+        }
+    }
+
+    public function editGroup(Request $request)
+    {
+        $rules = array(
+            'group_id' => 'required',
+            'user_id' => 'required',
+            'standard_id' => 'required',
+            'group_name' => 'required',
+            'passcode' => 'required',
+            'class_id' => 'required',
+        );
+        $messages = array(
+            'group_id.required' => 'Please enter group id.',
+            'user_id.required' => 'Please enter user id.',
+            'standard_id' => 'Please enter standard id.',
+            'group_name' => 'Please enter group name.',
+            'passcode' => 'Please enter passcode.',
+            'class_id' => 'Please enter class id.'
+        );
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            $msg = $validator->messages();
+            return ['status' => "false",'msg' => $msg];
+        }
+
+        $chkuser = User::where(['id' => $request->user_id])->first();
+        $chkstandard = Standard::where(['id' => $request->standard_id,'status' => 'Active'])->first();
+        $chkgroup = ClassroomGroup::where(['id' => $request->group_id,'status' => 'Active'])->first();
+
+        if (empty($chkuser)) {
+            return response()->json([
+                "code" => 400,
+                "message" => "User not found.",
+                "data" => [],
+            ]);
+        } elseif (empty($chkstandard)) {
+            return response()->json([
+                "code" => 400,
+                "message" => "Standard not found.",
+                "data" => [],
+            ]);
+        } elseif (empty($chkgroup)) {
+            return response()->json([
+                "code" => 400,
+                "message" => "Classroom group not found.",
+                "data" => [],
+            ]);
+        } else {
+            $add =  ClassroomGroup::find($request->group_id);
+            $add->user_id = $request->user_id;
+            $add->standard_id = $request->standard_id;
+            $add->group_name = $request->group_name;
+            $add->passcode = $request->passcode;
+            $add->class_ids  = $request->class_id;
+            $add->status = "Active";
+            $add->save();
+
+            return response()->json([
+                "code" => 200,
+                "message" => "success",
+            ]);
+        }
+    }
+
+    public function viewGroup(Request $request)
+    {
+        $rules = array(
+            'user_id' => 'required',
+            'standard_id' => 'required'
+        );
+        $messages = array(
+            'user_id.required' => 'Please enter user id.',
+            'standard_id' => 'Please enter standard id.'
+        );
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        $chkuser = User::where(['id' => $request->user_id])->first();
+
+        if ($validator->fails()) {
+            $msg = $validator->messages();
+            return ['status' => "false",'msg' => $msg];
+        }
+
+        if (empty($chkuser)) {
+            return response()->json([
+                "code" => 400,
+                "message" => "User not found.",
+                "data" => [],
+            ]);
+        } else {
+            if ($request->standard_id != "0") {
+                $get_classgroup = ClassroomGroup::where(['user_id' => $request->user_id,'standard_id' => $request->standard_id])->get();
+            } else {
+                $get_classgroup = ClassroomGroup::where(['user_id' => $request->user_id])->get();
+            }
+
+            $group_data=[];
+            foreach ($get_classgroup as $key_group => $value_group) {
+                $link = "https://www.ramdootedu.world/view_group/?group_id=".$value_group->id."&passcode=".$value_group->passcode;
+
+                $classids = explode(',', $value_group->class_ids);
+
+                $class_arr=[];
+                if (count($classids) > 0) {
+                    foreach ($classids as $key_class => $value_class) {
+                        $get_class = Classroom::where('id', $value_class)->first();
+
+                        $class_arr[] =  ['id' => $get_class->id,'user_id' => $get_class->user_id,'board_id' => $get_class->board_id,'board' =>
+                            isset($get_class->board->sub_title) ? $get_class->board->sub_title:'','medium_id' => $get_class->medium_id,
+                            'medium' => isset($get_class->medium->sub_title) ? $get_class->medium->sub_title:'','standard_id' =>
+                            $get_class->standard_id,'standard' => isset($get_class->standard->standard) ? $get_class->standard->standard:'',
+                            'subject_id' => $get_class->subject_id,
+                            'subject' => isset($get_class->subject->sub_title) ? $get_class->subject->sub_title:'',
+                            'semester_id' => $get_class->semester_id,
+                            'semester' => isset($get_class->semester->semester) ? $get_class->semester->semester:'',
+                            'division' => $get_class->division,'strenth' => $get_class->strenth,
+                            'classroom_id' => $get_class->classroom_id,'type'=> $get_class->type,'status' => $get_class->status];
+                    }
+                }
+
+                $group_data[] = ["id" => $value_group->id,"user_id" => $value_group->user_id,"standard_id" => $value_group->standard_id,"group_name" => $value_group->group_name,"class_ids" => $value_group->class_ids,"passcode" => $value_group->passcode,"status" => $value_group->status,"created_at" => $value_group->created_at,"updated_at" => $value_group->updated_at,'link' => $link,'class' => $class_arr];
+            }
+
+
+            return response()->json([
+                "code" => 200,
+                "message" => "success",
+                "data" => $group_data,
+            ]);
+        }
+    }
+
+
+    //ClassroomGroup
 }
