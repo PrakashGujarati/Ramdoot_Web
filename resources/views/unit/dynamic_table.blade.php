@@ -57,7 +57,8 @@
                         <td>{{ isset($data->semester->semester) ? $data->semester->semester:'' }}</td>
                         <td>{{ isset($data->subject->subject_name) ? $data->subject->subject_name:'' }}</td>--}}
                         <td>{{ isset($data->title) ? $data->title:'' }}</td>
-                        <td>{{ isset($data->description) ? $data->description:'' }}</td>
+                        <td>{{ isset($data->sub_title) ? $data->sub_title:'' }}</td>
+                        {{--<td>{{ isset($data->description) ? $data->description:'' }}</td>--}}
                         <td>
                             @if($data->url_type == 'Server')
                             @if($data->url)
