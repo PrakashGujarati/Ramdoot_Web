@@ -2429,12 +2429,15 @@ class RamdootEduController extends Controller
             if($classGroup->passcode == $request->passcode){
                 $classroom_ids = explode(",",$classGroup->class_ids);
                 foreach($classroom_ids as $classroom_id){
-                    $class_id = Classroom::where('classroom_id',$classroom_id)->first()->id;
-                    $classStudent = new ClassStudent();
-                    $classStudent->class_id = $class_id;
-                    $classStudent->user_id = $request->user_id;
-                    $classStudent->status = 'aprove';
-                    $classStudent->save();
+                    $classroom_details = Classroom::where('classroom_id',$classroom_id)->first();
+                    if($classroom_details){
+                        $class_id = $classroom_details->id;
+                        $classStudent = new ClassStudent();
+                        $classStudent->class_id = $class_id;
+                        $classStudent->user_id = $request->user_id;
+                        $classStudent->status = 'aprove';
+                        $classStudent->save();
+                    }
                 }
             }else {
                 return response()->json([
