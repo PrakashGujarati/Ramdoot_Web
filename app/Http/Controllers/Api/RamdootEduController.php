@@ -2505,8 +2505,7 @@ class RamdootEduController extends Controller
         else{
             return response()->json([
                 "code" => 400,
-                "message" => "Classroom not found.",
-                "data" => [],
+                "message" => "Classroom not found."
             ]);   
         }
     }
