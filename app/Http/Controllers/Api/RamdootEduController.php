@@ -2432,11 +2432,15 @@ class RamdootEduController extends Controller
                     $classroom_details = Classroom::where('id',$classroom_id)->first();
                     if($classroom_details){
                         $class_id = $classroom_details->id;
-                        $classStudent = new ClassStudent();
-                        $classStudent->class_id = $class_id;
-                        $classStudent->user_id = $request->user_id;
-                        $classStudent->status = 'aprove';
-                        $classStudent->save();
+
+                        $check_classstudent = ClassStudent::where(['class_id' => $class_id,'user_id' => $request->user_id])->first();
+                        if(empty($check_classstudent)){
+                            $classStudent = new ClassStudent();
+                            $classStudent->class_id = $class_id;
+                            $classStudent->user_id = $request->user_id;
+                            $classStudent->status = 'aprove';
+                            $classStudent->save();
+                        }
                     }
                 }
             }else {
