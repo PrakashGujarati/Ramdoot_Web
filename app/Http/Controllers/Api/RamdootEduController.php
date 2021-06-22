@@ -2802,7 +2802,8 @@ class RamdootEduController extends Controller
             'class_id' => 'required',
             'start_time' => 'required',
             'end_time' => 'required',
-            'day' => 'required'
+            'day' => 'required',
+            'is_show' => 'required',
         );
         $messages = array(
             'user_id.required' => 'Please enter user id.',
@@ -2810,6 +2811,7 @@ class RamdootEduController extends Controller
             'start_time.required' => 'Please enter start time.',
             'end_time.required' => 'Please enter end time.',
             'day.required' => 'Please enter day.',
+            'is_show.required' => 'Please enter is_show status.'
         );
 
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -2844,6 +2846,7 @@ class RamdootEduController extends Controller
             $add->start_time = $request->start_time;
             $add->end_time = $request->end_time;
             $add->day  = $request->day;
+            $add->is_show = $request->is_show;
             $add->save();
 
             return response()->json([
@@ -2865,7 +2868,8 @@ class RamdootEduController extends Controller
             'class_id' => 'required',
             'start_time' => 'required',
             'end_time' => 'required',
-            'day' => 'required'
+            'day' => 'required',
+            'is_show' => 'required',
         );
         $messages = array(
             'timetable_id' => 'required',
@@ -2874,6 +2878,7 @@ class RamdootEduController extends Controller
             'start_time.required' => 'Please enter start time.',
             'end_time.required' => 'Please enter end time.',
             'day.required' => 'Please enter day.',
+            'is_show.required' => 'Please enter is_show status.'
         );
 
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -2916,6 +2921,7 @@ class RamdootEduController extends Controller
             $update->start_time = $request->start_time;
             $update->end_time = $request->end_time;
             $update->day  = $request->day;
+            $update->is_show = $request->is_show;
             $update->save();
 
             return response()->json([
@@ -2951,20 +2957,21 @@ class RamdootEduController extends Controller
             if(count($get_timetable) > 0){
                 foreach ($get_timetable as $key_day => $value_day) {
 
-                    $get_lecture = TimeTable::where(['day' => $value_day->day])->get();
+                    $get_lecture = TimeTable::where(['day' => $value_day->day])->select('id','start_time','end_time','is_show')->get();
 
-                    $lecture_arr=[];$count=1;
-                    if(count($get_lecture) > 0){
-                        foreach ($get_lecture as $key_lecture => $value_lecture) {
+                    // $lecture_arr=[];$count=1;
+                    // if(count($get_lecture) > 0){
+                    //     foreach ($get_lecture as $key_lecture => $value_lecture) {
 
-                            $lecture_arr = array_merge($lecture_arr,array('lecture'.$count => $value_lecture->start_time.'-'.$value_lecture->end_time));
-                            $count=$count+1;    
-                        }
+                    //         $lecture_arr = array_merge($lecture_arr,array('lecture'.$count => $value_lecture->start_time.'-'.$value_lecture->end_time));
+                    //         $count=$count+1;    
+                    //     }
                         
-                    }
-                    $day = ['day' => $value_day->day];
-                    $data[] = array_merge($day,$lecture_arr);
+                    // }
+                    // $day = ['day' => $value_day->day];
+                    // $data[] = array_merge($day,$lecture_arr);
                     //dd($value_day->day);
+                    $data[] = ['day' => $value_day->day,'lecture' => $get_lecture];
                 }
 
                 return response()->json([
