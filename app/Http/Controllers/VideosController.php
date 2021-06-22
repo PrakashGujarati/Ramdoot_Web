@@ -460,6 +460,15 @@ class VideosController extends Controller
         $data = ['html' => $html];
         return response()->json($data);    
     }
+
+
+
+    /*-----------------------------------------------------------------------------------------------------   */
     
+
+    public function videosDemo(Request $request){
+        return view('video_demo');
+    }
+
 }
 

@@ -160,6 +160,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('videos/delete', [VideosController::class, 'distroy'])->name('videos.distroy');
     Route::get('videos_export', [VideosController::class, 'videosExport'])->name('videos.export');
 
+    Route::get('videos_demo', [VideosController::class, 'videosDemo'])->name('videos.demo');
+
     /*solutions*/
     Route::get('solution', [SolutionController::class, 'index'])->name('solution.index');
     Route::get('solution/create/{subject_id?}', [SolutionController::class, 'create'])->name('solution.create');

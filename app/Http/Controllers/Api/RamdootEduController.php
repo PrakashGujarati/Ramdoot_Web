@@ -2843,7 +2843,7 @@ class RamdootEduController extends Controller
             $add->start_time = $request->start_time;
             $add->end_time = $request->end_time;
             $add->day  = $request->day;
-            $add->is_show = $request->is_show;
+            $add->is_show = 1;
             $add->save();
 
             return response()->json([
@@ -2916,7 +2916,7 @@ class RamdootEduController extends Controller
             $update->start_time = $request->start_time;
             $update->end_time = $request->end_time;
             $update->day  = $request->day;
-            $update->is_show = $request->is_show;
+            //$update->is_show = $request->is_show;
             $update->save();
 
             return response()->json([
@@ -2952,7 +2952,7 @@ class RamdootEduController extends Controller
             if(count($get_timetable) > 0){
                 foreach ($get_timetable as $key_day => $value_day) {
 
-                    $get_lecture = TimeTable::where(['day' => $value_day->day])->select('id','start_time','end_time')->get();
+                    $get_lecture = TimeTable::where(['day' => $value_day->day,'class_id' => $request->class_id])->select('id','start_time','end_time')->get();
 
                     // $lecture_arr=[];$count=1;
                     // if(count($get_lecture) > 0){
