@@ -2802,15 +2802,13 @@ class RamdootEduController extends Controller
             'class_id' => 'required',
             'start_time' => 'required',
             'end_time' => 'required',
-            'day' => 'required',
-            'is_show' => 'required',
+            'day' => 'required'
         );
         $messages = array(
             'user_id.required' => 'Please enter user id.',
             'class_id.required' => 'Please enter class id.',
             'start_time.required' => 'Please enter start time.',
-            'end_time.required' => 'Please enter end time.',
-            'day.required' => 'Please enter day.'
+            'end_time.required' => 'Please enter end time.'
         );
 
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -2867,8 +2865,7 @@ class RamdootEduController extends Controller
             'class_id' => 'required',
             'start_time' => 'required',
             'end_time' => 'required',
-            'day' => 'required',
-            'is_show' => 'required',
+            'day' => 'required'
         );
         $messages = array(
             'timetable_id' => 'required',
@@ -2876,8 +2873,7 @@ class RamdootEduController extends Controller
             'class_id.required' => 'Please enter class id.',
             'start_time.required' => 'Please enter start time.',
             'end_time.required' => 'Please enter end time.',
-            'day.required' => 'Please enter day.',
-            'is_show.required' => 'Please enter is_show status.'
+            'day.required' => 'Please enter day.'
         );
 
         $validator = Validator::make($request->all(), $rules, $messages);
