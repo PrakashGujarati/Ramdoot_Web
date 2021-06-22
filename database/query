@@ -4,6 +4,8 @@
 
 ALTER TABLE `timetables` ADD `is_show` TINYINT NOT NULL DEFAULT '0' AFTER `end_time`;
 
+ALTER TABLE `timetables` CHANGE `is_show` `is_show` TINYINT(4) NOT NULL DEFAULT '1';
+
 -----------------------19-06-2021-------------------
 
 ALTER TABLE `assignments` ADD `status` ENUM('Active','Inactive','Deleted') NOT NULL DEFAULT 'Active' AFTER `assignment_details`;

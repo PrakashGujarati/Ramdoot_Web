@@ -2810,8 +2810,7 @@ class RamdootEduController extends Controller
             'class_id.required' => 'Please enter class id.',
             'start_time.required' => 'Please enter start time.',
             'end_time.required' => 'Please enter end time.',
-            'day.required' => 'Please enter day.',
-            'is_show.required' => 'Please enter is_show status.'
+            'day.required' => 'Please enter day.'
         );
 
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -2957,7 +2956,7 @@ class RamdootEduController extends Controller
             if(count($get_timetable) > 0){
                 foreach ($get_timetable as $key_day => $value_day) {
 
-                    $get_lecture = TimeTable::where(['day' => $value_day->day])->select('id','start_time','end_time','is_show')->get();
+                    $get_lecture = TimeTable::where(['day' => $value_day->day])->select('id','start_time','end_time')->get();
 
                     // $lecture_arr=[];$count=1;
                     // if(count($get_lecture) > 0){
@@ -2971,7 +2970,7 @@ class RamdootEduController extends Controller
                     // $day = ['day' => $value_day->day];
                     // $data[] = array_merge($day,$lecture_arr);
                     //dd($value_day->day);
-                    $data[] = ['day' => $value_day->day,'lecture' => $get_lecture];
+                    $data[] = ['day' => $value_day->day,'is_show' => $value_day->is_show,'lecture' => $get_lecture];
                 }
 
                 return response()->json([
@@ -3003,7 +3002,58 @@ class RamdootEduController extends Controller
     }
     
 
+    public function timetableStatusChange(Request $request){
+        $rules = array(
+            'user_id' => 'required',
+            'class_id' => 'required',
+            'day' => 'required',
+            'is_show' => 'required',
+        );
+        $messages = array(
+            'user_id.required' => 'Please enter user id.',
+            'class_id.required' => 'Please enter class id.',
+            'day.required' => 'Please enter day.',
+            'is_show.required' => 'Please enter is show status.'
+        );
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            $msg = $validator->messages();
+            return ['status' => "false",'msg' => $msg];
+        }
     
+
+
+        $chkuser = User::where(['id' => $request->user_id])->first();
+        $chkclass = Classroom::where(['id' => $request->class_id,'status' => 'Active'])->first();
+
+        if (empty($chkuser)) {
+            return response()->json([
+                "code" => 400,
+                "message" => "User not found.",
+                "data" => [],
+            ]);
+        }
+        elseif (empty($chkclass)) {
+            return response()->json([
+                "code" => 400,
+                "message" => "Classroom not found.",
+                "data" => [],
+            ]);
+        }
+        else{
+
+            $get_timetable = TimeTable::where(['class_id' => $request->class_id,'user_id' => $request->user_id,'day' => "monday"])
+                            ->update(['is_show' => $request->is_show]);
+            
+            return response()->json([
+                "code" => 200,
+                "message" => "success"
+            ]);
+
+        }
+    }
 
     
     //ClassroomGroup
