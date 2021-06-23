@@ -2928,6 +2928,40 @@ class RamdootEduController extends Controller
     }
 
 
+    public function deleteTimetable(Request $request){
+        $rules = array(
+            'timetable_id' => 'required'
+        );
+        $messages = array(
+            'timetable_id.required' => 'Please enter time table id.'
+        );
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            $msg = $validator->messages();
+            return ['status' => "false",'msg' => $msg];
+        }
+
+        $chktimetable = TimeTable::where(['id' => $request->timetable_id])->first();
+
+        if($chktimetable) {
+
+            TimeTable::find($request->timetable_id)->delete();
+            return response()->json([
+                "code" => 200,
+                "message" => "success",
+            ]);
+        }
+        else{
+            return response()->json([
+                "code" => 400,
+                "message" => "TimeTable not found."
+            ]);
+        }
+
+    }
+
     public function viewTimetable(Request $request){
         
         $rules = array(
@@ -3040,7 +3074,7 @@ class RamdootEduController extends Controller
         }
         else{
 
-            $get_timetable = TimeTable::where(['class_id' => $request->class_id,'user_id' => $request->user_id,'day' => "monday"])
+            $get_timetable = TimeTable::where(['class_id' => $request->class_id,'user_id' => $request->user_id,'day' => $request->day])
                             ->update(['is_show' => $request->is_show]);
             
             return response()->json([
