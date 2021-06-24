@@ -357,15 +357,30 @@
               var board = $("#board_id option:selected").html();
                     var standard_id = $("#standard_id").val();
               var standard = $("#standard_id option:selected").html();
-              $.post("ajax.php", {
-                  getSubjectByStandard: 'getSubjectByStandard',
-                  board_id: board_id,
-                  board: board,
-                  standard_id: standard_id,
-                  standard: standard
-              }, function(data) {
-                  $("#subject_id").html(data);
+              $.ajax({
+                      url: "{{route('below_order.board')}}",
+                      type: "GET",
+                      data: {
+                        getSubjectByStandard: 'getSubjectByStandard',
+                        board_id: board_id,
+                        board: board,
+                        standard_id: standard_id,
+                        standard: standard
+                      },
+                      success: function(html) {
+                          $("#subject_id").html(data);                  
+                      }
               });
+
+              // $.post("ajax.php", {
+              //     getSubjectByStandard: 'getSubjectByStandard',
+              //     board_id: board_id,
+              //     board: board,
+              //     standard_id: standard_id,
+              //     standard: standard
+              // }, function(data) {
+              //     $("#subject_id").html(data);
+              // });
           }
   
           function getChapterBySubject() {

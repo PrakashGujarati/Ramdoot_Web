@@ -2432,9 +2432,17 @@ class RamdootEduController extends Controller
                     $classroom_details = Classroom::where('id',$classroom_id)->first();
                     if($classroom_details){
                         $class_id = $classroom_details->id;
-
+                        //dd($class_id,$request->user_id);
                         $check_classstudent = ClassStudent::where(['class_id' => $class_id,'user_id' => $request->user_id])->first();
-                        if(empty($check_classstudent)){
+                        //dd($check_classstudent);
+                        if($check_classstudent){
+                            if($check_classstudent->status == "reject"){
+                                $classStudent = ClassStudent::find($check_classstudent->id);
+                                $classStudent->status = 'aprove';
+                                $classStudent->save();
+                            }
+                        }
+                        else{
                             $classStudent = new ClassStudent();
                             $classStudent->class_id = $class_id;
                             $classStudent->user_id = $request->user_id;
@@ -2983,24 +2991,34 @@ class RamdootEduController extends Controller
         if($chkclass){
             $get_timetable = TimeTable::where(['class_id' => $request->class_id])->groupby('day')->get();
 
-            if(count($get_timetable) > 0){
-                foreach ($get_timetable as $key_day => $value_day) {
+            // $week = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
 
-                    $get_lecture = TimeTable::where(['day' => $value_day->day,'class_id' => $request->class_id])->select('id','start_time','end_time')->get();
+            $day_arr=[];
+            foreach ($get_timetable as $keyday => $valueday) {
+                
+                $day = date('w', strtotime($valueday->day));
+                $day_arr[$valueday->day] = $day;
+            }
+            asort($day_arr);
 
-                    // $lecture_arr=[];$count=1;
-                    // if(count($get_lecture) > 0){
-                    //     foreach ($get_lecture as $key_lecture => $value_lecture) {
+            if(count($day_arr) > 0){
+                foreach ($day_arr as $key_day => $value_day) {
 
-                    //         $lecture_arr = array_merge($lecture_arr,array('lecture'.$count => $value_lecture->start_time.'-'.$value_lecture->end_time));
-                    //         $count=$count+1;    
-                    //     }
-                        
-                    // }
-                    // $day = ['day' => $value_day->day];
-                    // $data[] = array_merge($day,$lecture_arr);
-                    //dd($value_day->day);
-                    $data[] = ['day' => $value_day->day,'is_show' => $value_day->is_show,'lecture' => $get_lecture];
+                    $get_lecture = TimeTable::where(['day' => $key_day,'class_id' => $request->class_id])->select('id','start_time','end_time')->get();
+
+                    $get_array=[];
+                    foreach ($get_lecture as $key_time => $value_time) {
+                        $get_array[$value_time->id] = $value_time->start_time;
+                    }
+                    asort($get_array);
+
+                    $get_final_array=[];
+                    foreach ($get_array as $key_arr => $value_arr) {
+                        $get_final_array[] = TimeTable::where(['id' => $key_arr])->select('id','start_time','end_time')->first();
+                    }
+
+                    $get_status = TimeTable::where(['class_id' => $request->class_id,'day' => $key_day])->first();
+                    $data[] = ['day' => $key_day,'is_show' => $get_status->is_show,'lecture' => $get_final_array];
                 }
 
                 return response()->json([
