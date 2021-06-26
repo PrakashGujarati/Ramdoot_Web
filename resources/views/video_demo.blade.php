@@ -194,11 +194,21 @@
                             </div>
                             <div style="width:49%;float: right;">
                               <div class="form-field form-name">
-                                <label class="contactNameField color-theme" for="contactNameField">Board - Medium:</label>
-                                <select name="set_board_id" id="set_board_id" class="form-control" onchange="setStandardByBoard();">
-                                  <option value="">Select Board</option>                                  
+                                <label class="contactNameField color-theme" for="contactNameField">Board:</label>
+                                <select name="set_board_id" id="set_board_id" class="form-control" onchange="setMediumByBoard();">
+                                  <option value="">--Select Board--</option>
+                                  @foreach($boards as $boards_data)
+                                  <option value="{{ $boards_data->id }}" @if(old('board_id') == $boards_data->id) selected="" @endif>{{ $boards_data->name}}</option>
+                                  @endforeach                                  
                                   </select>
                               </div>
+                              <div class="form-field form-name">
+                                <label class="contactNameField color-theme" for="contactNameField">Medium:</label>
+                                <select name="set_medium_id" class="form-control" id="set_medium_id" onchange="setStandardByBoard();">
+                                    <option value="">--Select Medium--</option>
+                                </select>
+                              </div>
+
                               <div class="form-field form-email">
                                   <label class="contactEmailField color-theme" for="contactEmailField">Standard:</label>
                                   <select name="set_standard_id" id="set_standard_id" class="form-control" onchange="setSubjectByStandard();">
@@ -207,7 +217,8 @@
                               </div>
                               <div class="form-field form-name">
                                 <label class="contactNameField color-theme" for="contactNameField">Subject:</label>
-                                <select class="form-control" name="set_subject_id" id="set_subject_id"  onchange="setSemesterBySubject();">
+                                <select class="form-control" name="set_subject_id" id="set_subject_id"  
+                                onchange="setSemesterBySubject();">
                                   <option value="">Subject Id</option>
                                 </select>
                               </div>
@@ -217,13 +228,14 @@
                                   <option value="">Semester Id</option>
                                 </select>
                               </div>
-                              <div class="form-field form-name">
+                              <div class="form-field form-name mb-2">
                                 <label class="contactNameField color-theme" for="contactNameField">Chapter:</label>
                                 <select class="form-control" name="set_chapter_id" id="set_chapter_id">
                                   <option value="">Chapter Id</option>
                                 </select>
                               </div>
                             </div>
+                            <br/>
                             <div class="form-button">                              
                                 <label class="contactNameField color-theme" for="contactNameField">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
                               <input type="button" class="btn bg-dark text-uppercase font-900 btn-m btn-full border-0 rounded-sm shadow-xl contactSubmitButton" onclick="postParams()" value="Submit" /> 
@@ -243,63 +255,149 @@
         <script>
           
           $( document ).ready(function() {
-              $.post("ajax.php", {
-                  setBoardMediumData: 'setBoardMediumData'
-              }, function(data) {
-                  $("#set_board_id").html(data);
+
+              $.ajax({
+                      url: "{{route('setBoardMediumData')}}",
+                      type: "GET",
+                      success: function(html) {
+                          $("#set_board_id").html(html);                  
+                      }
               });
+
+              // $.post("ajax.php", {
+              //     setBoardMediumData: 'setBoardMediumData'
+              // }, function(data) {
+              //     $("#set_board_id").html(data);
+              // });
           });
+
+          
+          function setMediumByBoard() {
+              var board_id = $("#set_board_id").val();
+              $.ajax({
+                  type: "GET",
+                  url: "{{route('get.medium')}}",
+                  data: {
+                      "board_id":board_id,
+                  },
+                  success: function(result) {
+                      $('#set_medium_id').html(result.html);
+                  }
+              });
+          }
 
           function setStandardByBoard() {
               var board_id = $("#set_board_id").val();
-              $.post("ajax.php", {
-                  setStandardData: 'setStandardData',
-                  board_id: board_id
-              }, function(data) {
-                  $("#set_standard_id").html(data);
+              var medium_id = $('#set_medium_id').val();
+              $.ajax({
+                  type: "GET",
+                  url: "{{route('get.standard')}}",
+                  data: {
+                      "board_id":board_id,
+                      "medium_id":medium_id,
+                  },
+                  success: function(result) {
+                      $('#set_standard_id').html(result.html);
+                  }
               });
+              // $.post("ajax.php", {
+              //     setStandardData: 'setStandardData',
+              //     board_id: board_id
+              // }, function(data) {
+              //     $("#set_standard_id").html(data);
+              // });
           }
 
           function setSubjectByStandard(){
               var board_id = $("#set_board_id").val();
+              var medium_id = $('#set_medium_id').val();
               var standard_id = $("#set_standard_id").val();
-              $.post("ajax.php", {
-                  setSubjectData: 'setSubjectData',
-                  board_id: board_id,
-                  standard_id: standard_id,
-              }, function(data) {
-                  $("#set_subject_id").html(data);
+              
+              $.ajax({
+                  type: "GET",
+                  url: "{{route('get.subject')}}",
+                  data: {
+                      "board_id":board_id,
+                      "medium_id":medium_id,
+                      "standard_id":standard_id,
+                  },
+                  success: function(result) {
+                      $('#set_subject_id').html(result.html);
+                  }
               });
+
+              // $.post("ajax.php", {
+              //     setSubjectData: 'setSubjectData',
+              //     board_id: board_id,
+              //     standard_id: standard_id,
+              // }, function(data) {
+              //     $("#set_subject_id").html(data);
+              // });
           }
 
           function setSemesterBySubject(){
               var board_id = $("#set_board_id").val();
+              var medium_id = $('#set_medium_id').val();
               var standard_id = $("#set_standard_id").val();
               var subject_id = $("#set_subject_id").val();
-              $.post("ajax.php", {
-                  setSemesterBySubject: 'setSemesterBySubject',
-                  board_id: board_id,
-                  standard_id: standard_id,
-                  subject_id: subject_id
-              }, function(data) {
-                  $("#set_semester_id").html(data);
-              });
+                
+              $.ajax({
+                  type: "GET",
+                  url: "{{route('get.semester.unit')}}",
+                  data: {
+                      "board_id":board_id,
+                      "medium_id":medium_id,
+                      "standard_id":standard_id,
+                      "subject_id":subject_id,
+                  },
+                  success: function(result) {
+                    $('#set_semester_id').html('');
+                      $('#set_semester_id').html(result.html);
+                  }
+              }); 
+
+              // $.post("ajax.php", {
+              //     setSemesterBySubject: 'setSemesterBySubject',
+              //     board_id: board_id,
+              //     standard_id: standard_id,
+              //     subject_id: subject_id
+              // }, function(data) {
+              //     $("#set_semester_id").html(data);
+              // });
           }
 
           function setChapterBySemester(){
               var board_id = $("#set_board_id").val();
+              var medium_id = $('#set_medium_id').val();
               var standard_id = $("#set_standard_id").val();              
               var subject_id = $("#set_subject_id").val();
               var semester_id = $("#set_semester_id").val();
-              $.post("ajax.php", {
-                  setChapterBySubject: 'setChapterBySubject',
-                  board_id: board_id,
-                  standard_id: standard_id,
-                  subject_id: subject_id,
-                  semester_id: semester_id
-              }, function(data) {
-                  $("#set_chapter_id").html(data);
-              });
+              
+              $.ajax({
+                  type: "GET",
+                  url: "{{route('get.unit')}}",
+                  data: {
+                      "board_id":board_id,
+                      "medium_id":medium_id,
+                      "standard_id":standard_id,
+                      "subject_id":subject_id,
+                      "semester_id":semester_id,
+                  },
+                  success: function(result) {
+                      $('#set_chapter_id').html(result.html);
+                  }
+              }); 
+
+
+              // $.post("ajax.php", {
+              //     setChapterBySubject: 'setChapterBySubject',
+              //     board_id: board_id,
+              //     standard_id: standard_id,
+              //     subject_id: subject_id,
+              //     semester_id: semester_id
+              // }, function(data) {
+              //     $("#set_chapter_id").html(data);
+              // });
           }
 
           function postParams() {
@@ -344,12 +442,24 @@
 
           function getStandardByBoard() {
               var board_id = $("#board_id").val();
-              $.post("ajax.php", {
-                  getStandardByBoard: 'getStandardByBoard',
-                  board_id: board_id
-              }, function(data) {
-                  $("#standard_id").html(data);
+              $.ajax({
+                      url: "{{route('getStandardData')}}",
+                      type: "GET",
+                      data: {
+                        //getSubjectByStandard: 'getSubjectByStandard',
+                        board_id: board_id,
+                      },
+                      success: function(html) {
+                          $("#standard_id").html(html);                  
+                      }
               });
+
+              // $.post("ajax.php", {
+              //     getStandardByBoard: 'getStandardByBoard',
+              //     board_id: board_id
+              // }, function(data) {
+              //     $("#standard_id").html(data);
+              // });
           }
   
           function getSubjectByStandard() {
@@ -358,17 +468,17 @@
                     var standard_id = $("#standard_id").val();
               var standard = $("#standard_id option:selected").html();
               $.ajax({
-                      url: "{{route('below_order.board')}}",
+                      url: "{{route('getSubjectData')}}",
                       type: "GET",
                       data: {
-                        getSubjectByStandard: 'getSubjectByStandard',
+                        //getSubjectByStandard: 'getSubjectByStandard',
                         board_id: board_id,
                         board: board,
                         standard_id: standard_id,
                         standard: standard
                       },
                       success: function(html) {
-                          $("#subject_id").html(data);                  
+                          $("#subject_id").html(html);                  
                       }
               });
 
@@ -390,18 +500,38 @@
               var standard = $("#standard_id option:selected").html();
               var subject_id = $("#subject_id").val();
               var subject = $("#subject_id option:selected").html();
-              $.post("ajax.php", {
-                  getChapterBySubject: 'getChapterBySubject',
-                  board_id: board_id,
-                  board: board,
-                  standard_id: standard_id,
-                  standard: standard,
-                  subject_id: subject_id,
-                  subject: subject
-              }, function(data) {
-                  $("#chapter_id").html(data);
+
+              $.ajax({
+                      url: "{{route('getChapterData')}}",
+                      type: "GET",
+                      data: {
+                        board_id: board_id,
+                        board: board,
+                        standard_id: standard_id,
+                        standard: standard,
+                        subject_id: subject_id,
+                        subject: subject
+                      },
+                      success: function(html) {
+                          $("#chapter_id").html(html);                  
+                      }
               });
+
+
+              // $.post("ajax.php", {
+              //     getChapterBySubject: 'getChapterBySubject',
+              //     board_id: board_id,
+              //     board: board,
+              //     standard_id: standard_id,
+              //     standard: standard,
+              //     subject_id: subject_id,
+              //     subject: subject
+              // }, function(data) {
+              //     $("#chapter_id").html(data);
+              // });
           }
+
+
           function getVideosByChapter() {
               var board_id = $("#board_id").val();
               var board = $("#board_id option:selected").html();
@@ -411,19 +541,38 @@
               var subject = $("#subject_id option:selected").html();
               var chapter_id = $("#chapter_id").val();
               var chapter = $("#chapter_id option:selected").html();
-              $.post("ajax.php", {
-                  getVideosByChapter: 'getVideosByChapter',
-                  board_id: board_id,
-                  board: board,
-                  standard_id: standard_id,
-                  standard: standard,
-                  subject_id: subject_id,
-                  subject: subject,
-                  chapter_id: chapter_id,
-                  chapter: chapter,
-              }, function(data) {
-                  $("#video_id").html(data);
+              
+              $.ajax({
+                      url: "{{route('video_getdata')}}",
+                      type: "GET",
+                      data: {
+                        board_id: board_id,
+                        board: board,
+                        standard_id: standard_id,
+                        standard: standard,
+                        subject_id: subject_id,
+                        subject: subject,
+                        chapter_id: chapter_id,
+                        chapter: chapter,
+                      },
+                      success: function(html) {
+                          $("#video_id").html(html);                  
+                      }
               });
+
+              // $.post("ajax.php", {
+              //     getVideosByChapter: 'getVideosByChapter',
+              //     board_id: board_id,
+              //     board: board,
+              //     standard_id: standard_id,
+              //     standard: standard,
+              //     subject_id: subject_id,
+              //     subject: subject,
+              //     chapter_id: chapter_id,
+              //     chapter: chapter,
+              // }, function(data) {
+              //     $("#video_id").html(data);
+              // });
           }  
 
             

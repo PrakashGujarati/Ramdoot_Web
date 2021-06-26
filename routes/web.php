@@ -162,6 +162,17 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('videos_demo', [VideosController::class, 'videosDemo'])->name('videos.demo');
     
+    Route::get('getStandardData', [VideosController::class, 'getStandardData'])->name('getStandardData');
+    Route::get('getSubjectData', [VideosController::class, 'getSubjectData'])->name('getSubjectData');
+    Route::get('getChapterData', [VideosController::class, 'getChapterData'])->name('getChapterData');
+    Route::get('video_getdata', [VideosController::class, 'getdata'])->name('video_getdata');
+
+    
+    Route::get('setBoardMediumData', [VideosController::class, 'setBoardMediumData'])->name('setBoardMediumData');
+    Route::get('setStandardData', [VideosController::class, 'setStandardData'])->name('setStandardData');
+    Route::get('setSubjectData', [VideosController::class, 'setSubjectData'])->name('setSubjectData');
+    Route::get('setSemesterBySubject', [VideosController::class, 'setSemesterBySubject'])->name('setSemesterBySubject');
+    Route::get('setChapterBySubject', [VideosController::class, 'setChapterBySubject'])->name('setChapterBySubject');
 
     /*solutions*/
     Route::get('solution', [SolutionController::class, 'index'])->name('solution.index');

@@ -468,8 +468,259 @@ class VideosController extends Controller
     
 
     public function videosDemo(Request $request){
-        return view('video_demo');
+        $boards = Board::where('status','!=','Deleted')->get();
+        return view('video_demo',compact('boards'));
     }
+
+
+
+    function getStandardData(Request $request)
+    {
+
+        $board  = $request->board_id;
+
+        $vars = 'id=660adcf2-0d31-4d14-b113-e318768f7f86&unique_key=WwoTi8&board='.$board;
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL,"https://api.studentbro.in/User/getAllStandardBoardWise");
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS,$vars);  //Post Fields
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $headers = [
+            'Accept-Encoding: gzip',    
+            'Connection: Keep-Alive',
+            'Cache-Control: no-cache',    
+            'Content-Type: application/x-www-form-urlencoded; charset=utf-8',
+            'Host: api.studentbro.in',
+            'User-Agent: okhttp/3.12.0'    
+        ];
+
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        $server_output = curl_exec ($ch);
+        curl_close ($ch);
+
+        $data = json_decode($server_output)->data;
+        
+        echo '<option>Select Standard</option>';
+        foreach($data as $node)
+        {
+            foreach($node->standard as $standard)
+            {            
+                echo '<option value="'.$standard->id.'">'.$standard->name.'</option>';
+            }
+        }
+    }
+
+
+    function getSubjectData(Request $request)
+    {
+
+        $board = $request->board_id;
+        $std = $request->standard_id;
+
+        $vars = 'id=660adcf2-0d31-4d14-b113-e318768f7f86&unique_key=WwoTi8&board='.$board.'&std='.$std.'&fcm_id=c5Txo2eSSUOS0SAaNJAxxn:APA91bE_n7_bFjx-CPDGD97cViZXss0S5MFPLMMN3xMcl4JOTRpwomhsQTmFXjdwVOd718ctj3ELvCtCKGxXV9gcShRykeo8UYC3QXI3i1cVKOG4xSKpUHhdsTailaDqqEpiOTfpNDND'.'&v_code=52';
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL,"https://api.studentbro.in/User/getBalance");
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS,$vars);  //Post Fields
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $headers = [
+            'Accept-Encoding: gzip',    
+            'Connection: Keep-Alive',
+            'Cache-Control: no-cache',    
+            'Content-Type: application/x-www-form-urlencoded; charset=utf-8',
+            'Host: api.studentbro.in',
+            'User-Agent: okhttp/3.12.0'    
+        ];
+
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        $server_output = curl_exec ($ch);
+        curl_close ($ch);
+        
+        $data = json_decode($server_output)->subject;
+
+        echo '<option>Select Subject</option>';
+        foreach($data as $subject)
+        {
+            echo '<option value="'.$subject->id.'">'.$subject->name.'</option>';        
+        }
+    }
+
+
+    function getChapterData(Request $request)
+    {
+
+        $board_id = $request->board_id;
+        $board = $request->board;
+        $standard_id = $request->standard_id;
+        $standard = $request->standard;
+        $subject_id = $request->subject_id;
+        $subject = $request->subject;
+
+        $vars = 'id=660adcf2-0d31-4d14-b113-e318768f7f86&unique_key=WwoTi8&subject_id='.$subject_id.'&v_code=52';
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL,"https://api.studentbro.in/Chapter/getSubjectChapter");
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS,$vars);  //Post Fields
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $headers = [
+            'Accept-Encoding: gzip',    
+            'Connection: Keep-Alive',
+            'Cache-Control: no-cache',    
+            'Content-Type: application/x-www-form-urlencoded; charset=utf-8',
+            'Host: api.studentbro.in',
+            'User-Agent: okhttp/3.12.0'    
+        ];
+
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        $server_output = curl_exec ($ch);
+        curl_close ($ch);
+        
+        $data = json_decode($server_output)->data;  
+        echo '<option>Select Chapter</option>';
+        foreach($data as $lec)
+        {
+            
+            foreach($lec->lec as $chapter)
+            {           
+                //echo "<li>".$board_id."-".$board."-".$standard_id."-".$standard."-".$subject_id."-".$subject."-".$chapter->id."-".$chapter->name."</li>";
+                //getdata($board_id,$board,$standard_id,$standard,$subject_id,$subject,$chapter->id,$chapter->name,$excel);         
+                echo '<option value="'.$chapter->id.'">'.$chapter->name.'</option>';    
+            }
+        }
+        
+        
+    }
+
+
+    function getdata(Request $request)
+    {
+
+        $board_id = $request->board_id;
+        $standard_id = $request->standard_id;
+        $subject_id = $request->subject_id;
+        $chapter_id = $request->chapter_id;
+
+        $vars = 'id=660adcf2-0d31-4d14-b113-e318768f7f86&unique_key=WwoTi8&fcm_id=c5Txo2eSSUOS0SAaNJAxxn:APA91bE_n7_bFjx-CPDGD97cViZXss0S5MFPLMMN3xMcl4JOTRpwomhsQTmFXjdwVOd718ctj3ELvCtCKGxXV9gcShRykeo8UYC3QXI3i1cVKOG4xSKpUHhdsTailaDqqEpiOTfpNDND&subject_id='.$subject_id.'&chapter_id='.$chapter_id.'&v_code=52';
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL,"https://api.studentbro.in/Chapter/GetLectureVideo");
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS,$vars);  //Post Fields
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $headers = [
+            'Accept-Encoding: gzip',    
+            'Connection: Keep-Alive',
+            'Cache-Control: no-cache',    
+            'Content-Type: application/x-www-form-urlencoded; charset=utf-8',
+            'Host: api.studentbro.in',
+            'User-Agent: okhttp/3.12.0'    
+        ];
+
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        $server_output = curl_exec ($ch);
+        curl_close ($ch);
+
+        $data = json_decode($server_output);
+        echo '<option>Select Video</option>';
+        if(isset($data->lectures))
+        {
+            foreach($data->lectures as $topicvideo)
+            {
+                echo '<option value="'.$topicvideo->url.'">'.$topicvideo->topic_name."-".$topicvideo->sub_topic_name.'</option>';
+            }
+        }elseif(isset($data->data)){
+            foreach($data->data as $chapterdata)
+            {
+                foreach($chapterdata->SubTopic as $topicvideo)
+                {           
+                    echo '<option value="'.$topicvideo->url.'">'.$topicvideo->topic_name."#".$topicvideo->sub_topic_name.'</option>';
+                }
+            }
+        }else{
+            echo '<option >Not Available</option>';
+        }
+
+    }
+
+
+    function setBoardMediumData($link)
+    {
+        $sql = "SELECT mediums.id as id, boards.id as bid, boards.sub_title as boardsub, mediums.sub_title as subtitle FROM mediums join boards on boards.id = mediums.board_id";   
+        echo '<option>Select Board - Medium</option>';
+        if($result = mysqli_query($link, $sql)){
+            if(mysqli_num_rows($result) > 0){
+                // output data of each row
+                while($row = mysqli_fetch_array($result)){
+                    echo '<option value="'.$row['id'].'" bid="'.$row['bid'].'">'.$row['boardsub'].'-'.$row['subtitle'].'</option>';
+                }
+            }
+        }
+    }
+
+
+    function setStandardData($link, $medium_id)
+    {
+        $sql = "SELECT * FROM standards where medium_id=".$medium_id;   
+        echo '<option>Select Standard</option>';
+        if($result = mysqli_query($link, $sql)){
+            if(mysqli_num_rows($result) > 0){
+                // output data of each row
+                while($row = mysqli_fetch_array($result)){
+                    echo '<option value="'.$row['id'].'">'.$row['sub_title'].'</option>';
+                }
+            }
+        }
+    }
+
+
+
+    function setSubjectData($link, $medium_id, $standard_id)
+    {
+        $sql = "SELECT * FROM subjects where medium_id=".$medium_id." and standard_id=".$standard_id;   
+        echo '<option>Select Subject</option>';
+        if($result = mysqli_query($link, $sql)){
+            if(mysqli_num_rows($result) > 0){
+                // output data of each row
+                while($row = mysqli_fetch_array($result)){
+                    echo '<option value="'.$row['id'].'">'.$row['sub_title'].'</option>';
+                }
+            }
+        }
+    }
+
+
+    function setSemesterBySubject($link, $medium_id, $standard_id, $subject_id)
+    {
+        $sql = "SELECT * FROM semesters where medium_id=".$medium_id." and standard_id=".$standard_id." and subject_id=".$subject_id;   
+        echo '<option>Select Semesters</option>';
+        if($result = mysqli_query($link, $sql)){
+            if(mysqli_num_rows($result) > 0){
+                // output data of each row
+                while($row = mysqli_fetch_array($result)){
+                    echo '<option value="'.$row['id'].'">'.$row['sub_title'].'</option>';
+                }
+            }
+        }
+    }
+
+
+    function setChapterBySubject($link, $medium_id, $standard_id, $subject_id, $semester_id)
+    {
+        $sql = "SELECT * FROM units where medium_id=".$medium_id." and standard_id=".$standard_id." and subject_id=".$subject_id." and semester_id=".$semester_id;  
+        echo '<option>Select Chapter</option>';
+        if($result = mysqli_query($link, $sql)){
+            if(mysqli_num_rows($result) > 0){
+                // output data of each row
+                while($row = mysqli_fetch_array($result)){
+                    echo '<option value="'.$row['id'].'">'.$row['sub_title'].'</option>';
+                }
+            }
+        }
+    }
+
 
 }
 
