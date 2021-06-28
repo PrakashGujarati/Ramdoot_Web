@@ -61,9 +61,9 @@
           $("#title").val(res[0]);
           $("#subtitle").val(res[1]);
           var video_id = $("#video_id").val();
+          alert(video_id);
           $("#url").val(video_id);
-          player.loadVideoById(video_id);
-          
+          player.loadVideoById(video_id);        
         }
 
 			  // 5. The API calls this function when the player's state changes.
@@ -404,6 +404,7 @@
               var board_id = $("#set_board_id").val();
               var board = $("#set_board_id option:selected").html();
               var bid = $("#set_board_id").find(':selected').attr('bid');
+              var medium_id = $('#set_medium_id').val();
               var standard_id = $("#set_standard_id").val();
               var standard = $("#set_standard_id option:selected").html();
               var subject_id = $("#set_subject_id").val();
@@ -415,29 +416,59 @@
               var start_time = $("#starttime").val();
               var duration = $("#duration").val();
               var title = $("#title").val();
-              var url = $("#url").val();
+              var url_video = $("#url").val();
               var subtitle = $("#subtitle").val();
-              $.post("ajax.php", {
-                  postParams: 'postParams',
-                  bid: bid,
-                  board_id: board_id,
-                  board: board,
-                  standard_id: standard_id,
-                  standard: standard,
-                  subject_id: subject_id,
-                  subject: subject,
-                  semester_id: semester_id,
-                  semester: semester,
-                  chapter_id: chapter_id,
-                  chapter: chapter,
-                  start_time : start_time,
-                  duration: duration,
-                  title: title,
-                  subtitle: subtitle,
-                  url: url,
-              }, function(data) {
-                  console.log(data);
-              });
+
+              $.ajax({
+                  type: "GET",
+                  url: "{{route('videodata_store')}}",
+                  data: {
+                          //postParams: 'postParams',
+                          bid: bid,
+                          board_id: board_id,
+                          board: board,
+                          standard_id: standard_id,
+                          standard: standard,
+                          medium_id:medium_id,
+                          subject_id: subject_id,
+                          subject: subject,
+                          semester_id: semester_id,
+                          semester: semester,
+                          chapter_id: chapter_id,
+                          chapter: chapter,
+                          start_time : start_time,
+                          duration: duration,
+                          title: title,
+                          subtitle: subtitle,
+                          url_video: url_video,
+                  },
+                  success: function(result) {
+                      console.log(data);
+                  }
+              }); 
+
+
+              // $.post("ajax.php", {
+              //     postParams: 'postParams',
+              //     bid: bid,
+              //     board_id: board_id,
+              //     board: board,
+              //     standard_id: standard_id,
+              //     standard: standard,
+              //     subject_id: subject_id,
+              //     subject: subject,
+              //     semester_id: semester_id,
+              //     semester: semester,
+              //     chapter_id: chapter_id,
+              //     chapter: chapter,
+              //     start_time : start_time,
+              //     duration: duration,
+              //     title: title,
+              //     subtitle: subtitle,
+              //     url: url,
+              // }, function(data) {
+              //     console.log(data);
+              // });
           }
 
           function getStandardByBoard() {

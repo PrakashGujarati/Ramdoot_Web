@@ -166,6 +166,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('getSubjectData', [VideosController::class, 'getSubjectData'])->name('getSubjectData');
     Route::get('getChapterData', [VideosController::class, 'getChapterData'])->name('getChapterData');
     Route::get('video_getdata', [VideosController::class, 'getdata'])->name('video_getdata');
+    Route::get('videodata_store', [VideosController::class, 'storeVideo'])->name('videodata_store');    
 
     
     Route::get('setBoardMediumData', [VideosController::class, 'setBoardMediumData'])->name('setBoardMediumData');

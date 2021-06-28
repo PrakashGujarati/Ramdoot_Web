@@ -721,6 +721,41 @@ class VideosController extends Controller
         }
     }
 
+    function storeVideo(Request $request)
+    {
+        //dd($request->all());
+        // $order_no=1;
+        // $sql = "insert into videos (board_id,medium_id,standard_id,subject_id,semester_id,unit_id,title,sub_title,url_type,url,duration,start_time,status,order_no)
+        // values(".$request->bid.",".$request->medium_id.",".$request->standard_id.",".$request->subject_id.",".$request->semester_id.
+        // ",".$request->chapter_id.",'".$request->title."','".$request->subtitle."','Youtube','".$request->url."','".$request->duration."','".$request->start_time."','Active',".$order_no.")";   
+        // if($result = mysqli_query($link, $sql)){
+        //     echo "success";
+        // }else{
+        //     echo "fail";
+        // }
+        $order_no=1;
+        $add = new Videos;
+        $add->user_id  = Auth::user()->id;
+        $add->unit_id = $request->chapter_id;
+        $add->board_id = $request->board_id;
+        $add->medium_id = $request->medium_id;
+        $add->standard_id = $request->standard_id;
+        $add->semester_id = $request->semester_id;
+        $add->subject_id = $request->subject_id;
+        $add->title = $request->title;
+        $add->sub_title = $request->subtitle;
+        $add->url_type = "Youtube";
+        $add->url = $request->url_video;
+        $add->duration = $request->duration;
+        $add->order_no=$order_no;
+        $add->status = 'Active';
+        $add->start_time = $request->start_time;
+        $add->save();
+
+        echo "success";
+
+    }
+
 
 }
 
