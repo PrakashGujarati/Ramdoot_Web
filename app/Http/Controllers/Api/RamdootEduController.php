@@ -1417,6 +1417,9 @@ class RamdootEduController extends Controller
                     $add_ques->assignment_id = $request->assignment_id;
                     $add_ques->student_id = $get_student[$i];
                     $add_ques->save();
+
+                    //$message = "કેમ છો? વિદ્યાર્થી મિત્રો, મજામાં...??";
+                    //send_notification($get_student[$i], $message, $title);
                 }
 
                 return response()->json([
@@ -2677,10 +2680,10 @@ class RamdootEduController extends Controller
 
             if($request->standard_id != "0"){
 
-                $get_classgroup = ClassroomGroup::where(['user_id' => $request->user_id,'standard_id' => $request->standard_id])->get();
+                $get_classgroup = ClassroomGroup::where(['user_id' => $request->user_id,'standard_id' => $request->standard_id,'status' => 'Active'])->get();
             }
             else{
-                $get_classgroup = ClassroomGroup::where(['user_id' => $request->user_id])->get();
+                $get_classgroup = ClassroomGroup::where(['user_id' => $request->user_id,'status' => 'Active'])->get();
             }
 
             $group_data=[];
@@ -3101,6 +3104,45 @@ class RamdootEduController extends Controller
             ]);
 
         }
+    }
+
+
+    public function deleteGroup(Request $request){
+        $rules = array(
+            'group_id' => 'required',
+        );
+        $messages = array(
+            'group_id.required' => 'Please enter group id.',
+        );
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            $msg = $validator->messages();
+            return ['status' => "false",'msg' => $msg];
+        }
+
+
+        $get_classgroup = ClassroomGroup::where(['id' => $request->group_id,'status' => 'Active'])->first();
+
+        if($get_classgroup){
+
+            ClassroomGroup::where(['id' => $get_classgroup->id])->update(['status' => 'Deleted']);
+
+            return response()->json([
+                "code" => 200,
+                "message" => "success"
+            ]);
+        }
+        else{
+
+            return response()->json([
+                "code" => 400,
+                "message" => "Classroom Group Not Found."
+            ]);
+        }
+
+
     }
 
     

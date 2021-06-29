@@ -114,6 +114,7 @@ Route::group(['middleware'=>'auth:api'], function()
     Route::post('create_group', [RamdootEduController::class, 'createGroup']);
     Route::post('view_group', [RamdootEduController::class, 'viewGroup']);
     Route::post('edit_group', [RamdootEduController::class, 'editGroup']);
+    Route::post('delete_group', [RamdootEduController::class, 'deleteGroup']);
 
     Route::post('edit_assignment', [RamdootEduController::class, 'editAssignment']);
     Route::post('delete_assignment', [RamdootEduController::class, 'deleteAssignment']);
