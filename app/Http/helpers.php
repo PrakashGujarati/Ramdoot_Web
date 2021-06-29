@@ -19,6 +19,7 @@ use App\Models\Solution;
 use App\Models\Subject;
 use App\Models\Videos;
 use App\Models\Worksheet;
+use App\Models\User;
 
 function storeLog($type, $type_id, $upload_time, $operation)
 {
@@ -303,7 +304,7 @@ function send_notification($token, $message, $title = null)
 function send_notifications($user_id, $message, $title = null)
 {
 
-    $user_details = User(['id' => $user_id])->first();
+    $user_details = User::where(['id' => $user_id])->first();
     $token = $user_details->device_token;
 
 
