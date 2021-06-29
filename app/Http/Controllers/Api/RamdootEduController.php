@@ -1419,7 +1419,7 @@ class RamdootEduController extends Controller
                     $add_ques->save();
 
                     //$message = "કેમ છો? વિદ્યાર્થી મિત્રો, મજામાં...??";
-                    //send_notification($get_student[$i], $message, $title);
+                //send_notification($get_student[$i], $message, $title);
                 }
 
                 return response()->json([
