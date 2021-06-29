@@ -1418,8 +1418,8 @@ class RamdootEduController extends Controller
                     $add_ques->student_id = $get_student[$i];
                     $add_ques->save();
 
-                    //$message = "કેમ છો? વિદ્યાર્થી મિત્રો, મજામાં...??";
-                //send_notification($get_student[$i], $message, $title);
+                    $message = "કેમ છો? વિદ્યાર્થી મિત્રો, મજામાં...??";
+                    send_notifications($get_student[$i], $message, $title = null);
                 }
 
                 return response()->json([

@@ -303,7 +303,9 @@ function send_notification($token, $message, $title = null)
 function send_notifications($user_id, $message, $title = null)
 {
 
-    $token = User(['id' => $user_id])->first();
+    $user_details = User(['id' => $user_id])->first();
+    $token = $user_details->device_token;
+
 
     $API_ACCESS_KEY = 'AAAAZkwzjLI:APA91bGJMNIZjlE8ormC8l_Re1CYwSolNwEa_rhyk7EPl1tzwF1EnqHzq5VUeEDMFGFErQQivaTYx1jNX7bfP7BJyx1dqag0vaAJ3p1V8vp9R5RPszIumzOF6EKFVvrM8vdKWqUV-DLg';
 
