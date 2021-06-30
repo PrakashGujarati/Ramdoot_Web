@@ -305,8 +305,9 @@ function send_notifications($user_id, $message, $title = null)
 {
 
     $user_details = User::where(['id' => $user_id])->first();
+    
     $token = $user_details->device_token;
-
+    //dd($token);
 
     $API_ACCESS_KEY = 'AAAAZkwzjLI:APA91bGJMNIZjlE8ormC8l_Re1CYwSolNwEa_rhyk7EPl1tzwF1EnqHzq5VUeEDMFGFErQQivaTYx1jNX7bfP7BJyx1dqag0vaAJ3p1V8vp9R5RPszIumzOF6EKFVvrM8vdKWqUV-DLg';
 
@@ -342,6 +343,7 @@ function send_notifications($user_id, $message, $title = null)
     );
 
     try {
+
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
         curl_setopt($ch, CURLOPT_POST, true);
@@ -354,7 +356,7 @@ function send_notifications($user_id, $message, $title = null)
         curl_close($ch);
         $errMsg = '';
         $res = (array) json_decode($result);
-        print_r($res);
+       // print_r($res);
         $errMsg = '';
 
         if (!empty($res)) {

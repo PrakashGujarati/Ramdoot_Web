@@ -20,4 +20,9 @@ class Assignment extends Model
     	return $this->hasMany(Solution::class,'id','question_id');
     }
 
+    public function class_details()
+    {
+        return $this->hasMany(Classroom::class,'id','class_id');
+    }
+
 }

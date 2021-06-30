@@ -1418,8 +1418,19 @@ class RamdootEduController extends Controller
                     $add_ques->student_id = $get_student[$i];
                     $add_ques->save();
 
-                    $message = "કેમ છો? વિદ્યાર્થી મિત્રો, મજામાં...??";
-                    send_notifications($get_student[$i], $message, $title = null);
+                    
+                    $get_class_details = Classroom::where(['id' => $check_assignment->class_id,'status' => 'Active'])->first();
+                    $subject_name = isset($get_class_details->subject->subject_name) ? $get_class_details->subject->subject_name:'';
+                    $standard_name = isset($get_class_details->standard->standard) ? $get_class_details->standard->standard:'';
+                    $student_details = User::where(['id' => $get_student[$i]])->first();
+                    $student_name = isset($student_details->name) ? $student_details->name:'';
+                    $title = isset($check_assignment->assignment_type) ? $check_assignment->assignment_type:'';
+
+                    $message = "How are you? (".$student_name.")
+                        Today ".date('d/m/Y, l').".
+                        Today's subject will be ".$subject_name." in class ".$standard_name.".
+                        👉 For today's homework Go to classroom>".$subject_name.">".$title.".";
+                    send_notifications($get_student[$i], $message, $title);
                 }
 
                 return response()->json([
