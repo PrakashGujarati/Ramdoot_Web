@@ -41,7 +41,7 @@
                         <th>Answer</th>
                         <th>Marks</th>
                         <th>Label</th>
-                        <th>Image</th> -->
+                        <th>Image</th>-->
                         <th>Action</th>
                     </tr>
                 </thead>

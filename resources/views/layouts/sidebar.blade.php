@@ -265,6 +265,8 @@
                     </li>
                     @endcanany
 
+                    
+                    @canany(['DataExcelSheet-view'])
                     <li class="nk-menu-item has-sub">
                         <a href="#" class="nk-menu-link nk-menu-toggle">
                             <span class="nk-menu-icon"><em class="icon ni ni-align-right"></em></span>
@@ -297,6 +299,7 @@
                             </li><!-- .nk-menu-item -->
                         </ul><!-- .nk-menu-sub -->
                     </li>
+                    @endcanany
                     
                     
 

@@ -87,7 +87,7 @@ class MaterialController extends Controller
             'marks' => 'required'
         ]);
 
-        /*
+        
         if ($request->hidden_id != "0") {
             $new_name='';
             if ($request->image_file_type == 'Server') {
@@ -124,7 +124,7 @@ class MaterialController extends Controller
             $add->save();
 
             $msg = "Material Updated Successfully.";
-        } else {*/
+        } else {
             $new_name='';
             if ($request->image_file_type == 'Server') {
                 if ($request->has('image')) {
@@ -169,7 +169,7 @@ class MaterialController extends Controller
 
             storeLog('material', $add->id, date('Y-m-d H:i:s'), 'create');
             storeReview('material', $add->id, date('Y-m-d H:i:s'));
-        //}
+        }
 
         $material_details = Material::where(['semester_id' => $request->semester_id])->where('status', '!=', 'Deleted')->orderBy('order_no', 'asc')->get();
         $html = view('material.dynamic_table', compact('material_details'))->render();

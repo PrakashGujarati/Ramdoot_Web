@@ -696,7 +696,6 @@ td{
                 },
             //For custom messages
             messages: {
-
                 board_id:"Please select board.",
                 medium_id:"Please select medium.",
                 standard_id:"Please select standard.",
