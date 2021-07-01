@@ -61,7 +61,6 @@
           $("#title").val(res[0]);
           $("#subtitle").val(res[1]);
           var video_id = $("#video_id").val();
-          alert(video_id);
           $("#url").val(video_id);
           player.loadVideoById(video_id);        
         }

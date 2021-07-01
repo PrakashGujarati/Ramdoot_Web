@@ -126,6 +126,12 @@
                                     <span class="nk-menu-text">Videos</span>
                                 </a>
                             </li><!-- .nk-menu-item -->
+                            <li class="nk-menu-item @if(\Request::route()->getName() == 'videos.demo') active @endif">
+                                <a href="{{ route('videos.demo') }}" class="nk-menu-link">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-chevron-right"></em></span>
+                                    <span class="nk-menu-text">Live Videos</span>
+                                </a>
+                            </li>
                             @endcanany
                             @canany(['Solution-view'])
                             <li class="nk-menu-item @if(\Request::route()->getName() == 'solution.index' || \Request::route()->getName() == 'solution.create' || \Request::route()->getName() == 'solution.edit') active @endif">

@@ -1424,12 +1424,22 @@ class RamdootEduController extends Controller
                     $standard_name = isset($get_class_details->standard->standard) ? $get_class_details->standard->standard:'';
                     $student_details = User::where(['id' => $get_student[$i]])->first();
                     $student_name = isset($student_details->name) ? $student_details->name:'';
-                    $title = isset($check_assignment->assignment_type) ? $check_assignment->assignment_type:'';
+                    $title_details = isset($check_assignment->assignment_type) ? $check_assignment->assignment_type:'';
 
-                    $message = "How are you? (".$student_name.")
-                        Today ".date('d/m/Y, l').".
-                        Today's subject will be ".$subject_name." in class ".$standard_name.".
-                        👉 For today's homework Go to classroom>".$subject_name.">".$title.".";
+                    $medium_details = Medium::where(['id' => $get_class_details->medium_id])->first();
+
+                    if($medium_details->sub_title == "GUJARATI_MEDIUM"){  
+                        $title = $title_details;
+
+                        $message = "કેમ છો? ".$student_name.", મજામાં...??\n".date('d/m/Y, l').". ના રોજ ધોરણ:- ".$standard_name." માં આજનો અભ્યાસનો વિષય:- ".$subject_name." રહેશે.\n👉Go to Classroom માં ".$subject_name." વિષયમાં તમને અપાયેલ સૂચન મુજબ આજનું ".$title_details." કરો.";
+                    }
+                    else{
+                        
+                        $title = $title_details;
+
+                        $message = "How are you? ".$student_name."\nToday ".date('d/m/Y, l').".\nToday's subject will be ".
+                        $subject_name." in class ".$standard_name.".\n👉 For today's homework Go to classroom>".$subject_name.">".$title_details.".";
+                    }
                     send_notifications($get_student[$i], $message, $title);
                 }
 
@@ -1680,6 +1690,35 @@ class RamdootEduController extends Controller
 
             AssignmentSubmission::where(['user_id' => $request->user_id,'assignment_id' => $request->assignment_id])->update(['is_submit' => 1]);    
 
+
+            $student_details = User::where(['id' => $request->user_id])->first();
+            $student_name = isset($student_details->name) ? $student_details->name:'';
+
+            $assignment_details = Assignment::where(['id' => $request->assignment_id])->first();
+
+            $teacher_details = User::where(['id' => $assignment_details->user_id])->first();
+            $teacher_name = isset($teacher_details->name) ? $teacher_details->name:'';
+
+            $get_class_details = Classroom::where(['id' => $assignment_details->class_id,'status' => 'Active'])->first();
+            $subject_name = isset($get_class_details->subject->subject_name) ? $get_class_details->subject->subject_name:'';
+            $standard_name = isset($get_class_details->standard->standard) ? $get_class_details->standard->standard:''; 
+
+            $get_assignment_type = isset($assignment_details->assignment_type) ? $assignment_details->assignment_type:'';
+            
+            $medium_details = Medium::where(['id' => $get_class_details->medium_id])->first();    
+
+            if($medium_details->sub_title == "GUJARATI_MEDIUM"){
+                $title = "Submit ".$get_assignment_type;
+                $message = "તા.".date('d/m/Y, l')." ના રોજ ધોરણ:- ".$standard_name." માં ".$subject_name." વિષયમાં આપવામાં આવેલ ગૃહકાર્ય ".$student_name." દ્વારા સબમિટ થઈ ગયું છે.";
+            }
+            else{
+                $title = "Submit ".$get_assignment_type;
+                $message = "Class ".$standard_name.",\n".$subject_name." Assigned On ".date('d/m/Y, l')." is submitted by ".$student_name.".";        
+            }
+            
+
+            send_notifications($teacher_details->id, $message, $title);
+
             return response()->json([
                 "code" => 200,
                 "message" => "success"
@@ -1755,7 +1794,41 @@ class RamdootEduController extends Controller
                 AssignmentStudent::where(['id' => $check_student_assignment->id])->update(['teacher_submission_date' => date('Y-m-d H:i:s')]);
               }
 
-            AssignmentSubmission::where(['user_id' => $request->user_id,'assignment_id' => $request->assignment_id])->update(['is_submit' => 3]);    
+            AssignmentSubmission::where(['user_id' => $request->user_id,'assignment_id' => $request->assignment_id])->update(['is_submit' => 3]);
+
+
+            
+
+            $student_details = User::where(['id' => $request->user_id])->first();
+            $student_name = isset($student_details->name) ? $student_details->name:'';
+
+            $assignment_details = Assignment::where(['id' => $request->assignment_id])->first();
+
+            $teacher_details = User::where(['id' => $assignment_details->user_id])->first();
+            $teacher_name = isset($teacher_details->name) ? $teacher_details->name:'';
+          //  dd($assignment_details);
+
+            $get_class_details = Classroom::where(['id' => $assignment_details->class_id,'status' => 'Active'])->first();
+            $subject_name = isset($get_class_details->subject->subject_name) ? $get_class_details->subject->subject_name:'';
+            $standard_name = isset($get_class_details->standard->standard) ? $get_class_details->standard->standard:''; 
+
+            $get_assignment_type = isset($assignment_details->assignment_type) ? $assignment_details->assignment_type:'';
+            $medium_details = Medium::where(['id' => $get_class_details->medium_id])->first();
+
+            if($medium_details->sub_title == "GUJARATI_MEDIUM"){
+                
+                $title = "Review ".$get_assignment_type;
+
+                $message = "કેમ છો?  ".$student_name.", મજામાં...??\n".date('d/m/Y, l')." ના રોજ ધોરણ:- ".$standard_name." માં ".$subject_name." વિષયમાં તમારા દ્વારા સબમિટ કરેલ ગૃહકાર્યનો રિવ્યું રિપોર્ટ તમને ".$teacher_name." એ મોકલ્યો છે.\n👉રિવ્યું રિપોર્ટ જોવા Go to Classroom માં ".$subject_name." વિષયમાં Review માં જવું.";
+            }
+            else{
+                
+                $title = "Review ".$get_assignment_type;
+
+                $message = "How are you? ".$student_name.".\n".$subject_name."in class ".$standard_name."Assignment submitted by you on ".date('d/m/Y, l')." is Review by ".$teacher_name.".\n👉 For Seeing the report Go to classroom>".$subject_name.">Review ".$get_assignment_type.".";
+            }
+
+            send_notifications($request->user_id, $message, $title);    
 
             return response()->json([
                 "code" => 200,
