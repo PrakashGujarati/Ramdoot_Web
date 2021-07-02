@@ -95,7 +95,6 @@ class BookController extends Controller
             if ($request->thumbnail_file_type == 'Server') {
                 if ($request->has('thumbnail')) {
                     $image = $request->file('thumbnail');
-
                     $url = get_subtitle($request->unit_id).'/book/thumbnail/';
                     $originalPath = imagePathCreate($url);
                     $name = time() . mt_rand(10000, 99999);

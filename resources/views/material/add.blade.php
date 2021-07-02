@@ -129,6 +129,7 @@ td{
                                 <label class="form-label">Question Type</label>
                                 <div class="form-control-wrap">
                                     <input type="text" class="form-control" id="question_type" name="question_type" value="{{ old('question_type') }}">
+                                    
                                     {{--<select class="form-control" id="question_type" name="question_type">
                                         <option value="">--Select Question Type--</option>
                                         @foreach($question_type_details as $question_type)

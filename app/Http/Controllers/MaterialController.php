@@ -46,6 +46,7 @@ class MaterialController extends Controller
             $material_details = Material::where(['semester_id' => $id])->where('status', '!=', 'Deleted')->orderBy('order_no', 'asc')->get();
             $question_type_details = QuestionType::where('status', '!=', 'Deleted')->get();
             $semesters_details = Semester::where('id', $id)->first();
+
             //$subjects_details = Subject::where('id',$id)->first();
             $isset = 1;
             return view('material.add', compact('units', 'boards', 'material_details', 'question_type_details', 'semesters_details', 'isset'));
@@ -214,6 +215,7 @@ class MaterialController extends Controller
         'subject_sub_title' => $subject_sub_title,'unit_sub_title' => $unit_sub_title];
         $data = ['materialdata' => $materialdata,'sub_title' => $sub_title];
         return $data;
+        
         //return $materialdata;
         //$boards = Board::where('status','Active')->get();
         //$question_type_details = QuestionType::where('status','Active')->get();

@@ -57,19 +57,23 @@ class FeatureController extends Controller
         
             $image = $request->file('image');
 
-            $new_name = rand() . '.' . $image->getClientOriginalExtension();
+            $url = 'upload/feature/';
+            $originalPath = imagePathCreate($url);
+            $name = time() . mt_rand(10000, 99999);
+            $new_name = $name . '.' . $image->getClientOriginalExtension();
+            $image->move($originalPath, $new_name);
 
-            $valid_ext = array('png','jpeg','jpg');
 
-            // Location
-            $location = public_path('upload/feature/').$new_name;
+            // $new_name = rand() . '.' . $image->getClientOriginalExtension();
+            // $valid_ext = array('png','jpeg','jpg');
+            // $location = public_path('upload/feature/').$new_name;
 
-            $file_extension = pathinfo($location, PATHINFO_EXTENSION);
-            $file_extension = strtolower($file_extension);
+            // $file_extension = pathinfo($location, PATHINFO_EXTENSION);
+            // $file_extension = strtolower($file_extension);
 
-            if(in_array($file_extension,$valid_ext)){
-                $this->compressImage($image->getPathName(),$location,60);
-            }
+            // if(in_array($file_extension,$valid_ext)){
+            //     $this->compressImage($image->getPathName(),$location,60);
+            // }
         }
         /*
         $last_data=Feature::orderBy('id','desc')->first();
@@ -129,20 +133,22 @@ class FeatureController extends Controller
         {
         
             $image = $request->file('image');
+            $url = 'upload/feature/';
+            $originalPath = imagePathCreate($url);
+            $name = time() . mt_rand(10000, 99999);
+            $new_name = $name . '.' . $image->getClientOriginalExtension();
+            $image->move($originalPath, $new_name);
+            // $new_name = rand() . '.' . $image->getClientOriginalExtension();
 
-            $new_name = rand() . '.' . $image->getClientOriginalExtension();
+            // $valid_ext = array('png','jpeg','jpg');
+            // $location = public_path('upload/feature/').$new_name;
 
-            $valid_ext = array('png','jpeg','jpg');
+            // $file_extension = pathinfo($location, PATHINFO_EXTENSION);
+            // $file_extension = strtolower($file_extension);
 
-            // Location
-            $location = public_path('upload/feature/').$new_name;
-
-            $file_extension = pathinfo($location, PATHINFO_EXTENSION);
-            $file_extension = strtolower($file_extension);
-
-            if(in_array($file_extension,$valid_ext)){
-                $this->compressImage($image->getPathName(),$location,60);
-            }
+            // if(in_array($file_extension,$valid_ext)){
+            //     $this->compressImage($image->getPathName(),$location,60);
+            // }
         }
         else{
             $new_name = $request->hidden_image;
@@ -172,19 +178,19 @@ class FeatureController extends Controller
         return redirect()->route('feature.index')->with('success', 'Feature Deleted Successfully.');
     }
 
-    function compressImage($source, $destination, $quality) {
-      $info = getimagesize($source);
+    // function compressImage($source, $destination, $quality) {
+    //   $info = getimagesize($source);
 
-      if ($info['mime'] == 'image/jpeg') 
-        $image = imagecreatefromjpeg($source);
+    //   if ($info['mime'] == 'image/jpeg') 
+    //     $image = imagecreatefromjpeg($source);
 
-      elseif ($info['mime'] == 'image/gif') 
-        $image = imagecreatefromgif($source);
+    //   elseif ($info['mime'] == 'image/gif') 
+    //     $image = imagecreatefromgif($source);
 
-      elseif ($info['mime'] == 'image/png') 
-        $image = imagecreatefrompng($source);
+    //   elseif ($info['mime'] == 'image/png') 
+    //     $image = imagecreatefrompng($source);
 
-      imagejpeg($image, $destination, $quality);
+    //   imagejpeg($image, $destination, $quality);
 
-    }
+    // }
 }

@@ -85,6 +85,7 @@ class RamdootEduController extends Controller
 			  	"data" => [],
 	        ]);
         }
+        
         elseif (empty($chkmedium)) {
         	return response()->json([
     			"code" => 400,
