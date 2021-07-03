@@ -125,6 +125,11 @@ Route::group(['middleware'=>'auth:api'], function()
     Route::post('delete_timetable', [RamdootEduController::class, 'deleteTimetable']);
 
     Route::post('timetable_status_change', [RamdootEduController::class, 'timetableStatusChange']);
+
+
+    Route::post('add_questions_smart_creation', [RamdootEduController::class, 'addQuestionsSmartCreation']);
+    /**/
+
 });
 
 Route::post('view_semesters_web', [RamdootEduController::class, 'viewSemesters']);

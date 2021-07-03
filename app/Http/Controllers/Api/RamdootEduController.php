@@ -779,9 +779,12 @@ class RamdootEduController extends Controller
             foreach ($get_unit as $key => $value) {
                 //dd($get_unit);
                 // $getquestion_details = QuestionType::select('id','question_type')->where(['id' => $value->question_type])->first();
-                $get_question_type[] = ['question_type' => $value->question_type]; //$getquestion_details;
+                $get_question_count = Solution::where(['question_type' => $value->question_type])->count('id');
+                $get_mark = Solution::where(['question_type' => $value->question_type])->first();    
+
+                $get_question_type[] = ['question_type' => $value->question_type,'question_count' => $get_question_count,'mark' => isset($get_mark->marks) ? $get_mark->marks:0]; //$getquestion_details;
             }
-            $mcqdetails = ['question_type' => "MCQ"];
+            $mcqdetails = ['question_type' => "MCQ",'question_count' => 0,'mark' => 0];
             array_push($get_question_type,$mcqdetails);
 
             return response()->json([
@@ -1701,24 +1704,26 @@ class RamdootEduController extends Controller
             $teacher_name = isset($teacher_details->name) ? $teacher_details->name:'';
 
             $get_class_details = Classroom::where(['id' => $assignment_details->class_id,'status' => 'Active'])->first();
-            $subject_name = isset($get_class_details->subject->subject_name) ? $get_class_details->subject->subject_name:'';
-            $standard_name = isset($get_class_details->standard->standard) ? $get_class_details->standard->standard:''; 
 
-            $get_assignment_type = isset($assignment_details->assignment_type) ? $assignment_details->assignment_type:'';
-            
-            $medium_details = Medium::where(['id' => $get_class_details->medium_id])->first();    
+            if($get_class_details){
 
-            if($medium_details->sub_title == "GUJARATI_MEDIUM"){
-                $title = "Submit ".$get_assignment_type;
-                $message = "તા.".date('d/m/Y, l')." ના રોજ ધોરણ:- ".$standard_name." માં ".$subject_name." વિષયમાં આપવામાં આવેલ ગૃહકાર્ય ".$student_name." દ્વારા સબમિટ થઈ ગયું છે.";
+                $subject_name = isset($get_class_details->subject->subject_name) ? $get_class_details->subject->subject_name:'';
+                $standard_name = isset($get_class_details->standard->standard) ? $get_class_details->standard->standard:''; 
+
+                $get_assignment_type = isset($assignment_details->assignment_type) ? $assignment_details->assignment_type:'';
+                
+                $medium_details = Medium::where(['id' => $get_class_details->medium_id])->first();    
+
+                if($medium_details->sub_title == "GUJARATI_MEDIUM"){
+                    $title = "Submit ".$get_assignment_type;
+                    $message = "તા.".date('d/m/Y, l')." ના રોજ ધોરણ:- ".$standard_name." માં ".$subject_name." વિષયમાં આપવામાં આવેલ ગૃહકાર્ય ".$student_name." દ્વારા સબમિટ થઈ ગયું છે.";
+                }
+                else{
+                    $title = "Submit ".$get_assignment_type;
+                    $message = "Class ".$standard_name.",\n".$subject_name." Assigned On ".date('d/m/Y, l')." is submitted by ".$student_name.".";        
+                }
+                send_notifications($teacher_details->id, $message, $title);        
             }
-            else{
-                $title = "Submit ".$get_assignment_type;
-                $message = "Class ".$standard_name.",\n".$subject_name." Assigned On ".date('d/m/Y, l')." is submitted by ".$student_name.".";        
-            }
-            
-
-            send_notifications($teacher_details->id, $message, $title);
 
             return response()->json([
                 "code" => 200,
@@ -1810,26 +1815,26 @@ class RamdootEduController extends Controller
           //  dd($assignment_details);
 
             $get_class_details = Classroom::where(['id' => $assignment_details->class_id,'status' => 'Active'])->first();
-            $subject_name = isset($get_class_details->subject->subject_name) ? $get_class_details->subject->subject_name:'';
-            $standard_name = isset($get_class_details->standard->standard) ? $get_class_details->standard->standard:''; 
 
-            $get_assignment_type = isset($assignment_details->assignment_type) ? $assignment_details->assignment_type:'';
-            $medium_details = Medium::where(['id' => $get_class_details->medium_id])->first();
+            if($get_class_details){
 
-            if($medium_details->sub_title == "GUJARATI_MEDIUM"){
-                
-                $title = "Review ".$get_assignment_type;
+                $subject_name = isset($get_class_details->subject->subject_name) ? $get_class_details->subject->subject_name:'';
+                $standard_name = isset($get_class_details->standard->standard) ? $get_class_details->standard->standard:''; 
 
-                $message = "કેમ છો?  ".$student_name.", મજામાં...??\n".date('d/m/Y, l')." ના રોજ ધોરણ:- ".$standard_name." માં ".$subject_name." વિષયમાં તમારા દ્વારા સબમિટ કરેલ ગૃહકાર્યનો રિવ્યું રિપોર્ટ તમને ".$teacher_name." એ મોકલ્યો છે.\n👉રિવ્યું રિપોર્ટ જોવા Go to Classroom માં ".$subject_name." વિષયમાં Review માં જવું.";
-            }
-            else{
-                
-                $title = "Review ".$get_assignment_type;
+                $get_assignment_type = isset($assignment_details->assignment_type) ? $assignment_details->assignment_type:'';
+                $medium_details = Medium::where(['id' => $get_class_details->medium_id])->first();
 
-                $message = "How are you? ".$student_name.".\n".$subject_name."in class ".$standard_name."Assignment submitted by you on ".date('d/m/Y, l')." is Review by ".$teacher_name.".\n👉 For Seeing the report Go to classroom>".$subject_name.">Review ".$get_assignment_type.".";
-            }
+                if($medium_details->sub_title == "GUJARATI_MEDIUM"){
+                    $title = "Review ".$get_assignment_type;
+                    $message = "કેમ છો?  ".$student_name.", મજામાં...??\n".date('d/m/Y, l')." ના રોજ ધોરણ:- ".$standard_name." માં ".$subject_name." વિષયમાં તમારા દ્વારા સબમિટ કરેલ ગૃહકાર્યનો રિવ્યું રિપોર્ટ તમને ".$teacher_name." એ મોકલ્યો છે.\n👉રિવ્યું રિપોર્ટ જોવા Go to Classroom માં ".$subject_name." વિષયમાં Review માં જવું.";
+                }
+                else{
+                    $title = "Review ".$get_assignment_type;
+                    $message = "How are you? ".$student_name.".\n".$subject_name."in class ".$standard_name."Assignment submitted by you on ".date('d/m/Y, l')." is Review by ".$teacher_name.".\n👉 For Seeing the report Go to classroom>".$subject_name.">Review ".$get_assignment_type.".";
+                }
+                send_notifications($request->user_id, $message, $title);
 
-            send_notifications($request->user_id, $message, $title);    
+            }    
 
             return response()->json([
                 "code" => 200,
@@ -3228,6 +3233,105 @@ class RamdootEduController extends Controller
         }
 
 
+    }
+
+    public function addQuestionsSmartCreation(Request $request)
+    {
+
+        $rules = array(
+            'class_id' => 'required',
+            'semester_id' => 'required',
+            'unit_id' => 'required',
+            'assignment_type' => 'required',
+            'question_type' => 'required',
+            'question_mark' => 'required',
+            'question_count' => 'required',
+            'mode' => 'required',
+        );
+        $messages = array(
+            'class_id' => 'Please enter class id.',
+            'semester_id' => 'Please enter semester id.',
+            'unit_id' => 'Please enter assignment type.',
+            'assignment_type' => 'Please enter assignment type.',
+            'question_type' => 'Please enter question type.',
+            'question_mark' => 'Please enter question mark.',
+            'question_count' => 'Please enter question count.',
+            'mode' => 'Please enter mode',
+        );
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            $msg = $validator->messages();
+            return ['status' => "false",'msg' => $msg];
+        }
+
+        $chksemester = Semester::where(['id' => $request->semester_id,'status' => 'Active'])->first();
+        $chkunit = Unit::where(['id' => $request->unit_id,'status' => 'Active'])->first();
+        $check_class = Classroom::where(['id' => $request->class_id,'status' => 'Active'])->first();
+
+        if(empty($chksemester)){
+            return response()->json([
+                "code" => 400,
+                "message" => "Semester not found.",
+                "data" => [],
+            ]);
+        }
+        elseif (empty($chkunit)) {
+            return response()->json([
+                "code" => 400,
+                "message" => "Unit not found.",
+                "data" => [],
+            ]);
+        }
+        elseif (empty($check_class)) {
+            return response()->json([
+                "code" => 400,
+                "message" => "Classroom not found.",
+                "data" => [],
+            ]);
+        }
+        else{
+
+            $get_exits_question = VirtualAssignmentQuestions::get();
+            $question_arr=[];
+            foreach ($get_exits_question as $key_old => $value_old) {
+                $question_arr[] = $value_old->question_id;
+            }
+
+            $get_question_type = explode(',',$request->question_type);
+            $get_question_mark = explode(',',$request->question_mark);
+            $get_question_count = explode(',',$request->question_count);
+            
+            for ($i=0; $i < count($get_question_type); $i++) { 
+
+                $get_questions = Solution::where(['semester_id' => $request->semester_id,'unit_id' => $request->unit_id,'question_type' => $get_question_type[$i]])->whereNotIn('id', $question_arr)->inRandomOrder()->limit($get_question_count[$i])->get();
+
+                if(count($get_questions) > 0){
+
+                    foreach ($get_questions as $key_questions => $value_questions) {
+                        
+                        $add = new VirtualAssignmentQuestions;
+                        $add->class_id = $request->class_id;
+                        $add->assignment_type = $request->assignment_type;
+                        $add->question_id = $value_questions->id;
+                        $add->question_type = $get_question_type[$i];
+                        $add->is_mcq = 0;
+                        $add->mode = $request->mode;
+                        $add->marks = $get_question_mark[$i];
+                        $add->save();
+                    }
+                        
+                }
+                
+
+            }
+
+            return response()->json([
+                "code" => 200,
+                "message" => "success",
+            ]);            
+
+        }
     }
 
     
