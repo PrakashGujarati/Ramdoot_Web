@@ -2,6 +2,7 @@
 /public/hot
 /public/upload
 /public/storage
+/public/web/apk/RamdootEduWorld.apk
 /storage/*.key
 /vendor
 .env
