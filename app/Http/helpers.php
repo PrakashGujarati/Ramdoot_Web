@@ -356,7 +356,7 @@ function send_notifications($user_id, $message, $title = null)
         curl_close($ch);
         $errMsg = '';
         $res = (array) json_decode($result);
-        print_r($res);
+       // print_r($res);
         $errMsg = '';
 
         if (!empty($res)) {
