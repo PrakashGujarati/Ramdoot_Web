@@ -28,11 +28,11 @@
     </div>
     <div class="card card-preview">
         <div class="row" style="margin: 10px">
-            <div class="col-lg-4">
+            <div class="col-lg-3">
                 <label>Start Date</label>
                 <input type="date" name="start_date" value="{{date('Y-m-d')}}" class="form-control start_date">
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-3">
                 <label>End Date</label>
                 <input type="date" name="end_date" value="{{date('Y-m-d')}}" class="form-control end_date">
             </div>
@@ -48,6 +48,7 @@
                     @endforeach
                 </select>
             </div>
+            <div class="col-lg-2 mt-3 pt-4"><a class="btn btn-success export_userlog" href="javascript:;">Export</a></div>
         </div>
         <div class="row dyanamicTable">
 
@@ -74,6 +75,32 @@
     $(document).on('change','.user-id',function(){
         getData();
     });
+
+    $(document).on('click','.export_userlog',function(){
+        var start_date=$('.start_date').val();
+        var end_date=$('.end_date').val();
+        var user_id=$('.user-id').val();
+
+        window.location.href = "{{ url('user_log/export') }}/"+start_date+"/"+end_date+"/"+user_id;
+
+        // $('.dyanamicTable').html('');
+        // $.ajax({
+        //     type: "GET",
+        //     data:{
+        //         'end_date':end_date,
+        //         'start_date':start_date,
+        //         'user_id':user_id
+        //     },
+        //     url: "{{ route('user.log.export') }}",
+        //     beforeSend: function( xhr ) {
+        //         // $('.loader').show();
+        //     },
+        //     success: function(result) {
+        //         //$('.dyanamicTable').html(result.html);
+        //     }
+        // });
+
+    })
 
     function getDetails(userDataLogId,id){
         var userDataLogId = userDataLogId;

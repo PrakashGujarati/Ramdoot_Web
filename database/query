@@ -1,5 +1,4 @@
 
-
 -----------------------22-06-2021-------------------
 
 ALTER TABLE `timetables` ADD `is_show` TINYINT NOT NULL DEFAULT '0' AFTER `end_time`;

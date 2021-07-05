@@ -13,6 +13,8 @@ class UserDataLog extends Model
 
     public $timestamps = false;
 
+    protected $fillable = ['name','sub_title','abbreviation','thumbnail_file_type','thumbnail','status','order_no'];
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');

@@ -779,7 +779,20 @@ class RamdootEduController extends Controller
             foreach ($get_unit as $key => $value) {
                 //dd($get_unit);
                 // $getquestion_details = QuestionType::select('id','question_type')->where(['id' => $value->question_type])->first();
-                $get_question_count = Solution::where(['question_type' => $value->question_type])->count('id');
+                $get_exits_question=[];
+                if($request->has('mode')){
+                   $get_exits_question = VirtualAssignmentQuestions::where(['mode' => $request->mode])->get();
+                }
+                $question_arr=[];
+                if(count($get_exits_question) > 0){
+                    foreach ($get_exits_question as $key_old => $value_old) {
+                        $question_arr[] = $value_old->question_id;
+                    }    
+                }
+                
+                $get_question_count = Solution::where(['question_type' => $value->question_type])->whereNotIn('id', $question_arr)->count('id');    
+                
+                
                 $get_mark = Solution::where(['question_type' => $value->question_type])->first();    
 
                 $get_question_type[] = ['question_type' => $value->question_type,'question_count' => $get_question_count,'mark' => isset($get_mark->marks) ? $get_mark->marks:0]; //$getquestion_details;
