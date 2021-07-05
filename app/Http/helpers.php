@@ -20,6 +20,7 @@ use App\Models\Subject;
 use App\Models\Videos;
 use App\Models\Worksheet;
 use App\Models\User;
+use App\Models\Notification;
 
 function storeLog($type, $type_id, $upload_time, $operation)
 {
@@ -342,6 +343,14 @@ function send_notifications($user_id, $message, $title = null)
     'notification' => $notification
     );
 
+    
+    $add_notification = new Notification();
+    $add_notification->device_id = $user_details->device_token;
+    $add_notification->user_id = $user_details->id;
+    $add_notification->title = $title;
+    $add_notification->message = $message;
+    $add_notification->save();
+
     try {
 
         $ch = curl_init();
@@ -356,7 +365,12 @@ function send_notifications($user_id, $message, $title = null)
         curl_close($ch);
         $errMsg = '';
         $res = (array) json_decode($result);
+
        // print_r($res);
+        
+        //$inputs = ['device_id' => $token,'user_details' => $user_details->id,'title' => $title,'message' => $message];
+		//Notification::create($inputs);
+
         $errMsg = '';
 
         if (!empty($res)) {
@@ -367,4 +381,6 @@ function send_notifications($user_id, $message, $title = null)
     } catch (Exception $e) {
         Log::info("ERROR IN CACHE");
     }
+
+    
 }
