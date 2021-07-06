@@ -743,10 +743,12 @@ class RamdootEduController extends Controller
         $rules = array(
             'semester_id' => 'required',
             'unit_id' => 'required',
+            'mode' => 'required',
         );
         $messages = array(
             'semester_id' => 'Please enter semester id.',
-            'unit_id' => 'Please enter unit id.'
+            'unit_id' => 'Please enter unit id.',
+            'mode' => 'Please enter mode.',
         );
         $validator = Validator::make($request->all(), $rules, $messages);
 
@@ -779,10 +781,9 @@ class RamdootEduController extends Controller
             foreach ($get_unit as $key => $value) {
                 //dd($get_unit);
                 // $getquestion_details = QuestionType::select('id','question_type')->where(['id' => $value->question_type])->first();
-                $get_exits_question=[];
-                if($request->has('mode')){
-                   $get_exits_question = VirtualAssignmentQuestions::where(['mode' => $request->mode])->get();
-                }
+                
+                $get_exits_question = VirtualAssignmentQuestions::where(['mode' => $request->mode])->get();
+                
                 $question_arr=[];
                 if(count($get_exits_question) > 0){
                     foreach ($get_exits_question as $key_old => $value_old) {
@@ -791,7 +792,7 @@ class RamdootEduController extends Controller
                 }
                 
                 $get_question_count = Solution::where(['question_type' => $value->question_type])->whereNotIn('id', $question_arr)->count('id');    
-                
+                //dd($get_question_count);
                 
                 $get_mark = Solution::where(['question_type' => $value->question_type])->first();    
 
@@ -812,10 +813,12 @@ class RamdootEduController extends Controller
         $rules = array(
             'unit_id' => 'required',
             'category_id' => 'required',
+            'mode' => 'required',
         );
         $messages = array(
             'unit_id' => 'Please enter unit id.',
             'category_id' => 'Please enter category_id.',
+            'mode' => 'Please enter mode.',
         );
         $validator = Validator::make($request->all(), $rules, $messages);
 
@@ -840,7 +843,7 @@ class RamdootEduController extends Controller
         }
         else{
 
-            $get_exits_question = VirtualAssignmentQuestions::get();
+            $get_exits_question = VirtualAssignmentQuestions::where(['mode' => $request->mode])->get();
             $question_arr=[];
             foreach ($get_exits_question as $key_old => $value_old) {
                 $question_arr[] = $value_old->question_id;
@@ -975,10 +978,12 @@ class RamdootEduController extends Controller
         $rules = array(
             'class_id' => 'required',
             'assignment_type' => 'required',
+            'mode' => 'required',
         );
         $messages = array(
             'class_id' => 'Please enter class id.',
             'assignment_type' => 'Please enter assignment id.',
+            'mode' => 'Please enter mode.',
         );
         $validator = Validator::make($request->all(), $rules, $messages);
 
@@ -987,31 +992,31 @@ class RamdootEduController extends Controller
             return ['status' => "false",'msg' => $msg];
         }
 
-        $get_question_details = VirtualAssignmentQuestions::with('questionType')->where(['class_id' => $request->class_id,'assignment_type' => $request->assignment_type])->groupby('marks')->get();
+        $get_question_details = VirtualAssignmentQuestions::with('questionType')->where(['class_id' => $request->class_id,'assignment_type' => $request->assignment_type,'mode' => $request->mode])->groupby('marks')->get();
 
         if(count($get_question_details) > 0){
             $counter_array=[];
             foreach ($get_question_details as $key => $value) {
 
                 if($value->question_type != null || $value->is_mcq == 0){
-                     $vquestions = VirtualAssignmentQuestions::where(['class_id' => $value->class_id,'marks' => $value->marks,'assignment_type' => $value->assignment_type])->pluck('question_id')->toArray();
+                     $vquestions = VirtualAssignmentQuestions::where(['class_id' => $value->class_id,'marks' => $value->marks,'assignment_type' => $value->assignment_type,'mode' => $request->mode])->pluck('question_id')->toArray();
                      //dd($vquestions);     
                      $questions = Solution::whereIn('id',$vquestions)->get();
                      $question_arr=[];
                      foreach ($questions as $key_question => $value_question) {
                         
-                        $get_vquestions_id = VirtualAssignmentQuestions::where(['question_id' => $value_question->id,'class_id' => $value->class_id])->first();
+                        $get_vquestions_id = VirtualAssignmentQuestions::where(['question_id' => $value_question->id,'class_id' => $value->class_id,'mode' => $request->mode])->first();
                         
                          $question_arr[] = Solution::where(['id' => $value_question->id])->select('*',DB::raw("CONCAT('$get_vquestions_id->id') AS virtual_assignment_question_id"))->first();
                      }
                 }    
                 else{
-                    $vmquestions = VirtualAssignmentQuestions::with('question')->where(['class_id' => $value->class_id,'marks' => $value->marks,'assignment_type' => $value->assignment_type])->pluck('question_id')->toArray();
+                    $vmquestions = VirtualAssignmentQuestions::with('question')->where(['class_id' => $value->class_id,'marks' => $value->marks,'assignment_type' => $value->assignment_type,'mode' => $request->mode])->pluck('question_id')->toArray();
                     $questions = Solution::whereIn('id',$vmquestions)->get();
                     $question_arr=[];
                      foreach ($questions as $key_question => $value_question) {
                         
-                        $get_vquestions_id = VirtualAssignmentQuestions::where(['question_id' => $value_question->id,'class_id' => $value->class_id])->first();
+                        $get_vquestions_id = VirtualAssignmentQuestions::where(['question_id' => $value_question->id,'class_id' => $value->class_id,'mode' => $request->mode])->first();
                         
                          $question_arr[] = Solution::where(['id' => $value_question->id])->select('*',DB::raw("CONCAT('$get_vquestions_id->id') AS virtual_assignment_question_id"))->first();
                      }
@@ -1028,7 +1033,7 @@ class RamdootEduController extends Controller
         else{
             return response()->json([
                 "code" => 400,
-                "message" => "count not found.",
+                "message" => "Question not found.",
                 "data" => [],
             ]);
         }
@@ -1122,7 +1127,7 @@ class RamdootEduController extends Controller
             }    
         }
 
-        VirtualAssignmentQuestions::where(['class_id' => $request->class_id])->delete();
+        VirtualAssignmentQuestions::where(['class_id' => $request->class_id,'mode' => $request->mode])->delete();
         
         return response()->json([
             "code" => 200,

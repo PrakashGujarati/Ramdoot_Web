@@ -24,7 +24,6 @@ class MediumSampleExport implements FromCollection,WithHeadings,ShouldAutoSize, 
 
     public function collection()
     {
-        dd($this->data);
         $mediums=[];
         foreach ($this->data as $value) {
             $mediums[] = array(

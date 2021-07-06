@@ -31,11 +31,24 @@ class NotificationsController extends Controller
 
 		if($check_user){
 			$get_notification = Notification::where(['user_id' => $check_user->id])->get();
-			if(count($get_notification) > 0){
+
+			$notification_details=[];
+			foreach ($get_notification as $key => $value) {
+				$url = "";
+				if($value->image){
+	        		$url =  config('ramdoot.appurl')."/upload/notifications/".$value->image;		
+	        	}	
+    			$notification_details[] = ['id' => $value->id,'device_id' => $value->device_id,'user_id' => $value->user_id,'title' => $value->title,'message' => $value->message,'image' => $url,'is_read' => $value->is_read,'created_at' => 
+    			$value->created_at,'updated_at' => $value->updated_at];
+				//$notification_details
+			}
+			
+
+			if(count($notification_details) > 0){
 				return response()->json([
 	    			"code" => 200,
 				  	"message" => "success",
-	 			  	"data" => $get_notification,
+	 			  	"data" => $notification_details,
 		        ]);	
 			}
 			else{
