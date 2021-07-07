@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Validator;
 use App\Models\Role;
+use App\Models\UserDeviceToken;
 
 class RegisterController extends Controller
 {
@@ -33,7 +34,7 @@ class RegisterController extends Controller
             ];
 
             $user = User::where('mobile',$request->mobile)->first();
-            $user->device_token = $request->device_token;
+            $user->device_token = null; //$request->device_token;
             $user->save();
             $token = $user->createToken('Ramdoot')->accessToken;
             $image="";
@@ -41,6 +42,15 @@ class RegisterController extends Controller
                 $image = config('ramdoot.appurl')."/upload/profile/".$user->profile_photo_path;    
             }
 
+            $check_token = UserDeviceToken::where(['user_id' => $user->id,'device_token' => $request->device_token])->first();
+
+            if(empty($check_token)){
+                $add_token = new UserDeviceToken;
+                $add_token->user_id = $user->id;
+                $add_token->device_token = $request->device_token;
+                $add_token->save();        
+            }
+            
             // $role_id = 0;
             // if($user->user_type == "Teacher / Faculty" || $user->user_type == "Teacher"){
             //     $getrole = Role::where(['slug' => 'Teacher'])->first();
@@ -51,7 +61,7 @@ class RegisterController extends Controller
             //     $role_id = $getrole->id;
             // }
 
-            $data = ['id' => $user->id,'role_id' => $user->role_id,'name' => $user->name,'mobile' => $user->mobile,'email' => $user->email,'address' => $user->address,'pin_code' => $user->pin_code,'city' => $user->city,'birth_date' => $user->birth_date,'user_type' => $user->user_type,'gender' => $user->gender,'profile_photo' => $image,'username' => $user->username,'token' => $token];
+            $data = ['id' => $user->id,'role_id' => $user->role_id,'name' => $user->name,'mobile' => $user->mobile,'email' => $user->email,'address' => $user->address,'pin_code' => $user->pin_code,'city' => $user->city,'birth_date' => $user->birth_date,'user_type' => $user->user_type,'gender' => $user->gender,'profile_photo' => $image,'username' => $user->username,'device_token' => $request->device_token,'token' => $token];
             return response()->json([
                 "code" => 200,
                 "message" => "success",
@@ -62,13 +72,24 @@ class RegisterController extends Controller
                 'mobile' => $request->mobile,           
                 'device_token' => $request->device_token,
             ]);
+
+            $check_token = UserDeviceToken::where(['user_id' => $user->id,'device_token' => $request->device_token])->first();
+
+            if(empty($check_token)){
+                if($request->device_token){
+                    $add_token = new UserDeviceToken;
+                    $add_token->user_id = $user->id;
+                    $add_token->device_token = $request->device_token;
+                    $add_token->save(); 
+                }       
+            }
            
             $token = $user->createToken('Ramdoot')->accessToken;
             $image="";
             if($user->profile_photo_path){
                 $image = config('ramdoot.appurl')."/upload/profile/".$user->profile_photo_path;    
             }
-            $data = ['id' => $user->id,'role_id' => $user->role_id,'name' => $user->name,'mobile' => $user->mobile,'email' => $user->email,'address' => $user->address,'pin_code' => $user->pin_code,'city' => $user->city,'birth_date' => $user->birth_date,'user_type' => $user->user_type,'gender' => $user->gender,'profile_photo' => $image,'username' => $user->username,'token' => $token];
+            $data = ['id' => $user->id,'role_id' => $user->role_id,'name' => $user->name,'mobile' => $user->mobile,'email' => $user->email,'address' => $user->address,'pin_code' => $user->pin_code,'city' => $user->city,'birth_date' => $user->birth_date,'user_type' => $user->user_type,'gender' => $user->gender,'profile_photo' => $image,'username' => $user->username,'device_token' => $request->device_token,'token' => $token];
             return response()->json([
                 "code" => 200,
                 "message" => "success",
@@ -201,16 +222,39 @@ class RegisterController extends Controller
 
     public function logout(Request $request)
     {      
-        $this->validate($request, [            
-            'user_id' => 'required',            
-        ]);
-        $user = User::find($request->user_id);
-        $user->device_token = "";
-        $user->save();
-		$request->user()->token()->revoke();
-        return response()->json([
-            'message' => 'Successfully logged out'
-        ]);
+
+        $rules = array(
+            'user_id' => 'required',
+            'device_token' => 'required'
+        );
+        $messages = array(
+            'user_id.required' => 'Please enter user id.',
+            'device_token.required' => 'Please enter device token.'
+        );
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            $msg = $validator->messages();
+            return ['code' => 500,'message'=>'Invalid input','data' => $msg];
+        }
+
+        $check_token = UserDeviceToken::where(['user_id' => $request->user_id,'device_token' => $request->device_token])->first();
+
+        if($check_token){
+            UserDeviceToken::where(['id' => $check_token->id])->delete();
+            return response()->json([
+                'message' => 'Successfully logged out'
+            ]);    
+        }
+        else{
+            return response()->json([
+                "code" => 400,
+                "message" => "User not found."
+            ]); 
+        }
+
+        
 	}
 
     function compressImage($source, $destination, $quality) {
