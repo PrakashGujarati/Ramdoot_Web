@@ -21,6 +21,7 @@ use App\Models\Videos;
 use App\Models\Worksheet;
 use App\Models\User;
 use App\Models\Notification;
+use App\Models\UserDeviceToken;
 
 function storeLog($type, $type_id, $upload_time, $operation)
 {
@@ -307,80 +308,87 @@ function send_notifications($user_id, $message, $title = null)
 
     $user_details = User::where(['id' => $user_id])->first();
     
-    $token = $user_details->device_token;
-    //dd($token);
+    $get_user_token = UserDeviceToken::where(['user_id' => $user_id])->get();
 
-    $API_ACCESS_KEY = 'AAAAZkwzjLI:APA91bGJMNIZjlE8ormC8l_Re1CYwSolNwEa_rhyk7EPl1tzwF1EnqHzq5VUeEDMFGFErQQivaTYx1jNX7bfP7BJyx1dqag0vaAJ3p1V8vp9R5RPszIumzOF6EKFVvrM8vdKWqUV-DLg';
+    if(count($get_user_token) > 0){
+        foreach ($get_user_token as $key => $value) {
+            
+            $token = $value->device_token;
+            //dd($token);
 
-    $headers = array(
-    'Authorization: key=' . $API_ACCESS_KEY,
-    'Content-Type: application/json'
-    );
+            $API_ACCESS_KEY = 'AAAAZkwzjLI:APA91bGJMNIZjlE8ormC8l_Re1CYwSolNwEa_rhyk7EPl1tzwF1EnqHzq5VUeEDMFGFErQQivaTYx1jNX7bfP7BJyx1dqag0vaAJ3p1V8vp9R5RPszIumzOF6EKFVvrM8vdKWqUV-DLg';
 
-    $msg = array(
-    'alert' => $message,
-    'title' => $title,
-    'message' => $message,
-    'notification_type' => "",
-    'user_type' => "",
-    'sound' => 'default',
-    'client_id' => "",
-    'flag'=>"",
-    );
+            $headers = array(
+            'Authorization: key=' . $API_ACCESS_KEY,
+            'Content-Type: application/json'
+            );
 
-    $notification = array(
-    'title' => $title,
-    'body' => $message,
-    'sound' => 'default',
-    );
+            $msg = array(
+            'alert' => $message,
+            'title' => $title,
+            'message' => $message,
+            'notification_type' => "",
+            'user_type' => "",
+            'sound' => 'default',
+            'client_id' => "",
+            'flag'=>"",
+            );
+
+            $notification = array(
+            'title' => $title,
+            'body' => $message,
+            'sound' => 'default',
+            );
 
 
-    $fields = array(
-    'to' => $token,
-    'data' => $msg,
-    'priority' => 'high',
-    'vibrate' => 1,
-    'notification' => $notification
-    );
+            $fields = array(
+            'to' => $token,
+            'data' => $msg,
+            'priority' => 'high',
+            'vibrate' => 1,
+            'notification' => $notification
+            );
 
-    
-    $add_notification = new Notification();
-    $add_notification->device_id = $user_details->device_token;
-    $add_notification->user_id = $user_details->id;
-    $add_notification->title = $title;
-    $add_notification->message = $message;
-    $add_notification->save();
+            
+            $add_notification = new Notification();
+            $add_notification->device_id = $user_details->device_token;
+            $add_notification->user_id = $user_details->id;
+            $add_notification->title = $title;
+            $add_notification->message = $message;
+            $add_notification->save();
 
-    try {
+            try {
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+                curl_setopt($ch, CURLOPT_POST, true);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
 
-        $result = curl_exec($ch);
-        curl_close($ch);
-        $errMsg = '';
-        $res = (array) json_decode($result);
+                $result = curl_exec($ch);
+                curl_close($ch);
+                $errMsg = '';
+                $res = (array) json_decode($result);
 
-       // print_r($res);
-        
-        //$inputs = ['device_id' => $token,'user_details' => $user_details->id,'title' => $title,'message' => $message];
-		//Notification::create($inputs);
+               // print_r($res);
+                
+                //$inputs = ['device_id' => $token,'user_details' => $user_details->id,'title' => $title,'message' => $message];
+                //Notification::create($inputs);
 
-        $errMsg = '';
+                $errMsg = '';
 
-        if (!empty($res)) {
-            if ($res['failure'] == 1) {
-                $errMsg = $res['results'][0]->error;
+                if (!empty($res)) {
+                    if ($res['failure'] == 1) {
+                        $errMsg = $res['results'][0]->error;
+                    }
+                }
+            } catch (Exception $e) {
+                Log::info("ERROR IN CACHE");
             }
-        }
-    } catch (Exception $e) {
-        Log::info("ERROR IN CACHE");
-    }
 
-    
+
+        }    
+    }
 }

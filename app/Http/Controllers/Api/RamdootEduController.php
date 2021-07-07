@@ -59,6 +59,7 @@ class RamdootEduController extends Controller
 
         $validator = Validator::make($request->all(), $rules, $messages);
 
+
         if ($validator->fails()) {
             $msg = $validator->messages();
             return ['status' => "false",'msg' => $msg];
