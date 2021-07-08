@@ -53,7 +53,7 @@ class MaterialController extends Controller
         } else {
             $boards = Board::where('status', '!=', 'Deleted')->get();
             $units = [];
-            $material_details = Material::where('status', '!=', 'Deleted')->orderBy('order_no', 'asc')->get();
+            $material_details = Material::where('semester_id', 1)->where('status', '!=', 'Deleted')->orderBy('order_no', 'asc')->get();
             $semesters_details = [];
             $question_type_details = QuestionType::where('status', '!=', 'Deleted')->get();
             $isset = 0;
