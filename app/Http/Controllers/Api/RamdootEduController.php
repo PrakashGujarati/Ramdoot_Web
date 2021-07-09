@@ -1185,7 +1185,7 @@ class RamdootEduController extends Controller
                 
                 if($check_student){
 
-                    $get_student_assignment = AssignmentStudent::where(['student_id' => $request->student_id])->get();
+                    $get_student_assignment = AssignmentStudent::where(['student_id' => $request->student_id])->orderBy('id','DESC')->get();
                    // $assignment_details = Assignment::with('assignment_question')->where(['user_id' => ])->get();
                     $assignment=[];
                     if(count($get_student_assignment) > 0){

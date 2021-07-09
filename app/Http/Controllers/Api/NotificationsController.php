@@ -30,7 +30,7 @@ class NotificationsController extends Controller
         $check_user = User::where(['id' => $request->user_id])->first();
 
 		if($check_user){
-			$get_notification = Notification::where(['user_id' => $check_user->id])->get();
+			$get_notification = Notification::where(['user_id' => $check_user->id])->orderBy('id','DESC')->get();
 
 
 			$notification_details=[];
