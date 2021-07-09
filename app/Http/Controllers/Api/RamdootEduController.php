@@ -29,6 +29,7 @@ use App\Models\TeacherAssignment;
 use App\Models\TeacherAssignmentDocument;
 use App\Models\ClassroomGroup;
 use App\Models\TimeTable;
+use App\Models\ExternalQuestion;
 
 class RamdootEduController extends Controller
 {
@@ -745,11 +746,13 @@ class RamdootEduController extends Controller
             'semester_id' => 'required',
             'unit_id' => 'required',
             'mode' => 'required',
+            'class_id' => 'required',
         );
         $messages = array(
             'semester_id' => 'Please enter semester id.',
             'unit_id' => 'Please enter unit id.',
             'mode' => 'Please enter mode.',
+            'class_id' => 'Please enter class id.',
         );
         $validator = Validator::make($request->all(), $rules, $messages);
 
@@ -760,6 +763,7 @@ class RamdootEduController extends Controller
 
         $chksemester = Semester::where(['id' => $request->semester_id,'status' => 'Active'])->first();
         $chkunit = Unit::where(['id' => $request->unit_id,'status' => 'Active'])->first();
+        $check_class = Classroom::where(['id' => $request->class_id,'status' => 'Active'])->first();
 
         if(empty($chksemester)){
             return response()->json([
@@ -775,6 +779,13 @@ class RamdootEduController extends Controller
                 "data" => [],
             ]);
         }
+        elseif (empty($check_class)) {
+            return response()->json([
+                "code" => 400,
+                "message" => "Classroom not found.",
+                "data" => [],
+            ]);
+        }
         else{
             $get_unit = Solution::where(['semester_id' => $request->semester_id,'unit_id' => $request->unit_id])->groupby('question_type')->get();
             
@@ -783,7 +794,7 @@ class RamdootEduController extends Controller
                 //dd($get_unit);
                 // $getquestion_details = QuestionType::select('id','question_type')->where(['id' => $value->question_type])->first();
                 
-                $get_exits_question = VirtualAssignmentQuestions::where(['mode' => $request->mode])->get();
+                $get_exits_question = VirtualAssignmentQuestions::where(['class_id' => $request->class_id,'mode' => $request->mode])->get();
                 
                 $question_arr=[];
                 if(count($get_exits_question) > 0){
@@ -815,11 +826,13 @@ class RamdootEduController extends Controller
             'unit_id' => 'required',
             'category_id' => 'required',
             'mode' => 'required',
+            'class_id' => 'required',
         );
         $messages = array(
             'unit_id' => 'Please enter unit id.',
-            'category_id' => 'Please enter category_id.',
+            'category_id' => 'Please enter category id.',
             'mode' => 'Please enter mode.',
+            'class_id' => 'Please enter class id.',
         );
         $validator = Validator::make($request->all(), $rules, $messages);
 
@@ -829,6 +842,7 @@ class RamdootEduController extends Controller
         }
 
         $chkunit = Unit::where(['id' => $request->unit_id,'status' => 'Active'])->first();
+        $check_class = Classroom::where(['id' => $request->class_id,'status' => 'Active'])->first();
 
         // if($request->category_id != 0){
         //     $chkquestiontype = QuestionType::where(['id' => $request->category_id,'status' => 'Active'])->first();    
@@ -842,9 +856,17 @@ class RamdootEduController extends Controller
                 "data" => [],
             ]);
         }
+        elseif (empty($check_class)) {
+            return response()->json([
+                "code" => 400,
+                "message" => "Classroom not found.",
+                "data" => [],
+            ]);
+        }
         else{
 
-            $get_exits_question = VirtualAssignmentQuestions::where(['mode' => $request->mode])->get();
+            $get_exits_question = VirtualAssignmentQuestions::where(['class_id' => $request->class_id,'mode' => $request->mode])
+            ->get();
             $question_arr=[];
             foreach ($get_exits_question as $key_old => $value_old) {
                 $question_arr[] = $value_old->question_id;
@@ -1128,7 +1150,7 @@ class RamdootEduController extends Controller
             }    
         }
 
-        VirtualAssignmentQuestions::where(['class_id' => $request->class_id,'mode' => $request->mode])->delete();
+        VirtualAssignmentQuestions::where(['class_id'=> $request->class_id,'mode' => $request->mode])->delete();
         
         return response()->json([
             "code" => 200,
@@ -3353,6 +3375,178 @@ class RamdootEduController extends Controller
         }
     }
 
+
+    public function addExternalQuestion(Request $request)
+    {
+        $rules = array(
+            'board_id' => 'required',
+            'medium_id' => 'required',
+            'standard_id' => 'required',
+            'semester_id' => 'required',
+            'subject_id' => 'required',
+            'unit_id' => 'required',
+            'user_id' => 'required'
+        );
+        $messages = array(
+            'board_id' => 'Please enter board id.',
+            'medium_id' => 'Please enter medium id',
+            'standard_id' => 'Please enter standard id.',
+            'semester_id' => 'Please enter semester id.',
+            'subject_id' => 'Please enter subject id.',
+            'unit_id' => 'Please enter unit id.',
+            'user_id' => 'Please enter user id.'
+        );
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            $msg = $validator->messages();
+            return ['status' => "false",'msg' => $msg];
+        }
+
+        $chkboard = Board::where(['id' => $request->board_id,'status' => 'Active'])->first();
+        $chkmedium = Medium::where(['id' => $request->medium_id,'status' => 'Active'])->first();
+        $chkstandard = Standard::where(['id' => $request->standard_id,'status' => 'Active'])->first();
+        $chksubject = Subject::where(['id' => $request->subject_id,'status' => 'Active'])->first();
+        $chksemester = Semester::where(['id' => $request->semester_id,'status' => 'Active'])->first();
+        $chkunit = Unit::where(['id' => $request->unit_id,'status' => 'Active'])->first();
+        //$chksemester = Semester::where(['id' => $request->semester_id,'status' => 'Active'])->first();
+        //$chkunit = Unit::where(['id' => $request->unit_id,'status' => 'Active'])->first();
+        //$check_class = Classroom::where(['id' => $request->class_id,'status' => 'Active'])->first();
+
+        if(empty($chkboard)){
+            return response()->json([
+                "code" => 400,
+                "message" => "Board not found.",
+                "data" => [],
+            ]);
+        }
+        elseif (empty($chkmedium)) {
+            return response()->json([
+                "code" => 400,
+                "message" => "Medium not found.",
+                "data" => [],
+            ]);
+        }
+        elseif (empty($chkstandard)) {
+            return response()->json([
+                "code" => 400,
+                "message" => "Standard not found.",
+                "data" => [],
+            ]);
+        }
+        elseif (empty($chksubject)) {
+            return response()->json([
+                "code" => 400,
+                "message" => "Subject not found.",
+                "data" => [],
+            ]);
+        }
+        elseif (empty($chksemester)) {
+            return response()->json([
+                "code" => 400,
+                "message" => "Semester not found.",
+                "data" => [],
+            ]);
+        }
+        elseif (empty($chkunit)) {
+            return response()->json([
+                "code" => 400,
+                "message" => "Unit not found.",
+                "data" => [],
+            ]);
+        }
+        else{
+
+            $question_img=null;
+            if($request->has('question_image'))
+            {
+                $questionimage = $request->file('question_image');
+                $url = public_path('upload/external_question/');
+                $originalPath = $url;
+                $name = time() . mt_rand(10000, 99999);
+                $question_img = $name . '.' . $questionimage->getClientOriginalExtension();
+                $questionimage->move($originalPath, $question_img);           
+            }
+
+            $option_1_img=null;
+            if($request->has('option_1_image'))
+            {
+                $option1_image = $request->file('option_1_image');
+                $url = public_path('upload/external_question/');
+                $originalPath = $url;
+                $name = time() . mt_rand(10000, 99999);
+                $option_1_img = $name . '.' . $option1_image->getClientOriginalExtension();
+                $option1_image->move($originalPath, $option_1_img);           
+            }
+
+            $option_2_img=null;
+            if($request->has('option_2_image'))
+            {
+                $option2_image = $request->file('option_2_image');
+                $url = public_path('upload/external_question/');
+                $originalPath = $url;
+                $name = time() . mt_rand(10000, 99999);
+                $option_2_img = $name . '.' . $option2_image->getClientOriginalExtension();
+                $option2_image->move($originalPath, $option_2_img);           
+            }
+
+            $option_3_img=null;
+            if($request->has('option_3_image'))
+            {
+                $option3_image = $request->file('option_3_image');
+                $url = public_path('upload/external_question/');
+                $originalPath = $url;
+                $name = time() . mt_rand(10000, 99999);
+                $option_3_img = $name . '.' . $option3_image->getClientOriginalExtension();
+                $option3_image->move($originalPath, $option_3_img);           
+            }
+
+            $option_4_img=null;
+            if($request->has('option_4_image'))
+            {
+                $option4_image = $request->file('option_4_image');
+                $url = public_path('upload/external_question/');
+                $originalPath = $url;
+                $name = time() . mt_rand(10000, 99999);
+                $option_4_img = $name . '.' . $option4_image->getClientOriginalExtension();
+                $option4_image->move($originalPath, $option_4_img);           
+            }
+
+            $add = new ExternalQuestion;
+            $add->board_id = $request->board_id;
+            $add->medium_id = $request->medium_id;
+            $add->standard_id = $request->standard_id;
+            $add->subject_id = $request->subject_id;
+            $add->semester_id = $request->semester_id;
+            $add->unit_id = $request->unit_id;
+            $add->user_id = $request->user_id;
+            $add->question = isset($request->question) ? $request->question:null;
+            $add->question_image = $question_img;
+            $add->option_1 = isset($request->option_1) ? $request->option_1:null;
+            $add->option_1_image = $option_1_img;
+            $add->option_2 = isset($request->option_2) ? $request->option_2:null;
+            $add->option_2_image = $option_2_img;
+            $add->option_3 = isset($request->option_3) ? $request->option_3:null;
+            $add->option_3_image = $option_3_img;
+            $add->option_4 = isset($request->option_4) ? $request->option_4:null;
+            $add->option_4_image = $option_4_img;
+            $add->level = $request->level;
+            $add->save();
+
+            return response()->json([
+                "code" => 200,
+                "message" => "success",
+            ]);            
+
+        }
+
+        
+        
+
+
+
+    }
     
     //ClassroomGroup
 

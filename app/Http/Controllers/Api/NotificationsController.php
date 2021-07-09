@@ -32,6 +32,7 @@ class NotificationsController extends Controller
 		if($check_user){
 			$get_notification = Notification::where(['user_id' => $check_user->id])->get();
 
+
 			$notification_details=[];
 			foreach ($get_notification as $key => $value) {
 				$url = "";

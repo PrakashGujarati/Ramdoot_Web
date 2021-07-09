@@ -127,6 +127,8 @@ Route::group(['middleware'=>'auth:api'], function()
     Route::post('timetable_status_change', [RamdootEduController::class, 'timetableStatusChange']);
 
     Route::post('add_questions_smart_creation', [RamdootEduController::class, 'addQuestionsSmartCreation']);
+
+    Route::post('add_external_questions', [RamdootEduController::class, 'addExternalQuestion']);
     /**/
 
 });
