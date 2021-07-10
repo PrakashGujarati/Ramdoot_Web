@@ -1185,7 +1185,8 @@ class RamdootEduController extends Controller
                 
                 if($check_student){
 
-                    $get_student_assignment = AssignmentStudent::where(['student_id' => $request->student_id])->orderBy('id','DESC')->get();
+                    $get_student_assignment = AssignmentStudent::where(['student_id' => $request->student_id])->get();
+                   // dd(count($get_student_assignment));
                    // $assignment_details = Assignment::with('assignment_question')->where(['user_id' => ])->get();
                     $assignment=[];
                     if(count($get_student_assignment) > 0){
@@ -1348,10 +1349,15 @@ class RamdootEduController extends Controller
                            
                         }
                     }
+                    arsort($assignment);
+                    $assignmentdata=[];
+                    foreach ($assignment as $key_assignment => $value_assignment) {
+                        $assignmentdata[] = $value_assignment;
+                    }
                     return response()->json([
                         "code" => 200,
                         "message" => "success",
-                        "data" => $assignment,
+                        "data" => $assignmentdata,
                     ]);
                 }
                 else{

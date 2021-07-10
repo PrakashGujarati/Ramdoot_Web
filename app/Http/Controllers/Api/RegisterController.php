@@ -44,6 +44,12 @@ class RegisterController extends Controller
 
             $check_token = UserDeviceToken::where(['user_id' => $user->id,'device_token' => $request->device_token])->first();
 
+            $check_device_token = UserDeviceToken::where(['device_token' => $request->device_token])->first();
+
+            if($check_device_token){
+                UserDeviceToken::where(['id' => $check_device_token->id])->delete();
+            }
+
             if(empty($check_token)){
                 $add_token = new UserDeviceToken;
                 $add_token->user_id = $user->id;
