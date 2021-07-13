@@ -134,6 +134,7 @@ Route::group(['middleware'=>'auth:api'], function()
     Route::post('get_lecture', [RamdootEduController::class, 'getLecture']);
     Route::post('add_attendance', [RamdootEduController::class, 'addAttendance']);
     Route::post('edit_attendance', [RamdootEduController::class, 'editAttendance']);
+    Route::post('attendance_list', [RamdootEduController::class, 'attendanceList']);
 });
 
 Route::post('view_semesters_web', [RamdootEduController::class, 'viewSemesters']);

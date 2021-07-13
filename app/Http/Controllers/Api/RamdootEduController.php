@@ -3679,17 +3679,67 @@ class RamdootEduController extends Controller
         }
 
         $student_ids = explode(',',$request->student_ids);
-        foreach ($student_ids as $ids) {
-            AttendanceStudent::where(['student_id' => $ids,'attendance_id'=>$request->attendance_id])
-            ->update([
-                'is_present' => $request->presented_ids ? in_array($ids, $request->presented_ids) : false,
-            ]);
+        if(count($student_ids) > 0){
+            AttendanceStudent::where(['attendance_id' => $request->attendance_id])->delete();
+            foreach ($student_ids as $ids) {
+                AttendanceStudent::create([
+                    'attendance_id' => $request->attendance_id,
+                    'student_id' => $ids,
+                    'is_present' => $request->presented_ids ? in_array($student_id, $request->presented_ids) :  false
+                ]);
+                // AttendanceStudent::where(['student_id' => $ids,'attendance_id' => $request->attendance_id])
+                // ->update(['is_present' => $request->presented_ids ? in_array($ids, $request->presented_ids) : false,
+                // ]);
+            }    
         }
+        
 
         return response()->json([
             "code" => 200,
             "message" => "success"
         ]);
+    }
+
+    public function attendanceList(Request $request){
+
+        $rules = array(
+            'class_id' => 'required',
+            'timetable_id' => 'required'
+        );
+        $messages = array(
+            'class_id' => 'Please enter day.',
+            'timetable_id' => 'Please enter class id.'
+        );
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            $msg = $validator->messages();
+            return ['status' => "false",'msg' => $msg];
+        }
+
+        $check_class = Classroom::where(['id' => $request->class_id,'status' => 'Active'])->first();
+            
+        if(empty($check_class)){
+            return response()->json([
+                "code" => 400,
+                "message" => "Classroom not found.",
+                "data" => [],
+            ]);   
+        }
+        else{
+            $get_attendance_data =  Attendance::where(['class_id' => $request->class_id,'timetable_id' => $request->timetable_id])->first();
+
+            $get_attendance_list = AttendanceStudent::where(['attendance_id' => $get_attendance_data->id])->get();  
+
+            return response()->json([
+                "code" => 200,
+                "message" => "success",
+                "data" => $get_attendance_list,
+            ]);
+
+        }
+
     }
     //ClassroomGroup
 
