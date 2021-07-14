@@ -32,7 +32,9 @@ use App\Models\TimeTable;
 use App\Models\ExternalQuestion;
 use App\Models\Attendance;
 use App\Models\AttendanceStudent;
-
+use DatePeriod;
+use DateTime;
+use DateInterval;
 
 class RamdootEduController extends Controller
 {
@@ -3556,46 +3558,7 @@ class RamdootEduController extends Controller
 
     }
 
-    public function getLecture(Request $request){
-
-        $rules = array(
-            'day' => 'required',
-            'class_id' => 'required'
-        );
-        $messages = array(
-            'day' => 'Please enter day.',
-            'class_id' => 'Please enter class id.'
-        );
-
-        $validator = Validator::make($request->all(), $rules, $messages);
-
-        if ($validator->fails()) {
-            $msg = $validator->messages();
-            return ['status' => "false",'msg' => $msg];
-        }
-
-        $check_class = Classroom::where(['id' => $request->class_id,'status' => 'Active'])->first();
-
-        if(empty($check_class)){
-            return response()->json([
-                "code" => 400,
-                "message" => "Classroom not found.",
-                "data" => [],
-            ]);   
-        }
-        else{
-            $lectures = TimeTable::where('day', $request->day)->where(['class_id' => $request->class_id])->select('id', 'start_time', 'end_time')->get();
-
-            return response()->json([
-                "code" => 200,
-                "message" => "success",
-                "data" => $lectures,
-            ]);
-        }
-
-                
-    }
-
+    
 
     public function addAttendance(Request $request){
 
@@ -3603,13 +3566,13 @@ class RamdootEduController extends Controller
             'class_id' => 'required',
             'timetable_id' => 'required',
             'date' => 'required',
-            'student_ids' => 'required'
+            'student_id' => 'required'
         );
         $messages = array(
             'class_id' => 'Please enter day.',
             'timetable_id' => 'Please enter class id.',
             'date' => 'Please enter date.',
-            'student_ids' => 'Please enter student ids.'
+            'student_id' => 'Please enter student ids.'
         );
 
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -3620,6 +3583,7 @@ class RamdootEduController extends Controller
         }
 
         $check_class = Classroom::where(['id' => $request->class_id,'status' => 'Active'])->first();
+        $check_timetable = TimeTable::where(['id' => $request->timetable_id])->first();
             
         if(empty($check_class)){
             return response()->json([
@@ -3628,87 +3592,73 @@ class RamdootEduController extends Controller
                 "data" => [],
             ]);   
         }
+        elseif (empty($check_timetable)) {
+            return response()->json([
+                "code" => 400,
+                "message" => "TimeTable not found.",
+                "data" => [],
+            ]);   
+        }
         else{
             
-            $createdData = Attendance::create([
-                'class_id' => $request->class_id,
-                'timetable_id' => $request->timetable_id,
-                'description' => $request->description,
-                'date' => $request->date
-            ]);
+            $check_attendance = Attendance::where(['class_id' => $request->class_id,'timetable_id' => $request->timetable_id])->whereDate('date','=',$request->date)->first();
 
-            $student_ids = explode(',',$request->student_ids);
+            if($check_attendance){
 
-            foreach (array_unique($student_ids) as $student_id) {
-                AttendanceStudent::create([
-                    'attendance_id' => $createdData->id,
-                    'student_id' => $student_id,
-                    'is_present' => $request->presented_ids ? in_array($student_id, $request->presented_ids) :  false
-                ]);
+                $createdData = Attendance::find($check_attendance->id);
+                $createdData->class_id = $request->class_id;
+                $createdData->timetable_id = $request->timetable_id;
+                $createdData->description = isset($request->description) ? $request->description:'';
+                $createdData->date = $request->date;
+                $createdData->save();
+
+
+                AttendanceStudent::where(['attendance_id' => $createdData->id])->delete();
+
+                $created_attendance = new AttendanceStudent;
+                $created_attendance->attendance_id = $createdData->id;
+                $created_attendance->student_id = $request->student_id;
+                $created_attendance->is_present = 1;
+                $created_attendance->save(); 
             }
+            else{
 
+                $createdData = new Attendance;
+                $createdData->class_id = $request->class_id;
+                $createdData->timetable_id = $request->timetable_id;
+                $createdData->description = isset($request->description) ? $request->description:'';
+                $createdData->date = $request->date;
+                $createdData->save();
+
+                $created_attendance = new AttendanceStudent;
+                $created_attendance->attendance_id = $createdData->id;
+                $created_attendance->student_id = $request->student_id;
+                $created_attendance->is_present = 1;
+                $created_attendance->save();
+            }
+            
             return response()->json([
                 "code" => 200,
                 "message" => "success"
             ]);
         }
-
-
-    }
-
-    public function editAttendance(Request $request){
-
-        $rules = array(
-            'attendance_id' => 'required',
-            'student_ids' => 'required'
-        );
-        $messages = array(
-            'attendance_id' => 'Please enter attendance id.',
-            'student_ids' => 'Please enter student id.'
-        );
-
-        $validator = Validator::make($request->all(), $rules, $messages);
-
-        if ($validator->fails()) {
-            $msg = $validator->messages();
-            return ['status' => "false",'msg' => $msg];
-        }
-
-        if ($request->description) {
-            Attendance::where('id', $request->attendance_id)->update(['description' => isset($request->description) ? $request->description:'']);
-        }
-
-        $student_ids = explode(',',$request->student_ids);
-        if(count($student_ids) > 0){
-            AttendanceStudent::where(['attendance_id' => $request->attendance_id])->delete();
-            foreach ($student_ids as $ids) {
-                AttendanceStudent::create([
-                    'attendance_id' => $request->attendance_id,
-                    'student_id' => $ids,
-                    'is_present' => $request->presented_ids ? in_array($student_id, $request->presented_ids) :  false
-                ]);
-                // AttendanceStudent::where(['student_id' => $ids,'attendance_id' => $request->attendance_id])
-                // ->update(['is_present' => $request->presented_ids ? in_array($ids, $request->presented_ids) : false,
-                // ]);
-            }    
-        }
-        
-
-        return response()->json([
-            "code" => 200,
-            "message" => "success"
-        ]);
     }
 
     public function attendanceList(Request $request){
 
         $rules = array(
             'class_id' => 'required',
-            'timetable_id' => 'required'
+            'timetable_id' => 'required',
+            'student_id' => 'required',
+            'start_date' => 'required',
+            'end_date' => 'required'
         );
         $messages = array(
             'class_id' => 'Please enter day.',
-            'timetable_id' => 'Please enter class id.'
+            'timetable_id' => 'Please enter class id.',
+            'student_id' => 'required',
+            'start_date' => 'required',
+            'end_date' => 'required'
         );
 
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -3719,7 +3669,8 @@ class RamdootEduController extends Controller
         }
 
         $check_class = Classroom::where(['id' => $request->class_id,'status' => 'Active'])->first();
-            
+        $check_timetable = TimeTable::where(['id' => $request->timetable_id])->first();
+
         if(empty($check_class)){
             return response()->json([
                 "code" => 400,
@@ -3727,19 +3678,76 @@ class RamdootEduController extends Controller
                 "data" => [],
             ]);   
         }
+        elseif (empty($check_timetable)) {
+            return response()->json([
+                "code" => 400,
+                "message" => "TimeTable not found.",
+                "data" => [],
+            ]);   
+        }
         else{
-            $get_attendance_data =  Attendance::where(['class_id' => $request->class_id,'timetable_id' => $request->timetable_id])->first();
 
-            $get_attendance_list = AttendanceStudent::where(['attendance_id' => $get_attendance_data->id])->get();  
+            $get_dates = $this->getDatesFromRange($request->start_date,$request->end_date);
+            
+            $present_count=0;$absent_count=0;$attendence=[];
+            foreach ($get_dates as $dates_value) {
+
+                $get_attendance_data = Attendance::where(['class_id' => $request->class_id,'timetable_id' => $request->timetable_id])->whereDate('date', '=', $dates_value)->first();
+
+                if($get_attendance_data){
+                    $get_attendance_list = AttendanceStudent::where(['attendance_id' => $get_attendance_data->id,'student_id' => $request->student_id])->first();
+
+                    if($get_attendance_list){
+                        $check_user_details = User::where(['id' => $get_attendance_list->student_id])->first();
+                        $present_count = $present_count+1;
+                        $attendence[] = ['date' => $dates_value,'status' => "present"];
+                    }
+                    else{
+                        $absent_count = $absent_count+1;
+                        $attendence[] = ['date' => $dates_value,'status' => "absent"];
+                    }
+                }
+                else{
+                    $absent_count = $absent_count+1;
+                    $attendence[] = ['date' => $dates_value,'status' => "absent"];
+                }
+
+            }
+
+            $data[] = ["student_name" =>  isset($check_user_details->name) ? $check_user_details->name:'',"present_count" => $present_count,"absent_count" => $absent_count,'attendence' => $attendence];
+            
 
             return response()->json([
                 "code" => 200,
                 "message" => "success",
-                "data" => $get_attendance_list,
+                "data" => $data,
             ]);
 
         }
 
+    }
+
+    function getDatesFromRange($start, $end, $format = 'Y-m-d') {
+      
+        // Declare an empty array
+        $array = array();
+          
+        // Variable that store the date interval
+        // of period 1 day
+        $interval = new DateInterval('P1D');
+      
+        $realEnd = new DateTime($end);
+        $realEnd->add($interval);
+      
+        $period = new DatePeriod(new DateTime($start), $interval, $realEnd);
+      
+        // Use loop to store date into array
+        foreach($period as $date) {                 
+            $array[] = $date->format($format); 
+        }
+      
+        // Return the array elements
+        return $array;
     }
     //ClassroomGroup
 
