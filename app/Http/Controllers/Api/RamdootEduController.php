@@ -1737,6 +1737,8 @@ class RamdootEduController extends Controller
         if($check_assignment){
 
               $check_student_assignment =  AssignmentStudent::where(['student_id' => $request->user_id,'assignment_id' => $request->assignment_id])->first();
+              $assign_date = $check_student_assignment->created_at;
+
               if($check_student_assignment){
                 AssignmentStudent::where(['id' => $check_student_assignment->id])->update(['student_submission_date' => date('Y-m-d H:i:s')]);
               }
@@ -1767,11 +1769,11 @@ class RamdootEduController extends Controller
 
                 if($medium_details->sub_title == "GUJARATI_MEDIUM"){
                     $title = "Submit ".$get_assignment_type;
-                    $message = "તા.".date('d/m/Y, l')." ના રોજ ધોરણ:- ".$standard_name." માં ".$subject_name." વિષયમાં આપવામાં આવેલ ગૃહકાર્ય ".$student_name." દ્વારા સબમિટ થઈ ગયું છે.";
+                    $message = "તા.".date('d/m/Y, l',strtotime($assign_date))." ના રોજ ધોરણ:- ".$standard_name." માં ".$subject_name." વિષયમાં આપવામાં આવેલ ગૃહકાર્ય ".$student_name." દ્વારા સબમિટ થઈ ગયું છે.";
                 }
                 else{
                     $title = "Submit ".$get_assignment_type;
-                    $message = "Class ".$standard_name.",\n".$subject_name." Assigned On ".date('d/m/Y, l')." is submitted by ".$student_name.".";        
+                    $message = "Class ".$standard_name.",\n".$subject_name." Assigned On ".date('d/m/Y, l',strtotime($assign_date))." is submitted by ".$student_name.".";        
                 }
                 send_notifications($teacher_details->id, $message, $title);        
             }
@@ -1847,6 +1849,7 @@ class RamdootEduController extends Controller
 
 
             $check_student_assignment =  AssignmentStudent::where(['student_id' => $request->user_id,'assignment_id' => $request->assignment_id])->first();
+            $assign_date = $check_student_assignment->created_at;
               if($check_student_assignment){
                 AssignmentStudent::where(['id' => $check_student_assignment->id])->update(['teacher_submission_date' => date('Y-m-d H:i:s')]);
               }
@@ -1877,11 +1880,11 @@ class RamdootEduController extends Controller
 
                 if($medium_details->sub_title == "GUJARATI_MEDIUM"){
                     $title = "Review ".$get_assignment_type;
-                    $message = "કેમ છો?  ".$student_name.", મજામાં...??\n".date('d/m/Y, l')." ના રોજ ધોરણ:- ".$standard_name." માં ".$subject_name." વિષયમાં તમારા દ્વારા સબમિટ કરેલ ગૃહકાર્યનો રિવ્યું રિપોર્ટ તમને ".$teacher_name." એ મોકલ્યો છે.\n👉રિવ્યું રિપોર્ટ જોવા Go to Classroom માં ".$subject_name." વિષયમાં Review માં જવું.";
+                    $message = "કેમ છો?  ".$student_name.", મજામાં...??\n".date('d/m/Y, l',strtotime($assign_date))." ના રોજ ધોરણ:- ".$standard_name." માં ".$subject_name." વિષયમાં તમારા દ્વારા સબમિટ કરેલ ગૃહકાર્યનો રિવ્યું રિપોર્ટ તમને ".$teacher_name." એ મોકલ્યો છે.\n👉રિવ્યું રિપોર્ટ જોવા Go to Classroom માં ".$subject_name." વિષયમાં Review માં જવું.";
                 }
                 else{
                     $title = "Review ".$get_assignment_type;
-                    $message = "How are you? ".$student_name.".\n".$subject_name."in class ".$standard_name."Assignment submitted by you on ".date('d/m/Y, l')." is Review by ".$teacher_name.".\n👉 For Seeing the report Go to classroom>".$subject_name.">Review ".$get_assignment_type.".";
+                    $message = "How are you? ".$student_name.".\n".$subject_name."in class ".$standard_name."Assignment submitted by you on ".date('d/m/Y, l',strtotime($assign_date))." is Review by ".$teacher_name.".\n👉 For Seeing the report Go to classroom>".$subject_name.">Review ".$get_assignment_type.".";
                 }
                 send_notifications($request->user_id, $message, $title);
 

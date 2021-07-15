@@ -44,11 +44,11 @@ class RegisterController extends Controller
 
             $check_token = UserDeviceToken::where(['user_id' => $user->id,'device_token' => $request->device_token])->first();
 
-            $check_device_token = UserDeviceToken::where(['device_token' => $request->device_token])->first();
+            $check_device_token = UserDeviceToken::where(['device_token' => $request->device_token])->delete();
 
-            if($check_device_token){
-                UserDeviceToken::where(['id' => $check_device_token->id])->delete();
-            }
+            // if($check_device_token){
+            //     UserDeviceToken::where(['id' => $check_device_token->id])->delete();
+            // }
 
             if(empty($check_token)){
                 $add_token = new UserDeviceToken;
@@ -245,20 +245,25 @@ class RegisterController extends Controller
             return ['code' => 500,'message'=>'Invalid input','data' => $msg];
         }
 
-        $check_token = UserDeviceToken::where(['user_id' => $request->user_id,'device_token' => $request->device_token])->first();
+        //$check_token = UserDeviceToken::where(['user_id' => $request->user_id,'device_token' => $request->device_token])->first();
+        $check_token = UserDeviceToken::where(['device_token' => $request->device_token])->delete();
 
-        if($check_token){
-            UserDeviceToken::where(['id' => $check_token->id])->delete();
-            return response()->json([
-                'message' => 'Successfully logged out'
-            ]);    
-        }
-        else{
-            return response()->json([
-                "code" => 400,
-                "message" => "User not found."
-            ]); 
-        }
+        return response()->json([
+            'message' => 'Successfully logged out'
+        ]);   
+
+        // if($check_token){
+        //     UserDeviceToken::where(['id' => $check_token->id])->delete();
+        //     return response()->json([
+        //         'message' => 'Successfully logged out'
+        //     ]);    
+        // }
+        // else{
+        //     return response()->json([
+        //         "code" => 400,
+        //         "message" => "User not found."
+        //     ]); 
+        // }
 
         
 	}
