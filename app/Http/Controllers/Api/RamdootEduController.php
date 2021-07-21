@@ -3893,8 +3893,8 @@ class RamdootEduController extends Controller
 
                         $get_class = Classroom::where(['id' => $classroom_details->class_id])->first();
                         if($get_class){
-
-                            $check_user = $student_details = User::where(['id' => $request->user_id])->first();
+                            
+                            $check_user = User::where(['id' => $get_class->user_id])->first();
 
                             if($check_user){
 
