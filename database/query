@@ -1,5 +1,11 @@
 
 
+-----------------------23-07-2021-------------------
+
+ALTER TABLE `virtual_assignment_questions` ADD `type` VARCHAR(255) NULL AFTER `class_id`;
+
+ALTER TABLE `assignment_questions` ADD `type` VARCHAR(255) NULL AFTER `assignment_id`;
+
 -----------------------16-07-2021-------------------
 
 CREATE TABLE `institutes` (

@@ -36,6 +36,7 @@ use DatePeriod;
 use DateTime;
 use DateInterval;
 use App\Models\Institute;
+use App\Models\Material;
 
 class RamdootEduController extends Controller
 {
@@ -870,32 +871,48 @@ class RamdootEduController extends Controller
         }
         else{
 
-            $get_exits_question = VirtualAssignmentQuestions::where(['class_id' => $request->class_id,'mode' => $request->mode])
-            ->get();
-            $question_arr=[];
-            foreach ($get_exits_question as $key_old => $value_old) {
-                $question_arr[] = $value_old->question_id;
+            $get_exits_question_solution = VirtualAssignmentQuestions::where(['class_id' => $request->class_id,'mode' => $request->mode,'type' => 'solution'])->get();
+            $question_arr_solution=[];
+            foreach ($get_exits_question_solution as $key_old_solution => $value_old_solution) {
+                $question_arr_solution[] = $value_old_solution->question_id;
+            }
+
+
+            $get_exits_question_material = VirtualAssignmentQuestions::where(['class_id' => $request->class_id,'mode' => $request->mode,'type' => 'material'])->get();
+            $question_arr_material=[];
+            foreach ($get_exits_question_material as $key_old_material => $value_old_material) {
+                $question_arr_material[] = $value_old_material->question_id;
             }
 
             if($request->category_id){
 
-                // if(empty($chkquestiontype)){
-                //     return response()->json([
-                //         "code" => 400,
-                //         "message" => "Category not found.",
-                //         "data" => [],
-                //     ]);    
-                // }
-                // else{
-                    $get_question = Solution::where(['unit_id' => $request->unit_id,'question_type' => $request->category_id])->whereNotIn('id', $question_arr)->get();
+                    $get_question_solution_data = Solution::where(['unit_id' => $request->unit_id,'question_type' => $request->category_id])->whereNotIn('id', $question_arr_solution)->get();
+                    $get_question_solution=[];
+                    if(count($get_question_solution_data) > 0){
+                        foreach ($get_question_solution_data as $key_solution => $value_solution) {
+                            $get_question_solution[] = Solution::where(['id' => $value_solution->id])->select('*',DB::raw("CONCAT('solution') AS type"))->first();
+                        }
+                    }
+
+                    $get_question_material_data = Material::where(['unit_id' => $request->unit_id,'question_type' => $request->category_id])->whereNotIn('id', $question_arr_material)->get();
+                    $get_question_material=[];
+                    if(count($get_question_material_data) > 0){
+                        foreach ($get_question_material_data as $key_material => $value_material) {
+                            $get_question_material[] = Material::where(['id' => $value_material->id])->select('*',DB::raw("CONCAT('material') AS type"))->first();
+                        }
+                    }
+                    //dd(count($get_question_solution),count($get_question_material));
+                    $final_array = array_merge($get_question_solution,$get_question_material);
+                    //dd($final_array);
                     return response()->json([
                         "code" => 200,
                         "message" => "success",
-                        "data" => $get_question,
+                        "data" => $final_array,
                     ]);
                 // }
             }
             else{
+
                 $get_question = Question::where(['unit_id' => $request->unit_id])->whereNotIn('id', $question_arr)->get();
                 return response()->json([
                     "code" => 200,
@@ -919,6 +936,7 @@ class RamdootEduController extends Controller
             'mark_ids' => 'required',
             'is_mcq' => 'required',
             'mode' => 'required',
+            'type' => 'required',
         );
         $messages = array(
             'class_id' => 'Please enter class id.',
@@ -928,6 +946,7 @@ class RamdootEduController extends Controller
             'mark_ids' => 'Please enter mark ids.',
             'is_mcq' => 'Please enter mcq status.',
             'mode' => 'Please enter mode',
+            'type' => 'Please enter type',
         );
         $validator = Validator::make($request->all(), $rules, $messages);
 
@@ -938,6 +957,7 @@ class RamdootEduController extends Controller
 
         $get_question_arr = explode(',',$request->question_ids);
         $get_mark_arr = explode(',',$request->mark_ids);
+        $get_type_arr = explode(',',$request->type);
         
         for ($i=0; $i < count($get_question_arr); $i++) { 
             
@@ -949,6 +969,7 @@ class RamdootEduController extends Controller
             $add->is_mcq = $request->is_mcq;
             $add->mode = $request->mode;
             $add->marks = $get_mark_arr[$i];
+            $add->type = $get_type_arr[$i];
             $add->save();
         }
 
@@ -1027,29 +1048,57 @@ class RamdootEduController extends Controller
             foreach ($get_question_details as $key => $value) {
 
                 if($value->question_type != null || $value->is_mcq == 0){
-                     $vquestions = VirtualAssignmentQuestions::where(['class_id' => $value->class_id,'marks' => $value->marks,'assignment_type' => $value->assignment_type,'mode' => $request->mode])->pluck('question_id')->toArray();
+                     $vquestions_solution = VirtualAssignmentQuestions::where(['class_id' => $value->class_id,'marks' => $value->marks,'assignment_type' => $value->assignment_type,'mode' => $request->mode,'type' => 'solution'])->pluck('question_id')->toArray();
                      //dd($vquestions);     
-                     $questions = Solution::whereIn('id',$vquestions)->get();
-                     $question_arr=[];
-                     foreach ($questions as $key_question => $value_question) {
+                     $questions_solution = Solution::whereIn('id',$vquestions_solution)->get();
+                     $question_arr_solution=[];
+                     foreach ($questions_solution as $key_question_solution => $value_question_solution) {
                         
-                        $get_vquestions_id = VirtualAssignmentQuestions::where(['question_id' => $value_question->id,'class_id' => $value->class_id,'mode' => $request->mode])->first();
+                        $get_vquestions_id = VirtualAssignmentQuestions::where(['question_id' => $value_question_solution->id,'class_id' => $value->class_id,'mode' => $request->mode])->first();
                         
-                         $question_arr[] = Solution::where(['id' => $value_question->id])->select('*',DB::raw("CONCAT('$get_vquestions_id->id') AS virtual_assignment_question_id"))->first();
+                         $question_arr_solution[] = Solution::where(['id' => $value_question_solution->id])->select('*',DB::raw("CONCAT('$get_vquestions_id->id') AS virtual_assignment_question_id"),DB::raw("CONCAT('solution') AS type"))->first();
                      }
+
+                     $vquestions_material = VirtualAssignmentQuestions::where(['class_id' => $value->class_id,'marks' => $value->marks,'assignment_type' => $value->assignment_type,'mode' => $request->mode,'type' => 'material'])->pluck('question_id')->toArray();
+
+                     $questions_material = Material::whereIn('id',$vquestions_material)->get();
+                     $question_arr_material=[];
+                     foreach ($questions_material as $key_question_material => $value_question_material) {
+                        
+                        $get_vquestions_id_material = VirtualAssignmentQuestions::where(['question_id' => $value_question_material->id,'class_id' => $value->class_id,'mode' => $request->mode])->first();
+                        
+                         $question_arr_material[] = Material::where(['id' => $value_question_material->id])->select('*',DB::raw("CONCAT('$get_vquestions_id_material->id') AS virtual_assignment_question_id"),DB::raw("CONCAT('material') AS type"))->first();
+                     }
+
+                    $final_question_arr = array_merge($question_arr_solution,$question_arr_material);
+
                 }    
                 else{
-                    $vmquestions = VirtualAssignmentQuestions::with('question')->where(['class_id' => $value->class_id,'marks' => $value->marks,'assignment_type' => $value->assignment_type,'mode' => $request->mode])->pluck('question_id')->toArray();
-                    $questions = Solution::whereIn('id',$vmquestions)->get();
-                    $question_arr=[];
-                     foreach ($questions as $key_question => $value_question) {
+                    $vmquestions_solution = VirtualAssignmentQuestions::with('question')->where(['class_id' => $value->class_id,'marks' => $value->marks,'assignment_type' => $value->assignment_type,'mode' => $request->mode,'type' => 'solution'])->pluck('question_id')->toArray();
+                    $questions_solution = Solution::whereIn('id',$vmquestions_solution)->get();
+                    $question_arr_solution=[];
+                     foreach ($questions_solution as $key_question_solution => $value_question_solution) {
                         
-                        $get_vquestions_id = VirtualAssignmentQuestions::where(['question_id' => $value_question->id,'class_id' => $value->class_id,'mode' => $request->mode])->first();
+                        $get_vquestions_id = VirtualAssignmentQuestions::where(['question_id' => $value_question_solution->id,'class_id' => $value->class_id,'mode' => $request->mode])->first();
                         
-                         $question_arr[] = Solution::where(['id' => $value_question->id])->select('*',DB::raw("CONCAT('$get_vquestions_id->id') AS virtual_assignment_question_id"))->first();
+                         $question_arr_solution[] = Solution::where(['id' => $value_question_solution->id])->select('*',DB::raw("CONCAT('$get_vquestions_id->id') AS virtual_assignment_question_id"),DB::raw("CONCAT('solution') AS type"))->first();
                      }
+
+
+                     $vmquestions_material = VirtualAssignmentQuestions::with('question')->where(['class_id' => $value->class_id,'marks' => $value->marks,'assignment_type' => $value->assignment_type,'mode' => $request->mode,'type' => 'material'])->pluck('question_id')->toArray();
+                    $questions_material = Material::whereIn('id',$vmquestions_material)->get();
+                    $question_arr_material=[];
+                     foreach ($questions_material as $key_question_material => $value_question_material) {
+                        
+                        $get_vquestions_id_material = VirtualAssignmentQuestions::where(['question_id' => $value_question_material->id,'class_id' => $value->class_id,'mode' => $request->mode])->first();
+                        
+                         $question_arr_material[] = Material::where(['id' => $value_question_material->id])->select('*',DB::raw("CONCAT('$get_vquestions_id_material->id') AS virtual_assignment_question_id"),DB::raw("CONCAT('material') AS type"))->first();
+                     }
+
+                     $final_question_arr = array_merge($question_arr_solution,$question_arr_material);
+
                 }                                
-                $question_array[] = ['id' => $value->id,'class_id' => $value->class_id,'mode' => $value->mode,'assignment_type' => $value->assignment_type,'question_type' => $value->question_type,'is_mcq' => $value->is_mcq,'marks' => $value->marks,'question_solution' => $question_arr]; //,'question_type_id' => $value->questionType->id,'question_type' => $value->questionType->question_type
+                $question_array[] = ['id' => $value->id,'class_id' => $value->class_id,'mode' => $value->mode,'assignment_type' => $value->assignment_type,'question_type' => $value->question_type,'is_mcq' => $value->is_mcq,'marks' => $value->marks,'question_solution' => $final_question_arr]; //,'question_type_id' => $value->questionType->id,'question_type' => $value->questionType->question_type
             }
             
             return response()->json([
@@ -1121,7 +1170,7 @@ class RamdootEduController extends Controller
         $get_semester_id = explode(',',$request->semester_id);
         $get_question_type = explode(',',$request->question_type);
         $get_marks = explode(',',$request->marks);
-        
+        $get_type = explode(',',$request->type);
         
         if(count($get_question) > 0){
             for ($i=0; $i < count($get_question); $i++) { 
@@ -1133,6 +1182,7 @@ class RamdootEduController extends Controller
                 $add_ques->assignment_id = $add->id;
                 $add_ques->question_id = $get_question[$i];
                 $add_ques->marks = $get_marks[$i];
+                $add_ques->type = $get_type[$i];
                 $add_ques->save();
             }    
         }
