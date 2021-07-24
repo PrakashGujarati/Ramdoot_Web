@@ -3848,36 +3848,106 @@ class RamdootEduController extends Controller
 
     public function instituteList(Request $request){
 
-        $get_institutes = Institute::where(['status' => 'Active'])->get();
+        $rules = array(
+            'user_id' => 'required'
+        );
+        $messages = array(
+            'user_id' => 'Please enter user id.'
+        );
 
-        if(count($get_institutes) > 0){
+        $validator = Validator::make($request->all(), $rules, $messages);
 
-            $data=[];
-            foreach ($get_institutes as $key => $value) {
+        if ($validator->fails()) {
+            $msg = $validator->messages();
+            return ['status' => "false",'msg' => $msg];
+        }
 
-                $url='';
-                if($value->logo){
-                  $url = config('ramdoot.appurl')."/upload/institute/".$value->logo;
+        if($request->user_id != "0"){
+
+            //$check_user = $student_details = User::where(['id' => $request->user_id])->first();
+
+            $classroom_details = ClassStudent::whereHas('classroom', function($q) use($request){
+                $q->where(['status'=>'Active']);
+            })->where(['user_id' => $request->user_id])->where('status','!=','reject')->get();
+
+            //dd(count($classroom_details));
+            $institute_arr=[];
+            if(count($classroom_details) > 0){
+                foreach ($classroom_details as $key_classroom_details => $value_classroom_details) {
+
+                    if($value_classroom_details){
+                        $get_class = Classroom::where(['id' => $value_classroom_details->class_id])->first();
+                        if($get_class){
+                            
+                            $check_user = User::where(['id' => $get_class->user_id])->first();
+
+                            if($check_user){
+
+                                $get_institutes = Institute::where(['id' => $check_user->institute_id,'status' => 'Active'])->first();
+                                if($get_institutes){
+
+                                    $institute_arr[] = $get_institutes->id;
+                                }
+                            }
+                        }
+                    }
+                }
+                $institute_arr = array_unique($institute_arr);
+                $data=[];
+                if(count($institute_arr) >= 0){
+                    foreach ($institute_arr as $key_institute => $value_institute) 
+                    {
+                        $get_institutes = Institute::where(['id' => $value_institute])->first();
+                        $url='';
+                        if($get_institutes->logo){
+                          $url = config('ramdoot.appurl')."/upload/institute/".$get_institutes->logo;
+                        }
+
+                        $data[] = ['id' => $get_institutes->id,'name' => $get_institutes->name,'logo' => $url];
+                    }
                 }
 
-                $data[] = ['id' => $value->id,'name' => $value->name,'logo' => $url];
+                return response()->json(["code" => 200,"message" => "success","data" => $data]); 
             }
+            else{
+                return response()->json(["code" => 400,"message" => "Institute not found."]);
+            }
+            
+            
 
-            return response()->json([
-                "code" => 200,
-                "message" => "success",
-                "data" => $data,
-            ]);
         }
         else{
-            return response()->json([
-                "code" => 400,
-                "message" => "Institute not found.",
-                "data" => [],
-            ]);
-        }   
-        
 
+            $get_institutes = Institute::where(['status' => 'Active'])->get();
+
+            if(count($get_institutes) > 0){
+
+                $data=[];
+                foreach ($get_institutes as $key => $value) {
+
+                    $url='';
+                    if($value->logo){
+                      $url = config('ramdoot.appurl')."/upload/institute/".$value->logo;
+                    }
+
+                    $data[] = ['id' => $value->id,'name' => $value->name,'logo' => $url];
+                }
+
+                return response()->json([
+                    "code" => 200,
+                    "message" => "success",
+                    "data" => $data,
+                ]);
+            }
+            else{
+                return response()->json([
+                    "code" => 400,
+                    "message" => "Institute not found.",
+                    "data" => [],
+                ]);
+            }
+
+        }
     }
 
 
@@ -3897,7 +3967,7 @@ class RamdootEduController extends Controller
             return ['status' => "false",'msg' => $msg];
         }
 
-        $check_user = $student_details = User::where(['id' => $request->user_id])->first();
+        $check_user = User::where(['id' => $request->user_id])->first();
 
         if($check_user)
         {
@@ -3935,43 +4005,70 @@ class RamdootEduController extends Controller
                 }
                 elseif ($get_role->slug == "Student") {
 
-                    $classroom_details = ClassStudent::whereHas('classroom', function($q) use($request){
-                        $q->where(['status'=>'Active']);
-                    })->where(['user_id' => $request->user_id])->where('status','!=','reject')->first();
+                    $check_user_institue = User::where(['id' => $request->user_id])->first();
 
-                    if($classroom_details){
+                    if($check_user_institue){
 
-                        $get_class = Classroom::where(['id' => $classroom_details->class_id])->first();
-                        if($get_class){
-                            
-                            $check_user = User::where(['id' => $get_class->user_id])->first();
+                        if($check_user_institue->institute_id){
+                            $get_institutes = Institute::where(['id' => $check_user_institue->institute_id,'status' => 'Active'])->first();
+                            if($get_institutes){
+                                $url='';
+                                if($get_institutes->logo){
+                                  $url = config('ramdoot.appurl')."/upload/institute/".$get_institutes->logo;
+                                }
 
-                            if($check_user){
+                                $data = ['id' => $get_institutes->id,'name' => $get_institutes->name,'logo' => $url];
 
-                                $get_institutes = Institute::where(['id' => $check_user->institute_id,'status' => 'Active'])->first();
-                                if($get_institutes){
-                                    $url='';
-                                    if($get_institutes->logo){
-                                      $url = config('ramdoot.appurl')."/upload/institute/".$get_institutes->logo;
+                                return response()->json(["code" => 200,"message" => "success","data" => $data]); 
+                            }
+                            else{
+                                return response()->json(["code" => 400,"message" => "Institute not found."]);
+                            }   
+                        }
+                        else{
+                            $classroom_details = ClassStudent::whereHas('classroom', function($q) use($request){
+                                $q->where(['status'=>'Active']);
+                            })->where(['user_id' => $request->user_id])->where('status','!=','reject')->first();
+
+                            if($classroom_details){
+
+                                $get_class = Classroom::where(['id' => $classroom_details->class_id])->first();
+                                if($get_class){
+                                    
+                                    $check_user = User::where(['id' => $get_class->user_id])->first();
+
+                                    if($check_user){
+
+                                        $get_institutes = Institute::where(['id' => $check_user->institute_id,'status' => 'Active'])->first();
+                                        if($get_institutes){
+                                            $url='';
+                                            if($get_institutes->logo){
+                                              $url = config('ramdoot.appurl')."/upload/institute/".$get_institutes->logo;
+                                            }
+
+                                            $data = ['id' => $get_institutes->id,'name' => $get_institutes->name,'logo' => $url];
+
+                                            return response()->json(["code" => 200,"message" => "success","data" => $data]); 
+                                        }
+                                        else{
+                                            return response()->json(["code" => 400,"message" => "Institute not found."]);
+                                        }
                                     }
-
-                                    $data = ['id' => $get_institutes->id,'name' => $get_institutes->name,'logo' => $url];
-
-                                    return response()->json(["code" => 200,"message" => "success","data" => $data]); 
+                                    else{
+                                        return response()->json(["code" => 400,"message" => "Institute not found."]);
+                                    }
                                 }
                                 else{
                                     return response()->json(["code" => 400,"message" => "Institute not found."]);
                                 }
-                            }
-                            else{
+                            }else{
                                 return response()->json(["code" => 400,"message" => "Institute not found."]);
                             }
                         }
-                        else{
-                            return response()->json(["code" => 400,"message" => "Institute not found."]);
-                        }
-                    }else{
-                        return response()->json(["code" => 400,"message" => "Institute not found."]);
+
+                    }
+                    else{
+
                     }
                 }
                 else{
