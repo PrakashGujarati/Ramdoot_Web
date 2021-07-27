@@ -3723,7 +3723,6 @@ class RamdootEduController extends Controller
         }
 
         $check_class = Classroom::where(['id' => $request->class_id,'status' => 'Active'])->first();
-        //$check_timetable = TimeTable::where(['id' => $request->timetable_id])->first();
 
         if(empty($check_class)){
             return response()->json([
@@ -3732,59 +3731,27 @@ class RamdootEduController extends Controller
                 "data" => [],
             ]);   
         }
-        // elseif (empty($check_timetable)) {
-        //     return response()->json([
-        //         "code" => 400,
-        //         "message" => "TimeTable not found.",
-        //         "data" => [],
-        //     ]);   
-        // }
         else{
 
+            if($request->student_id == "0"){
+                $get_student = ClassStudent::where(['class_id' => $request->class_id,'status' => 'aprove'])->get();
+            }
+            else{
+                $get_student = ClassStudent::where(['class_id' => $request->class_id,'user_id' => $request->student_id,'status' => 'aprove'])->get();
+            }
+
             $get_dates = $this->getDatesFromRange($request->start_date,$request->end_date);
-            
-            $present_count=0;$absent_count=0;$attendence=[];
-            $data=[];
-            foreach ($get_dates as $dates_value) {
+            foreach ($get_student as $key_studentdata => $value_studentdata) {
                 
-                $get_attendance_data = Attendance::where(['class_id' => $request->class_id])->whereDate('date', '=', $dates_value)->first();
-                //dd($get_attendance_data);
-                if($get_attendance_data){
+                $get_user_details = User::where('id',$value_studentdata->user_id)->first();
+                
+                $present_count=0;$absent_count=0;$attendence=[];
 
-                    if($request->student_id == "0"){
-                        
-                        // $get_attendance_lists = AttendanceStudent::where(['attendance_id' => $get_attendance_data->id])->get();
+                foreach ($get_dates as $dates_value) {
+                    $get_attendance_data = Attendance::where(['class_id' => $request->class_id])->whereDate('date', '=', $dates_value)->first();
+                    if($get_attendance_data){
 
-                        // foreach ($get_attendance_lists as $key_attendance_data => $value_attendance_data) {
-
-                        //     if($value_attendance_data){
-                        //         $check_user_details = User::where(['id' => $value_attendance_data->student_id])->first();
-                        //         $present_count = $present_count+1;
-                        //         $attendence[] = ['date' => $dates_value,'status' => "present"];
-
-                        //         $profile_path='';
-                        //         if($check_user_details->profile_photo_path){
-                        //           $profile_path =   config('ramdoot.appurl')."/upload/profile/".$check_user_details->profile_photo_path;
-                        //         }
-                        //         $data[] = ["id" => $check_user_details->id,"user_name" =>  isset($check_user_details->name) ? $check_user_details->name:'',"mobile" => $check_user_details->mobile,"profile" => $profile_path,"present_count" => $present_count,"absent_count" => $absent_count,'attendence' => $attendence];
-
-                        //     }
-                        //     else{
-                        //         $absent_count = $absent_count+1;
-                        //         $attendence[] = ['date' => $dates_value,'status' => "absent"];
-
-                        //         $profile_path='';
-                        //         if($check_user_details->profile_photo_path){
-                        //           $profile_path =   config('ramdoot.appurl')."/upload/profile/".$check_user_details->profile_photo_path;
-                        //         }
-                        //         $data[] = ["id" => $check_user_details->id,"user_name" =>  isset($check_user_details->name) ? $check_user_details->name:'',"mobile" => $check_user_details->mobile,"profile" => $profile_path,"present_count" => $present_count,"absent_count" => $absent_count,'attendence' => $attendence];
-
-                        //     }
-                        // }       
-                    }
-                    else{
-                        
-                        $get_attendance_list = AttendanceStudent::where(['attendance_id' => $get_attendance_data->id,'student_id' => $request->student_id])->first();
+                        $get_attendance_list = AttendanceStudent::where(['attendance_id' => $get_attendance_data->id,'student_id' => $get_user_details->id])->first();
 
                         if($get_attendance_list){
                             $check_user_details = User::where(['id' => $get_attendance_list->student_id])->first();
@@ -3795,16 +3762,19 @@ class RamdootEduController extends Controller
                             $absent_count = $absent_count+1;
                             $attendence[] = ['date' => $dates_value,'status' => "absent"];
                         }
-
-                        $profile_path='';
-                        if($check_user_details->profile_photo_path){
-                          $profile_path =   config('ramdoot.appurl')."/upload/profile/".$check_user_details->profile_photo_path;
-                        }
-                        $data[] = ["id" => $check_user_details->id,"user_name" =>  isset($check_user_details->name) ? $check_user_details->name:'',"mobile" => $check_user_details->mobile,"profile" => $profile_path,"present_count" => $present_count,"absent_count" => $absent_count,'attendence' => $attendence];   
-                            
                     }
+                    else{
+                        $absent_count = $absent_count+1;
+                        $attendence[] = ['date' => $dates_value,'status' => "absent"];
+                    }
+                }
+                //dd($attendence);
 
-                }   
+                $profile_path='';
+                if($get_user_details->profile_photo_path){
+                  $profile_path =   config('ramdoot.appurl')."/upload/profile/".$get_user_details->profile_photo_path;
+                }
+                $data[] = ["id" => $get_user_details->id,"user_name" =>  isset($get_user_details->name) ? $get_user_details->name:'',"mobile" => $get_user_details->mobile,"profile" => $profile_path,"present_count" => $present_count,"absent_count" => $absent_count,'attendence' => $attendence];
             }
 
             return response()->json([
@@ -3812,7 +3782,6 @@ class RamdootEduController extends Controller
                 "message" => "success",
                 "data" => $data,
             ]);
-
         }
 
     }
