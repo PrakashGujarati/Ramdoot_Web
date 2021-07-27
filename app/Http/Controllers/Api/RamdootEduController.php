@@ -3739,14 +3739,14 @@ class RamdootEduController extends Controller
             else{
                 $get_student = ClassStudent::where(['class_id' => $request->class_id,'user_id' => $request->student_id,'status' => 'aprove'])->get();
             }
-
+            $data=[];
             $get_dates = $this->getDatesFromRange($request->start_date,$request->end_date);
             foreach ($get_student as $key_studentdata => $value_studentdata) {
                 
                 $get_user_details = User::where('id',$value_studentdata->user_id)->first();
                 
                 $present_count=0;$absent_count=0;$attendence=[];
-
+                
                 foreach ($get_dates as $dates_value) {
                     $get_attendance_data = Attendance::where(['class_id' => $request->class_id])->whereDate('date', '=', $dates_value)->first();
                     if($get_attendance_data){
