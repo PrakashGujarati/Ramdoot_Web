@@ -38,6 +38,9 @@ use DateInterval;
 use App\Models\Institute;
 use App\Models\Material;
 
+use App\Exports\AttendenceReport;
+use Excel;
+
 class RamdootEduController extends Controller
 {
     public function create_class(Request $request){
@@ -3708,11 +3711,11 @@ class RamdootEduController extends Controller
             'end_date' => 'required'
         );
         $messages = array(
-            'class_id' => 'Please enter day.',
+            'class_id' => 'Please enter class_id.',
             // 'timetable_id' => 'Please enter class id.',
-            'student_id' => 'required',
-            'start_date' => 'required',
-            'end_date' => 'required'
+            'student_id' => 'Please enter student id.',
+            'start_date' => 'Please enter start date.',
+            'end_date' => 'Please enter end date.'
         );
 
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -3774,7 +3777,7 @@ class RamdootEduController extends Controller
                 if($get_user_details->profile_photo_path){
                   $profile_path =   config('ramdoot.appurl')."/upload/profile/".$get_user_details->profile_photo_path;
                 }
-                $data[] = ["id" => $get_user_details->id,"user_name" =>  isset($get_user_details->name) ? $get_user_details->name:'',"mobile" => $get_user_details->mobile,"profile" => $profile_path,"present_count" => $present_count,"absent_count" => $absent_count,'attendence' => $attendence];
+                $data[] = ["id" => $get_user_details->id,"user_name" =>  isset($get_user_details->name) ? $get_user_details->name:'',"mobile" => $get_user_details->mobile,"profile" => $profile_path,"average_present_percentage" => 0,"present_count" => $present_count,"absent_count" => $absent_count,'attendence' => $attendence];
             }
 
             return response()->json([
@@ -3784,6 +3787,122 @@ class RamdootEduController extends Controller
             ]);
         }
 
+    }
+
+    // public function attendanceDelete(Request $request){
+        
+    // }
+
+    public function attendanceReport(Request $request){
+
+        $rules = array(
+            'class_id' => 'required',
+            'duration' => 'required'
+        );
+        $messages = array(
+            'class_id' => 'Please enter class_id.',
+            'duration' => 'Please enter duration.'
+        );
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            $msg = $validator->messages();
+            return ['status' => "false",'msg' => $msg];
+        }
+
+        $check_class = Classroom::where(['id' => $request->class_id,'status' => 'Active'])->first();
+
+        if(empty($check_class)){
+            return response()->json([
+                "code" => 400,
+                "message" => "Classroom not found.",
+                "data" => [],
+            ]);   
+        }
+        else{
+
+            // if($request->student_id == "0"){
+                $get_student = ClassStudent::where(['class_id' => $request->class_id,'status' => 'aprove'])->get();
+            // }
+            // else{
+            //     $get_student = ClassStudent::where(['class_id' => $request->class_id,'user_id' => $request->student_id,'status' => 'aprove'])->get();
+            // }
+            $data=[];
+            $get_dates=0;
+            if($request->duration == "7D"){
+                $final = date("Y-m-d", strtotime("-7 day"));
+                $get_dates = $this->getDatesFromRange($final,date('Y-m-d'));
+            }
+            elseif ($request->duration == "15D") {
+                $final = date("Y-m-d", strtotime("-15 day"));
+                $get_dates = $this->getDatesFromRange($final,date('Y-m-d'));
+            }
+            elseif ($request->duration == "1M") {
+                $final = date("Y-m-d", strtotime("-1 month"));
+                $get_dates = $this->getDatesFromRange($final,date('Y-m-d'));
+            }
+            // elseif ($request->duration == "6M") {
+            //     $final = date("Y-m-d", strtotime("-6 month"));
+            //     $get_dates = $this->getDatesFromRange($final,date('Y-m-d'));
+            // }
+            // elseif ($request->duration == "1Y") {
+            //     $final = date("Y-m-d", strtotime("-12 month"));
+            //     $get_dates = $this->getDatesFromRange($final,date('Y-m-d'));
+            // }
+
+            //dd($get_dates);
+
+            foreach ($get_student as $key_studentdata => $value_studentdata) {
+                
+                $get_user_details = User::where('id',$value_studentdata->user_id)->first();
+                
+                $present_count=0;$absent_count=0;$attendence="A";
+                
+                foreach ($get_dates as $dates_value) {
+                    $get_attendance_data = Attendance::where(['class_id' => $request->class_id])->whereDate('date', '=', $dates_value)->first();
+                    if($get_attendance_data){
+
+                        $get_attendance_list = AttendanceStudent::where(['attendance_id' => $get_attendance_data->id,'student_id' => $get_user_details->id])->first();
+
+                        if($get_attendance_list){
+                            $check_user_details = User::where(['id' => $get_attendance_list->student_id])->first();
+                            $present_count = $present_count+1;
+                            $attendence = "P";//['date' => $dates_value,'status' => "present"];
+                        }
+                        else{
+                            $absent_count = $absent_count+1;
+                            $attendence = "A";//['date' => $dates_value,'status' => "absent"];
+                        }
+                    }
+                    else{
+                        $absent_count = $absent_count+1;
+                        $attendence = "A";//['date' => $dates_value,'status' => "absent"];
+                    }
+
+                    $profile_path='';
+                    if($get_user_details->profile_photo_path){
+                      $profile_path =   config('ramdoot.appurl')."/upload/profile/".$get_user_details->profile_photo_path;
+                    }
+                    $data[] = ["id" => $get_user_details->id,"user_name" =>  isset($get_user_details->name) ? $get_user_details->name:'',"mobile" => $get_user_details->mobile,"profile" => $profile_path,'date' => $dates_value,'attendence' => $attendence];
+
+                }
+                
+            }
+
+            //dd($data);
+            //$data = Medium::where(['board_id' => $request->board_id])->get();
+            $file = Excel::store(new AttendenceReport($data), 'AttendenceReport.xlsx');
+
+            $get_path = storage_path('app\AttendenceReport.xlsx');
+            return response()->json([
+                "code" => 200,
+                "message" => "success",
+                "data" => ['report_link' => $get_path],
+            ]);
+        }
+
+           
     }
 
     function getDatesFromRange($start, $end, $format = 'Y-m-d') {
@@ -3808,6 +3927,7 @@ class RamdootEduController extends Controller
         // Return the array elements
         return $array;
     }
+
     //ClassroomGroup
 
 
