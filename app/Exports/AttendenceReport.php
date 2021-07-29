@@ -17,38 +17,51 @@ class AttendenceReport implements FromCollection,WithHeadings,ShouldAutoSize, Wi
     */
     private  $data = [];
 
-    public function __construct($data)
+    public function __construct($data,$get_dates)
     {
         $this->data = $data;
+        $this->get_dates = $get_dates;
     }
 
     public function collection()
     {
-        $mediums=[];
+    	//dd($this->get_dates);
+        $data_array=[];
         if($this->data) {
         	foreach ($this->data as $key => $value) {
-        		$mediums[] = array(
-        			'date' => $value['date'],
-	                'user_name' => $value['user_name'],
-	                'mobile' => $value['mobile'],
-	                'status' => $value['attendence']
-	            );
+
+        		$inner_data=[];
+        		foreach ($this->get_dates as $key_dates => $value_dates) {
+        			$inner_data[$value_dates] = $value[$value_dates];
+        		}
+
+        	$staticarr = ['user_name' => $value['user_name'],'mobile' => $value['mobile']];
+        	//dd($inner_data,$staticarr);
+        	$data_array[] = array_merge($staticarr,$inner_data);
+        		
         	}
         }
-
         return collect([
-            $mediums
+            $data_array
         ]);
     }
 
     public function headings(): array
     {
-        return [
-        	'Date',
-            "User Name",
-            "Mobile Number",
-            "Status",
-        ];
+
+    	$static_column = ['User Name','Mobile'];
+    	$dynamic_column=[];
+    	foreach ($this->get_dates as $key => $value) {
+    		$dynamic_column[] = date('d-m-Y',strtotime($value));
+    	}
+    	$final_array = array_merge($static_column,$dynamic_column);
+    	return $final_array;
+        // return [
+        // 	'Date',
+        //     "User Name",
+        //     "Mobile Number",
+        //     "Status",
+        // ];
     }
 
     public function registerEvents(): array

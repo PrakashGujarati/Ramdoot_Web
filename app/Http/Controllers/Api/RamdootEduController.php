@@ -3789,9 +3789,75 @@ class RamdootEduController extends Controller
 
     }
 
-    // public function attendanceDelete(Request $request){
+    public function attendanceDelete(Request $request){
         
-    // }
+        $rules = array(
+            'class_id' => 'required',
+            'date' => 'required',
+            'student_id' => 'required'
+        );
+        $messages = array(
+            'class_id' => 'Please enter day.',
+            'date' => 'Please enter date.',
+            'student_id' => 'Please enter student ids.'
+        );
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            $msg = $validator->messages();
+            return ['status' => "false",'msg' => $msg];
+        }
+
+        $check_class = Classroom::where(['id' => $request->class_id,'status' => 'Active'])->first();
+        $check_timetable = TimeTable::where(['id' => $request->timetable_id])->first();
+            
+        if(empty($check_class)){
+            return response()->json([
+                "code" => 400,
+                "message" => "Classroom not found.",
+                "data" => [],
+            ]);   
+        }
+        else{
+            
+            $check_attendance = Attendance::where(['class_id' => $request->class_id])->whereDate('date','=',$request->date)->first();
+
+            if($check_attendance){
+                
+                $check_attendance_student = AttendanceStudent::where(['attendance_id' => $check_attendance->id,'student_id' => $request->student_id])->first();
+
+                if($check_attendance_student){
+
+                    $check_attendance_student = AttendanceStudent::where(['attendance_id' => $check_attendance->id,'student_id' => $request->student_id])->delete();
+
+                    return response()->json([
+                        "code" => 200,
+                        "message" => "success"
+                    ]);   
+                    
+                }
+                else{
+                    return response()->json([
+                        "code" => 400,
+                        "message" => "User not found.",
+                        "data" => [],
+                    ]);  
+                }
+                 
+            }
+            else{
+
+                return response()->json([
+                    "code" => 400,
+                    "message" => "User not found.",
+                    "data" => [],
+                ]);
+            }
+            
+        }
+
+    }
 
     public function attendanceReport(Request $request){
 
@@ -3842,6 +3908,14 @@ class RamdootEduController extends Controller
                 $final = date("Y-m-d", strtotime("-1 month"));
                 $get_dates = $this->getDatesFromRange($final,date('Y-m-d'));
             }
+            else{
+                $date_data = explode('/',$request->duration);
+                if(count($date_data) == 2){
+                    $get_dates = $this->getDatesFromRange($date_data[0],$date_data[1]);
+                }
+                //$final = ;
+                //2021-07-26/2021-07-29
+            }
             // elseif ($request->duration == "6M") {
             //     $final = date("Y-m-d", strtotime("-6 month"));
             //     $get_dates = $this->getDatesFromRange($final,date('Y-m-d'));
@@ -3857,10 +3931,11 @@ class RamdootEduController extends Controller
                 
                 $get_user_details = User::where('id',$value_studentdata->user_id)->first();
                 
-                $present_count=0;$absent_count=0;$attendence="A";
+                $present_count=0;$absent_count=0;$attendence=[];
                 
                 foreach ($get_dates as $dates_value) {
                     $get_attendance_data = Attendance::where(['class_id' => $request->class_id])->whereDate('date', '=', $dates_value)->first();
+
                     if($get_attendance_data){
 
                         $get_attendance_list = AttendanceStudent::where(['attendance_id' => $get_attendance_data->id,'student_id' => $get_user_details->id])->first();
@@ -3868,31 +3943,32 @@ class RamdootEduController extends Controller
                         if($get_attendance_list){
                             $check_user_details = User::where(['id' => $get_attendance_list->student_id])->first();
                             $present_count = $present_count+1;
-                            $attendence = "P";//['date' => $dates_value,'status' => "present"];
+                            $attendence[$dates_value] = "P";//['date' => $dates_value,'status' => "present"];
                         }
                         else{
                             $absent_count = $absent_count+1;
-                            $attendence = "A";//['date' => $dates_value,'status' => "absent"];
+                            $attendence[$dates_value] = "A";//['date' => $dates_value,'status' => "absent"];
                         }
                     }
                     else{
                         $absent_count = $absent_count+1;
-                        $attendence = "A";//['date' => $dates_value,'status' => "absent"];
+                        $attendence[$dates_value]= "A";//['date' => $dates_value,'status' => "absent"];
                     }
 
-                    $profile_path='';
+                }
+               // dd($attendence);
+
+                $profile_path='';
                     if($get_user_details->profile_photo_path){
                       $profile_path =   config('ramdoot.appurl')."/upload/profile/".$get_user_details->profile_photo_path;
                     }
-                    $data[] = ["id" => $get_user_details->id,"user_name" =>  isset($get_user_details->name) ? $get_user_details->name:'',"mobile" => $get_user_details->mobile,"profile" => $profile_path,'date' => $dates_value,'attendence' => $attendence];
+                $data_details = ["id" => $get_user_details->id,"user_name" =>  isset($get_user_details->name) ? $get_user_details->name:'',"mobile" => $get_user_details->mobile,"profile" => $profile_path,'date' => $dates_value];
 
-                }
+                $data[] = array_merge($data_details,$attendence);
                 
             }
-
-            //dd($data);
             //$data = Medium::where(['board_id' => $request->board_id])->get();
-            $file = Excel::store(new AttendenceReport($data), 'AttendenceReport.xlsx');
+            $file = Excel::store(new AttendenceReport($data,$get_dates), 'AttendenceReport.xlsx');
 
             $get_path = storage_path('app\AttendenceReport.xlsx');
             return response()->json([
