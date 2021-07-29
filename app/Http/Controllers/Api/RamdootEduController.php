@@ -3968,9 +3968,10 @@ class RamdootEduController extends Controller
                 
             }
             //$data = Medium::where(['board_id' => $request->board_id])->get();
-            $file = Excel::store(new AttendenceReport($data,$get_dates), 'AttendenceReport.xlsx');
-
-            $get_path = "https://www.ramdootedu.world/storage/app/AttendenceReport.xlsx"; 
+            $file = Excel::store(new AttendenceReport($data,$get_dates),'upload/attendence_report/AttendenceReport.xlsx','real_public');
+             //dd();
+            $get_path = public_path('upload\attendence_report\AttendenceReport.xlsx');//"http://localhost:8000//public/upload/attendence_report/AttendenceReport.xlsx";
+            //"https://www.ramdootedu.world/public/upload/attendence_report/AttendenceReport.xlsx"; 
             //storage_path('app\AttendenceReport.xlsx');
             return response()->json([
                 "code" => 200,
