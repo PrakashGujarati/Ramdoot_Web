@@ -3970,7 +3970,8 @@ class RamdootEduController extends Controller
             //$data = Medium::where(['board_id' => $request->board_id])->get();
             $file = Excel::store(new AttendenceReport($data,$get_dates), 'AttendenceReport.xlsx');
 
-            $get_path = storage_path('app\AttendenceReport.xlsx');
+            $get_path = "https://www.ramdootedu.world/storage/app/AttendenceReport.xlsx"; 
+            //storage_path('app\AttendenceReport.xlsx');
             return response()->json([
                 "code" => 200,
                 "message" => "success",
