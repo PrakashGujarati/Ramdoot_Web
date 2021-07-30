@@ -13,11 +13,17 @@ td{
 #cke_1_contents{
     height: 120px!important;
 }
+hr{
+    margin-top: 0px!important;
+    margin-bottom: 0px!important;
+}
 </style>
 
 @endsection
 
 @section('content')
+
+@include('solution.dynamic_media_form')
 
 <div class="nk-block nk-block-lg">
     <div class="row g-gs">
@@ -26,6 +32,9 @@ td{
                 <div class="card-inner">
                     <div class="card-head">
                         <h5 class="card-title">Add Solution</h5>
+                        @if(Request::segment(3))
+                        <a href="javascript:;" class="btn btn-primary text-light add_medias">Add Media</a>
+                        @endif
                     </div>
                     <form action="{{ route('solution.store') }}" method="POST" enctype='multipart/form-data' id="solution_form">
                     @csrf
@@ -860,8 +869,61 @@ $(document).ready(function(){
                 $(this).val(suggestion.data);
         }
     });
-
 });
+
+$(document).on('click','.add_medias', function() {
+    var semester_id = "{{ Request::segment(3) }}";//$('#semester_id').val();
+    var url = "{{ route('solution.add.media')}}";
+    $.ajax({
+        type: "GET",
+        url: url,
+        data:{
+            'semester_id':semester_id,
+            'type':'solution',
+        },
+        success: function(result) {
+            $('#add_media').modal({show:true});
+           $('#add_media_model_data').html(result.html);
+        } 
+    });
+});
+
+$(function () {
+    $('#medias_form').on('submit', function (e) {
+
+      e.preventDefault();
+      var formData = new FormData($("#medias_form")[0]);
+      formData.append('_token', '{{csrf_token()}}');
+      $.ajax({
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf_token"]').attr('content')},
+        type: 'post',
+        url: "{{ route('store.medias') }}",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (result) {
+            $('#add_media_model_data').html(result.html); 
+            alert('Media Uploaded Successfully.');    
+          
+        }
+      });
+
+    });
+});
+
+
+$(document).on('click','.copybtn', function() {
+
+    var getdata = $(this).attr('data-media-id');
+    var copyText = document.getElementById('url_path_'+getdata);
+    copyText.select();
+    copyText.setSelectionRange(0, 99999);
+    document.execCommand("copy");
+});
+
+
+
+
 
 
 </script>

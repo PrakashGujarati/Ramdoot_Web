@@ -185,6 +185,9 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('load_autocomplete/solution/question_type/{board_id}/{medium_id}/{standard_id}/{subject_id}', [SolutionController::class,'load_autocomplete_solution'])->name('load_autocomplete.solution.question_type');
 
+    Route::get('add_media', [SolutionController::class, 'addmediaView'])->name('solution.add.media');
+    Route::post('store_media', [SolutionController::class, 'storeMediaView'])->name('store.medias');
+
     /*materials*/
     Route::get('material', [MaterialController::class, 'index'])->name('material.index');
     Route::get('material/create/{subject_id?}', [MaterialController::class, 'create'])->name('material.create');

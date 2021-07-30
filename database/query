@@ -1,4 +1,21 @@
 
+-----------------------31-07-2021-------------------
+
+CREATE TABLE `medias` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `semester_id` int(11) NOT NULL,
+  `type` enum('solution','material') DEFAULT NULL,
+  `image` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+ALTER TABLE `medias`
+  ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `medias`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 -----------------------23-07-2021-------------------
 

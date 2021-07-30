@@ -12,6 +12,7 @@ use App\Models\Subject;
 use App\Models\Semester;
 use App\Models\Medium;
 use App\Models\Standard;
+use App\Models\Media;
 
 class SolutionController extends Controller
 {
@@ -382,4 +383,49 @@ class SolutionController extends Controller
         }
         return json_encode(array("suggestions" => $response));
     }
+
+    public function addmediaView(Request $request){
+        $semesterid = $request->semester_id;
+        $type = $request->type;
+        $media_details = Media::where(['semester_id' => $semesterid,'user_id' => Auth::user()->id,'type' => $type])->get();
+        $html=view('solution.dynamic_media_model',compact('semesterid','media_details','type'))->render();
+        return response()->json(['success'=>true,'html'=>$html]);
+    }
+
+
+    public function storeMediaView(Request $request){
+        
+        //dd($request->all());
+
+        if ($request->has('file')) {
+            if(count($request->file) > 0){
+
+                for ($media=0; $media < count($request->file); $media++) { 
+
+                    $image = $request->file[$media];//$request->file('image');
+                    $url = 'upload/media/solution/';
+                    $originalPath = imagePathCreate($url);
+                    $name = time() . mt_rand(10000, 99999);
+                    $new_name = $name . '.' . $image->getClientOriginalExtension();
+                    $image->move($originalPath, $new_name);
+
+                    $add = new Media;
+                    $add->user_id = Auth::user()->id;
+                    $add->semester_id = $request->semesterid;
+                    $add->type = $request->hiddentype;
+                    $add->image = $new_name;
+                    $add->save();
+
+                }
+            }
+        }
+
+        $semesterid = $request->semesterid;
+        $type = $request->hiddentype;
+        $media_details = Media::where(['semester_id' => $semesterid,'user_id' => Auth::user()->id,'type' => $type])->get();
+        $html=view('solution.dynamic_media_model',compact('semesterid','media_details','type'))->render();
+        return response()->json(['success'=>true,'html'=>$html]);
+       // dd($request->all());
+    }
 }
+
