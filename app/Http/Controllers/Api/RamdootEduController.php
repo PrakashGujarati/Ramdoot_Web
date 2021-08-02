@@ -3916,16 +3916,16 @@ class RamdootEduController extends Controller
                 //$final = ;
                 //2021-07-26/2021-07-29
             }
+
             // elseif ($request->duration == "6M") {
             //     $final = date("Y-m-d", strtotime("-6 month"));
             //     $get_dates = $this->getDatesFromRange($final,date('Y-m-d'));
             // }
+
             // elseif ($request->duration == "1Y") {
             //     $final = date("Y-m-d", strtotime("-12 month"));
             //     $get_dates = $this->getDatesFromRange($final,date('Y-m-d'));
             // }
-
-            //dd($get_dates);
 
             foreach ($get_student as $key_studentdata => $value_studentdata) {
                 
@@ -3970,9 +3970,9 @@ class RamdootEduController extends Controller
             //$data = Medium::where(['board_id' => $request->board_id])->get();
             $file = Excel::store(new AttendenceReport($data,$get_dates),'upload/attendence_report/AttendenceReport.xlsx','real_public');
              //dd();
-            $get_path = public_path('upload\attendence_report\AttendenceReport.xlsx');//"http://localhost:8000//public/upload/attendence_report/AttendenceReport.xlsx";
-            //"https://www.ramdootedu.world/public/upload/attendence_report/AttendenceReport.xlsx"; 
-            //storage_path('app\AttendenceReport.xlsx');
+            $get_path = config('ramdoot.appurl')."/upload/attendence_report/AttendenceReport.xlsx";
+            //public_path('upload\attendence_report\AttendenceReport.xlsx');//"http://localhost:8000//public/upload/attendence_report/AttendenceReport.xlsx";
+            
             return response()->json([
                 "code" => 200,
                 "message" => "success",
