@@ -1,4 +1,37 @@
 
+-----------------------03-08-2021-------------------
+
+ALTER TABLE `users` ADD `qualification_id` INT(11) NOT NULL DEFAULT '0' AFTER `institute_id`, ADD `experience_id` INT(11) NOT NULL DEFAULT '0' AFTER `qualification_id`;
+
+
+CREATE TABLE `experiences` (
+  `id` int(11) NOT NULL,
+  `experience` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT NULL
+);
+
+ALTER TABLE `experiences`
+  ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `experiences`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+
+CREATE TABLE `qualifications` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT NULL
+);
+
+ALTER TABLE `qualifications`
+  ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `qualifications`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+
 -----------------------31-07-2021-------------------
 
 CREATE TABLE `medias` (

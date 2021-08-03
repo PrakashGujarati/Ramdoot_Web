@@ -144,6 +144,10 @@ Route::group(['middleware'=>'auth:api'], function()
     Route::post('institute_list', [RamdootEduController::class, 'instituteList']);
     Route::post('get_institute_details', [RamdootEduController::class, 'getInstituteDetails']);
 
+
+    Route::post('qualification_list', [RamdootEduController::class, 'qualificationList']);
+    Route::post('experience_list', [RamdootEduController::class, 'experienceList']);  
+
 });
 
 Route::post('view_semesters_web', [RamdootEduController::class, 'viewSemesters']);

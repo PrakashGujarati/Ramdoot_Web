@@ -41,6 +41,9 @@ use App\Models\Material;
 use App\Exports\AttendenceReport;
 use Excel;
 
+use App\Models\Qualification;
+use App\Models\Experience;
+
 class RamdootEduController extends Controller
 {
     public function create_class(Request $request){
@@ -4287,7 +4290,49 @@ class RamdootEduController extends Controller
         }
 
     }
+
+
+
+    public function qualificationList(Request $request){
+
+        $get_qualification = Qualification::select('id','name')->get();
+
+        if(count($get_qualification) > 0){
+            return response()->json([
+                "code" => 200,
+                "message" => "success",
+                "data" => $get_qualification,
+            ]);
+        }
+        else{
+            return response()->json([
+                "code" => 200,
+                "message" => "Qualification not found.",
+                "data" => [],
+            ]);
+        }
+    }
       
+    public function experienceList(Request $request){
+
+        $get_experience = Experience::select('id','experience')->get();
+
+        if(count($get_experience) > 0){
+            return response()->json([
+                "code" => 200,
+                "message" => "success",
+                "data" => $get_experience,
+            ]);
+        }
+        else{
+            return response()->json([
+                "code" => 200,
+                "message" => "Experience not found.",
+                "data" => [],
+            ]);
+        }
+    }
+
 
 }
 
