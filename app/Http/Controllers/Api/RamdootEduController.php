@@ -3899,11 +3899,11 @@ class RamdootEduController extends Controller
             $data=[];
             $get_dates=0;
             if($request->duration == "7D"){
-                $final = date("Y-m-d", strtotime("-7 day"));
+                $final = date("Y-m-d", strtotime("-6 day"));
                 $get_dates = $this->getDatesFromRange($final,date('Y-m-d'));
             }
             elseif ($request->duration == "15D") {
-                $final = date("Y-m-d", strtotime("-15 day"));
+                $final = date("Y-m-d", strtotime("-14 day"));
                 $get_dates = $this->getDatesFromRange($final,date('Y-m-d'));
             }
             elseif ($request->duration == "1M") {
@@ -3972,7 +3972,7 @@ class RamdootEduController extends Controller
             //$data = Medium::where(['board_id' => $request->board_id])->get();
             $file = Excel::store(new AttendenceReport($data,$get_dates),'upload/attendence_report/AttendenceReport.xlsx','real_public');
              //dd();
-            $get_path = config('ramdoot.appurl')."/upload/attendence_report/AttendenceReport.xlsx";
+            $get_path = public_path('upload\attendence_report\AttendenceReport.xlsx');//config('ramdoot.appurl')."/upload/attendence_report/AttendenceReport.xlsx";
             //public_path('upload\attendence_report\AttendenceReport.xlsx');//"http://localhost:8000//public/upload/attendence_report/AttendenceReport.xlsx";
             
             return response()->json([
@@ -4331,6 +4331,29 @@ class RamdootEduController extends Controller
             ]);
         }
     }
+
+    public function teacherSubjetList(){
+
+        $chksubject = Subject::where(['status' => 'Active'])->select('subject_name','sub_title')->groupby('sub_title')->orderBy('id','ASC')->get();
+        //dd(count($chksubject));
+
+        if(count($chksubject) > 0){
+            return response()->json([
+                "code" => 200,
+                "message" => "success",
+                "data" => $chksubject,
+            ]);
+        }
+        else{
+            return response()->json([
+                "code" => 200,
+                "message" => "Subject not found.",
+                "data" => [],
+            ]);
+        }
+
+    }
+    
 
 
 }

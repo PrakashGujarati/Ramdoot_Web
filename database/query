@@ -1,4 +1,8 @@
 
+-----------------------04-08-2021-------------------
+
+ALTER TABLE `users` ADD `subject` VARCHAR(255) NULL AFTER `experience_id`;
+
 -----------------------03-08-2021-------------------
 
 ALTER TABLE `users` ADD `qualification_id` INT(11) NOT NULL DEFAULT '0' AFTER `institute_id`, ADD `experience_id` INT(11) NOT NULL DEFAULT '0' AFTER `qualification_id`;
