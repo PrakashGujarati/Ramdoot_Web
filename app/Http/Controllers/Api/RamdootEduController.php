@@ -204,7 +204,6 @@ class RamdootEduController extends Controller
             //     return substr(str_shuffle($str_result),0, $length_of_string);
             // }
             // $unique_string = random_strings(9);
-
             if(empty($chkboard)){
                 return response()->json([
                     "code" => 400,
