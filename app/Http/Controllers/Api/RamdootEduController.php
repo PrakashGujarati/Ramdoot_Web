@@ -4336,12 +4336,18 @@ class RamdootEduController extends Controller
 
         $chksubject = Subject::where(['status' => 'Active'])->select('subject_name','sub_title')->groupby('sub_title')->orderBy('id','ASC')->get();
         //dd(count($chksubject));
-
+        $chksubject_arr=[];
         if(count($chksubject) > 0){
+            foreach ($chksubject as $key => $value) {
+                $chksubject_arr[] = ['name' => $value->subject_name,'sub_title' => $value->sub_title];
+            }
+        }
+
+        if(count($chksubject_arr) > 0){
             return response()->json([
                 "code" => 200,
                 "message" => "success",
-                "data" => $chksubject,
+                "data" => $chksubject_arr,
             ]);
         }
         else{
@@ -4351,7 +4357,6 @@ class RamdootEduController extends Controller
                 "data" => [],
             ]);
         }
-
     }
     
 
