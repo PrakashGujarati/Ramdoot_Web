@@ -941,7 +941,7 @@ class RamdootEduController extends Controller
             'mark_ids' => 'required',
             'is_mcq' => 'required',
             'mode' => 'required',
-            'type' => 'required',
+            // 'type' => 'required',
         );
         $messages = array(
             'class_id' => 'Please enter class id.',
@@ -951,7 +951,7 @@ class RamdootEduController extends Controller
             'mark_ids' => 'Please enter mark ids.',
             'is_mcq' => 'Please enter mcq status.',
             'mode' => 'Please enter mode',
-            'type' => 'Please enter type',
+            // 'type' => 'Please enter type',
         );
         $validator = Validator::make($request->all(), $rules, $messages);
 
