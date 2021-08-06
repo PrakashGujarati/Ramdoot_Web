@@ -25,6 +25,7 @@ use App\Models\UserDeviceToken;
 
 function storeLog($type, $type_id, $upload_time, $operation)
 {
+    //dd($type, $type_id, $upload_time, $operation);
     // $add=new UserDataLog;
     // $add->user_id=Auth::user()->id;
     // $add->type=$type;

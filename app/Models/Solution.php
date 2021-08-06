@@ -47,6 +47,7 @@ class Solution extends Model
     {
         return $this->belongsTo(QuestionType::class, 'question_type');
     }
+
     public function dataLog()
     {
         return $this->morphMany(UserDataLog::class, 'logable');
